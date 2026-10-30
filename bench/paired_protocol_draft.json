@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "protocol_id": "MM-003-MM-012-arm64-A1-A3-draft-v1",
+  "as_of": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "state": "DRAFT_NOT_FROZEN_FOR_FORMAL_COLLECTION",
+  "tasks": ["MM-003", "MM-012", "MM-022"],
+  "workload": {
+    "selected": null,
+    "real_input_manifest": null,
+    "semantic_oracle": null,
+    "scope": "Real CPU work with complete observable output; allocation loops and checksum-only synthetic pointer chains do not qualify as product work.",
+    "BIL_hot_path_equivalence": "NOT_ESTABLISHED",
+    "candidate_requires": [
+      "actual source function and caller/lifetime contract",
+      "fixed ordinary-optimized A1 rather than an intentionally weak allocator baseline",
+      "input hash, output oracle, completed-work count and success/fallback semantics",
+      "identical algorithm, tier/quality, initialization, alignment and output lifetime",
+      "CPU-owned backing with a practical fallible Memory integration point"
+    ]
+  },
+  "variants": {
+    "A1": {
+      "definition": "The conventional optimized native System path for this exact workload.",
+      "requirements": [
+        "Reuse normal scratch or one dense System backing when already justified by the same lifetime contract.",
+        "Do not allocate every frame in A1 while retaining the same workspace across frames only in A3.",
+        "Preserve necessary initialization, input/output separation, warm work and semantic revalidation.",
+        "Freeze the baseline source before formal sampling; retain every pilot and baseline revision."
+      ]
+    },
+    "A2": {
+      "selection": "OPTIONAL_SAME_NATIVE_STORAGE_CONTROL",
+      "definition": "Memory System provider with identical backing, ownership, zeroing, copies, layout, lifetime and completed work as A1.",
+      "warning": "Existing image --system is a Memory System mode, not by itself a conventional A1. If storage semantics differ, label the difference migration-plus-integration cost."
+    },
+    "A3": {
+      "definition": "A1 work through the installed Memory arena/region and explicit lifetime contract, including its integration and final cleanup costs.",
+      "requirements": [
+        "Use the same task/batch boundary and output lifetime as A1.",
+        "Include domain/setup, allocation, required initialization and copies, leases, actual CPU algorithm, reset/trim when applicable, begin_close/collect/drain/destroy in total task time.",
+        "Acquire asynchronous leases before admission; never force-free on timeout.",
+        "Record retained/padding/reservation and old-new coexistence peaks rather than only live payload."
+      ]
+    },
+    "A4": "NOT_SELECTED"
+  },
+  "freeze_prerequisites": {
+    "device_occupancy": "Confirmed free of other session work, then exclusive ownership recorded before any workload launch.",
+    "required_fields": [
+      "exact workload and real inputs/output oracle",
+      "A1/A3 code, compiler/options, installed Memory artifact and executable SHA256",
+      "physical device OS/kernel/build, ABI, page size and available CPU affinity set",
+      "same completion unit and initialization/lifetime contract",
+      "pilot receipt and independent formal sample-count decision",
+      "seeded complete ABBA/BAAB order, stopping rule and resource/time limits",
+      "available thermal/background/frequency/migration observations and their exact limitations",
+      "numeric eligibility thresholds decided without looking at formal outcomes"
+    ],
+    "formal_protocol_hash": null,
+    "formal_started": false,
+    "rule": "Create and hash a resolved protocol after pilot and before formal data; this draft is not permission to label exploratory data confirmatory."
+  },
+  "measurement": {
+    "primary_metric": "CLOCK_MONOTONIC elapsed nanoseconds per identical successfully completed task/session, including the full selected lifetime contract.",
+    "primary_denominator": "A1",
+    "gain_formula": "1 - T_A3/T_A1",
+    "process_start_and_file_IO": "Choose before freeze. Prefer fixed input loaded before each timed native task, plus a separately reported load-and-task end-to-end metric; both variants use identical boundaries.",
+    "phase_rule": "Nested phase timers are diagnostic only and not summed into elapsed twice.",
+    "session_state": "New independent task owner/domain per session; no A3-only retained state carried between statistical units.",
+    "calibration": "Use pilot only to choose one fixed completed-work count targeting approximately 250 ms per session; do not adapt iterations separately by variant.",
+    "target_session_ms": 250,
+    "maximum_session_ms": 1000,
+    "single_launch_timeout_seconds": 15,
+    "native_working_backing_limit_bytes": 67108864,
+    "concurrent_workloads": 1,
+    "formal_profile_max_wall_seconds": 600,
+    "thermal_cooldown_max_wall_seconds": 300,
+    "limit_rule": "The fixed work and bounded actual input may need a smaller or different budget; freeze that value. Reaching a time/budget cap stops with all samples retained and an incomplete/inconclusive result."
+  },
+  "sampling": {
+    "unit": "One predeclared four-session time block. Inner frames/records/loop iterations are correlated operations, not independent samples.",
+    "orders": ["A1,A3,A3,A1", "A3,A1,A1,A3"],
+    "order_assignment": "Balanced count of ABBA and BAAB blocks, deterministically shuffled by a seed committed before collection. Each block uses the same input sequence and completed work for both variants.",
+    "pilot_blocks": 6,
+    "pilot_in_formal_estimate": false,
+    "formal_blocks_minimum": 32,
+    "formal_blocks_maximum": 96,
+    "sample_size_method": {
+      "block_log_ratio": "d_b = mean(log(T_A3)) - mean(log(T_A1)) for the two sessions of each variant in block b.",
+      "precision_target_log_ratio_half_width": 0.01,
+      "provisional_calculation": "N0 = ceil((1.96 * pilot_sd(d_b) / 0.01)^2); round max(32,N0) up to a multiple of 8, cap at 96.",
+      "interpretation": "A planning approximation from a small pilot, not a guaranteed confidence width or a power proof. Record pilot_sd, chosen N and cap activation before formal sampling.",
+      "insufficient_precision": "If planning requires more than the cap or the final interval is too wide, report INCONCLUSIVE; do not alter N after inspecting gains."
+    },
+    "formal_stop": "Exactly the frozen eligible block count, or the predeclared total-time/resource/failure cap. No early stop for significance or favorable result.",
+    "minimum_required_reporting": ["all attempted sessions and blocks", "order and clock times", "output/success qualification", "timeouts/crashes/fallbacks", "raw total and phase times", "fixed work count", "pre/post environmental observations"]
+  },
+  "analysis": {
+    "primary_estimator": "g = 1 - exp(mean(d_b)) over complete eligible blocks; this is the geometric paired time ratio, not arithmetic elapsed reduction of an arbitrary summed run.",
+    "interval": "Two-sided 95% percentile bootstrap over whole block d_b values, 20000 resamples with a frozen seed. Transform log-ratio endpoints through 1-exp(d) in reverse order.",
+    "dependence_limit": "Time blocks reduce within-block correlation; they are not automatically independent. Report ordered d_b and exploratory lag-1 correlation. If clear time trends/persistent serial dependence remain, label the interval exploratory and qualify with longer independently scheduled sessions before adoption.",
+    "sensitivity": "Also report the paired arithmetic ratio and all-attempt resource/failure summary, clearly secondary. Do not choose the estimator with the best gain.",
+    "tail_metrics": "Do not report p95/p99 from 32-96 blocks as precise product tail estimates.",
+    "workload_multiplicity": "Choose one primary workload before formal collection; any additional sizes, modes or workloads are separately labeled secondary/exploratory."
+  },
+  "environment_and_failures": {
+    "device_state_changes": "No governor/thermal/sysfs/THP/MTE/global process-policy changes. CPU affinity may be applied only to this benchmark process if legal and already supported.",
+    "affinity": "Prefer one confirmed allowed CPU for every timed session, fixed before pilot/formal. Failure to enforce intended affinity is explicit; start/end CPU equality alone is not a migration counter.",
+    "thermal_thresholds": {"sensor": null, "unit": null, "prelaunch_max": null, "thermal_status_max": null},
+    "background_thresholds": {"observable": null, "prelaunch_max": null, "observation_window_seconds": null},
+    "threshold_rule": "Resolve numeric thresholds from actual available, documented observations before freeze; never invent a CPU temperature from a battery sensor. Missing capabilities stay UNAVAILABLE and narrow qualification.",
+    "prelaunch_ineligible": "Record the gate failure and cooldown/skip before launching. Do not silently discard it.",
+    "postlaunch_violations": "Retain complete raw results and flag the block. Report all-attempt and prespecified eligible-subset results; never drop only a slow variant or use post hoc limits.",
+    "semantic_failure": "Record as functional failure, not a fast timing. Any unexplained A3 failure, output mismatch, timeout or extra fallback prevents adoption.",
+    "diagnostic_separation": "Allocation ledgers, RSS/PSS polling, tracing and detailed counters run separately from low-disturbance timing. Record matching workload and same completion unit for both rounds.",
+    "metrics": ["unique backing peak", "live/retained/retiring", "requested and provider calls", "RSS/PSS if observable", "minor/major faults if observable", "CPU affinity and available migration evidence", "thermal and frequency observations", "background load", "energy method or UNAVAILABLE"]
+  },
+  "decision_gates": {
+    "time_gain_route": "Primary point gain >= 3% and paired 95% gain interval lower bound > 0, with zero correctness/lifecycle failures and all selected regression gates satisfied. The 3% is a predeclared engineering criterion, never a value to prove or backfill.",
+    "memory_gain_route": "Unique owned-backing peak reduction >= 10% and the upper 95% time-ratio bound <= 1.02, with identical work and zero safety failures; RSS savings require separate real observation.",
+    "owned_backing_regression_max_fraction": 0.05,
+    "non_target_time_regression_max_fraction": 0.02,
+    "interpretation": "Do not declare a pass when noise cannot establish the applicable bounds; a point estimate alone is insufficient.",
+    "BIL_adoption_additional": ["The selected CPU function is actually used by BIL and has matching observed input/lifetime/hot-path behavior.", "Installed native integration preserves origin-owner, success/fallback/quality and deadline behavior.", "Current A1 scratch/P1-07 and packed gains are not counted again.", "Measure integration/bridge costs and complete BIL-specific functional/device regressions before default enablement."],
+    "fallback": "No stable net benefit or insufficient evidence => keep System/current BIL path; record NO_GAIN or INCONCLUSIVE with all evidence, without weakening baseline or reducing work."
+  },
+  "separate_blockers": {
+    "real_16kb_loader": "UNAVAILABLE_UNTIL_SEPARATELY_VERIFIED",
+    "MTE_Hwasan": "UNAVAILABLE_UNTIL_DEVICE_AND_MODE_CONFIRMED",
+    "energy": "UNAVAILABLE_UNLESS_MATCHING_WORK_COLLECTION_METHOD_EXISTS",
+    "PMU_PFN_TLB_mechanism": "NOT_REQUIRED_FOR_BLACK_BOX_A1_A3_TIMING_BUT_NO_MECHANISM_CLAIM",
+    "scope_rule": "A bounded arm64 4KB timing result does not qualify missing 16KB/MTE/energy, every device, or BIL end-to-end performance."
+  }
+}

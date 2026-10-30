@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "workload_id": "dmg-parse-enumerate-bil917-classes1-v1",
+  "scope": "REAL_CPU_DEX_PARSE_AND_COMPLETE_QUERY_TASK_NOT_BIL_PRODUCT_HOTPATH",
+  "selected_primary": true,
+  "input": {
+    "origin": "Existing Bilibili 9.17.0 (9170100) APK, held locally by the user",
+    "archive_bytes": 243687778,
+    "archive_sha256": "f0f880e841d017db335b3919e6d4792961f2e08aa9993da661b626d52cfcb955",
+    "member": "classes.dex",
+    "format": "DEX037",
+    "bytes": 10540184,
+    "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "redistribution": "NOT_PUBLISHED_INPUT_STAYS_IN_ARTIFACTS_LOCAL"
+  },
+  "algorithm": "Real frozen DexMeguviz borrowed snapshot creation, method query, and consumption of every method row and text field; compare source hash, complete coverage, method count and result checksum.",
+  "completion_unit": "One independent process/task, one full source parse and complete method enumeration; no allocation-only loop",
+  "A1": "Conventional native System single dense 64-byte-aligned input backing, checked budget and refcount lifetime, existing borrowed-source parser API; all setup/memcpy/parse/query/full consumption/final release included",
+  "A3": "Installed Memory ARENA with identical payload, alignment, initialization, source API, work, result lifetime and System backing; include domain/lease/owner admission and final collect/drain/destroy cost",
+  "same_backing_budget_bytes": 33554432,
+  "common_parser_owned_budget_bytes": 268435456,
+  "preflight_budget_revision": "Before pilot/formal sampling, full 54147-method query explicitly rejected the original 64 MiB parser budget. Preserve that failure; both A1/A3 now use a fixed 256 MiB parser budget. Memory input budget remains 32 MiB. No partial results or reduced work accepted.",
+  "arena_chunk_bytes": 10540184,
+  "storage_migration": false,
+  "A2": "NOT_SELECTED_SEPARATE_INTERFACE_ONLY_ATTRIBUTION_NOT_CLAIMED",
+  "A4": "NOT_SELECTED",
+  "preload_boundary": "The same input file is read into a preloaded byte vector before the timed task in both variants; preload duration separately recorded. This is a CPU task elapsed metric, not APK open-to-result or host end-to-end latency.",
+  "timing_round": "No provider tracing or detailed phase timers; only full-task elapsed. Own rusage and CPU metadata captured outside the elapsed boundary. Required semantic consumption and lifecycle checks remain enabled.",
+  "diagnostic_round": "Separate --diagnostic runs with phase timers and resource fields, never pooled into formal timings.",
+  "limits": {
+    "parser_internal_allocations": "Remain owned by DexMeguviz; not injected into Memory or counted as its backing savings",
+    "expected_opportunity": "Input is already one dense System backing; no proven allocation or layout saving is assumed",
+    "BIL_integration": "Independent parser task is not the current BIL DexKit/player path. Even positive results require actual BIL hotpath/lifetime and bridge-cost qualification; no automatic switch.",
+    "existing_P1_07_P2_05": "EXCLUDED_FROM_MEMORY_INCREMENT"
+  },
+  "formal_sampling": "NOT_STARTED_REQUIRES_DEVICE_SAFETY_PASS_AND_PILOT_FROZEN_PLAN"
+}
