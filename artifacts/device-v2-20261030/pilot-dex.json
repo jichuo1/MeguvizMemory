@@ -1,0 +1,634 @@
+{
+  "schema_version": 2,
+  "suite_schema": "FOUR_VARIANT_WINDOW_V1",
+  "phase": "pilot",
+  "family": "dex",
+  "decision": "PILOT_FEASIBLE_FORMAL_ALLOWED",
+  "performance_qualified": false,
+  "BIL_auto_enable": false,
+  "protocol_canonical_sha256": "8c0fa6d53c79b27516e1975598e112bf06ec91b55e19d9cac1f758bd201b7617",
+  "plan_canonical_sha256": "1385e83637aaabfcc5a13c5c47c2ec2af12bd440f3d8c4001b63d4272e806bdd",
+  "attempted_tasks": 64,
+  "planned_tasks": 64,
+  "functional_failures": [],
+  "incomplete_reasons": [],
+  "resource_budget_failures": [],
+  "freeze_errors": [],
+  "blocks": [
+    {
+      "window_id": "pilot-w00",
+      "block_id": 0,
+      "descriptive_log_ratios": {
+        "ordinary": -0.010646340465129356,
+        "interface": 0.005112249418864678,
+        "arena": 0.002794887308965599,
+        "memory_net": 0.018553477192959633,
+        "arena_vs_direct_copy": 0.007907136727830277
+      }
+    },
+    {
+      "window_id": "pilot-w00",
+      "block_id": 1,
+      "descriptive_log_ratios": {
+        "ordinary": -0.010111424469911867,
+        "interface": -0.016182830091487688,
+        "arena": 0.010172609456390092,
+        "memory_net": 0.004101203834814271,
+        "arena_vs_direct_copy": -0.006010220635097596
+      }
+    },
+    {
+      "window_id": "pilot-w01",
+      "block_id": 0,
+      "descriptive_log_ratios": {
+        "ordinary": 0.006318559989878736,
+        "interface": 0.008491000034226204,
+        "arena": -0.0014593319729456766,
+        "memory_net": 0.0007131080714017912,
+        "arena_vs_direct_copy": 0.007031668061280527
+      }
+    },
+    {
+      "window_id": "pilot-w01",
+      "block_id": 1,
+      "descriptive_log_ratios": {
+        "ordinary": -0.02509304701522197,
+        "interface": -0.0014098944524221224,
+        "arena": -0.0015732496246130268,
+        "memory_net": 0.02210990293818682,
+        "arena_vs_direct_copy": -0.002983144077035149
+      }
+    },
+    {
+      "window_id": "pilot-w02",
+      "block_id": 0,
+      "descriptive_log_ratios": {
+        "ordinary": -0.023084172253827973,
+        "interface": -0.003413674319748594,
+        "arena": 0.0044095251218436715,
+        "memory_net": 0.02408002305592305,
+        "arena_vs_direct_copy": 0.0009958508020950774
+      }
+    },
+    {
+      "window_id": "pilot-w02",
+      "block_id": 1,
+      "descriptive_log_ratios": {
+        "ordinary": -0.017805214367605515,
+        "interface": 0.0025188902512454092,
+        "arena": -0.0032596384460816807,
+        "memory_net": 0.017064466172769244,
+        "arena_vs_direct_copy": -0.0007407481948362715
+      }
+    },
+    {
+      "window_id": "pilot-w03",
+      "block_id": 0,
+      "descriptive_log_ratios": {
+        "ordinary": -0.014512281723657594,
+        "interface": -0.002753519071664101,
+        "arena": -0.0014399330717225212,
+        "memory_net": 0.010318829580270972,
+        "arena_vs_direct_copy": -0.004193452143386622
+      }
+    },
+    {
+      "window_id": "pilot-w03",
+      "block_id": 1,
+      "descriptive_log_ratios": {
+        "ordinary": -0.007296043359396265,
+        "interface": 0.011703224656585576,
+        "arena": 0.00755586917241402,
+        "memory_net": 0.02655513718839586,
+        "arena_vs_direct_copy": 0.019259093828999596
+      }
+    }
+  ],
+  "contrasts": {
+    "ordinary": {
+      "id": "ordinary",
+      "candidate": "D-Z0",
+      "reference": "D-C0",
+      "attribution": "ORDINARY_CONSUMER",
+      "windows_observed": 4,
+      "window_means": [
+        {
+          "window_id": "pilot-w00",
+          "mean_log_ratio": -0.010378882467520611,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w01",
+          "mean_log_ratio": -0.009387243512671617,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w02",
+          "mean_log_ratio": -0.020444693310716744,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w03",
+          "mean_log_ratio": -0.01090416254152693,
+          "blocks": 2
+        }
+      ],
+      "estimate": null,
+      "pilot_planning_log_half_width_for_12_formal_windows": 0.004430896536655396,
+      "pilot_feasible": true,
+      "actual_precision_met": null,
+      "formal_half_shift_log": null,
+      "formal_trend_warning": false,
+      "simultaneous_interval_class": "DESCRIPTIVE_BONFERRONI_FAMILYWISE_95_PERCENT_FOUR_CONTRASTS",
+      "pilot_precision_screen_applies": true,
+      "resource_comparison": {
+        "owned_backing_peak_ratio": {
+          "value": 0.0,
+          "unavailable_reason": null
+        },
+        "source_plus_input_or_workspace_capacity_ratio": {
+          "value": 0.5,
+          "unavailable_reason": null
+        },
+        "scope": "Requested input/workspace and simultaneous preloaded-source capacity only; excludes parser/metadata/RSS/energy."
+      },
+      "performance_qualified": false
+    },
+    "interface": {
+      "id": "interface",
+      "candidate": "D-C1",
+      "reference": "D-C0",
+      "attribution": "MEMORY_INTERFACE_SAME_WORK",
+      "windows_observed": 4,
+      "window_means": [
+        {
+          "window_id": "pilot-w00",
+          "mean_log_ratio": -0.005535290336311505,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w01",
+          "mean_log_ratio": 0.0035405527909020407,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w02",
+          "mean_log_ratio": -0.00044739203425159246,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w03",
+          "mean_log_ratio": 0.004474852792460737,
+          "blocks": 2
+        }
+      ],
+      "estimate": null,
+      "pilot_planning_log_half_width_for_12_formal_windows": 0.003923445101842079,
+      "pilot_feasible": true,
+      "actual_precision_met": null,
+      "formal_half_shift_log": null,
+      "formal_trend_warning": false,
+      "simultaneous_interval_class": "DESCRIPTIVE_BONFERRONI_FAMILYWISE_95_PERCENT_FOUR_CONTRASTS",
+      "pilot_precision_screen_applies": true,
+      "resource_comparison": {
+        "owned_backing_peak_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "source_plus_input_or_workspace_capacity_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "scope": "Requested input/workspace and simultaneous preloaded-source capacity only; excludes parser/metadata/RSS/energy."
+      },
+      "performance_qualified": false
+    },
+    "arena": {
+      "id": "arena",
+      "candidate": "D-C2",
+      "reference": "D-C1",
+      "attribution": "ARENA_VS_MEMORY_SYSTEM",
+      "windows_observed": 4,
+      "window_means": [
+        {
+          "window_id": "pilot-w00",
+          "mean_log_ratio": 0.006483748382677845,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w01",
+          "mean_log_ratio": -0.0015162907987793517,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w02",
+          "mean_log_ratio": 0.0005749433378809954,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w03",
+          "mean_log_ratio": 0.0030579680503457496,
+          "blocks": 2
+        }
+      ],
+      "estimate": null,
+      "pilot_planning_log_half_width_for_12_formal_windows": 0.0029612780447256302,
+      "pilot_feasible": true,
+      "actual_precision_met": null,
+      "formal_half_shift_log": null,
+      "formal_trend_warning": false,
+      "simultaneous_interval_class": "DESCRIPTIVE_BONFERRONI_FAMILYWISE_95_PERCENT_FOUR_CONTRASTS",
+      "pilot_precision_screen_applies": true,
+      "resource_comparison": {
+        "owned_backing_peak_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "source_plus_input_or_workspace_capacity_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "scope": "Requested input/workspace and simultaneous preloaded-source capacity only; excludes parser/metadata/RSS/energy."
+      },
+      "performance_qualified": false
+    },
+    "memory_net": {
+      "id": "memory_net",
+      "candidate": "D-C2",
+      "reference": "D-Z0",
+      "attribution": "MEMORY_VS_PREDECLARED_ORDINARY_BASELINE",
+      "windows_observed": 4,
+      "window_means": [
+        {
+          "window_id": "pilot-w00",
+          "mean_log_ratio": 0.011327340513886952,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w01",
+          "mean_log_ratio": 0.011411505504794306,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w02",
+          "mean_log_ratio": 0.020572244614346147,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w03",
+          "mean_log_ratio": 0.018436983384333416,
+          "blocks": 2
+        }
+      ],
+      "estimate": null,
+      "pilot_planning_log_half_width_for_12_formal_windows": 0.004110787258025867,
+      "pilot_feasible": true,
+      "actual_precision_met": null,
+      "formal_half_shift_log": null,
+      "formal_trend_warning": false,
+      "simultaneous_interval_class": "DESCRIPTIVE_BONFERRONI_FAMILYWISE_95_PERCENT_FOUR_CONTRASTS",
+      "pilot_precision_screen_applies": true,
+      "resource_comparison": {
+        "owned_backing_peak_ratio": {
+          "value": null,
+          "unavailable_reason": "ZERO_REFERENCE_BACKING_NOT_A_VALID_RATIO_DENOMINATOR"
+        },
+        "source_plus_input_or_workspace_capacity_ratio": {
+          "value": 2.0,
+          "unavailable_reason": null
+        },
+        "scope": "Requested input/workspace and simultaneous preloaded-source capacity only; excludes parser/metadata/RSS/energy."
+      },
+      "performance_qualified": false
+    }
+  },
+  "secondary_contrasts": {
+    "arena_vs_direct_copy": {
+      "id": "arena_vs_direct_copy",
+      "candidate": "D-C2",
+      "reference": "D-C0",
+      "attribution": "SECONDARY_WHOLE_STRATEGY_VS_DIRECT_COPY",
+      "windows_observed": 4,
+      "window_means": [
+        {
+          "window_id": "pilot-w00",
+          "mean_log_ratio": 0.0009484580463663406,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w01",
+          "mean_log_ratio": 0.002024261992122689,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w02",
+          "mean_log_ratio": 0.00012755130362940292,
+          "blocks": 2
+        },
+        {
+          "window_id": "pilot-w03",
+          "mean_log_ratio": 0.007532820842806487,
+          "blocks": 2
+        }
+      ],
+      "estimate": null,
+      "pilot_planning_log_half_width_for_12_formal_windows": 0.0021229084121913233,
+      "pilot_feasible": true,
+      "actual_precision_met": null,
+      "formal_half_shift_log": null,
+      "formal_trend_warning": false,
+      "simultaneous_interval_class": "SECONDARY_EXPLORATORY_UNADJUSTED_95_PERCENT_NO_SIMULTANEOUS_COVERAGE",
+      "pilot_precision_screen_applies": false,
+      "resource_comparison": {
+        "owned_backing_peak_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "source_plus_input_or_workspace_capacity_ratio": {
+          "value": 1.0,
+          "unavailable_reason": null
+        },
+        "scope": "Requested input/workspace and simultaneous preloaded-source capacity only; excludes parser/metadata/RSS/energy."
+      },
+      "performance_qualified": false
+    }
+  },
+  "resources_by_variant": {
+    "D-C0": {
+      "native_rows": 16,
+      "columns": {
+        "logical_requested_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "unique_owned_backing_peak_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "external_source_capacity_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "retained_before_collect_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "reserved_final_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "metadata_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "rss_pss_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "energy_joules": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "parser_peak_owned_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 79089386,
+          "maximum": 79089386
+        }
+      },
+      "source_plus_input_or_workspace_unique_capacity_max": 21080368,
+      "sum_scope": "Common preloaded source remains alive through workspace peak; parser, metadata and RSS excluded."
+    },
+    "D-Z0": {
+      "native_rows": 16,
+      "columns": {
+        "logical_requested_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "unique_owned_backing_peak_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "external_source_capacity_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "retained_before_collect_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "reserved_final_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "metadata_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "rss_pss_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "energy_joules": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "parser_peak_owned_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 79089386,
+          "maximum": 79089386
+        }
+      },
+      "source_plus_input_or_workspace_unique_capacity_max": 10540184,
+      "sum_scope": "Common preloaded source remains alive through workspace peak; parser, metadata and RSS excluded."
+    },
+    "D-C1": {
+      "native_rows": 16,
+      "columns": {
+        "logical_requested_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "unique_owned_backing_peak_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "external_source_capacity_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "retained_before_collect_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "reserved_final_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "metadata_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "rss_pss_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "energy_joules": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "parser_peak_owned_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 79089386,
+          "maximum": 79089386
+        }
+      },
+      "source_plus_input_or_workspace_unique_capacity_max": 21080368,
+      "sum_scope": "Common preloaded source remains alive through workspace peak; parser, metadata and RSS excluded."
+    },
+    "D-C2": {
+      "native_rows": 16,
+      "columns": {
+        "logical_requested_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "unique_owned_backing_peak_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "external_source_capacity_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "retained_before_collect_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 10540184,
+          "maximum": 10540184
+        },
+        "reserved_final_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 0,
+          "maximum": 0
+        },
+        "metadata_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "rss_pss_bytes": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "energy_joules": {
+          "observed": 0,
+          "unavailable": 16,
+          "minimum": null,
+          "maximum": null
+        },
+        "parser_peak_owned_bytes": {
+          "observed": 16,
+          "unavailable": 0,
+          "minimum": 79089386,
+          "maximum": 79089386
+        }
+      },
+      "source_plus_input_or_workspace_unique_capacity_max": 21080368,
+      "sum_scope": "Common preloaded source remains alive through workspace peak; parser, metadata and RSS excluded."
+    }
+  },
+  "descriptive_memory_target": {
+    "prespecified": {
+      "minimum_point_gain": 0.03,
+      "gain_interval_lower_gt": 0.0,
+      "maximum_source_plus_backing_ratio": 1.05,
+      "qualification": "DESCRIPTIVE_ONLY_NOT_PERFORMANCE_PASS"
+    },
+    "point_gain_gate": null,
+    "gain_interval_gate": null,
+    "source_plus_backing_gate": false,
+    "performance_qualified": false,
+    "does_not_override_precision_trend_or_outer_limits": true
+  },
+  "statistics": {
+    "critical_value": 2.980872430052642,
+    "degrees_of_freedom": 11,
+    "familywise_alpha": 0.05,
+    "contrasts": 4,
+    "primary_unit": "window_mean_of_two_mirrored_blocks",
+    "pilot_pooled": false
+  },
+  "limitations": [
+    "Same-day shared environment does not establish independent outer windows; all intervals descriptive.",
+    "Bonferroni coverage assumes the underlying t model; multiplicity adjustment does not repair dependence.",
+    "Both ordinary baselines are disclosed through primary and secondary contrasts; neither layout or source strategy is assumed faster.",
+    "Input capacity, backing, retained and parser high-water columns have separate scopes; unknown RSS and energy are not zero.",
+    "Ordinary consumer, interface, arena and whole migration contrasts are separate; percentages are not added."
+  ],
+  "protocol_file_sha256": "f2381fc00b0f04acc984064db51b892f50c4861d6c43699490afa32f3f09d231",
+  "plan_file_sha256": "5fe1689b6b0d384e61da408239f86a674202c0fa2b8b14d76f96820b14761f94",
+  "journal_file_sha256": "1a6313d6cf016d19740fa0d8214ce7d952cb6d7e42787eb28ccfc596cbf938ae",
+  "analysis_source_sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
+}

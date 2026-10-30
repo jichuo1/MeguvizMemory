@@ -1035,7 +1035,7 @@
     "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE"
   },
   "live_v2_20261030": {
-    "state": "ONE_PREREGISTERED_ENGINEERING_RETRY_PILOT_SCHEDULED",
+    "state": "DEX_FORMAL_IN_PROGRESS_IMAGE_STOPPED_BY_PILOT",
     "device": {
       "model": "2210132C",
       "api": 33,
@@ -1053,10 +1053,18 @@
     "device_functional_runner": "IMPLEMENTED_OFFLINE_13_TESTS_PASS",
     "protocol": "artifacts/device-v2-20261030/frozen-suite-retry1/protocol.json",
     "plan": "artifacts/device-v2-20261030/frozen-suite-retry1/plan.json",
-    "new_performance": "PENDING_PREDECLARED_PILOT_AND_FORMAL",
+    "new_performance": "DEX_IN_PROGRESS_IMAGE_NO_FORMAL_QUALIFICATION",
     "BIL": "UNCHANGED_NO_INTEGRATION",
     "first_attempt": "INCOMPLETE_28_SUCCESSFUL_TASKS_SESSION_WALL_CAP",
     "engineering_retry_cap": 1,
-    "old_attempt_pooling": false
+    "old_attempt_pooling": false,
+    "retry1_pilot": "PASS_128_TASKS_4_WINDOWS",
+    "formal_selected_families": [
+      "dex"
+    ],
+    "formal_skipped_families": {
+      "image": "PRECISION_INSUFFICIENT_MEMORY_NET_PLANNED_LOG_HALF_WIDTH_0.010362410262851413_GT_0.01"
+    },
+    "formal_planned_tasks_selected": 192
   }
 }

@@ -3,7 +3,7 @@
   "scope": "SCOPED_SOURCE_TREE_LOCK",
   "roots": {
     "MeguvizMemory": {
-      "head": "5a7611a8a40e06e1259524be8164d1f55b2dd3a1",
+      "head": "ae7e9b23c1c60d266a661379294abbed7a107df4",
       "dirty": true,
       "state": "READ_ONLY_LOCAL_CHECK"
     },
@@ -14,8 +14,8 @@
     }
   },
   "external_parser_source": "LOCKED",
-  "source_set_sha256": "795c168519cb7403320b3af23f853a889a6fd92cfc8151146161f63b70c2493c",
-  "file_count": 151,
+  "source_set_sha256": "c15a669c8be99a6162e58a9cf4e14658ffc3394eb1a2216b6f8ed4865f3d935d",
+  "file_count": 152,
   "files": [
     {
       "root": "DexMeguviz",
@@ -416,8 +416,8 @@
     {
       "root": "MeguvizMemory",
       "path": ".github/workflows/core.yml",
-      "bytes": 3959,
-      "sha256": "56a98ca9ed2b33bc2790bdb30b33570ec053f33946efa64599e988a40c431314"
+      "bytes": 4013,
+      "sha256": "4a2663accba1144a060ceae64f4d36028f5058df55863f47225ff7a9ff30b243"
     },
     {
       "root": "MeguvizMemory",
@@ -458,8 +458,8 @@
     {
       "root": "MeguvizMemory",
       "path": "TASKS.json",
-      "bytes": 44033,
-      "sha256": "0c229e653d75909091656ba3f9624fb181f155201a6c4dd48b0778ad823f299e"
+      "bytes": 44322,
+      "sha256": "6a7549d1c70d735628cfdfb5b8be6da06b62bc803bd4349c43c09a83c6ce80c3"
     },
     {
       "root": "MeguvizMemory",
@@ -632,8 +632,8 @@
     {
       "root": "MeguvizMemory",
       "path": "docs/DEVICE_V2_20261030.md",
-      "bytes": 4647,
-      "sha256": "70f785daa3f945290e68ef3312e2c4af8ab5728b80eb9c1df97a2e7d1a5782ba"
+      "bytes": 5483,
+      "sha256": "977262b5365230502ce4bd6f8b33ffd4b41ea6e94705f656fc21368ab6906294"
     },
     {
       "root": "MeguvizMemory",
@@ -818,8 +818,8 @@
     {
       "root": "MeguvizMemory",
       "path": "tools/record_device_v2_evidence.py",
-      "bytes": 9467,
-      "sha256": "f2319cc9d861edcd0693f7093c00c175d9240ff477987c1ec9f814d4d37e3b25"
+      "bytes": 11193,
+      "sha256": "84cfacbde24ddc4757329f79f280c140e6ff14863401362b54c8ff45df3b0faf"
     },
     {
       "root": "MeguvizMemory",
@@ -874,6 +874,12 @@
       "path": "tools/test_device_capture_v2.py",
       "bytes": 22115,
       "sha256": "53a6bad3d46ef23ec9680d9cd35f7808589b72485832cabf47c9cea07f276936"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/test_freeze_device_suite_v2.py",
+      "bytes": 10228,
+      "sha256": "dfbbfe81ea0a44dbbfd333113114b4888e8b3ca97af5d392995de69297a3be02"
     },
     {
       "root": "MeguvizMemory",

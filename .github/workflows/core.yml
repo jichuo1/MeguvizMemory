@@ -22,6 +22,7 @@ jobs:
           python tools/test_paired_suite_v2.py --output artifacts/ci-research/four-group-suite.json
           python tools/test_device_capture_v2.py --output artifacts/ci-research/fake-device-capture.json
           python tools/test_validate_arm64_consumers_v2.py
+          python tools/test_freeze_device_suite_v2.py
       - name: Windows capture journal regression
         if: runner.os == 'Windows'
         run: python tools/test_capture_journal.py --out-dir build/capture-journal-ci

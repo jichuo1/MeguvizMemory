@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_CAPTURE_SUMMARY_PRIVATE_AUTHORIZATION_BODY_EXCLUDED",
+  "state": "FAILED_OR_BLOCKED",
+  "all_passed": false,
+  "started_at_utc": "2026-10-30T08:24:08.179528+00:00",
+  "completed_at_utc": "2026-10-30T08:29:30.634117+00:00",
+  "native_tasks_recorded": 28,
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "device_directory": "/data/local/tmp/meguvizmemory-v2-20261030T082353Z-8ee171aaf0d3",
+  "reason": "Blocked:session_wall_cap_exceeded",
+  "enabled_families": [
+    "dex",
+    "image"
+  ],
+  "skipped_by_pilot_stop": null,
+  "private_receipt_file_sha256": "45847c340e92108e2d1f54c8c11077abafa82558e2a6dfa70a8885972ec1d529",
+  "commands_recorded": 95,
+  "performance_qualified": false
+}

@@ -1,0 +1,25 @@
+{
+  "scope": "RECOMPUTED_RAW_PILOT_ADMISSION_NO_EFFECT_SELECTION",
+  "gates": [
+    {
+      "family": "dex",
+      "formal_allowed": true,
+      "reasons": [],
+      "performance_qualified": false,
+      "rule": "One completed pilot; no repeated pilot or precision-driven sample extension."
+    },
+    {
+      "family": "image",
+      "formal_allowed": false,
+      "reasons": [
+        "pilot_does_not_admit_formal_family",
+        "pilot_precision_or_window_gate:memory_net"
+      ],
+      "performance_qualified": false,
+      "rule": "One completed pilot; no repeated pilot or precision-driven sample extension."
+    }
+  ],
+  "pilot_file_sha256": "1a6313d6cf016d19740fa0d8214ce7d952cb6d7e42787eb28ccfc596cbf938ae",
+  "recorded_at_utc": "2026-10-30T08:51:02.506943+00:00",
+  "performance_qualified": false
+}

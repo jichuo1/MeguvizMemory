@@ -1,0 +1,26 @@
+{
+  "schema_version": 2,
+  "scope": "FAKE_OFFLINE_ONLY_SYNTHETIC_TEMPORARY_INPUTS_NO_DEVICE",
+  "status": "PASS",
+  "tests": 12,
+  "failures": 0,
+  "errors": 0,
+  "actual_device_operations": 0,
+  "test_names": [
+    "test_changed_admission_is_rejected",
+    "test_custom_caps_without_preregistration_are_rejected",
+    "test_default_limits_fit_and_plan_is_finite",
+    "test_expiry_must_cover_entire_retry",
+    "test_incomplete_consumers_or_core_are_rejected",
+    "test_input_and_resource_contracts_are_preserved",
+    "test_only_preregistered_retry_caps_are_accepted",
+    "test_retry_has_240_second_schedule_and_bound_identities",
+    "test_retry_requires_one_no_extra_no_examined_gain",
+    "test_session_cap_cannot_reach_window_gap",
+    "test_stale_or_future_functional_receipt_is_rejected",
+    "test_wrong_device_is_rejected"
+  ],
+  "freeze_helper_sha256": "bda03c3b27e568cd0261175374981e022a0ec6f7d649ac90e26d09637c13f27c",
+  "test_sha256": "dfbbfe81ea0a44dbbfd333113114b4888e8b3ca97af5d392995de69297a3be02",
+  "performance_qualified": false
+}

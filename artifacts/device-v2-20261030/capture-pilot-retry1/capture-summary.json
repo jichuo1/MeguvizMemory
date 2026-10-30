@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_CAPTURE_SUMMARY_PRIVATE_AUTHORIZATION_BODY_EXCLUDED",
+  "state": "PASS_CAPTURE_ONLY",
+  "all_passed": true,
+  "started_at_utc": "2026-10-30T08:34:11.164706+00:00",
+  "completed_at_utc": "2026-10-30T08:50:58.129808+00:00",
+  "native_tasks_recorded": 128,
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "device_directory": "/data/local/tmp/meguvizmemory-v2-20261030T083407Z-ca8192f010c1",
+  "reason": null,
+  "enabled_families": [
+    "dex",
+    "image"
+  ],
+  "skipped_by_pilot_stop": null,
+  "private_receipt_file_sha256": "37776b83dd8e76a9064006e8c3c44fdc4be7f0cbb37d20a3e1cef720c5ac9fcc",
+  "commands_recorded": 411,
+  "performance_qualified": false
+}
