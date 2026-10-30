@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "state": "MEMORY_DEVICE_WINDOW_ENDED_NO_QUEUED_TASKS",
+  "finished_at_utc": "2026-10-30T09:12:00.588605+00:00",
+  "reason": "Frozen formal environment gate exhausted; no further retry or replacement tasks",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "read_only_inventory": [
+    {
+      "name": "processes",
+      "exit_code": 0,
+      "stdout_sha256": "e55e13faf977b6eb7a465f1da8eb29deabdd84743869249b1d44a963df77f11e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parsed_rows": 857,
+      "matching_tests": []
+    },
+    {
+      "name": "instrumentation",
+      "exit_code": 0,
+      "stdout_sha256": "e8f529696b46ace11002d1b8e22f1d62368989d635170b78cb343fd6881af571",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "active_markers": []
+    },
+    {
+      "name": "boot",
+      "exit_code": 0,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb"
+    }
+  ],
+  "frozen_device_artifacts_rechecked": [
+    {
+      "role": "library",
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+      "matches_frozen": true
+    },
+    {
+      "role": "dex_formal",
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+      "matches_frozen": true
+    },
+    {
+      "role": "image_formal",
+      "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90",
+      "matches_frozen": true
+    },
+    {
+      "role": "dex_input",
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+      "matches_frozen": true
+    },
+    {
+      "role": "image_input",
+      "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+      "matches_frozen": true
+    }
+  ],
+  "own_native_processes_absent": true,
+  "directories_retained": true,
+  "processes_stopped_by_Memory": false,
+  "global_policy_or_app_data_changed": false,
+  "further_device_commands_planned": false
+}

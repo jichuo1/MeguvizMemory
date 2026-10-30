@@ -54,3 +54,5 @@ OPEN → begin_close → CLOSING
 预算约束唯一 provider backing 与 pending reservation，不包含 allocator/容器元数据或 RSS/PSS。arena 的 retained 含 reset 前不能复用的已释放空间，不能把它直接称为 RSS 节省。默认 dense/System；slab、page hint、TLB placement、JNI 和 GPU 桥均未启用。
 
 本仓库保留实现与可审查进度；没有发布正式 Release 或宣称 BIL 性能获益。原始研究附件留在本地 `research/`，公开文档仅记录其 hash、合同摘要及当前实现状态。
+
+最新v2：新设备API33/arm64/4KB的core3与196消费者用例通过；pilot128任务完成，图像因精度不足停止formal，DEX formal64次成功后因环境门槛中止。正式性能未获资格，BIL保持原实现。详见[v2结果与区间纠正](docs/DEVICE_V2_RESULTS.md)。

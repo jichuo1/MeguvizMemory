@@ -114,9 +114,15 @@
     "api": 33,
     "abi": "arm64-v8a",
     "base_page_bytes": 4096,
-    "core_safety": "PASS_FRESH_3_TESTS",
+    "core_safety": "PASS_FRESH_3_TESTS_11_GROUPS_145033_CHECKS",
     "consumers": "PASS_196_CASES",
-    "new_performance": "PENDING_FROZEN_PILOT_AND_FORMAL",
-    "evidence": "docs/DEVICE_V2_20261030.md"
+    "new_performance": "INCOMPLETE_ENVIRONMENT_STOP_NOT_QUALIFIED",
+    "evidence": "docs/DEVICE_V2_RESULTS.md",
+    "pilot": "PASS_128_NATIVE_TASKS",
+    "formal": "64_NATIVE_SUCCESS_1_PRELAUNCH_REFUSAL_4_OF_12_WINDOWS",
+    "image_formal": "NOT_STARTED_PILOT_PRECISION_STOP",
+    "BIL_integration": "NOT_SELECTED",
+    "device_window": "ENDED",
+    "analysis_intervals": "NULL_FOR_INCOMPLETE_FORMAL_CORRECTION_ARCHIVED"
   }
 }

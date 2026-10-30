@@ -339,10 +339,13 @@ def interval(values,coefficient):
     if not values:
         return None
     mean=st.mean(values)
-    half=coefficient*st.stdev(values)/math.sqrt(len(values)) if len(values)>1 else None
-    return {"mean_log_ratio":mean,"time_ratio":math.exp(mean),"gain":-math.expm1(mean),
+    half=coefficient*st.stdev(values)/math.sqrt(len(values)) if len(values)==FORMAL_WINDOWS else None
+    result={"mean_log_ratio":mean,"time_ratio":math.exp(mean),"gain":-math.expm1(mean),
             "log_half_width":half,"log_interval":[mean-half,mean+half] if half is not None else None,
             "gain_interval":[-math.expm1(mean+half),-math.expm1(mean-half)] if half is not None else None}
+    if half is None:
+        result["interval_unavailable_reason"]="FORMAL_REQUIRES_EXACTLY_12_COMPLETE_VALID_WINDOWS"
+    return result
 
 
 def capture_order_errors(protocol,plan,records,phase):
@@ -505,6 +508,13 @@ def analyze_family(protocol,plan,records,phase,family,journal_errors=None):
             "performance_qualified":False}
         if not complete:
             incomplete.append("missing_complete_windows:"+contrast["id"])
+    if phase=="formal" and (functional or incomplete or frozen or resources):
+        for item in list(contrast_reports.values())+list(secondary_reports.values()):
+            estimate=item["estimate"]
+            if estimate is not None:
+                estimate.update({"log_half_width":None,"log_interval":None,"gain_interval":None})
+                estimate.setdefault("interval_unavailable_reason","FORMAL_HAS_FUNCTIONAL_CAPTURE_FREEZE_OR_RESOURCE_FAILURE")
+            item["actual_precision_met"]=None
     if functional:
         decision="STOP_ENTIRE_SUITE_CORRECTNESS_OR_LIFETIME_FAILURE"
     elif incomplete or frozen:

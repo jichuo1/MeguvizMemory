@@ -1,5 +1,7 @@
 # BIL 接入决策
 
+2026-10-30 v2补充：新设备2210132C/API33/arm64/4KB的core3与196消费者功能用例通过；完整pilot128任务后图像因精度停止，DEX formal64次成功后因CPU2背景忙碌率门槛中止。正式计划未完成，未建立性能资格。普通借用减少一份输入；Memory复制方案相对借用的source加input容量为2倍。**继续不接入BIL。** 新结果单独见 [DEVICE_V2_RESULTS.md](DEVICE_V2_RESULTS.md)，不与下述旧PMA110的32块结果混池。
+
 日期：2026-10-30。**决策：本批不把 MeguvizMemory 接入 BIL，保持现有 System/Java direct/既有 owner 路径。** 这不是核心功能失败，也不声称所有 Memory 用途无效；当前真实 CPU 实验没有建立稳定净收益，且所选独立 DexMeguviz 任务不是 BIL 的生产 DexKit/播放器热点。
 
 本批核定 BIL main 为 `00572940c354fbec7b6f311d4ecd6f02e66ea7c5`。没有在该 checkout 修改 Memory 依赖、设置默认开关或替换 parser/帧资源 owner。已有 P1-07 scratch（`e630ad56`）与 P2-05 holder 打包（`061360f5`）保留为 A1 的既有能力，不计入本库增量；准备流程的初始化、输入独立区间、成功条件和第二快统计也没有改变。

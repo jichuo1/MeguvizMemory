@@ -7,6 +7,7 @@ import argparse
 from datetime import datetime, timedelta, timezone
 import hashlib
 import json
+import runpy
 from pathlib import Path
 import tempfile
 import sys
@@ -81,6 +82,9 @@ class SuiteTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.protocol=protocol_fixture(); cls.plan=make_plan(cls.protocol); cls.rows=records_fixture(cls.protocol,cls.plan)
+        reference=Path(__file__).resolve().parents[1]/"artifacts/device-v2-20261030/frozen-suite-analyzer-initial.txt"
+        assert hashlib.sha256(reference.read_bytes()).hexdigest()=="0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
+        cls.reference=runpy.run_path(str(reference),run_name="frozen_suite_reference")
 
     def result(self,rows=None,phase="formal",family="dex",protocol=None):
         return analyze_family(protocol or self.protocol,self.plan,self.rows if rows is None else rows,phase,family)
@@ -132,6 +136,8 @@ class SuiteTests(unittest.TestCase):
         r=self.result();self.assertEqual(r["decision"],"INCONCLUSIVE_OUTER_INDEPENDENCE_NOT_ESTABLISHED")
         self.assertFalse(r["performance_qualified"]);self.assertEqual(r["attempted_tasks"],192)
         self.assertEqual(r["functional_failures"],[]); self.assertEqual(r["incomplete_reasons"],[])
+        self.assertEqual(r,self.reference["analyze_family"](self.protocol,self.plan,self.rows,"formal","dex"))
+        self.assertEqual(self.result(family="image"),self.reference["analyze_family"](self.protocol,self.plan,self.rows,"formal","image"))
 
     def test_all_four_attributions_and_reverse_gain_interval(self):
         r=self.result();self.assertEqual(set(r["contrasts"]),{"ordinary","interface","arena","memory_net"})
@@ -160,6 +166,51 @@ class SuiteTests(unittest.TestCase):
         r=self.result(phase="pilot");self.assertEqual(r["attempted_tasks"],64)
         self.assertEqual(r["decision"],"PILOT_FEASIBLE_FORMAL_ALLOWED")
         self.assertIsNone(r["contrasts"]["ordinary"]["estimate"])
+        self.assertEqual(r,self.reference["analyze_family"](self.protocol,self.plan,self.rows,"pilot","dex"))
+        self.assertEqual(self.result(phase="pilot",family="image"),self.reference["analyze_family"](self.protocol,self.plan,self.rows,"pilot","image"))
+
+    def assert_formal_intervals_unavailable(self,report):
+        self.assertFalse(report["performance_qualified"])
+        for item in list(report["contrasts"].values())+list(report["secondary_contrasts"].values()):
+            self.assertIsNotNone(item["estimate"])
+            self.assertIsNotNone(item["estimate"]["gain"])
+            for field in ("log_half_width","log_interval","gain_interval"):
+                self.assertIsNone(item["estimate"][field])
+            self.assertTrue(item["estimate"]["interval_unavailable_reason"])
+            self.assertIsNone(item["actual_precision_met"])
+        self.assertIsNone(report["descriptive_memory_target"]["gain_interval_gate"])
+
+    def test_four_formal_windows_have_point_but_no_interval_or_precision(self):
+        rows=[row for row in self.rows if row["phase"]!="formal" or int(row["window_id"][-2:])<8]
+        report=self.result(rows);self.assertEqual(report["decision"],"INCOMPLETE")
+        self.assertEqual(report["contrasts"]["ordinary"]["windows_observed"],4)
+        self.assertAlmostEqual(report["contrasts"]["ordinary"]["estimate"]["gain"],.05,places=10)
+        self.assert_formal_intervals_unavailable(report)
+
+    def test_eleven_formal_windows_have_no_interval_or_precision(self):
+        rows=[row for row in self.rows if row["phase"]!="formal" or int(row["window_id"][-2:])<15]
+        report=self.result(rows);self.assertEqual(report["decision"],"INCOMPLETE")
+        self.assertEqual(report["contrasts"]["ordinary"]["windows_observed"],11)
+        self.assert_formal_intervals_unavailable(report)
+
+    def test_full_formal_shape_with_any_gate_failure_has_no_interval(self):
+        for kind in ("functional","environment","resource","freeze"):
+            rows=deepcopy(self.rows);protocol=deepcopy(self.protocol)
+            row=next(r for r in rows if r["family"]=="dex" and r["phase"]=="formal")
+            if kind=="functional":
+                row["native"]["result_checksum"]+=1
+            elif kind=="environment":
+                row["environment"].pop("battery_deci_c")
+            elif kind=="resource":
+                row["native"]["unique_owned_backing_peak_bytes"]=2_000_000_000
+                row["resources"]=resource_view(protocol,"dex",row["native"])
+            else:
+                protocol["state"]="DRAFT_NOT_FROZEN"
+            row["command_result"]["stdout"]=json.dumps(row["native"])
+            with self.subTest(gate=kind):
+                report=self.result(rows,protocol=protocol)
+                self.assertEqual(report["contrasts"]["ordinary"]["windows_observed"],12)
+                self.assert_formal_intervals_unavailable(report)
 
     def test_formal_requires_identity_bound_feasible_pilot(self):
         r=self.result(phase="pilot")

@@ -367,5 +367,11 @@
     "manifest": "artifacts/research-20261030/ARTIFACTS.json",
     "scope": "HOST_FUNCTIONAL_RESOURCE_HARNESSES_AND_ARM64_CROSS_BUILDS_NO_NEW_DEVICE_RESULTS",
     "old_binary_identities": "PRESERVED_COMPILED_SOURCE_COMMIT_FIELD_REMAINS_ORIGINAL_SDK_ONLY"
+  },
+  "device_v2_followup": {
+    "manifest": "artifacts/device-v2-20261030/ARTIFACTS.json",
+    "functional": "PASS_NEW_API33_ARM64_4K_CORE3_AND_CONSUMERS196",
+    "performance": "INCOMPLETE_NOT_QUALIFIED",
+    "note": "Original SDK compiled commit above remains unchanged; new consumer binaries and frozen/corrected analysis sources have separate exact hashes"
   }
 }

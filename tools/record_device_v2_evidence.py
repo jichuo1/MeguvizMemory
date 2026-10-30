@@ -16,6 +16,7 @@ def record(retry1=False):
     if not __debug__:
         raise RuntimeError("evidence_checks_require_assertions_enabled")
     files = {}
+    frozen_source_references = []
     suffix = "-retry1" if retry1 else ""
     def blob(relative, expected=None, include=True):
         path = (ROOT / relative).resolve()
@@ -28,6 +29,20 @@ def record(retry1=False):
         return raw
     def read(relative):
         return strict_json(blob(relative).decode("utf-8-sig"))
+    def frozen_source(relative, expected):
+        current = (ROOT/relative).read_bytes()
+        if hashlib.sha256(current).hexdigest() == expected:
+            blob(relative, expected)
+            return
+        snapshots = {"tools/freeze_device_suite_v2.py":"frozen-helper-initial.txt",
+                     "tools/paired_suite_v2.py":"frozen-suite-analyzer-initial.txt",
+                     "tools/test_paired_suite_v2.py":"frozen-suite-tests-initial.txt"}
+        assert relative in snapshots, "unexplained frozen source change"
+        snapshot = BASE/snapshots[relative]
+        blob(snapshot, expected)
+        frozen_source_references.append({"original_path":relative,"frozen_sha256":expected,
+                                         "exact_archived_source":snapshot.as_posix(),
+                                         "current_file_differs_after_capture":True})
     def private_receipt(relative):
         raw = blob(relative, include=False)
         value = strict_json(raw.decode("utf-8-sig"))
@@ -61,7 +76,7 @@ def record(retry1=False):
     assert len(native_rows) == 199 and all(r["success"] is True and all(v is True for v in r["checks"].values()) for r in native_rows)
     protocol, plan = read(BASE / ("frozen-suite" + suffix) / "protocol.json"), read(BASE / ("frozen-suite" + suffix) / "plan.json")
     assert not freeze_errors(protocol, plan)
-    for item in protocol["freeze"]["source_closure"]: blob(item["path"], item["sha256"])
+    for item in protocol["freeze"]["source_closure"]: frozen_source(item["path"], item["sha256"])
     retry = None
     if retry1:
         prereg = read(BASE / "engineering-retry1-preregistration.json")
@@ -73,15 +88,7 @@ def record(retry1=False):
         failed = private_receipt(BASE / "capture-pilot/receipt.json"); old_rows, errors = chain(BASE / "capture-pilot/tasks.jsonl")
         assert not errors and failed["state"] == "FAILED_OR_BLOCKED" and failed["reason"] == "Blocked:session_wall_cap_exceeded" and len(old_rows) == failed["native_tasks_recorded"] == 28 and all(r["success"] is True for r in old_rows)
         _, errors = chain(BASE / "capture-pilot/command-events.jsonl"); assert not errors
-        for item in old["freeze"]["source_closure"]:
-            path = ROOT / item["path"]
-            if hashlib.sha256(path.read_bytes()).hexdigest() != item["sha256"]:
-                snapshot = BASE / "frozen-helper-initial.txt"
-                if item["path"] == "tools/freeze_device_suite_v2.py" and (ROOT / snapshot).is_file():
-                    raw = blob(snapshot, item["sha256"])
-                else:
-                    raw = subprocess.run(["git", "-c", "safe.directory=" + ROOT.as_posix(), "show", "5a7611a:" + item["path"]], capture_output=True, check=True).stdout
-                assert hashlib.sha256(raw).hexdigest() == item["sha256"], "old frozen source differs from fixed Git blob"
+        for item in old["freeze"]["source_closure"]: frozen_source(item["path"], item["sha256"])
         retry = {"number": 1, "old_tasks_preserved_separately": 28, "old_native_tasks_successful": True, "old_source_fallback_commit": "5a7611a", "old_attempt_pooling": False, "further_retry_allowed": False}
     artifacts = []
     for item in protocol["freeze"]["artifact_closure"]:
@@ -98,7 +105,17 @@ def record(retry1=False):
     for item in cross["sources"] + [cross["binary"], cross["memory_installed_runtime"]]: blob(item["path"], item["sha256"])
     suite, collector = read(BASE / "suite-offline-tests.json"), read(BASE / "collector-offline-tests.json")
     assert suite["status"] == "PASS" and suite["test_count"] == 40 and suite["device_operations"] == 0
-    for item in suite["sources"]: blob(item["path"], item["sha256"])
+    for item in suite["sources"]: frozen_source(item["path"], item["sha256"])
+    correction = read(BASE/"analysis-correction.json")
+    blob(BASE/correction["original_report"],correction["original_report_sha256"])
+    blob(BASE/correction["corrected_report"],correction["corrected_report_sha256"])
+    assert correction["additional_native_tasks"] == 0 and correction["performance_qualified"] is False
+    corrected_tests = read(BASE/"suite-corrected-offline-tests.json")
+    assert corrected_tests["status"] == "PASS" and corrected_tests["test_count"] == 43 and corrected_tests["device_operations"] == 0
+    for item in corrected_tests["sources"]: blob(item["path"],item["sha256"])
+    freeze_tests = read(BASE/"freeze-offline-tests.json")
+    assert freeze_tests["status"] == "PASS"
+    read(BASE/"device-window-finished.json")
     assert collector["status"] == "PASS" and collector["tests"] == 20 and collector["actual_device_operations"] == 0
     blob("tools/device_capture_v2.py", collector["collector_sha256"]); blob("tools/test_device_capture_v2.py", collector["test_sha256"])
     captures, reports = {}, {}
@@ -116,6 +133,8 @@ def record(retry1=False):
             "enabled_families":receipt.get("enabled_families"),"skipped_by_pilot_stop":receipt.get("skipped_by_pilot_stop",[])}
         for family in ("dex", "image"):
             name = BASE / (phase + "-" + family + ".json")
+            corrected = BASE/(phase+"-"+family+"-corrected.json")
+            if (ROOT/corrected).is_file(): name = corrected
             if (ROOT / name).is_file():
                 report = read(name); assert report["protocol_canonical_sha256"] == digest(protocol) and report["plan_canonical_sha256"] == digest(plan) and report["performance_qualified"] is False
                 recomputed = analyze_family(protocol, plan, rows, phase, family, errors)
@@ -123,7 +142,12 @@ def record(retry1=False):
                 reports[phase + "-" + family] = {"decision": report["decision"], "attempted_tasks": report["attempted_tasks"], "performance_qualified": False}
     historical = read(Path("artifacts/research-20261030/evidence_manifest.json"))
     for item in historical["historical_files"]: blob(item["path"], item["sha256"])
-    result = {"schema_version": 2, "scope": "DEVICE_V2_CURRENT_FREEZE_ONLY", "retry1_selected": retry1, "engineering_retry": retry, "static_integrity_verified": True, "functional_cases": 196, "core_safety_tests": 3, "artifacts": artifacts, "captures": captures, "reports": reports, "files": sorted(files.values(), key=lambda x: x["path"]), "performance_qualification": "INCONCLUSIVE_OUTER_INDEPENDENCE_NOT_ESTABLISHED", "BIL_integration": "NOT_SELECTED", "history": "5ac9b4f research manifest remains applicable to its original snapshot; not revalidated against changed current CMake", "privacy": "No raw inputs, admission body, absolute paths, duplicate command sidecars or file bodies included; active captures are explicitly IN_PROGRESS."}
+    current_lock = read(Path("SOURCE_LOCK.json"))
+    for item in current_lock["files"]:
+        prefix = "" if item["root"] == "MeguvizMemory" else "build/locked-inputs/DexMeguviz/"
+        blob(prefix+item["path"],item["sha256"],include=False)
+    qualification = "INCOMPLETE_FORMAL_CAPTURE_NOT_QUALIFIED" if any(r["decision"] == "INCOMPLETE" for r in reports.values()) else "INCONCLUSIVE_OUTER_INDEPENDENCE_NOT_ESTABLISHED"
+    result = {"schema_version": 2, "scope": "DEVICE_V2_CURRENT_FREEZE_ONLY", "retry1_selected": retry1, "engineering_retry": retry, "static_integrity_verified": True, "functional_cases": 196, "core_safety_tests": 3, "artifacts": artifacts, "captures": captures, "reports": reports, "files": sorted(files.values(), key=lambda x: x["path"]), "current_source_lock":files["SOURCE_LOCK.json"], "current_source_set_sha256":current_lock["source_set_sha256"], "frozen_source_references":frozen_source_references, "analysis_correction":correction, "performance_qualification": qualification, "BIL_integration": "NOT_SELECTED", "history": "5ac9b4f research manifest remains applicable to its original snapshot; not revalidated against changed current CMake", "privacy": "No raw inputs, admission body, absolute paths, duplicate command sidecars or file bodies included; private capture receipts have separate public summaries."}
     (ROOT / BASE / "ARTIFACTS.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"integrity": True, "captures": captures, "performance_qualified": False}))
 

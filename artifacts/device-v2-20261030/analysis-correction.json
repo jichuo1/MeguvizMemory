@@ -1,0 +1,27 @@
+{
+  "schema_version": 2,
+  "scope": "POST_CAPTURE_REPORT_CORRECTION_NO_NEW_DEVICE_DATA",
+  "reason": "Frozen analyzer emitted df11 interval fields despite only four of twelve formal windows; incomplete/invalid formal intervals are withdrawn",
+  "original_report": "formal-dex.json",
+  "original_report_sha256": "b7d5c8dcc17358f2301669f7ff838c0143082085db9c5398ca24ea9246746003",
+  "corrected_report": "formal-dex-corrected.json",
+  "corrected_report_sha256": "aa4a5afc4abe7d3619a6e70590feb888c3bcab3abab6e3c6596708d310b369b4",
+  "frozen_source_snapshot": "frozen-suite-analyzer-initial.txt",
+  "frozen_source_sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965",
+  "current_analysis_sha256": "7ab7b957b04df765c046b7868555e9c12bb6b4c1ea8b2d9b59d86ddeb3d85773",
+  "unchanged": [
+    "all raw data and hash chains",
+    "pilot decisions",
+    "all descriptive point estimates",
+    "INCOMPLETE formal decision",
+    "BIL not integrated"
+  ],
+  "withdrawn": [
+    "log_half_width",
+    "log_interval",
+    "gain_interval",
+    "actual_precision_met"
+  ],
+  "performance_qualified": false,
+  "additional_native_tasks": 0
+}

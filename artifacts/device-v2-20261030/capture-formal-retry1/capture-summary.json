@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "scope": "PUBLIC_CAPTURE_SUMMARY_PRIVATE_AUTHORIZATION_BODY_EXCLUDED",
+  "state": "FAILED_OR_BLOCKED",
+  "all_passed": false,
+  "started_at_utc": "2026-10-30T08:51:02.706665+00:00",
+  "completed_at_utc": "2026-10-30T09:09:26.084642+00:00",
+  "native_tasks_recorded": 65,
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "device_directory": "/data/local/tmp/meguvizmemory-v2-20261030T083407Z-ca8192f010c1",
+  "reason": "Blocked:capture_stopped_after_preserved_task_failure",
+  "enabled_families": [
+    "dex"
+  ],
+  "skipped_by_pilot_stop": [
+    {
+      "family": "image",
+      "state": "SKIPPED_BY_PILOT_STOP",
+      "reason": "STOP_FAMILY_PILOT_PRECISION_INSUFFICIENT"
+    }
+  ],
+  "private_receipt_file_sha256": "8511fee2339bb275d7a63b734f97d192b8c3cf49abbe865ce5037edc2685e7c8",
+  "commands_recorded": 216,
+  "performance_qualified": false
+}
