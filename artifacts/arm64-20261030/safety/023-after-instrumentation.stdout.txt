@@ -1,0 +1,8 @@
+private_inventory_sha256:f13e1e09608dc44bea9502dec914fac8860cb8b0a954ef5dabdc8f10191f326d
+{
+  "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+  "instrumentation_sections": [],
+  "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+  "active_instrumentation": [],
+  "blocked_instrumentation": []
+}

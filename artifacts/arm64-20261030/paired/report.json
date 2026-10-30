@@ -1,0 +1,1247 @@
+{
+  "schema_version": 1,
+  "scope": "REAL_NATIVE_CPU_TASK_A1_A3_ONLY",
+  "formal_file_sha256": "731c240db002a5d5e52e6707975fde40b743d716dd254325a7519d97fc8b289d",
+  "plan_sha256": "f6d026f5d1bf199e94d764b2da2bb08990e526dde91daef1f59060be5a9c95c1",
+  "analysis_tool_sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee",
+  "pilot_file_sha256": "3464478a1351bb7c7e7ffcc4fccebbe4b4ca78872ae6f4a76be155d6e2a380c8",
+  "decision": "INCONCLUSIVE",
+  "decision_reasons": [
+    "formal_plan_incomplete_or_run_semantics_environment_failed",
+    "pilot_required_sample_count_exceeded_frozen_cap",
+    "serial_dependence_or_time_trend_requires_separate_validation"
+  ],
+  "planned_protocol_complete": false,
+  "BIL_auto_enable": false,
+  "BIL_decision": "KEEP_CURRENT_PATH_PENDING_SEPARATE_PRODUCT_EQUIVALENCE_AND_INTEGRATION_GATES",
+  "semantic_identity": {
+    "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "result_checksum": 12701547145945416225,
+    "method_count": 54147
+  },
+  "formal_blocks_planned": 96,
+  "formal_blocks_observed": 36,
+  "formal_blocks_valid": 35,
+  "attempted_rows": 144,
+  "missing_blocks": [
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95
+  ],
+  "extra_blocks": [],
+  "parse_errors": [],
+  "group_errors": [],
+  "failed_or_environment_invalid_rows": [
+    {
+      "line": 144,
+      "block_id": 35,
+      "position": 3,
+      "variant": "A3",
+      "reasons": [
+        "run_not_successful",
+        "environment_not_explicitly_valid"
+      ]
+    }
+  ],
+  "precision_unmet": true,
+  "primary_estimator": "1-exp(mean(block mean(log(A3))-mean(log(A1))))",
+  "paired_estimate": {
+    "blocks": 35,
+    "mean_log_ratio": -0.007300866498781338,
+    "time_ratio": 0.9927257200859875,
+    "gain": 0.007274279914012527,
+    "gain_95_percentile_interval": [
+      -0.0031098983598463192,
+      0.017283898350736848
+    ],
+    "log_ratio_95_percentile_interval": [
+      -0.017435008636294817,
+      0.003105072628376418
+    ],
+    "gain_interval_half_width": 0.010196898355291584
+  },
+  "estimate_scope": "DESCRIPTIVE_ONLY_QUALIFICATION_NOT_PASSED",
+  "all_timed_blocks_descriptive_estimate": {
+    "blocks": 36,
+    "mean_log_ratio": -0.007021080466478165,
+    "time_ratio": 0.9930035097353954,
+    "gain": 0.006996490264604582,
+    "gain_95_percentile_interval": [
+      -0.003113491324668427,
+      0.016740280708087307
+    ],
+    "log_ratio_95_percentile_interval": [
+      -0.016881982855698887,
+      0.0031086544476699577
+    ],
+    "gain_interval_half_width": 0.009926886016377867
+  },
+  "paired_arithmetic_mean_of_block_ratios": 0.9931959266292522,
+  "owned_backing_peak_ratio_max": 1.0,
+  "serial_diagnostics": {
+    "lag1_correlation": 0.07447236908013968,
+    "second_minus_first_half_mean_log_ratio": 0.022295813132890193,
+    "warning_thresholds": {
+      "lag1_abs_warning_threshold": 0.5,
+      "half_log_ratio_shift_warning_threshold": 0.01
+    },
+    "warnings": [
+      "first_to_second_half_shift_above_frozen_warning_threshold"
+    ],
+    "limitation": "Exploratory diagnostics do not prove independence when no warning fires."
+  },
+  "bootstrap": {
+    "unit": "WHOLE_FOUR_SESSION_BLOCK",
+    "resamples": 20000,
+    "seed": 20261030,
+    "interval": "TWO_SIDED_95_PERCENTILE"
+  },
+  "blocks": [
+    {
+      "block_id": 0,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "times_ns": {
+        "A1": [
+          292170000,
+          294356822
+        ],
+        "A3": [
+          274191666,
+          280523073
+        ]
+      },
+      "descriptive_log_ratio": -0.05582259263996292,
+      "arithmetic_time_ratio": 0.9457619297076238,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 1,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "times_ns": {
+        "A1": [
+          294545676,
+          292969479
+        ],
+        "A3": [
+          297007343,
+          282708021
+        ]
+      },
+      "descriptive_log_ratio": -0.013665512331066054,
+      "arithmetic_time_ratio": 0.9867241024616633,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 2,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "times_ns": {
+        "A1": [
+          307661198,
+          291606302
+        ],
+        "A3": [
+          294353438,
+          287907552
+        ]
+      },
+      "descriptive_log_ratio": -0.028491569371769998,
+      "arithmetic_time_ratio": 0.9716211708460746,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 3,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "times_ns": {
+        "A1": [
+          292008490,
+          293752343
+        ],
+        "A3": [
+          293722604,
+          273276354
+        ]
+      },
+      "descriptive_log_ratio": -0.0332002758854415,
+      "arithmetic_time_ratio": 0.9679700759371188,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 4,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "times_ns": {
+        "A1": [
+          263526407,
+          261452031
+        ],
+        "A3": [
+          256568281,
+          278238906
+        ]
+      },
+      "descriptive_log_ratio": 0.01773527127824792,
+      "arithmetic_time_ratio": 1.0187221955961552,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 5,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "times_ns": {
+        "A1": [
+          284148438,
+          293076979
+        ],
+        "A3": [
+          291253594,
+          277000989
+        ]
+      },
+      "descriptive_log_ratio": -0.01585832540411758,
+      "arithmetic_time_ratio": 0.984458698914154,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 6,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "times_ns": {
+        "A1": [
+          286224426,
+          285460781
+        ],
+        "A3": [
+          286656614,
+          269718698
+        ]
+      },
+      "descriptive_log_ratio": -0.027608135188106786,
+      "arithmetic_time_ratio": 0.973219711105801,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 7,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "times_ns": {
+        "A1": [
+          296172031,
+          296600677
+        ],
+        "A3": [
+          277157968,
+          270136042
+        ]
+      },
+      "descriptive_log_ratio": -0.07990693347911204,
+      "arithmetic_time_ratio": 0.9232780163691342,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 8,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        33,
+        34,
+        35,
+        36
+      ],
+      "times_ns": {
+        "A1": [
+          280081666,
+          272167135
+        ],
+        "A3": [
+          276756666,
+          282663177
+        ]
+      },
+      "descriptive_log_ratio": 0.01294854505939469,
+      "arithmetic_time_ratio": 1.0129851653584667,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 9,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        37,
+        38,
+        39,
+        40
+      ],
+      "times_ns": {
+        "A1": [
+          286671927,
+          282014219
+        ],
+        "A3": [
+          277629375,
+          269047916
+        ]
+      },
+      "descriptive_log_ratio": -0.03955970558645561,
+      "arithmetic_time_ratio": 0.9612987670707209,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 10,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        41,
+        42,
+        43,
+        44
+      ],
+      "times_ns": {
+        "A1": [
+          271253438,
+          281021094
+        ],
+        "A3": [
+          282300625,
+          278346302
+        ]
+      },
+      "descriptive_log_ratio": 0.015177632381167427,
+      "arithmetic_time_ratio": 1.0151598426414492,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 11,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        45,
+        46,
+        47,
+        48
+      ],
+      "times_ns": {
+        "A1": [
+          287891302,
+          270441615
+        ],
+        "A3": [
+          272630000,
+          276280104
+        ]
+      },
+      "descriptive_log_ratio": -0.01655421701103421,
+      "arithmetic_time_ratio": 0.9831233074155289,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 12,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        49,
+        50,
+        51,
+        52
+      ],
+      "times_ns": {
+        "A1": [
+          269651354,
+          276401459
+        ],
+        "A3": [
+          267734479,
+          283321407
+        ]
+      },
+      "descriptive_log_ratio": 0.008796746413445078,
+      "arithmetic_time_ratio": 1.0091622511245995,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 13,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        53,
+        54,
+        55,
+        56
+      ],
+      "times_ns": {
+        "A1": [
+          287670000,
+          283810261
+        ],
+        "A3": [
+          281954687,
+          274852031
+        ]
+      },
+      "descriptive_log_ratio": -0.026070326127577204,
+      "arithmetic_time_ratio": 0.9743236223516738,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 14,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        57,
+        58,
+        59,
+        60
+      ],
+      "times_ns": {
+        "A1": [
+          289931250,
+          279690000
+        ],
+        "A3": [
+          271804739,
+          285750521
+        ]
+      },
+      "descriptive_log_ratio": -0.02156130488080521,
+      "arithmetic_time_ratio": 0.97881752129156,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 15,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        61,
+        62,
+        63,
+        64
+      ],
+      "times_ns": {
+        "A1": [
+          282573854,
+          288265729
+        ],
+        "A3": [
+          291284167,
+          291381198
+        ]
+      },
+      "descriptive_log_ratio": 0.020554503444945027,
+      "arithmetic_time_ratio": 1.0207164715835761,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 16,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        65,
+        66,
+        67,
+        68
+      ],
+      "times_ns": {
+        "A1": [
+          290923281,
+          292683229
+        ],
+        "A3": [
+          283977656,
+          279035677
+        ]
+      },
+      "descriptive_log_ratio": -0.035957640255730894,
+      "arithmetic_time_ratio": 0.964713935422002,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 17,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        69,
+        70,
+        71,
+        72
+      ],
+      "times_ns": {
+        "A1": [
+          294482500,
+          281144167
+        ],
+        "A3": [
+          288780990,
+          290112240
+        ]
+      },
+      "descriptive_log_ratio": 0.0059246485854203,
+      "arithmetic_time_ratio": 1.0056747944236573,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 18,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        73,
+        74,
+        75,
+        76
+      ],
+      "times_ns": {
+        "A1": [
+          290550625,
+          285595052
+        ],
+        "A3": [
+          275676458,
+          284338125
+        ]
+      },
+      "descriptive_log_ratio": -0.02848034978103442,
+      "arithmetic_time_ratio": 0.9720017095606881,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 19,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        77,
+        78,
+        79,
+        80
+      ],
+      "times_ns": {
+        "A1": [
+          296442500,
+          271784584
+        ],
+        "A3": [
+          282317292,
+          274964688
+        ]
+      },
+      "descriptive_log_ratio": -0.0185943914366149,
+      "arithmetic_time_ratio": 0.9807381515098637,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 20,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        81,
+        82,
+        83,
+        84
+      ],
+      "times_ns": {
+        "A1": [
+          248972448,
+          275399271
+        ],
+        "A3": [
+          235231667,
+          282318906
+        ]
+      },
+      "descriptive_log_ratio": -0.0159780145406323,
+      "arithmetic_time_ratio": 0.9869917736734387,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 21,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        85,
+        86,
+        87,
+        88
+      ],
+      "times_ns": {
+        "A1": [
+          272787916,
+          275926719
+        ],
+        "A3": [
+          283569948,
+          273962343
+        ]
+      },
+      "descriptive_log_ratio": 0.015809768568175286,
+      "arithmetic_time_ratio": 1.0160696570449592,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 22,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        89,
+        90,
+        91,
+        92
+      ],
+      "times_ns": {
+        "A1": [
+          278646250,
+          265588229
+        ],
+        "A3": [
+          280319739,
+          280896458
+        ]
+      },
+      "descriptive_log_ratio": 0.031013423475783952,
+      "arithmetic_time_ratio": 1.0312029440530908,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 23,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        93,
+        94,
+        95,
+        96
+      ],
+      "times_ns": {
+        "A1": [
+          276708177,
+          283765573
+        ],
+        "A3": [
+          288990260,
+          279434583
+        ]
+      },
+      "descriptive_log_ratio": 0.014024655953807752,
+      "arithmetic_time_ratio": 1.014186378933893,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 24,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        97,
+        98,
+        99,
+        100
+      ],
+      "times_ns": {
+        "A1": [
+          242773438,
+          265870572
+        ],
+        "A3": [
+          255825521,
+          262452292
+        ]
+      },
+      "descriptive_log_ratio": 0.019713350406846075,
+      "arithmetic_time_ratio": 1.0189401679968668,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 25,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        101,
+        102,
+        103,
+        104
+      ],
+      "times_ns": {
+        "A1": [
+          255620781,
+          247986927
+        ],
+        "A3": [
+          269277760,
+          251217083
+        ]
+      },
+      "descriptive_log_ratio": 0.03249489835136643,
+      "arithmetic_time_ratio": 1.0335323203591633,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 26,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        105,
+        106,
+        107,
+        108
+      ],
+      "times_ns": {
+        "A1": [
+          281664010,
+          273707708
+        ],
+        "A3": [
+          279118489,
+          279867813
+        ]
+      },
+      "descriptive_log_ratio": 0.006589047063137343,
+      "arithmetic_time_ratio": 1.006508404880639,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 27,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        109,
+        110,
+        111,
+        112
+      ],
+      "times_ns": {
+        "A1": [
+          285246250,
+          254334999
+        ],
+        "A3": [
+          271265157,
+          284064375
+        ]
+      },
+      "descriptive_log_ratio": 0.030146266304345914,
+      "arithmetic_time_ratio": 1.0291861198460586,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 28,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        113,
+        114,
+        115,
+        116
+      ],
+      "times_ns": {
+        "A1": [
+          282233542,
+          277974479
+        ],
+        "A3": [
+          287325469,
+          280647865
+        ]
+      },
+      "descriptive_log_ratio": 0.01372607346573318,
+      "arithmetic_time_ratio": 1.013861481287145,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 29,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        117,
+        118,
+        119,
+        120
+      ],
+      "times_ns": {
+        "A1": [
+          281046250,
+          276166197
+        ],
+        "A3": [
+          269119687,
+          270908646
+        ]
+      },
+      "descriptive_log_ratio": -0.031292107959448145,
+      "arithmetic_time_ratio": 0.9691605704565318,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 30,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        121,
+        122,
+        123,
+        124
+      ],
+      "times_ns": {
+        "A1": [
+          277524219,
+          285690677
+        ],
+        "A3": [
+          265966979,
+          288900261
+        ]
+      },
+      "descriptive_log_ratio": -0.015682104374960204,
+      "arithmetic_time_ratio": 0.9851785596238918,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 31,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        125,
+        126,
+        127,
+        128
+      ],
+      "times_ns": {
+        "A1": [
+          245361770,
+          271837604
+        ],
+        "A3": [
+          274840677,
+          286258645
+        ]
+      },
+      "descriptive_log_ratio": 0.08257437557532654,
+      "arithmetic_time_ratio": 1.0848801259376621,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 32,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        129,
+        130,
+        131,
+        132
+      ],
+      "times_ns": {
+        "A1": [
+          279387500,
+          266497188
+        ],
+        "A3": [
+          268392188,
+          280295260
+        ]
+      },
+      "descriptive_log_ratio": 0.005164723692349327,
+      "arithmetic_time_ratio": 1.0051343444167096,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 33,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        133,
+        134,
+        135,
+        136
+      ],
+      "times_ns": {
+        "A1": [
+          273994167,
+          266840625
+        ],
+        "A3": [
+          252783021,
+          257990625
+        ]
+      },
+      "descriptive_log_ratio": -0.05715182230151328,
+      "arithmetic_time_ratio": 0.9444171372761833,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 34,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        137,
+        138,
+        139,
+        140
+      ],
+      "times_ns": {
+        "A1": [
+          253794219,
+          285968593
+        ],
+        "A3": [
+          263481302,
+          261241562
+        ]
+      },
+      "descriptive_log_ratio": -0.026488928921455823,
+      "arithmetic_time_ratio": 0.9721360055460805,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 35,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": false,
+      "reasons": [
+        "line_144:environment_not_explicitly_valid",
+        "line_144:run_not_successful"
+      ],
+      "lines": [
+        141,
+        142,
+        143,
+        144
+      ],
+      "times_ns": {
+        "A1": [
+          278382239,
+          275655416
+        ],
+        "A3": [
+          281290573,
+          274321666
+        ]
+      },
+      "descriptive_log_ratio": 0.002771430664132879,
+      "arithmetic_time_ratio": 1.0028420162163887,
+      "backing_peak_ratio": 1.0
+    }
+  ],
+  "limitations": [
+    "All raw attempts remain in the input JSONL bound by its SHA; no timing-selected samples are removed.",
+    "Invalid/incomplete blocks are explicitly reported; their describable timings are secondary only and cannot pass qualification.",
+    "No precise p95/p99, energy, RSS, physical-contiguity or hardware mechanism claim follows from this analysis.",
+    "16KB/MTE/non-target/BIL end-to-end and family integration gates require separate evidence."
+  ]
+}

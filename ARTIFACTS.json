@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "qualification": "CPU_FUNCTIONAL_ENGINEERING_PREVIEW",
   "compiled_source_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
-  "source_identity_rule": "MeguvizMemory core and consumer sources match this code commit; external parser inputs are pinned independently by SOURCE_LOCK and the local replay snapshot.",
+  "source_identity_rule": "The original SDK and two original installed consumers listed below match the stated code commit. The arm64 followup has its own native benchmark/collector commits and immutable manifest. External parser inputs are pinned separately by source lock and local replay snapshot.",
   "installed_profiles": {
     "host": [
       {
@@ -354,5 +354,13 @@
     "bytes": 2998877,
     "sha256": "c4c409fec90549f0b6140bf11e8150426ba3e749e0d8ef2be00637177e3c0239",
     "scope": "LOCAL_INPUT_ARCHIVE_NOT_PUBLISHED_TO_GIT"
+  },
+  "arm64_followup": {
+    "manifest": "artifacts/arm64-20261030/ARTIFACTS.json",
+    "sha256": "b1c8739267fac67d5c424afb16503fb99d2cd00c9db6a595963cd857a8d4e31a",
+    "physical_safety": "PASS",
+    "paired_capture": "COMPLETE_32_BLOCKS_128_TASKS",
+    "performance_qualification": "INCONCLUSIVE_TIME_TREND",
+    "BIL_integration": "NOT_SELECTED"
   }
 }

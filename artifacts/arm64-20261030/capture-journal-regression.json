@@ -1,0 +1,24 @@
+{
+  "scope": "SYNTHETIC_WINDOWS_FILE_IO_REGRESSION_NOT_DEVICE_OR_PERFORMANCE_EVIDENCE",
+  "all_passed": true,
+  "atomic_replace": {
+    "short_hold_recovered": {
+      "success": true,
+      "elapsed_seconds": 0.1720000000004802
+    },
+    "persistent_hold_failed_explicitly": {
+      "success": false,
+      "exception": "PermissionError",
+      "elapsed_seconds": 0.9060000000008586
+    },
+    "reader_observations_complete": 11,
+    "declared_retry_budget_seconds": 0.9
+  },
+  "journal": {
+    "events": 3,
+    "recovered_commands": 2,
+    "duplicate_unchanged_save_suppressed": true,
+    "state_and_final_forced_snapshot": true,
+    "private_inventory_excluded": true
+  }
+}

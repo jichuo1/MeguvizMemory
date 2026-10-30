@@ -1,0 +1,455 @@
+{
+  "schema_version": 1,
+  "scope": "ARM64_REAL_CPU_A1_A3_PAIRED_CAPTURE",
+  "started_at_utc": "2026-10-30T03:46:13.068163+00:00",
+  "state": "PASS",
+  "all_passed": true,
+  "device_serial_sha256": "5579a8acd744122d3c611cdd981053250cb9d87432bee2fe9c176bf6e96b7382",
+  "device_directory": "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a",
+  "device_directory_created": true,
+  "shared_device_lock_acquired": false,
+  "admission_rule": "Original owner release plus observational process gates; no future-exclusion guarantee.",
+  "commands": [
+    {
+      "record_id": 1,
+      "name": "before-processes",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:53c49e124ec7094f8c0066fc7edbd20ced3642cd47be739b9a797249769db262\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 1000,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.13999999999941792,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "53c49e124ec7094f8c0066fc7edbd20ced3642cd47be739b9a797249769db262",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "001-before-processes.stdout.txt",
+      "stderr_file": "001-before-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 1000,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 2,
+      "name": "before-instrumentation",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:0091aff8a94eb8d8975d9cb95b0a1c0847f173395108f8e17e9a7ef1a9b484e5\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.10899999999855936,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "0091aff8a94eb8d8975d9cb95b0a1c0847f173395108f8e17e9a7ef1a9b484e5",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "002-before-instrumentation.stdout.txt",
+      "stderr_file": "002-before-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 3,
+      "name": "stage-boot-before",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07899999999972351,
+      "stdout_value_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "003-stage-boot-before.stdout.txt",
+      "stderr_file": "003-stage-boot-before.stderr.txt"
+    },
+    {
+      "record_id": 4,
+      "name": "create-exclusive-owned-directory",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "mkdir",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "stdout_file": "004-create-exclusive-owned-directory.stdout.txt",
+      "stderr_file": "004-create-exclusive-owned-directory.stderr.txt"
+    },
+    {
+      "record_id": 5,
+      "name": "push-executable",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "D:\\MeguvizMemory\\build\\dex-paired-arm64\\mgmem_dex_paired",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/mgmem_dex_paired"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "D:\\MeguvizMemory\\build\\dex-paired-arm64\\mgmem_dex_paired: 1 file pushed, 0 skipped. 223.4 MB/s (14406784 bytes in 0.062s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.14099999999962165,
+      "stdout_file": "005-push-executable.stdout.txt",
+      "stderr_file": "005-push-executable.stderr.txt"
+    },
+    {
+      "record_id": 6,
+      "name": "hash-executable",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/mgmem_dex_paired"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391  /data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/mgmem_dex_paired\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0930000000007567,
+      "stdout_file": "006-hash-executable.stdout.txt",
+      "stderr_file": "006-hash-executable.stderr.txt"
+    },
+    {
+      "record_id": 7,
+      "name": "push-library",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "D:\\MeguvizMemory\\install\\android-arm64-v8a\\lib\\libmgmem.so",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/libmgmem.so"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "D:\\MeguvizMemory\\install\\android-arm64-v8a\\lib\\libmgmem.so: 1 file pushed, 0 skipped. 204.5 MB/s (1665960 bytes in 0.008s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.09399999999914144,
+      "stdout_file": "007-push-library.stdout.txt",
+      "stderr_file": "007-push-library.stderr.txt"
+    },
+    {
+      "record_id": 8,
+      "name": "hash-library",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/libmgmem.so"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919  /data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/libmgmem.so\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "stdout_file": "008-hash-library.stdout.txt",
+      "stderr_file": "008-hash-library.stderr.txt"
+    },
+    {
+      "record_id": 9,
+      "name": "push-input",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<local-input-path-redacted>",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/input.dex"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<local-input-path-redacted>: 1 file pushed, 0 skipped. 145.4 MB/s (10540184 bytes in 0.069s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.14099999999962165,
+      "stdout_file": "009-push-input.stdout.txt",
+      "stderr_file": "009-push-input.stderr.txt"
+    },
+    {
+      "record_id": 10,
+      "name": "hash-input",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/input.dex"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0  /data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/input.dex\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0930000000007567,
+      "stdout_file": "010-hash-input.stdout.txt",
+      "stderr_file": "010-hash-input.stderr.txt"
+    },
+    {
+      "record_id": 11,
+      "name": "set-owned-execute-bit",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "chmod",
+        "700",
+        "/data/local/tmp/meguvizmemory-paired-20261030T034613Z-69ac31ef085a/mgmem_dex_paired"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07799999999951979,
+      "stdout_file": "011-set-owned-execute-bit.stdout.txt",
+      "stderr_file": "011-set-owned-execute-bit.stderr.txt"
+    },
+    {
+      "record_id": 12,
+      "name": "stage-boot-after",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07899999999972351,
+      "stdout_value_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "012-stage-boot-after.stdout.txt",
+      "stderr_file": "012-stage-boot-after.stderr.txt"
+    },
+    {
+      "record_id": 13,
+      "name": "after-processes",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:d679f8a6c578d6716bf169a1f6946e1b2954ee5c608a4454df518c833599a527\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 1000,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.125,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "d679f8a6c578d6716bf169a1f6946e1b2954ee5c608a4454df518c833599a527",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "013-after-processes.stdout.txt",
+      "stderr_file": "013-after-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 1000,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 14,
+      "name": "after-instrumentation",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:5b4491e7f06889c4331ec9b2dc235deceb15157406ed9ba95cd0c54bc87ada10\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.14100000000144064,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "5b4491e7f06889c4331ec9b2dc235deceb15157406ed9ba95cd0c54bc87ada10",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "014-after-instrumentation.stdout.txt",
+      "stderr_file": "014-after-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 15,
+      "name": "phase-boot-after",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_value_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "015-phase-boot-after.stdout.txt",
+      "stderr_file": "015-phase-boot-after.stderr.txt"
+    }
+  ],
+  "binary_manifest": [],
+  "tests": {},
+  "qualification": {
+    "scope": "INDEPENDENT_NATIVE_PARSER_TASK_ONLY",
+    "BIL_auto_enable": false,
+    "16kb": "UNAVAILABLE",
+    "MTE": "UNAVAILABLE",
+    "energy": "UNAVAILABLE"
+  },
+  "cleanup": "Own directory retained. No automatic kill or delete.",
+  "phase": "stage",
+  "native_session_rows": 0,
+  "admission": {
+    "file_name": "device-window-admission.json",
+    "sha256": "091e20f3e73a261b4962458272d1e35e34454ef4ad01a8e6aa8ccaa2d975ca57",
+    "state": "RELEASED_FOR_MEMORY",
+    "owner_evidence": {
+      "thread_id": "01a1814c-ad83-7681-833e-fdf32a513e45",
+      "explicit_statement": "设备已释放、可供 Memory 使用；我方目前没有排队的设备任务，后续如需使用会先协调。",
+      "prior_run": "gpu_gate_v2_1793324951",
+      "prior_run_terminal_state": "INTERRUPTED_INCOMPLETE",
+      "release_summary_sha256": "da1c9b57d6d4d6ca58f5b5cc1f0ff0bc85cace7b13d48b945aa50dd01dc21b2f",
+      "source_receipt_directory": "MeguvizPack/coordination/validation/gpu-inflight-gpu_gate_v2_1793324951/device-release-1793330888381736900",
+      "app_data_preserved": true,
+      "instrumentation_active": false
+    },
+    "explicitly_idle_processes": []
+  },
+  "safety_receipt": {
+    "sha256": "88889fd3571e6e4e33c3711b5db430594f53e5718f6d026e9cd9e06b93dca9dc",
+    "state": "PASS",
+    "abi": "arm64-v8a",
+    "page_bytes": 4096
+  },
+  "protocol_sha256": "e13da61f45122abdd408cf2eae71765ce7afe88ed47310f664d3a0e7e8a4a84c",
+  "local_artifacts": {
+    "executable": {
+      "name": "mgmem_dex_paired",
+      "bytes": 14406784,
+      "sha256": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391"
+    },
+    "library": {
+      "name": "libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    "input": {
+      "name": "input.dex",
+      "bytes": 10540184,
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0"
+    }
+  },
+  "workload_contract": {
+    "cpu": 2,
+    "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "expected_method_count": 54147,
+    "expected_result_checksum": 12701547145945416225
+  },
+  "before_occupancy": {
+    "checked_at_utc": "2026-10-30T03:46:13.395380+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "after_occupancy": {
+    "checked_at_utc": "2026-10-30T03:46:14.653850+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "completed_at_utc": "2026-10-30T03:46:14.722818+00:00"
+}

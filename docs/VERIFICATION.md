@@ -43,3 +43,17 @@ Android 使用现有 NDK `30.0.16248370` 的 `build/cmake/android.toolchain.cmak
 7. 外部 Dex 会话在最终核对后更新 CMake/任务元数据。没有将漂移静默记为哈希通过；最终复制独立配置输入和源码快照，重新构建 parser 与安装消费者并重跑 24 条 oracle 命令。旧回执保留于前一证据提交，最终 SOURCE_LOCK、ARTIFACTS 与回放输入 ZIP 对应冻结版本。
 
 本批没有修改外部 BIL/Dex/Compute/Media 源码或依赖版本，也没有正式发布 Release。公开仓库用于保存工程预览及进度，CPU 正式候选、家族集成和 TLB profile 各自仍需对应门槛。
+
+## 后续批次：arm64 真机安全（同日）
+
+原设备 owner 明确释放后，根代理重查诊断进程和 instrumentation 均为空，使用新建的独立设备目录运行本批 `arm64-v8a` 安装库及 core/C/C++ 程序。设备 PMA110、API 37、内核 6.12 Android、基础页 4096 B；四份上传 ELF 均逐个校验 SHA256，boot identity 前后相同。核心 11 组、145033 项检查，纯 C 最终 backing=0，C++ 五个 lifetime case 全通过。用例已包含 lease 迟到、六线程竞争、预算 reservation、失败原子、reset/trim BUSY、关闭/申请竞争及阻塞回收时 drain 超时。
+
+证据在 `artifacts/arm64-20261030/safety/receipt.json`；脚本为 `tools/run_arm64_validation.py`。设备库存原文仅在内存解析，公开数据只保留摘要和相关诊断行，不发布无关应用/页面。该批是普通 arm64 功能验证，不包含 MTE/HWASan、16 KB loader、BIL 安装/Hook 或性能通过。后续 A1/A3 性能协议及结果独立保存，不把安全程序耗时作为收益。
+
+## 后续批次：独立真实 DEX 的 A1/A3
+
+实际源为本地 BIL 9.17.0 APK 的 `classes.dex`，10,540,184 B；两组完整处理 54,147 个方法，摘要一致。64 MiB parser 预算的预检失败保留后，在任何 pilot 前将两组 parser 预算共同固定为 256 MiB，Memory 输入域仍为 32 MiB。A1 直接 System 单 backing，A3 安装后的 arena；完整 setup/parse/query/consume/cleanup 均计时，文件预载与进程启动不计入 CPU 主指标。
+
+首轮 96 块计划在第 36 块末遇 Windows 收据替换访问冲突，144 次 native 均成功，但末次环境回执缺失；35 个有效块和全部失败记录独立保留，判 INCONCLUSIVE。修复为最多 0.9 秒有界重试及追加命令 journal，真实 Windows 短/长读句柄冲突和日志恢复回归通过，并已进入 Windows CI。
+
+唯一一次独立重试重新 pilot 后固定 32 块，128 次任务、环境和关闭检查完整通过；配对几何时间比的描述性净增量 1.0793899%，探索性 95% 区间 −0.0234357%～2.3315899%。前后半程 log-ratio 偏移超过预设 0.01，最终仍 INCONCLUSIVE；不混池、不追加 pilot、不接入 BIL。两组 backing 峰值均为 10,540,184 B。详情与原始入口见 `docs/PERFORMANCE_A1_A3.md`、`docs/BIL_ADOPTION_DECISION.md`；设备窗口已结束，后续只在主机归档。

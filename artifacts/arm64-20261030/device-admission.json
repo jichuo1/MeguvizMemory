@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "state": "RELEASED_FOR_MEMORY",
+  "as_of": "2026-10-30",
+  "scope": "ARM64_NATIVE_SAFETY_THEN_ONE_CPU_WORKLOAD_PAIRED_EXPERIMENT",
+  "owner_evidence": {
+    "thread_id": "01a1814c-ad83-7681-833e-fdf32a513e45",
+    "explicit_statement": "设备已释放、可供 Memory 使用；我方目前没有排队的设备任务，后续如需使用会先协调。",
+    "prior_run": "gpu_gate_v2_1793324951",
+    "prior_run_terminal_state": "INTERRUPTED_INCOMPLETE",
+    "release_summary_sha256": "da1c9b57d6d4d6ca58f5b5cc1f0ff0bc85cace7b13d48b945aa50dd01dc21b2f",
+    "source_receipt_directory": "MeguvizPack/coordination/validation/gpu-inflight-gpu_gate_v2_1793324951/device-release-1793330888381736900",
+    "app_data_preserved": true,
+    "instrumentation_active": false
+  },
+  "live_recheck": {
+    "previous_diagnostic_pid_absent": true,
+    "matching_diagnostic_processes": [],
+    "active_instrumentation": false,
+    "method": "Filtered adb ps and dumpsys activity after explicit owner release"
+  },
+  "explicitly_idle_processes": [],
+  "forbidden": ["stopping unrelated work", "unfreezing previous GPU process", "clearing application data", "changing governors or global policies"],
+  "release_after_validation_and_measurement": true
+}

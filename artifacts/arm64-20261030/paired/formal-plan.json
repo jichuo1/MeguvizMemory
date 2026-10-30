@@ -1,0 +1,1095 @@
+{
+  "schema_version": 1,
+  "protocol_id": "MM-003-MM-012-arm64-native-parser-A1-A3-v1",
+  "state": "FROZEN_SAMPLE_SIZE_AND_ORDER_FROM_PILOT",
+  "scope": "INDEPENDENT_NATIVE_CPU_WORKLOAD_ONLY_NO_AUTOMATIC_BIL_ENABLEMENT",
+  "pilot_file_sha256": "3464478a1351bb7c7e7ffcc4fccebbe4b4ca78872ae6f4a76be155d6e2a380c8",
+  "analysis_tool_sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee",
+  "semantic_identity": {
+    "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "result_checksum": 12701547145945416225,
+    "method_count": 54147
+  },
+  "pilot_blocks_expected": 6,
+  "pilot_blocks_observed": 6,
+  "pilot_order_counts": {
+    "A1,A3,A3,A1": 3,
+    "A3,A1,A1,A3": 3
+  },
+  "pilot_valid": true,
+  "pilot_log_ratio_sd": 0.06815574503843856,
+  "required_blocks_unclipped": 179,
+  "formal_blocks": 96,
+  "minimum_blocks": 32,
+  "maximum_blocks": 96,
+  "target_log_ratio_95_half_width": 0.01,
+  "precision_unmet": true,
+  "sample_size_rule": "ceil((1.96*pilot_sd/0.01)^2), clamp to 32..96 then round up to an even count; planning approximation, not guaranteed precision.",
+  "planned_blocks": [
+    {
+      "block_id": 0,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 1,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 2,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 3,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 4,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 5,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 6,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 7,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 8,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 9,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 10,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 11,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 12,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 13,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 14,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 15,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 16,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 17,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 18,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 19,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 20,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 21,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 22,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 23,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 24,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 25,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 26,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 27,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 28,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 29,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 30,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 31,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 32,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 33,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 34,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 35,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 36,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 37,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 38,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 39,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 40,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 41,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 42,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 43,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 44,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 45,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 46,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 47,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 48,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 49,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 50,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 51,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 52,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 53,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 54,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 55,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 56,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 57,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 58,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 59,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 60,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 61,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 62,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 63,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 64,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 65,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 66,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 67,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 68,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 69,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 70,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 71,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 72,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 73,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 74,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 75,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 76,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 77,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 78,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 79,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 80,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 81,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 82,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 83,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 84,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 85,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 86,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 87,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 88,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 89,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 90,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 91,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 92,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 93,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    },
+    {
+      "block_id": 94,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ]
+    },
+    {
+      "block_id": 95,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ]
+    }
+  ],
+  "analysis": {
+    "order_seed": 20261030,
+    "bootstrap_seed": 20261030,
+    "bootstrap_resamples": 20000,
+    "lag1_abs_warning_threshold": 0.5,
+    "half_log_ratio_shift_warning_threshold": 0.01,
+    "dependence_warning_blocks_adoption": true,
+    "minimum_point_gain": 0.03,
+    "maximum_owned_backing_ratio": 1.05
+  },
+  "pilot_parse_errors": [],
+  "pilot_group_errors": [],
+  "pilot_blocks": [
+    {
+      "block_id": 0,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "times_ns": {
+        "A1": [
+          259084740,
+          260339531
+        ],
+        "A3": [
+          360154687,
+          250969740
+        ]
+      },
+      "descriptive_log_ratio": 0.14636207108347676,
+      "arithmetic_time_ratio": 1.1765419159629527,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 1,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "times_ns": {
+        "A1": [
+          257008177,
+          260206354
+        ],
+        "A3": [
+          284973594,
+          246619739
+        ]
+      },
+      "descriptive_log_ratio": 0.024830634255472717,
+      "arithmetic_time_ratio": 1.0278004602310757,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 2,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "times_ns": {
+        "A1": [
+          240609219,
+          279763750
+        ],
+        "A3": [
+          247738855,
+          244099636
+        ]
+      },
+      "descriptive_log_ratio": -0.05358397149323224,
+      "arithmetic_time_ratio": 0.9451653339049593,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 3,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        13,
+        14,
+        15,
+        16
+      ],
+      "times_ns": {
+        "A1": [
+          278570625,
+          270709063
+        ],
+        "A3": [
+          268930312,
+          268620365
+        ]
+      },
+      "descriptive_log_ratio": -0.021482455345399387,
+      "arithmetic_time_ratio": 0.9786465597468079,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 4,
+      "order": [
+        "A1",
+        "A3",
+        "A3",
+        "A1"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        17,
+        18,
+        19,
+        20
+      ],
+      "times_ns": {
+        "A1": [
+          268390416,
+          269132709
+        ],
+        "A3": [
+          268401770,
+          278141041
+        ]
+      },
+      "descriptive_log_ratio": 0.016483014978085464,
+      "arithmetic_time_ratio": 1.0167800892287193,
+      "backing_peak_ratio": 1.0
+    },
+    {
+      "block_id": 5,
+      "order": [
+        "A3",
+        "A1",
+        "A1",
+        "A3"
+      ],
+      "valid": true,
+      "reasons": [],
+      "lines": [
+        21,
+        22,
+        23,
+        24
+      ],
+      "times_ns": {
+        "A1": [
+          272661354,
+          274991302
+        ],
+        "A3": [
+          283633646,
+          269992708
+        ]
+      },
+      "descriptive_log_ratio": 0.010554173031287917,
+      "arithmetic_time_ratio": 1.0109078225670105,
+      "backing_peak_ratio": 1.0
+    }
+  ],
+  "rules": [
+    "Pilot samples are never pooled into the formal estimator.",
+    "Stop at frozen N or the parent protocol's cap; no favorable early stop or post-result N change.",
+    "The parent must freeze device/workload/artifact/environment eligibility before formal launch.",
+    "All missing, failed, semantic-mismatch and environmental-violation runs remain in the report and prevent qualification.",
+    "16KB, MTE, energy, BIL production equivalence and non-target regressions remain separate gates."
+  ]
+}

@@ -1,0 +1,7 @@
+private_inventory_sha256:24837f93d72c3fb1e4c51ca8b58cc376f9cb1d66df9572456ec098bfd7d612cc
+{
+  "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+  "process_rows_parsed": 1010,
+  "busy_processes": [],
+  "explicitly_idle_processes_observed": []
+}

@@ -1,25 +1,100 @@
 {
   "schema_version": 1,
   "as_of": "2026-10-30",
-  "cpu_host": {"os": "Windows x64", "compiler": "MSVC 19.51.36247", "release_ctest": "PASS_4_OF_4", "asan_ctest": "PASS_4_OF_4", "base_page_bytes": 4096},
-  "static_sdk": {"platform": "Windows x64", "installed_image_oracle": "PASS_22_OF_22"},
-  "remote_ci": {"code_commit": "58ed07f54199a1217ddef47735d4d297357654f4", "windows": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE", "linux": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE", "run_url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678"},
+  "cpu_host": {
+    "os": "Windows x64",
+    "compiler": "MSVC 19.51.36247",
+    "release_ctest": "PASS_4_OF_4",
+    "asan_ctest": "PASS_4_OF_4",
+    "base_page_bytes": 4096
+  },
+  "static_sdk": {
+    "platform": "Windows x64",
+    "installed_image_oracle": "PASS_22_OF_22"
+  },
+  "remote_ci": {
+    "code_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
+    "windows": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE",
+    "linux": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE",
+    "run_url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678"
+  },
   "android": {
     "ndk": "30.0.16248370",
     "compiler": "Clang 21.0.0",
     "minimum_api": 27,
-    "built_and_installed_abis": ["x86_64", "arm64-v8a", "armeabi-v7a"],
+    "built_and_installed_abis": [
+      "x86_64",
+      "arm64-v8a",
+      "armeabi-v7a"
+    ],
     "elf_pt_load_alignment_bytes": 16384,
-    "elf_needed": ["libm.so", "libdl.so", "libc.so"],
-    "emulator": {"api": 34, "abi": "x86_64", "base_page_bytes": 4096, "core_c_cpp_runtime": "PASS", "product_runtime": "NOT_TESTED"},
-    "physical_device": {"api": 37, "abi": "arm64-v8a", "base_page_bytes": 4096, "memory_runtime": "NOT_RUN_CONCURRENT_GPU_SESSION"},
+    "elf_needed": [
+      "libm.so",
+      "libdl.so",
+      "libc.so"
+    ],
+    "emulator": {
+      "api": 34,
+      "abi": "x86_64",
+      "base_page_bytes": 4096,
+      "core_c_cpp_runtime": "PASS",
+      "product_runtime": "NOT_TESTED"
+    },
+    "physical_device": {
+      "api": 37,
+      "model": "PMA110",
+      "abi": "arm64-v8a",
+      "base_page_bytes": 4096,
+      "memory_runtime": "PASS_CORE_11_GROUPS_145033_CHECKS_C_ABI_CPP_5_CASES",
+      "admission": "EXPLICIT_PRIOR_OWNER_RELEASE_AND_LIVE_RECHECK",
+      "evidence": "artifacts/arm64-20261030/safety/receipt.json"
+    },
     "actual_16kb_loader": "UNAVAILABLE",
     "mte_hwasan": "UNAVAILABLE",
     "apk_aar_packaging": "NOT_SELECTED_NATIVE_SDK_ONLY"
   },
-  "consumers": {"installed_Memory_API": "PASS_TWO_DISTINCT_HOST_CONSUMERS", "Dex_SDK": "REAL_SOURCE_BUILD_NO_INSTALLED_DEX_EXPORT", "BIL": "AUDITED_NOT_MODIFIED", "Compute_Media": "REAL_SDK_FOUND_CPU_IMPORT_CONTRACT_NOT_CONFIRMED"},
-  "research": {"pmu": "UNAVAILABLE", "pfn": "UNAVAILABLE", "tlb_geometry": "UNKNOWN", "physical_contiguity": "UNKNOWN", "translation_aggregation": "UNKNOWN", "special_placement": "NOT_SELECTED", "page_hint": "NOT_SELECTED", "slab": "NOT_SELECTED"},
-  "product_performance": "NOT_STARTED",
+  "consumers": {
+    "installed_Memory_API": "PASS_TWO_DISTINCT_HOST_CONSUMERS",
+    "Dex_SDK": "REAL_SOURCE_BUILD_NO_INSTALLED_DEX_EXPORT",
+    "BIL": "AUDITED_NOT_MODIFIED",
+    "Compute_Media": "REAL_SDK_FOUND_CPU_IMPORT_CONTRACT_NOT_CONFIRMED"
+  },
+  "research": {
+    "pmu": "UNAVAILABLE",
+    "pfn": "UNAVAILABLE",
+    "tlb_geometry": "UNKNOWN",
+    "physical_contiguity": "UNKNOWN",
+    "translation_aggregation": "UNKNOWN",
+    "special_placement": "NOT_SELECTED",
+    "page_hint": "NOT_SELECTED",
+    "slab": "NOT_SELECTED"
+  },
+  "product_performance": "INCONCLUSIVE_INDEPENDENT_CPU_ONLY_BIL_NOT_INTEGRATED",
   "energy_rss_pss": "UNAVAILABLE",
-  "formal_release": "NOT_QUALIFIED_ENGINEERING_PREVIEW"
+  "formal_release": "NOT_QUALIFIED_ENGINEERING_PREVIEW",
+  "independent_arm64_cpu_experiment": {
+    "scope": "REAL_DEX_PARSE_AND_COMPLETE_METHOD_QUERY_NOT_BIL_PRODUCT_HOTPATH",
+    "workload": "dmg-parse-enumerate-bil917-classes1-v1",
+    "input_bytes": 10540184,
+    "method_count": 54147,
+    "formal_blocks_complete": 32,
+    "native_sessions": 128,
+    "functional_environment_capture": "PASS",
+    "performance_qualification": "INCONCLUSIVE_TIME_TREND",
+    "gain_descriptive": 0.010793899186631095,
+    "gain_interval_exploratory": [
+      -0.00023435730555698697,
+      0.02331589922167354
+    ],
+    "owned_backing_ratio": 1.0,
+    "BIL_integration": "NOT_SELECTED",
+    "report": "artifacts/arm64-20261030/paired-retry1/report.json"
+  },
+  "separate_remaining_qualification": {
+    "actual_16kb_loader": "UNAVAILABLE_ON_CURRENT_4KB_DEVICE",
+    "MTE_HWASAN": "NOT_VERIFIED_PROCESS_MODE_AND_CONTROLLED_FAULT_TEST_MISSING",
+    "RSS_PSS": "NOT_COLLECTED_NO_RESIDENCY_CLAIM",
+    "energy": "NOT_MEASURED_NO_SAME_COMPLETED_WORK_ENERGY_METHOD",
+    "PMU_PFN": "NOT_COLLECTED_MECHANISM_UNKNOWN"
+  }
 }

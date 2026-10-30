@@ -1,0 +1,1 @@
+3c069fefed51fddc36077f4a51655092080b2078b72d05529431428ed8ccff4a  /data/local/tmp/meguvizmemory-arm64-20261030T033641Z-460563ec1ce9/mgmem_core_tests

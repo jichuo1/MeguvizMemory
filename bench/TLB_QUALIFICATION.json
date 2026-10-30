@@ -2,7 +2,13 @@
   "schema_version": 1,
   "as_of": "2026-10-30",
   "timezone": "Asia/Shanghai",
-  "task_ids": ["MM-020", "MM-021", "MM-022", "MM-023", "MM-024"],
+  "task_ids": [
+    "MM-020",
+    "MM-021",
+    "MM-022",
+    "MM-023",
+    "MM-024"
+  ],
   "profile": "CPU_FUNCTIONAL_ONLY",
   "special_tlb_profile_selected": false,
   "selection": "NOT_SELECTED",
@@ -31,15 +37,54 @@
     "host_case_count": 48,
     "host_checksums_passed": 48,
     "host_raw": "artifacts/verification-20261030/tlb-host-diagnostic.jsonl",
-    "host_matrix": {"stride_pages": [1, 2, 3], "window_pages": [0, 1], "offset": ["rotate", "fixed"], "mode": ["dependent", "independent"], "seed": [1, 7]},
+    "host_matrix": {
+      "stride_pages": [
+        1,
+        2,
+        3
+      ],
+      "window_pages": [
+        0,
+        1
+      ],
+      "offset": [
+        "rotate",
+        "fixed"
+      ],
+      "mode": [
+        "dependent",
+        "independent"
+      ],
+      "seed": [
+        1,
+        7
+      ]
+    },
     "emulator_case_count": 1,
     "emulator_checksums_passed": 1,
     "emulator_raw": "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl",
-    "budgets": {"reserved_span_bytes": 67108864, "workload_touched_pages": 1024, "concurrent_instances": 1},
-    "safety": ["checked span/multiply/round-up/window bounds", "actual OS base-page query", "only owned allocation memory", "node alignment and no page crossing", "fixed logical node count and actual access count within comparisons", "first-touch/warm/steady/release recorded separately", "live read/write lease preserves backing until last access", "checksum compared with mathematical complete-cycle oracle"],
+    "budgets": {
+      "reserved_span_bytes": 67108864,
+      "workload_touched_pages": 1024,
+      "concurrent_instances": 1
+    },
+    "safety": [
+      "checked span/multiply/round-up/window bounds",
+      "actual OS base-page query",
+      "only owned allocation memory",
+      "node alignment and no page crossing",
+      "fixed logical node count and actual access count within comparisons",
+      "first-touch/warm/steady/release recorded separately",
+      "live read/write lease preserves backing until last access",
+      "checksum compared with mathematical complete-cycle oracle"
+    ],
     "cache_line_bytes_assumed": 64,
     "cache_geometry_verified": false,
-    "remaining_functional_matrix": ["multi-arena phase interleaving", "selected subregion/slot research profiles", "trim/refault profile"],
+    "remaining_functional_matrix": [
+      "multi-arena phase interleaving",
+      "selected subregion/slot research profiles",
+      "trim/refault profile"
+    ],
     "limitation": "48 correlated diagnostic cases are not 48 independent product-performance sessions; phase times and assumed cache-line geometry establish no specific TLB cause."
   },
   "device_and_artifact_matrix": [
@@ -67,7 +112,11 @@
       "actual_base_page_bytes": null,
       "build": "PASS",
       "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
-      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
       "cpp_runtime": "STATIC",
       "real_loader_execution": "UNAVAILABLE",
       "evidence": "artifacts/verification-20261030/elf-arm64-v8a.txt"
@@ -77,7 +126,11 @@
       "actual_base_page_bytes": null,
       "build": "PASS",
       "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
-      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
       "cpp_runtime": "STATIC",
       "real_loader_execution": "UNAVAILABLE",
       "evidence": "artifacts/verification-20261030/elf-armeabi-v7a.txt"
@@ -85,10 +138,25 @@
     {
       "environment": "Android x86_64 ELF",
       "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
-      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "needed": [
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ],
       "cpp_runtime": "STATIC",
       "real_16k_loader_execution": "UNAVAILABLE",
       "evidence": "artifacts/verification-20261030/elf-x86_64.txt"
+    },
+    {
+      "environment": "PMA110 API37 arm64 physical device",
+      "actual_base_page_bytes": 4096,
+      "core_c_cpp_safety": "PASS",
+      "installed_real_dex_consumer": "PASS_COMPLETE_TASK",
+      "paired_performance": "INCONCLUSIVE",
+      "image_device_consumer": "NOT_RUN",
+      "tlb_harness_device": "NOT_RUN",
+      "mechanism": "INCONCLUSIVE",
+      "evidence": "artifacts/arm64-20261030/safety/receipt.json"
     }
   ],
   "capabilities": {
@@ -110,12 +178,25 @@
   },
   "real_consumer_functional_evidence": {
     "state": "PASS_HOST_ONLY",
-    "consumers": ["DexMeguviz real borrowed-source parser/query", "P6 file CPU luma and box-blur workspace"],
+    "consumers": [
+      "DexMeguviz real borrowed-source parser/query",
+      "P6 file CPU luma and box-blur workspace"
+    ],
     "memory_install_contract": "Each independent consumer CMake uses find_package(MeguvizMemory) and the installed Memory package.",
     "receipt": "artifacts/verification-20261030/consumers/receipt.json",
     "passing_commands": 24,
-    "semantic_oracles": ["independent Python scalar image output comparison", "real parser copy-in query oracle"],
-    "not_qualified": ["BIL product integration", "physical target TLB strategy", "matched A1/A3/A4 performance", "16 KiB loader", "energy", "family GPU retirement integration"]
+    "semantic_oracles": [
+      "independent Python scalar image output comparison",
+      "real parser copy-in query oracle"
+    ],
+    "not_qualified": [
+      "BIL product integration",
+      "physical target TLB strategy",
+      "matched A1/A3/A4 performance",
+      "16 KiB loader",
+      "energy",
+      "family GPU retirement integration"
+    ]
   },
   "workload_candidate": {
     "MM-022.candidate_decision": "INCONCLUSIVE",
@@ -141,8 +222,30 @@
   "fallback": {
     "new_domains": "Use the simple System provider and dense layout with the applicable explicit budget.",
     "existing_domains": "Complete through origin owner/provider; preserve outstanding leases, explicitly collect, then drain/destroy.",
-    "forbidden": ["moving live stable-address allocations", "force-free on close timeout", "marketing-name policy activation", "global allocator replacement", "ART/direct-buffer takeover", "global THP/sysfs/ASLR/MTE changes", "external MAP_FIXED or PFN/PTE operations"]
+    "forbidden": [
+      "moving live stable-address allocations",
+      "force-free on close timeout",
+      "marketing-name policy activation",
+      "global allocator replacement",
+      "ART/direct-buffer takeover",
+      "global THP/sysfs/ASLR/MTE changes",
+      "external MAP_FIXED or PFN/PTE operations"
+    ]
   },
-  "requalification_triggers": ["actual physical CPU/core/firmware or OS/kernel/page configuration changes", "provider/harness/policy version changes", "selected real workload/layout/lifetime changes", "new JNI/family import or retirement contract", "measured regression or budget failure"],
-  "qualification_rule": "Function, mechanism, product performance and release are independent states. The present NOT_SELECTED TLB profile does not block a separately qualified basic CPU profile, and does not waive that profile's own outstanding release gates."
+  "requalification_triggers": [
+    "actual physical CPU/core/firmware or OS/kernel/page configuration changes",
+    "provider/harness/policy version changes",
+    "selected real workload/layout/lifetime changes",
+    "new JNI/family import or retirement contract",
+    "measured regression or budget failure"
+  ],
+  "qualification_rule": "Function, mechanism, product performance and release are independent states. The present NOT_SELECTED TLB profile does not block a separately qualified basic CPU profile, and does not waive that profile's own outstanding release gates.",
+  "independent_cpu_paired_experiment": {
+    "function": "PASS_REAL_ARM64_API37_4K_54147_METHOD_TASK",
+    "formal_capture": "PASS_32_BLOCKS_128_TASKS",
+    "performance": "INCONCLUSIVE_TIME_TREND",
+    "mechanism": "NOT_ESTABLISHED",
+    "report": "artifacts/arm64-20261030/paired-retry1/report.json",
+    "tlb_profile_selected": false
+  }
 }

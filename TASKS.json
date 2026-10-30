@@ -15,40 +15,94 @@
     "tlb_qualified": "NOT_SELECTED. A selected profile would require MM-024. Author models, arithmetic and owned-region checksums do not qualify hardware mechanisms or BIL performance."
   },
   "delivery_qualification": {
-    "scope": "CPU_FUNCTIONAL_ONLY",
+    "scope": "CPU_FUNCTIONAL_WITH_SCOPED_REAL_ARM64_A1_A3_EXPERIMENT",
     "engineering_preview": "AVAILABLE_WITH_RECORDED_LIMITS",
     "formal_release_candidate": "BLOCKED",
     "host_release_ctest": "PASS_4_OF_4",
     "host_asan_ctest": "PASS_4_OF_4_AFTER_RUNTIME_PATH_CORRECTION",
-    "android_runtime": "PASS_API34_X86_64_EMULATOR_4K_CORE_C_CPP_ONLY",
-    "android_compiled_abis": ["x86_64", "arm64-v8a", "armeabi-v7a"],
+    "android_runtime": "PASS_API37_ARM64_PHYSICAL_4K_AND_API34_X86_64_EMULATOR_4K",
+    "android_compiled_abis": [
+      "x86_64",
+      "arm64-v8a",
+      "armeabi-v7a"
+    ],
     "static_elf_alignment": "PASS_PT_LOAD_0x4000_THREE_ABIS",
     "real_16k_loader": "UNAVAILABLE",
     "mte": "UNAVAILABLE",
     "product_performance": "NOT_STARTED",
-    "energy": "UNAVAILABLE"
+    "energy": "UNAVAILABLE",
+    "independent_cpu_performance": "INCONCLUSIVE_COMPLETE_32_BLOCKS_TREND_WARNING_NO_STABLE_GAIN",
+    "BIL_integration": "NOT_SELECTED_NO_QUALIFIED_NET_BENEFIT_OR_PRODUCT_EQUIVALENCE"
   },
-  "optional_result_states": ["NOT_SELECTED", "UNSUPPORTED", "UNAVAILABLE", "BLOCKED"],
-  "mechanism_result_states": ["NOT_APPLICABLE", "NOT_STARTED", "REPRODUCED", "NOT_REPRODUCED", "INCONCLUSIVE", "UNAVAILABLE"],
+  "optional_result_states": [
+    "NOT_SELECTED",
+    "UNSUPPORTED",
+    "UNAVAILABLE",
+    "BLOCKED"
+  ],
+  "mechanism_result_states": [
+    "NOT_APPLICABLE",
+    "NOT_STARTED",
+    "REPRODUCED",
+    "NOT_REPRODUCED",
+    "INCONCLUSIVE",
+    "UNAVAILABLE"
+  ],
   "partial_outputs": {
     "MM-003:protocol_ready": {
-      "states": ["NOT_STARTED", "READY", "BLOCKED"],
+      "states": [
+        "NOT_STARTED",
+        "READY",
+        "BLOCKED"
+      ],
       "state": "READY",
       "meaning": "Scenario, budgets, sample unit, primary metric, controls and record format are frozen for host functional/diagnostic work, independently of the target-device product baseline.",
-      "scope": "HOST_FUNCTIONAL_DIAGNOSTIC_ONLY",
-      "evidence": ["bench/protocol.json", "docs/BASELINE_PROTOCOL.md"],
-      "does_not_satisfy": ["MM-003 full task completion", "formal product performance sampling", "device release qualification"]
+      "scope": "HOST_FUNCTIONAL_AND_SCOPED_PHYSICAL_ARM64_PAIRED_CPU_PROTOCOL",
+      "evidence": [
+        "bench/protocol.json",
+        "docs/BASELINE_PROTOCOL.md"
+      ],
+      "does_not_satisfy": [
+        "MM-003 full task completion",
+        "formal product performance sampling",
+        "device release qualification"
+      ],
+      "additional_evidence": [
+        "bench/paired_protocol_retry1.json",
+        "artifacts/arm64-20261030/paired-retry1/formal-plan.json"
+      ]
     },
     "MM-021:functional_harness_receipt": {
-      "states": ["NOT_STARTED", "PASS", "FAIL", "BLOCKED"],
+      "states": [
+        "NOT_STARTED",
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ],
       "state": "PASS",
       "meaning": "PASS establishes only the implemented non-alias/no-hint functional safety, workload and checksum contract; it establishes neither target-device performance nor a reproduced CPU mechanism.",
       "scope": "HOST_48_CASES_AND_API34_X86_64_EMULATOR_ONE_CASE",
-      "evidence": ["artifacts/verification-20261030/tlb-host-diagnostic.jsonl", "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl"],
-      "not_implemented_or_qualified": ["multi-arena phase matrix", "target physical CPU matrix", "PFN evidence", "PMU event definitions and collection", "trim/refault performance", "selected special placement"]
+      "evidence": [
+        "artifacts/verification-20261030/tlb-host-diagnostic.jsonl",
+        "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl"
+      ],
+      "not_implemented_or_qualified": [
+        "multi-arena phase matrix",
+        "target physical CPU matrix",
+        "PFN evidence",
+        "PMU event definitions and collection",
+        "trim/refault performance",
+        "selected special placement"
+      ]
     },
     "MM-022:candidate_decision": {
-      "states": ["NOT_STARTED", "WORTH_PROTOTYPING", "NO_CANDIDATE", "INCONCLUSIVE", "BLOCKED"],
+      "states": [
+        "NOT_STARTED",
+        "WORTH_PROTOTYPING",
+        "NO_CANDIDATE",
+        "INCONCLUSIVE",
+        "BLOCKED"
+      ],
       "state": "INCONCLUSIVE",
       "meaning": "Only WORTH_PROTOTYPING opens MM-023. No real hot-workload replay or matched performance baseline exists in this batch; INCONCLUSIVE is not a completed NO_CANDIDATE outcome."
     }
@@ -65,19 +119,36 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_CPU_SOURCE_AND_BUILD_LOCK_TOOLS",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PARTIAL_API34_X86_64_4K",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "outputs": {"source_lock_tool": "READY", "research_arithmetic_reproduction": "PASS_3_OF_3", "engineering_preview_identity": "SOURCE_AND_ARTIFACT_LOCKED", "final_release_identity": "NOT_QUALIFIED"},
-      "evidence": ["SOURCE_LOCK.json", "ARTIFACTS.json", "tools/source_lock.py", "docs/audit/consumers.md", "artifacts/verification-20261030/research-arithmetic.json"],
-      "remaining": ["No verified product baseline or installed BIL Memory artifact", "Formal product/release identity requires its own qualification"]
+      "outputs": {
+        "source_lock_tool": "READY",
+        "research_arithmetic_reproduction": "PASS_3_OF_3",
+        "engineering_preview_identity": "SOURCE_AND_ARTIFACT_LOCKED",
+        "final_release_identity": "NOT_QUALIFIED"
+      },
+      "evidence": [
+        "SOURCE_LOCK.json",
+        "ARTIFACTS.json",
+        "tools/source_lock.py",
+        "docs/audit/consumers.md",
+        "artifacts/verification-20261030/research-arithmetic.json",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "No verified product baseline or installed BIL Memory artifact",
+        "Formal product/release identity requires its own qualification"
+      ]
     },
     {
       "id": "MM-002",
       "title": "allocation 与 owner 清单",
-      "dependencies": ["MM-001"],
+      "dependencies": [
+        "MM-001"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 001",
@@ -85,19 +156,34 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_CPU_OWNER_CONTRACT_AND_CONSUMER_AUDIT",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PARTIAL_API34_X86_64_4K",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "outputs": {"cpu_origin_owner_contract": "READY", "dex_borrowed_source_owner_contract": "PASS_HOST", "image_async_workspace_owner_contract": "PASS_HOST", "family_owner_import_contract": "UNCONFIRMED"},
-      "evidence": ["docs/ADR-001-ownership-and-abi.md", "docs/INTEGRATION.md", "docs/audit/consumers.md", "artifacts/verification-20261030/consumers/receipt.json"],
-      "remaining": ["Qualify selected family CPU-import and retirement contracts before any family bridge"]
+      "outputs": {
+        "cpu_origin_owner_contract": "READY",
+        "dex_borrowed_source_owner_contract": "PASS_HOST",
+        "image_async_workspace_owner_contract": "PASS_HOST",
+        "family_owner_import_contract": "UNCONFIRMED"
+      },
+      "evidence": [
+        "docs/ADR-001-ownership-and-abi.md",
+        "docs/INTEGRATION.md",
+        "docs/audit/consumers.md",
+        "artifacts/verification-20261030/consumers/receipt.json",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Qualify selected family CPU-import and retirement contracts before any family bridge"
+      ]
     },
     {
       "id": "MM-003",
       "title": "baseline 与实验协议",
-      "dependencies": ["MM-002"],
+      "dependencies": [
+        "MM-002"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 002",
@@ -106,20 +192,39 @@
       "implementation": "PROTOCOL_READY_HOST_FUNCTIONAL_ONLY",
       "functional_validation": "PASSED_HOST_PROTOCOL_AND_ORACLES",
       "device_validation": "BLOCKED_PRODUCT_BASELINE_NOT_COLLECTED",
-      "performance_validation": "BLOCKED_NO_MATCHED_REAL_VARIANT_SAMPLES",
+      "performance_validation": "INCONCLUSIVE_INDEPENDENT_CPU_ONLY",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
       "quantification_protocol": "docs/BASELINE_PROTOCOL.md",
       "measurement_template": "bench/protocol.json",
-      "outputs": {"protocol_ready": "READY", "scope": "HOST_FUNCTIONAL_DIAGNOSTIC_ONLY", "formal_performance_protocol": "INCOMPLETE_FOR_PERFORMANCE", "real_product_baseline": "BLOCKED"},
-      "evidence": ["bench/protocol.json", "docs/BASELINE_PROTOCOL.md"],
-      "remaining": ["Freeze actual matched consumer variants and device artifacts", "Independent pilot and justified session count", "Formal balanced sessions, regression budget and energy method"]
+      "outputs": {
+        "protocol_ready": "READY",
+        "scope": "HOST_FUNCTIONAL_DIAGNOSTIC_ONLY",
+        "formal_performance_protocol": "INCOMPLETE_FOR_PERFORMANCE",
+        "real_product_baseline": "BLOCKED",
+        "arm64_real_workload_protocol": "FROZEN_BEFORE_PILOT_AND_FORMAL",
+        "arm64_complete_paired_round": "32_BLOCKS_128_SESSIONS_ALL_FUNCTIONAL_AND_ENVIRONMENT_PASS",
+        "performance_qualification": "INCONCLUSIVE_TREND_WARNING_POINT_BELOW_TARGET"
+      },
+      "evidence": [
+        "bench/protocol.json",
+        "docs/BASELINE_PROTOCOL.md",
+        "bench/paired_protocol_retry1.json",
+        "artifacts/arm64-20261030/paired-retry1/report.json"
+      ],
+      "remaining": [
+        "Freeze actual matched consumer variants and device artifacts",
+        "Independent pilot and justified session count",
+        "Formal balanced sessions, regression budget and energy method"
+      ]
     },
     {
       "id": "MM-004",
       "title": "ABI 与命名 ADR",
-      "dependencies": ["MM-002"],
+      "dependencies": [
+        "MM-002"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 002",
@@ -127,19 +232,32 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_ABI_1_0_CPU_CONTRACT",
       "functional_validation": "PASSED_HOST_AND_ANDROID_X86_64_4K_SUBSET",
-      "device_validation": "PARTIAL_API34_X86_64_4K",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "outputs": {"cpu_adr": "READY", "c_abi": "PASS_HOST_AND_EMULATOR_4K", "cross_runtime_handle_rejection": "PASS_HOST"},
-      "evidence": ["docs/ADR-001-ownership-and-abi.md", "include/mgmem/mgmem.h", "tests/runtime_tests.cpp"],
-      "remaining": ["Final published ABI/artifact and selected device qualification"]
+      "outputs": {
+        "cpu_adr": "READY",
+        "c_abi": "PASS_HOST_AND_EMULATOR_4K",
+        "cross_runtime_handle_rejection": "PASS_HOST"
+      },
+      "evidence": [
+        "docs/ADR-001-ownership-and-abi.md",
+        "include/mgmem/mgmem.h",
+        "tests/runtime_tests.cpp",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Final published ABI/artifact and selected device qualification"
+      ]
     },
     {
       "id": "MM-005",
       "title": "System provider、页算术与首个安装消费者",
-      "dependencies": ["MM-004"],
+      "dependencies": [
+        "MM-004"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 004",
@@ -147,19 +265,36 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PASSED_API34_X86_64_4K_ONLY",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED_16K_RUNTIME_AND_PRODUCT_GATES",
       "scope": "core_or_qualification",
-      "outputs": {"system_provider": "PASS_HOST_AND_EMULATOR_4K", "checked_4k_16k_arithmetic": "PASS_BOUNDARY_TESTS_ONLY", "installed_first_real_consumer": "PASS_HOST_DEXMEGUVIZ", "real_16k_loader": "UNAVAILABLE"},
-      "evidence": ["src/mgmem.cpp", "tests/core_tests.cpp", "consumers/dex/main.cpp", "artifacts/verification-20261030/consumers/receipt.json", "artifacts/verification-20261030/android-api34-x86_64-core.txt"],
-      "remaining": ["Real Android 16 KiB loader and selected arm physical-device executions", "Functional arithmetic simulation is not page-environment qualification"]
+      "outputs": {
+        "system_provider": "PASS_HOST_AND_EMULATOR_4K",
+        "checked_4k_16k_arithmetic": "PASS_BOUNDARY_TESTS_ONLY",
+        "installed_first_real_consumer": "PASS_HOST_DEXMEGUVIZ",
+        "real_16k_loader": "UNAVAILABLE"
+      },
+      "evidence": [
+        "src/mgmem.cpp",
+        "tests/core_tests.cpp",
+        "consumers/dex/main.cpp",
+        "artifacts/verification-20261030/consumers/receipt.json",
+        "artifacts/verification-20261030/android-api34-x86_64-core.txt",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Real Android 16 KiB loader and selected arm physical-device executions",
+        "Functional arithmetic simulation is not page-environment qualification"
+      ]
     },
     {
       "id": "MM-006",
       "title": "Arena 生命周期",
-      "dependencies": ["MM-005"],
+      "dependencies": [
+        "MM-005"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 005",
@@ -167,19 +302,35 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PASSED_API34_X86_64_4K_ONLY",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED_DEVICE_MATRIX_AND_RELEASE_GATES",
       "scope": "core_or_qualification",
-      "outputs": {"arena_reset_trim": "PASS_HOST_AND_EMULATOR_4K", "lease_before_async_admission": "PASS_HOST_CONSUMERS", "nonblocking_begin_close": "PASS", "timeout_preserves_owner": "PASS", "explicit_collect_and_drain": "PASS"},
-      "evidence": ["src/mgmem.cpp", "tests/core_tests.cpp", "artifacts/verification-20261030/core-tests.txt", "artifacts/verification-20261030/consumers/receipt.json"],
-      "remaining": ["Selected physical devices, MTE where available and longer resource-stability sessions"]
+      "outputs": {
+        "arena_reset_trim": "PASS_HOST_AND_EMULATOR_4K",
+        "lease_before_async_admission": "PASS_HOST_CONSUMERS",
+        "nonblocking_begin_close": "PASS",
+        "timeout_preserves_owner": "PASS",
+        "explicit_collect_and_drain": "PASS"
+      },
+      "evidence": [
+        "src/mgmem.cpp",
+        "tests/core_tests.cpp",
+        "artifacts/verification-20261030/core-tests.txt",
+        "artifacts/verification-20261030/consumers/receipt.json",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Selected physical devices, MTE where available and longer resource-stability sessions"
+      ]
     },
     {
       "id": "MM-007",
       "title": "预算与观测适配",
-      "dependencies": ["MM-005"],
+      "dependencies": [
+        "MM-005"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 005",
@@ -187,19 +338,35 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_CPU_DOMAIN_BUDGET_AND_SNAPSHOT",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PASSED_API34_X86_64_4K_ONLY",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "outputs": {"unique_backing_accounting": "PASS", "growth_and_pending_reservation_peak": "PASS", "android_pressure_bridge": "NOT_IMPLEMENTED", "rss_pss_external_cost": "UNAVAILABLE"},
-      "evidence": ["include/mgmem/mgmem.h", "src/mgmem.cpp", "tests/core_tests.cpp", "consumers/dex/main.cpp"],
-      "remaining": ["Actual platform pressure bridge and private-resident/energy observation", "CPU requested capacity is not RSS/PSS or GPU storage"]
+      "outputs": {
+        "unique_backing_accounting": "PASS",
+        "growth_and_pending_reservation_peak": "PASS",
+        "android_pressure_bridge": "NOT_IMPLEMENTED",
+        "rss_pss_external_cost": "UNAVAILABLE"
+      },
+      "evidence": [
+        "include/mgmem/mgmem.h",
+        "src/mgmem.cpp",
+        "tests/core_tests.cpp",
+        "consumers/dex/main.cpp",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Actual platform pressure bridge and private-resident/energy observation",
+        "CPU requested capacity is not RSS/PSS or GPU storage"
+      ]
     },
     {
       "id": "MM-008",
       "title": "C++ Rust 窄适配",
-      "dependencies": ["MM-006"],
+      "dependencies": [
+        "MM-006"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 006",
@@ -207,20 +374,35 @@
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_CPP_SELECTED_SCOPE",
       "functional_validation": "PASSED_HOST_RELEASE_AND_ASAN_CPP_5_CASES",
-      "device_validation": "PASSED_API34_X86_64_4K_CPP_5_CASES_ONLY",
+      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED_FULL_DEVICE_AND_RELEASE_GATES",
       "scope": "core_or_qualification",
-      "selection": {"cpp": "SELECTED", "rust": "NOT_SELECTED_NO_CURRENT_CONSUMER_REQUIREMENT"},
-      "outputs": {"cpp_raii_and_fallible_ownership": "PASS_HOST_AND_EMULATOR_4K", "rust_adapter": "NOT_SELECTED"},
-      "evidence": ["include/mgmem/memory.hpp", "docs/INTEGRATION.md"],
-      "remaining": ["Rust is not required for the selected CPU/C++ profile", "Retain full-task PARTIAL until selected device/release scope is qualified"]
+      "selection": {
+        "cpp": "SELECTED",
+        "rust": "NOT_SELECTED_NO_CURRENT_CONSUMER_REQUIREMENT"
+      },
+      "outputs": {
+        "cpp_raii_and_fallible_ownership": "PASS_HOST_AND_EMULATOR_4K",
+        "rust_adapter": "NOT_SELECTED"
+      },
+      "evidence": [
+        "include/mgmem/memory.hpp",
+        "docs/INTEGRATION.md",
+        "artifacts/arm64-20261030/safety/receipt.json"
+      ],
+      "remaining": [
+        "Rust is not required for the selected CPU/C++ profile",
+        "Retain full-task PARTIAL until selected device/release scope is qualified"
+      ]
     },
     {
       "id": "MM-009",
       "title": "JNI 借用与 opaque 操作",
-      "dependencies": ["MM-006"],
+      "dependencies": [
+        "MM-006"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 006",
@@ -238,7 +420,9 @@
     {
       "id": "MM-010",
       "title": "packed reader",
-      "dependencies": ["MM-003"],
+      "dependencies": [
+        "MM-003"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 003",
@@ -252,13 +436,17 @@
       "release_qualification": "NOT_STARTED",
       "scope": "bil_consumer_optimization",
       "current_source_audit": "Current inspected BIL main still constructs ElemSignal through fromFlattened. No change in this CPU-core/two-consumer batch.",
-      "evidence": ["docs/audit/consumers.md"],
+      "evidence": [
+        "docs/audit/consumers.md"
+      ],
       "attribution": "Conventional packed optimization belongs to A0-to-A1, not Memory gain."
     },
     {
       "id": "MM-011",
       "title": "现有 Java direct 准备 scratch 复用",
-      "dependencies": ["MM-003"],
+      "dependencies": [
+        "MM-003"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 003",
@@ -273,32 +461,61 @@
       "scope": "bil_consumer_optimization",
       "existing_commit_prefix": "e630ad56",
       "audited_bil_head": "00572940c354fbec7b6f311d4ecd6f02e66ea7c5",
-      "evidence": ["docs/audit/consumers.md"],
+      "evidence": [
+        "docs/audit/consumers.md"
+      ],
       "attribution": "NOT_MEMORY_GAIN. Preserve current initialization, four inputs plus output, warm work and second-fastest statistic. Do not rerun development or count existing A1 gains again."
     },
     {
       "id": "MM-012",
       "title": "native 热点回放与后端比较",
-      "dependencies": ["MM-003", "MM-008"],
+      "dependencies": [
+        "MM-003",
+        "MM-008"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 003、MM 008",
       "acceptance": "system/arena/成熟后端同条件比较；A1→A3净增量、接口/迁移成本归因，保留回归结果",
       "status": "BLOCKED",
-      "implementation": "FUNCTIONAL_CONTROL_CONSUMERS_AVAILABLE_REPLAY_NOT_IMPLEMENTED",
-      "functional_validation": "PARTIAL_TWO_CONSUMER_SYSTEM_ARENA_ORACLES",
-      "device_validation": "NOT_STARTED",
-      "performance_validation": "BLOCKED_NO_REAL_HOTSPOT_TRACE_OR_MATCHED_BASELINE",
+      "implementation": "IMPLEMENTED_REAL_DEX_A1_NATIVE_SYSTEM_A3_INSTALLED_ARENA_PAIRED_HARNESS",
+      "functional_validation": "PASSED_HOST_AND_REAL_ARM64_COMPLETE_54147_METHOD_QUERY",
+      "device_validation": "PASSED_API37_ARM64_4K_SELECTED_WORKLOAD",
+      "performance_validation": "INCONCLUSIVE_COMPLETE_32_BLOCKS_TIME_TREND",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "evidence": ["artifacts/verification-20261030/consumers/receipt.json", "docs/BASELINE_PROTOCOL.md"],
-      "remaining": ["Actual hot-workload trace with lifetime/access/concurrency", "Matched native backing/provider and A1-to-A3 sampling", "No artificial malloc loop used as product benefit"]
+      "evidence": [
+        "consumers/dex/paired.cpp",
+        "bench/real-dex-workload.json",
+        "artifacts/arm64-20261030/paired/report.json",
+        "artifacts/arm64-20261030/paired-retry1/report.json",
+        "docs/PERFORMANCE_A1_A3.md"
+      ],
+      "remaining": [
+        "No verified BIL production hotpath equivalence",
+        "No qualified time/owned-backing gain; no special backend or default integration",
+        "16KB/MTE/energy/RSS and non-target product qualification remain separate"
+      ],
+      "outputs": {
+        "A1_A3_complete_formal_blocks": 32,
+        "first_attempt": "INCOMPLETE_HOST_RECEIPT_IO_FAILURE_PRESERVED_SEPARATELY",
+        "retry_count": 1,
+        "net_gain_descriptive": 0.010793899186631095,
+        "exploratory_gain_interval": [
+          -0.00023435730555698697,
+          0.02331589922167354
+        ],
+        "owned_backing_ratio": 1.0,
+        "adoption": "KEEP_SYSTEM_NO_BIL_CHANGE"
+      }
     },
     {
       "id": "MM-013",
       "title": "需要时实现 bounded slab",
-      "dependencies": ["MM-012"],
+      "dependencies": [
+        "MM-012"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 012",
@@ -316,28 +533,49 @@
     {
       "id": "MM-014",
       "title": "安装后的第二真实消费者",
-      "dependencies": ["MM-008"],
-      "conditional_dependencies": [{"condition": "consumer_uses_jni", "task": "MM-009"}],
+      "dependencies": [
+        "MM-008"
+      ],
+      "conditional_dependencies": [
+        {
+          "condition": "consumer_uses_jni",
+          "task": "MM-009"
+        }
+      ],
       "required_outputs": [],
       "dependency_contract": "MM 008；若使用 JNI 再依赖 MM 009",
       "acceptance": "非 BIL 解析器/图像工作区实际消费 Memory API；与首个消费者的场景区分",
       "status": "PARTIAL",
       "implementation": "IMPLEMENTED_TWO_REAL_INSTALLED_MEMORY_CONSUMERS",
       "functional_validation": "PASSED_HOST_24_OF_24_COMMANDS",
-      "device_validation": "NOT_RUN_FOR_THE_TWO_REAL_CONSUMERS",
+      "device_validation": "PARTIAL_REAL_DEX_AND_CORE_ARM64_IMAGE_CONSUMER_HOST_ONLY",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED_PRODUCT_DEVICE_AND_RELEASE_GATES",
       "scope": "core_or_qualification",
       "consumer_uses_jni": false,
-      "outputs": {"two_distinct_installed_consumers_host": "PASS", "parser": "REAL_DEXMEGUVIZ_BORROWED_SOURCE_QUERY", "image": "REAL_P6_FILE_INTEGER_LUMA_AND_BOX_BLUR", "full_dependency_completion": "NOT_CLAIMED_MM_008_CPP_PARTIAL_OUTPUT_USED"},
-      "evidence": ["consumers/dex/CMakeLists.txt", "consumers/image/CMakeLists.txt", "artifacts/verification-20261030/consumers/receipt.json"],
-      "remaining": ["Formal performance and device qualification of applicable real consumers", "Fixture success is not BIL product integration"]
+      "outputs": {
+        "two_distinct_installed_consumers_host": "PASS",
+        "parser": "REAL_DEXMEGUVIZ_BORROWED_SOURCE_QUERY",
+        "image": "REAL_P6_FILE_INTEGER_LUMA_AND_BOX_BLUR",
+        "full_dependency_completion": "NOT_CLAIMED_MM_008_CPP_PARTIAL_OUTPUT_USED"
+      },
+      "evidence": [
+        "consumers/dex/CMakeLists.txt",
+        "consumers/image/CMakeLists.txt",
+        "artifacts/verification-20261030/consumers/receipt.json"
+      ],
+      "remaining": [
+        "Formal performance and device qualification of applicable real consumers",
+        "Fixture success is not BIL product integration"
+      ]
     },
     {
       "id": "MM-015",
       "title": "Android 与 Lumen 观测桥",
-      "dependencies": ["MM-007"],
+      "dependencies": [
+        "MM-007"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 007",
@@ -355,7 +593,9 @@
     {
       "id": "MM-016",
       "title": "Compute host scratch 桥",
-      "dependencies": ["MM-008"],
+      "dependencies": [
+        "MM-008"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 008；实际可用的 Compute SDK、固定合同与生命周期资格",
@@ -370,12 +610,17 @@
       "scope": "family_integration",
       "external_sdk_state": "REAL_COMPUTE_AND_MEDIA_SOURCES_AND_INSTALLED_SDK_FOUND_IN_MEGUVIZPACK",
       "blocking_reason": "Existing map/content lease APIs do not establish external Memory backing CPU-import/provider ownership. Freeze that real contract and final SDK profile before a bridge; missing SDK is not the blocker.",
-      "evidence": ["docs/audit/consumers.md", "docs/INTEGRATION.md"]
+      "evidence": [
+        "docs/audit/consumers.md",
+        "docs/INTEGRATION.md"
+      ]
     },
     {
       "id": "MM-017",
       "title": "Tile Heap 可行性原型",
-      "dependencies": ["MM-003"],
+      "dependencies": [
+        "MM-003"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 003；Compute 设备/提交/退役资格与真实扩展设备",
@@ -393,7 +638,9 @@
     {
       "id": "MM-018",
       "title": "16 KB 包装与运行验收",
-      "dependencies": ["MM-014"],
+      "dependencies": [
+        "MM-014"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 014、集成产物",
@@ -401,20 +648,50 @@
       "status": "PARTIAL",
       "implementation": "ANDROID_THREE_ABI_BUILDS_AND_STATIC_ELF_CHECKS_IMPLEMENTED",
       "functional_validation": "STATIC_ELF_PASS_ONLY",
-      "device_validation": "PARTIAL_API34_X86_64_4K_LOADER_ONLY",
+      "device_validation": "PASS_4K_ARM64_AND_X86_64_EMULATOR_REAL_16KB_UNAVAILABLE",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED_REAL_16K_LOADER_AND_FINAL_PRODUCT_CLOSURE",
       "scope": "core_or_qualification",
-      "outputs": {"x86_64_arm64_armv7_build_install": "PASS", "all_core_pt_load_alignments": "0x4000", "core_dt_needed": ["libm.so", "libdl.so", "libc.so"], "cpp_runtime": "STATIC", "actual_4k_x86_64_loader": "PASS", "actual_16k_loader": "UNAVAILABLE", "arm64_armv7_physical_execution": "UNAVAILABLE"},
-      "evidence": ["artifacts/verification-20261030/elf-x86_64.txt", "artifacts/verification-20261030/elf-arm64-v8a.txt", "artifacts/verification-20261030/elf-armeabi-v7a.txt", "artifacts/verification-20261030/android-api34-x86_64-core.txt"],
-      "remaining": ["Run real 16 KiB loader", "Qualify final applicable APK/DSO and dependency closure", "Do not turn static ELF alignment or 4 KiB execution into 16 KiB runtime support"]
+      "outputs": {
+        "x86_64_arm64_armv7_build_install": "PASS",
+        "all_core_pt_load_alignments": "0x4000",
+        "core_dt_needed": [
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "cpp_runtime": "STATIC",
+        "actual_4k_x86_64_loader": "PASS",
+        "actual_16k_loader": "UNAVAILABLE",
+        "arm64_armv7_physical_execution": "UNAVAILABLE"
+      },
+      "evidence": [
+        "artifacts/verification-20261030/elf-x86_64.txt",
+        "artifacts/verification-20261030/elf-arm64-v8a.txt",
+        "artifacts/verification-20261030/elf-armeabi-v7a.txt",
+        "artifacts/verification-20261030/android-api34-x86_64-core.txt"
+      ],
+      "remaining": [
+        "Run real 16 KiB loader",
+        "Qualify final applicable APK/DSO and dependency closure",
+        "Do not turn static ELF alignment or 4 KiB execution into 16 KiB runtime support"
+      ]
     },
     {
       "id": "MM-019",
       "title": "回归与发布候选",
-      "dependencies": ["MM-003", "MM-014", "MM-018"],
-      "conditional_dependencies": [{"condition": "release_selects_tlb_profile", "task": "MM-024"}],
+      "dependencies": [
+        "MM-003",
+        "MM-014",
+        "MM-018"
+      ],
+      "conditional_dependencies": [
+        {
+          "condition": "release_selects_tlb_profile",
+          "task": "MM-024"
+        }
+      ],
       "required_outputs": [],
       "dependency_contract": "候选范围内已选路径全部通过；若选择TLB profile，须有MM 024回执",
       "acceptance": "CPU 独立候选与家族集成候选分开；ABI、资源稳定、性能、能量与禁用策略",
@@ -422,18 +699,32 @@
       "implementation": "ENGINEERING_PREVIEW_AVAILABLE_NOT_FORMAL_RELEASE_QUALIFIED",
       "functional_validation": "PASSED_HOST_AND_ANDROID_4K_SUBSET",
       "device_validation": "PARTIAL",
-      "performance_validation": "NOT_STARTED",
+      "performance_validation": "INCONCLUSIVE_NO_QUALIFIED_NET_GAIN",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
       "release_selects_tlb_profile": false,
-      "outputs": {"cpu_functional_preview": "AVAILABLE_WITH_LIMITS", "family_integration": "NOT_QUALIFIED", "formal_release_candidate": "BLOCKED"},
-      "remaining": ["MM-003 real matched baseline and formal regression samples", "MM-018 applicable real page/loader/product closure", "Resource-stability and same-completed-work energy qualification", "Two real consumers passing functionally does not waive performance/device gates"]
+      "outputs": {
+        "cpu_functional_preview": "AVAILABLE_WITH_LIMITS",
+        "family_integration": "NOT_QUALIFIED",
+        "formal_release_candidate": "BLOCKED"
+      },
+      "remaining": [
+        "MM-003 real matched baseline and formal regression samples",
+        "MM-018 applicable real page/loader/product closure",
+        "Resource-stability and same-completed-work energy qualification",
+        "Two real consumers passing functionally does not waive performance/device gates"
+      ],
+      "evidence": [
+        "artifacts/arm64-20261030/paired-retry1/report.json"
+      ]
     },
     {
       "id": "MM-020",
       "title": "TLB来源、主张与可反驳模型台账",
-      "dependencies": ["MM-001"],
+      "dependencies": [
+        "MM-001"
+      ],
       "conditional_dependencies": [],
       "required_outputs": [],
       "dependency_contract": "MM 001；可与基线并行",
@@ -447,15 +738,35 @@
       "release_qualification": "NOT_STARTED",
       "scope": "tlb_research_and_qualification",
       "detailed_protocol": "docs/BASELINE_PROTOCOL.md",
-      "evidence": ["docs/research-review.md", "bench/TLB_QUALIFICATION.json"],
-      "remaining": ["Attachment ledger refers to historical sprite/crop evidence not included in archive; this batch did not independently reacquire or view it", "Full author methods, audio/subtitles, original PMU/raw samples and vendor contract remain unavailable", "Preserve author-model classification; do not claim hardware reproduction"]
+      "evidence": [
+        "docs/research-review.md",
+        "bench/TLB_QUALIFICATION.json"
+      ],
+      "remaining": [
+        "Attachment ledger refers to historical sprite/crop evidence not included in archive; this batch did not independently reacquire or view it",
+        "Full author methods, audio/subtitles, original PMU/raw samples and vendor contract remain unavailable",
+        "Preserve author-model classification; do not claim hardware reproduction"
+      ]
     },
     {
       "id": "MM-021",
       "title": "能力记录与安全TLB微基准",
-      "dependencies": ["MM-001"],
+      "dependencies": [
+        "MM-001"
+      ],
       "conditional_dependencies": [],
-      "required_outputs": [{"task": "MM-003", "output": "protocol_ready", "required_state": "READY", "applies_to": ["implementation", "functional_validation"], "note": "Protocol only; does not require the whole baseline task to be DONE or a target device to be available."}],
+      "required_outputs": [
+        {
+          "task": "MM-003",
+          "output": "protocol_ready",
+          "required_state": "READY",
+          "applies_to": [
+            "implementation",
+            "functional_validation"
+          ],
+          "note": "Protocol only; does not require the whole baseline task to be DONE or a target device to be available."
+        }
+      ],
       "dependency_contract": "MM 001、MM 003的protocol_ready输出；不等待完整真机baseline或MM 020完成",
       "acceptance": "owned-region、预算/overflow、工作量一致、页内cache控制、事件定义、原始样本；无设备仍可交功能harness，真机资格另列BLOCKED",
       "status": "PARTIAL",
@@ -467,38 +778,101 @@
       "release_qualification": "BLOCKED_TARGET_DEVICE_AND_PROFILE_QUALIFICATION",
       "scope": "tlb_research_and_qualification",
       "detailed_protocol": "docs/BASELINE_PROTOCOL.md",
-      "outputs": {"functional_harness_receipt": "PASS", "scope": "NON_ALIAS_NO_HINT_HOST_FUNCTIONAL_SUBSET", "pmu": "UNAVAILABLE", "pfn_visibility": "UNAVAILABLE", "physical_contiguity": "UNKNOWN", "hardware_aggregation": "UNKNOWN"},
-      "evidence": ["bench/tlb_owned.cpp", "bench/protocol.json", "bench/TLB_QUALIFICATION.json", "artifacts/verification-20261030/tlb-host-diagnostic.jsonl", "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl"],
-      "remaining": ["Full target-device/core/page/thermal/PMU capability matrix", "Multi-arena and selected additional case profiles", "Functional checksum success alone establishes no mechanism or product-performance gate"]
+      "outputs": {
+        "functional_harness_receipt": "PASS",
+        "scope": "NON_ALIAS_NO_HINT_HOST_FUNCTIONAL_SUBSET",
+        "pmu": "UNAVAILABLE",
+        "pfn_visibility": "UNAVAILABLE",
+        "physical_contiguity": "UNKNOWN",
+        "hardware_aggregation": "UNKNOWN"
+      },
+      "evidence": [
+        "bench/tlb_owned.cpp",
+        "bench/protocol.json",
+        "bench/TLB_QUALIFICATION.json",
+        "artifacts/verification-20261030/tlb-host-diagnostic.jsonl",
+        "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl"
+      ],
+      "remaining": [
+        "Full target-device/core/page/thermal/PMU capability matrix",
+        "Multi-arena and selected additional case profiles",
+        "Functional checksum success alone establishes no mechanism or product-performance gate"
+      ]
     },
     {
       "id": "MM-022",
       "title": "BIL及独立候选的实际访问回放",
-      "dependencies": ["MM-002", "MM-003"],
+      "dependencies": [
+        "MM-002",
+        "MM-003"
+      ],
       "conditional_dependencies": [],
-      "required_outputs": [{"task": "MM-021", "output": "functional_harness_receipt", "required_state": "PASS", "applies_to": ["workload_replay"], "note": "No exact chip mechanism reproduction is required."}],
+      "required_outputs": [
+        {
+          "task": "MM-021",
+          "output": "functional_harness_receipt",
+          "required_state": "PASS",
+          "applies_to": [
+            "workload_replay"
+          ],
+          "note": "No exact chip mechanism reproduction is required."
+        }
+      ],
       "dependency_contract": "MM 002、MM 003、MM 021功能资格",
       "acceptance": "访问/寿命/并发/成功状态等价；A1已有收益去重；暴露成本未知不倒填；允许无值得接入的TLB热点",
       "status": "BLOCKED",
       "implementation": "SOURCE_AUDIT_AND_FUNCTIONAL_CONSUMERS_ONLY_REAL_TRACE_REPLAY_NOT_STARTED",
       "functional_validation": "NOT_STARTED_FOR_REAL_REPLAY",
       "device_validation": "NOT_STARTED",
-      "performance_validation": "BLOCKED_NO_REAL_TRACE_AND_MATCHED_BASELINE",
+      "performance_validation": "INCONCLUSIVE_INDEPENDENT_DMG_TASK_NOT_BIL_PLAYER",
       "mechanism_evidence": "INCONCLUSIVE",
       "release_qualification": "BLOCKED",
       "scope": "tlb_research_and_qualification",
       "quantification_protocol": "docs/BASELINE_PROTOCOL.md",
       "measurement_template": "bench/protocol.json",
       "detailed_protocol": "docs/BASELINE_PROTOCOL.md",
-      "outputs": {"candidate_decision": "INCONCLUSIVE", "existing_p1_07_gain": "A0_TO_A1_ONLY", "random_pointer_microbenchmark_as_product_replay": "PROHIBITED"},
-      "remaining": ["Trace actual owned-native CPU access/lifetime/concurrency in a real workload", "Determine worthwhile or no-candidate outcome from data, not need to demonstrate library value"]
+      "outputs": {
+        "candidate_decision": "INCONCLUSIVE",
+        "selected_real_CPU_workload": "dmg-parse-enumerate-bil917-classes1-v1",
+        "selected_workload_placement_qualification": "NOT_ESTABLISHED",
+        "BIL_product_trace": "NOT_ACQUIRED",
+        "existing_scratch_gains": "EXCLUDED_FROM_MEMORY_INCREMENT"
+      },
+      "remaining": [
+        "Trace actual owned-native CPU access/lifetime/concurrency in a real workload",
+        "Determine worthwhile or no-candidate outcome from data, not need to demonstrate library value"
+      ],
+      "evidence": [
+        "docs/BIL_ADOPTION_DECISION.md"
+      ]
     },
     {
       "id": "MM-023",
       "title": "证据驱动的有界placement",
-      "dependencies": ["MM-005", "MM-006", "MM-007", "MM-008"],
-      "conditional_dependencies": [{"condition": "consumer_uses_jni", "task": "MM-009"}],
-      "required_outputs": [{"task": "MM-021", "output": "functional_harness_receipt", "required_state": "PASS"}, {"task": "MM-022", "output": "candidate_decision", "required_state": "WORTH_PROTOTYPING"}],
+      "dependencies": [
+        "MM-005",
+        "MM-006",
+        "MM-007",
+        "MM-008"
+      ],
+      "conditional_dependencies": [
+        {
+          "condition": "consumer_uses_jni",
+          "task": "MM-009"
+        }
+      ],
+      "required_outputs": [
+        {
+          "task": "MM-021",
+          "output": "functional_harness_receipt",
+          "required_state": "PASS"
+        },
+        {
+          "task": "MM-022",
+          "output": "candidate_decision",
+          "required_state": "WORTH_PROTOTYPING"
+        }
+      ],
       "dependency_contract": "MM 005、MM 006、MM 007、MM 008、MM 021、MM 022；若经过JNI再依赖MM 009",
       "acceptance": "仅已证候选、默认dense、VA/触页/padding预算、结果/MTE/owner正确；真实净收益；不要求MM 013",
       "status": "NOT_SELECTED",
@@ -511,14 +885,35 @@
       "scope": "experimental",
       "detailed_protocol": "docs/BASELINE_PROTOCOL.md",
       "selection": "OPTIONAL_AFTER_EVIDENCE",
-      "external_prerequisites": [{"condition": "family_bridge_selected", "required": "Real installed family SDK and lifecycle qualification; fixtures do not qualify."}],
+      "external_prerequisites": [
+        {
+          "condition": "family_bridge_selected",
+          "required": "Real installed family SDK and lifecycle qualification; fixtures do not qualify."
+        }
+      ],
       "reason": "MM-022 candidate_decision is INCONCLUSIVE, not WORTH_PROTOTYPING. No special placement policy is enabled; no slab prerequisite is invented."
     },
     {
       "id": "MM-024",
       "title": "TLB策略设备/两消费者资格",
-      "dependencies": ["MM-014", "MM-018"],
-      "conditional_dependencies": [{"condition": "release_selects_tlb_profile", "task": "MM-021"}, {"condition": "release_selects_tlb_profile", "task": "MM-022"}, {"condition": "release_selects_tlb_profile", "task": "MM-023"}],
+      "dependencies": [
+        "MM-014",
+        "MM-018"
+      ],
+      "conditional_dependencies": [
+        {
+          "condition": "release_selects_tlb_profile",
+          "task": "MM-021"
+        },
+        {
+          "condition": "release_selects_tlb_profile",
+          "task": "MM-022"
+        },
+        {
+          "condition": "release_selects_tlb_profile",
+          "task": "MM-023"
+        }
+      ],
       "required_outputs": [],
       "dependency_contract": "MM 014、MM 018；已选择的MM 021/022/023结果",
       "acceptance": "组合A4真实测量、相对A1/A3的分母、场景稀释、RSS/能量/尾部回归；安装制品/两消费者/核心/页环境回执；供MM 019使用，不反向依赖MM 019",
@@ -535,7 +930,9 @@
       "detailed_protocol": "docs/BASELINE_PROTOCOL.md",
       "selection": "OPTIONAL_AFTER_EVIDENCE",
       "release_selects_tlb_profile": false,
-      "evidence": ["bench/TLB_QUALIFICATION.json"],
+      "evidence": [
+        "bench/TLB_QUALIFICATION.json"
+      ],
       "reason": "Record exists to keep mechanism, function and release scope explicit. No A4 or target-device strategy result exists; unselected experiments do not block otherwise qualified base CPU work."
     }
   ],

@@ -1,0 +1,5 @@
+verify (windows-latest)	Core safety verification	2026-10-30T04:09:09.3531607Z 100% tests passed out of 4
+verify (windows-latest)	Windows capture journal regression	2026-10-30T04:09:12.2511571Z {"all_passed": true, "receipt": "D:\\a\\MeguvizMemory\\MeguvizMemory\\build\\capture-journal-ci\\regression-receipt.json"}
+verify (windows-latest)	Verify image outputs (Windows)	2026-10-30T04:09:18.7076336Z {"all_passed": true, "command_count": 22, "dex_system_arena_results_equal": null, "receipt": "D:\\a\\MeguvizMemory\\MeguvizMemory\\artifacts\\ci-image\\receipt.json"}
+verify (ubuntu-latest)	Core safety verification	2026-10-30T04:08:49.3572331Z 100% tests passed, 0 tests failed out of 4
+verify (ubuntu-latest)	Verify image outputs (Linux)	2026-10-30T04:08:51.0678588Z {"all_passed": true, "command_count": 22, "dex_system_arena_results_equal": null, "receipt": "/home/runner/work/MeguvizMemory/MeguvizMemory/artifacts/ci-image/receipt.json"}

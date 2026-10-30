@@ -1,0 +1,1 @@
+{"consumer":"pure_c_abi","success":true,"backing_after_close":0}

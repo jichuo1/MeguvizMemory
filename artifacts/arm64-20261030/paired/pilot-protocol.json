@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "protocol_id": "MM-003-MM-012-real-dex-arm64-A1-A3-v1",
+  "state": "PILOT_READY",
+  "frozen_before_pilot": true,
+  "workload_manifest": "bench/real-dex-workload.json",
+  "workload_manifest_sha256": "e396cbeccd7f1080638cf5475f92eee169ae28b835a9a7bb841e595bbbf5b65e",
+  "cpu": 2,
+  "cpu_selection_reason": "Allowed CPU 0-7 verified; CPU2 selected before any device performance outcome, cpu_capacity 762; no governor or global setting changes.",
+  "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+  "input_bytes": 10540184,
+  "expected_method_count": 54147,
+  "expected_result_checksum": 12701547145945416225,
+  "semantic_reference": "Host A1 and A3 diagnostic preflight fully enumerate the same 54147 methods with identical source/output digest; not a product performance sample.",
+  "artifact_sha256": {
+    "native_exe": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391",
+    "installed_library": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+    "native_source": "ca1795d5db4871b1c842267b12037c5f6b308769074e93f4d32b8525f7f351a1",
+    "external_source_lock": "7c075a72388f8650ab765558a57e1f9706a6af7deaccbf8029dfa860f1a14ea7"
+  },
+  "safety_receipt": "artifacts/arm64-20261030/safety/receipt.json",
+  "safety_receipt_sha256": "88889fd3571e6e4e33c3711b5db430594f53e5718f6d026e9cd9e06b93dca9dc",
+  "environment": {
+    "battery_max_deci_c": 400,
+    "thermal_status_max": 0,
+    "background_cpu_busy_max": 0.5,
+    "background_window_seconds": 0.1,
+    "cooldown_attempts": 6,
+    "cooldown_seconds": 2
+  },
+  "limits": {
+    "single_launch_timeout_seconds": 20,
+    "phase_max_wall_seconds": 600,
+    "maximum_native_task_seconds": 5,
+    "concurrent_workloads": 1
+  },
+  "sampling": {
+    "pilot_blocks": 6,
+    "pilot_order": "Alternating ABBA and BAAB",
+    "formal_blocks": null,
+    "formal_plan_sha256": null,
+    "statistical_unit": "Four independent process/task sessions within one paired time block",
+    "precision_rule": "ceil((1.96*pilot block log-ratio sd/0.01)^2), clamp32..96 and round even",
+    "pilot_not_pooled_into_formal": true
+  },
+  "final_plan_sha256": null,
+  "decision": {
+    "minimum_point_time_gain": 0.03,
+    "gain_interval_lower_must_exceed": 0,
+    "maximum_owned_backing_ratio": 1.05,
+    "BIL_auto_enable": false,
+    "BIL_requires_actual_hotpath_and_integration_qualification": true
+  },
+  "separate_missing": {
+    "16kb": "UNAVAILABLE_REAL_4KB_DEVICE_ONLY",
+    "MTE_Hwasan": "UNAVAILABLE_NOT_VERIFIED",
+    "energy": "UNAVAILABLE",
+    "RSS_PSS": "NOT_COLLECTED",
+    "PMU_PFN": "UNAVAILABLE"
+  },
+  "external_source_lock_snapshot": "artifacts/arm64-20261030/sdk-source-lock-before-arm64.json",
+  "environment_limitations": {
+    "frequency": "Observe only; DVFS not controlled",
+    "CPU_temperature": "UNAVAILABLE_FOR_ELIGIBILITY_VENDOR_SENSOR_VALUES_NOT_VALIDATED",
+    "thermal_limitation": "Battery temperature and OS thermal status do not prove core temperature stability"
+  }
+}

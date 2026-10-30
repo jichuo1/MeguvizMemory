@@ -1,0 +1,1 @@
+D:\MeguvizMemory\build\android-arm64-v8a\mgmem_c_consumer: 1 file pushed, 0 skipped. 24.0 MB/s (13400 bytes in 0.001s)

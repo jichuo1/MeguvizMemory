@@ -1,0 +1,514 @@
+{
+  "schema_version": 1,
+  "scope": "ARM64_CPU_SAFETY_AND_TWO_DISTINCT_PAIRED_ATTEMPTS",
+  "integrity_check_scope": "PROVENANCE_ONLY_NOT_PERFORMANCE_QUALIFICATION",
+  "integrity_checks_passed": true,
+  "arm64_safety": "PASS",
+  "performance": "INCONCLUSIVE",
+  "BIL_integration": "NOT_SELECTED",
+  "device_window": "RELEASED",
+  "sdk_source_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
+  "benchmark_native_source_commit": "58765309752321c52dfeabb2f09b33dc998ca3a8",
+  "collector_first_commit": "58765309752321c52dfeabb2f09b33dc998ca3a8",
+  "collector_retry_commit": "601550c539b586a0a8e09e735e8ea5e047c92075",
+  "datasets": {
+    "paired": {
+      "decision": "INCONCLUSIVE",
+      "planned_blocks": 96,
+      "valid_blocks": 35,
+      "full_protocol_complete": false,
+      "exact_command_files_archived": 4536,
+      "journal_recovery_matches_final_receipt": {}
+    },
+    "paired-retry1": {
+      "decision": "INCONCLUSIVE",
+      "planned_blocks": 32,
+      "valid_blocks": 32,
+      "full_protocol_complete": true,
+      "exact_command_files_archived": 4088,
+      "journal_recovery_matches_final_receipt": {
+        "stage": 15,
+        "diagnostic": 35,
+        "pilot": 321,
+        "formal": 1673
+      }
+    }
+  },
+  "binary_artifacts": [
+    {
+      "path": "install/android-arm64-v8a/lib/libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    {
+      "path": "build/dex-paired-arm64/mgmem_dex_paired",
+      "bytes": 14406784,
+      "sha256": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391"
+    },
+    {
+      "path": "build/dex-locked/mgmem_dex_paired.exe",
+      "bytes": 437248,
+      "sha256": "cbfa966c44b91794d94c2d1d7a9ac3747020c8f612fc3f555980160aa2a429b3"
+    }
+  ],
+  "files": [
+    {
+      "path": "artifacts/arm64-20261030/capture-journal-regression.json",
+      "bytes": 678,
+      "sha256": "0e3d070ca224b4d9b9576dbce309e9909c898becaf4e9a6ef663004ce562700a"
+    },
+    {
+      "path": "artifacts/arm64-20261030/device-admission.json",
+      "bytes": 1263,
+      "sha256": "3185e13ad0d61cd4e4683c2c0bcb86e404251d22e31e891b01490eb084bbff52"
+    },
+    {
+      "path": "artifacts/arm64-20261030/device-window-admission.json",
+      "bytes": 1505,
+      "sha256": "091e20f3e73a261b4962458272d1e35e34454ef4ad01a8e6aa8ccaa2d975ca57"
+    },
+    {
+      "path": "artifacts/arm64-20261030/device-window-finished.json",
+      "bytes": 526,
+      "sha256": "4dcda44ef3178e0ca301c4d9152f839b29e8c6f3940654877d6766c92a3ffcbf"
+    },
+    {
+      "path": "artifacts/arm64-20261030/failures/host-A1-parser-budget64.json",
+      "bytes": 1159,
+      "sha256": "798964d730150bc7e39958e866a4e810fa4b435d0b260ad9e500a44fa85a448f"
+    },
+    {
+      "path": "artifacts/arm64-20261030/github-ci-68fac01-summary.txt",
+      "bytes": 947,
+      "sha256": "8c22e2f8e65a86e29d22e55059b2426cdb1e42c152cd86987b0a064d35a856cb"
+    },
+    {
+      "path": "artifacts/arm64-20261030/github-ci-68fac01.json",
+      "bytes": 5408,
+      "sha256": "c67f637b7acd307d1d97eb7be789386796c358f1fa8d3c5e7112ea5cdc2ba2d6"
+    },
+    {
+      "path": "artifacts/arm64-20261030/host-A1-diagnostic.json",
+      "bytes": 1178,
+      "sha256": "24aba84c7a1d25dbddb7c1c7ef3596d58eb531bcfc64a07e42fc39cf43fdfc0f"
+    },
+    {
+      "path": "artifacts/arm64-20261030/host-A3-diagnostic.json",
+      "bytes": 1177,
+      "sha256": "cc23b33056ec022418e64a8ce06d44590b56b63f5f3a55cf9ca1a6c5d307c083"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/collector-source-v1.py",
+      "bytes": 28817,
+      "sha256": "d3e7a5c3eea6bc52aebfc3a042e53c2c7f9b548f998a85c89a4bf4d6d4736953"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/command-logs.zip",
+      "bytes": 1103880,
+      "sha256": "1351725e486dcbdc8aef45e891c56a7dd42ce5ad59215ce4acac856385049f36"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/deployment.json",
+      "bytes": 1300,
+      "sha256": "178db2d872f83d65e6a3f33ec0847a54837e47873335bfa2c055f8146236a04e"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/diagnostic-receipt.json",
+      "bytes": 44449,
+      "sha256": "f9a9f29b15e5575f0a9c70239ab37c2f2a33d8adc4b43d579122f5105d5770b9"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/diagnostic.jsonl",
+      "bytes": 10248,
+      "sha256": "2c0dd2f896631f1f4535d7b6229bbc2b6604335471523962c09b5cbb92b794ad"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/formal-plan.json",
+      "bytes": 16276,
+      "sha256": "f6d026f5d1bf199e94d764b2da2bb08990e526dde91daef1f59060be5a9c95c1"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/formal-protocol.json",
+      "bytes": 3434,
+      "sha256": "b5f10c45da1a187fa5c8ed0bfd898134d15fccf25af3164db98f3204a00783ff"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/formal-receipt.json",
+      "bytes": 2086271,
+      "sha256": "2baf63c7f4e86f502aec0647e188d90254f49b43430559863973e14bfe40be46"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/formal.jsonl",
+      "bytes": 731246,
+      "sha256": "731c240db002a5d5e52e6707975fde40b743d716dd254325a7519d97fc8b289d"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/pilot-protocol.json",
+      "bytes": 3026,
+      "sha256": "e13da61f45122abdd408cf2eae71765ce7afe88ed47310f664d3a0e7e8a4a84c"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/pilot-receipt.json",
+      "bytes": 376566,
+      "sha256": "37db0a7e96ed18b6747fea2674430329010f706a50536abde5f0163dc0f1c18b"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/pilot.jsonl",
+      "bytes": 123901,
+      "sha256": "3464478a1351bb7c7e7ffcc4fccebbe4b4ca78872ae6f4a76be155d6e2a380c8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/report.json",
+      "bytes": 23436,
+      "sha256": "5344f125a71cfd847af533f3eb95d5cccfdb473824e451f6a87e72c79f40c809"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired/stage-receipt.json",
+      "bytes": 19135,
+      "sha256": "b1ad42d57453be7f67ba28dac009f5f1c1869d30fb3266bcf4e1904c77c62aea"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/command-logs.zip",
+      "bytes": 995276,
+      "sha256": "63c4903dc1752110956bd0dbff97fcce3a3e2c9a52e3feaec2b84076171a3826"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/deployment.json",
+      "bytes": 1300,
+      "sha256": "f0b3f133c2e851d73328bea54b4b8e08c11786e13cf4ff9075ed1b0c27e0f3fe"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/diagnostic-commands.jsonl",
+      "bytes": 60261,
+      "sha256": "eca2c1527c487de9ed7ac943e9c933fe7c9b24ec51f35d7fc6d5c0b86f1d729f"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/diagnostic-receipt.json",
+      "bytes": 44700,
+      "sha256": "d46fd8ac053e8f180e98c296b4d2cc88ef32e69bd4cf59dd7447f33508c33705"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/diagnostic.jsonl",
+      "bytes": 10245,
+      "sha256": "8b39796546746867839523d054fbbc14b99e04af5e9f5fdbec4ceb349cf500c7"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-commands.jsonl",
+      "bytes": 2860409,
+      "sha256": "e14c89eae3dc8681e0f317574fccef304aaa6c2bd13d71032c8754d98f04003c"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-plan.json",
+      "bytes": 8918,
+      "sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-protocol.json",
+      "bytes": 4405,
+      "sha256": "7e864ad7ea74e26857cf9a04c9ac162fc20bff1b71bf9ac5a6d32cf1e8592492"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-receipt.json",
+      "bytes": 1855643,
+      "sha256": "ec6e6737f9b502edebd170c24103375d1f950b99debd66a199860d0e6b33a2d5"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+      "bytes": 649882,
+      "sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/pilot-commands.jsonl",
+      "bytes": 548224,
+      "sha256": "f18a225a0679cccdf2822c3d5570f3b7c7ffbd9461d42d98db65ec85e6a49f50"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/pilot-protocol.json",
+      "bytes": 4163,
+      "sha256": "e9fe5ebc2259e5977f4f0966e1ae430c6c7fea6cdc0e7ee60e9114d1575dd8e5"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/pilot-receipt.json",
+      "bytes": 360368,
+      "sha256": "160b8b6b07446c84493fa4fd9185200651fe4f7c8298c8d97d161cc2e0e8f667"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/pilot.jsonl",
+      "bytes": 121817,
+      "sha256": "02b3099112427a66236c1a933ccca100b408455a8c5809ed2f87b8a8684ad8d8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/report.json",
+      "bytes": 20413,
+      "sha256": "40fe90483845bc74d31f4175dbb39ef2e129d687a562ee9d732832d9c51ad729"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/stage-commands.jsonl",
+      "bytes": 21121,
+      "sha256": "e2163071458d9c1c0cb93bea6075d4eec8080ae917df166c34d33474ebc49ca9"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/stage-receipt.json",
+      "bytes": 19345,
+      "sha256": "b2a614c4b4f0eba4fc8c8407450594b0bd6513b11eeb61cfe0111f55bd710ee5"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/001-before-processes.stderr.txt",
+      "bytes": 87,
+      "sha256": "a6677e6ee0b252ed5ede59f408b0e3609e956a4f613c415834af98ba1c5fe949"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/001-before-processes.stdout.txt",
+      "bytes": 283,
+      "sha256": "26d5d73cab7a9f2028dbb0f6f99b887ad00ee0b1d87b8f1189693cd64c5030a9"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/002-before-instrumentation.stderr.txt",
+      "bytes": 87,
+      "sha256": "a6677e6ee0b252ed5ede59f408b0e3609e956a4f613c415834af98ba1c5fe949"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/002-before-instrumentation.stdout.txt",
+      "bytes": 379,
+      "sha256": "fe21a2d69a753a7f40cc3255ae54f097987d06d6033a4772a1dc7ee6f6a34a2c"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/003-metadata-model.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/003-metadata-model.stdout.txt",
+      "bytes": 8,
+      "sha256": "60589dad27bab73b53977e16d22f7ce6bcf5e50aaeb6ea9ef5ee311f303b60ad"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/004-metadata-api.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/004-metadata-api.stdout.txt",
+      "bytes": 4,
+      "sha256": "a77b54178e2066fdc29229d4c0b59051caedc92e918e037928e185d39ad86316"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/005-metadata-abi-list.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/005-metadata-abi-list.stdout.txt",
+      "bytes": 11,
+      "sha256": "93a5f09ca2fe8b37c612145e5749beaf159a7218b686023da3c3c22d9d363327"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/006-metadata-kernel.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/006-metadata-kernel.stdout.txt",
+      "bytes": 49,
+      "sha256": "c0b902d1bb27f5ea3d4c5fa8607a8a487e70b907d7b276faedae3339886b443b"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/007-metadata-page-bytes.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/007-metadata-page-bytes.stdout.txt",
+      "bytes": 6,
+      "sha256": "30f236f92d107cedc1eab7b3d6dafa316df3657ac88e59ece8df2944b6c995ca"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/008-boot-before.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/008-boot-before.stdout.txt",
+      "bytes": 72,
+      "sha256": "403e9010d1083bc607c845ea0f99c1a28a0bd668392d1d826a0f5dcc76ed1ed2"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/009-create-owned-directory.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/009-create-owned-directory.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/010-push-libmgmem-so.stderr.txt",
+      "bytes": 118,
+      "sha256": "89d59ad48970ffe03cb52c478331d0ac79ad1450fcfa1b386b5ce6425a7ee9f6"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/010-push-libmgmem-so.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/011-hash-libmgmem-so.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/011-hash-libmgmem-so.stdout.txt",
+      "bytes": 145,
+      "sha256": "5de39b85b2b0541b0c53bdc3e2f287465044775a172d139e2661e5d721a86f65"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/012-push-mgmem_core_tests.stderr.txt",
+      "bytes": 122,
+      "sha256": "dabaed979a637da864ce513e5dc1dce20d5468a7743478e4eef88d1a0a51d0fe"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/012-push-mgmem_core_tests.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/013-hash-mgmem_core_tests.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/013-hash-mgmem_core_tests.stdout.txt",
+      "bytes": 150,
+      "sha256": "2f715419a43d9f65c70b7b2fc9641601680f77f89ee6eea38fd7f3b9c231e4c2"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/014-push-mgmem_c_consumer.stderr.txt",
+      "bytes": 120,
+      "sha256": "1183c8f098d5fc8a6131fa63ac99747ff07c8b3f1f47325bb3e817a89b742dc5"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/014-push-mgmem_c_consumer.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/015-hash-mgmem_c_consumer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/015-hash-mgmem_c_consumer.stdout.txt",
+      "bytes": 150,
+      "sha256": "852538ad0c800156872bbd8317bc941e2bd549bfb4d1f4aca781e2620f48d0c5"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/016-push-mgmem_cpp_consumer.stderr.txt",
+      "bytes": 124,
+      "sha256": "fd1a0b5331c5cfa1b4ec137556fe2b7a52b0713825dcccdb7f9036a523d69b01"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/016-push-mgmem_cpp_consumer.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/017-hash-mgmem_cpp_consumer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/017-hash-mgmem_cpp_consumer.stdout.txt",
+      "bytes": 152,
+      "sha256": "1ea676734e325685c8c89ca934bf9f0141b27965bb3b03608439609d8cb867e7"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/018-set-owned-test-execute-bits.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/018-set-owned-test-execute-bits.stdout.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/019-test-mgmem_core_tests.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/019-test-mgmem_core_tests.stdout.txt",
+      "bytes": 477,
+      "sha256": "a04ccd61cc11ad31141c13ca390063bda1fa26feaf5ba6075ed1185d95ab580b"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/020-test-mgmem_c_consumer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/020-test-mgmem_c_consumer.stdout.txt",
+      "bytes": 66,
+      "sha256": "9ebcdd5508a9e8c766b9dc4d8765a99c6359262afdc4ee72fc46aa3bd75e4050"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/021-test-mgmem_cpp_consumer.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/021-test-mgmem_cpp_consumer.stdout.txt",
+      "bytes": 54,
+      "sha256": "071ad3521a40af3890b3bb3aeae4d85c6838320ba9335a92a5515419c2a4a6dd"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/022-after-processes.stderr.txt",
+      "bytes": 87,
+      "sha256": "a6677e6ee0b252ed5ede59f408b0e3609e956a4f613c415834af98ba1c5fe949"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/022-after-processes.stdout.txt",
+      "bytes": 283,
+      "sha256": "2a071fbb1189808f56e0e2e27f1a36958ea5f29ea6fdae1e9fdf6753b0bf9481"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/023-after-instrumentation.stderr.txt",
+      "bytes": 87,
+      "sha256": "a6677e6ee0b252ed5ede59f408b0e3609e956a4f613c415834af98ba1c5fe949"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/023-after-instrumentation.stdout.txt",
+      "bytes": 379,
+      "sha256": "0aabdab608697ac22675abffc9b8fa3ad295c794d583d0fb4075ae689e92cada"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/024-boot-after.stderr.txt",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/024-boot-after.stdout.txt",
+      "bytes": 72,
+      "sha256": "403e9010d1083bc607c845ea0f99c1a28a0bd668392d1d826a0f5dcc76ed1ed2"
+    },
+    {
+      "path": "artifacts/arm64-20261030/safety/receipt.json",
+      "bytes": 27440,
+      "sha256": "88889fd3571e6e4e33c3711b5db430594f53e5718f6d026e9cd9e06b93dca9dc"
+    },
+    {
+      "path": "artifacts/arm64-20261030/sdk-source-lock-before-arm64.json",
+      "bytes": 20854,
+      "sha256": "7c075a72388f8650ab765558a57e1f9706a6af7deaccbf8029dfa860f1a14ea7"
+    }
+  ],
+  "private_inputs": "Original APK/DEX and full device inventory are not published.",
+  "raw_logs": "Filtered exact per-command streams are preserved in command-logs.zip; local unarchived duplicates remain in ignored commands directories.",
+  "limits": [
+    "Physical device/API37/arm64/4KB only",
+    "No confirmed stable CPU performance gain",
+    "No BIL production integration",
+    "16KB/MTE/HWASan/energy/RSS/PFN/PMU are separate unqualified fields"
+  ]
+}

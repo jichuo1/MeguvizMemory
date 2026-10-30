@@ -1,0 +1,1 @@
+52e21437ce336cc6c6e1c2ade9e4b67f0cf0856f6793929709f4f6a35b00f12b  /data/local/tmp/meguvizmemory-arm64-20261030T033641Z-460563ec1ce9/mgmem_cpp_consumer

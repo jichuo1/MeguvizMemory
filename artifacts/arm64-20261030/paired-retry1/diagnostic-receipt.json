@@ -1,0 +1,1021 @@
+{
+  "schema_version": 1,
+  "scope": "ARM64_REAL_CPU_A1_A3_PAIRED_CAPTURE",
+  "started_at_utc": "2026-10-30T04:04:35.041879+00:00",
+  "state": "PASS",
+  "all_passed": true,
+  "device_serial_sha256": "5579a8acd744122d3c611cdd981053250cb9d87432bee2fe9c176bf6e96b7382",
+  "device_directory": "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0",
+  "device_directory_created": false,
+  "shared_device_lock_acquired": false,
+  "admission_rule": "Original owner release plus observational process gates; no future-exclusion guarantee.",
+  "commands": [
+    {
+      "record_id": 1,
+      "name": "before-processes",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:c0876c29e030219f5ce335d3b2e3adb4c2060fa77ee6c362763ea3a3fa3c7ea7\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 1002,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.15600000000085856,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "c0876c29e030219f5ce335d3b2e3adb4c2060fa77ee6c362763ea3a3fa3c7ea7",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "001-before-processes.stdout.txt",
+      "stderr_file": "001-before-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 1002,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 2,
+      "name": "before-instrumentation",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:dc4ce43fdf27f4ba7b9d9b59de476d40288334f42197be8b80298fc886377a18\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.13999999999941792,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "dc4ce43fdf27f4ba7b9d9b59de476d40288334f42197be8b80298fc886377a18",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "002-before-instrumentation.stdout.txt",
+      "stderr_file": "002-before-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 3,
+      "name": "boot-before",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 3.936999999999898,
+      "stdout_value_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "003-boot-before.stdout.txt",
+      "stderr_file": "003-boot-before.stderr.txt"
+    },
+    {
+      "record_id": 4,
+      "name": "verify-device-executable",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/mgmem_dex_paired"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391  /data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/mgmem_dex_paired\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.11000000000058208,
+      "stdout_file": "004-verify-device-executable.stdout.txt",
+      "stderr_file": "004-verify-device-executable.stderr.txt"
+    },
+    {
+      "record_id": 5,
+      "name": "verify-device-library",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/libmgmem.so"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919  /data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/libmgmem.so\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07799999999951979,
+      "stdout_file": "005-verify-device-library.stdout.txt",
+      "stderr_file": "005-verify-device-library.stderr.txt"
+    },
+    {
+      "record_id": 6,
+      "name": "verify-device-input",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/input.dex"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0  /data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/input.dex\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0930000000007567,
+      "stdout_file": "006-verify-device-input.stdout.txt",
+      "stderr_file": "006-verify-device-input.stderr.txt"
+    },
+    {
+      "record_id": 7,
+      "name": "b000p0-pre0a-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07899999999972351,
+      "stdout_file": "007-b000p0-pre0a-battery.stdout.txt",
+      "stderr_file": "007-b000p0-pre0a-battery.stderr.txt"
+    },
+    {
+      "record_id": 8,
+      "name": "b000p0-pre0a-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:ce243b1a13477e075c52d6e5344538f47c54d10258721e914244ce4ab55f30d7\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.07799999999951979,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "ce243b1a13477e075c52d6e5344538f47c54d10258721e914244ce4ab55f30d7",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "008-b000p0-pre0a-thermal.stdout.txt",
+      "stderr_file": "008-b000p0-pre0a-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 9,
+      "name": "b000p0-pre0a-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:d843157f6896c506e98ad1ff9c53d4f737f2f411ffcdabbb1fc5a11305b0abd1\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214288 98062 1034733 31346445 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "d843157f6896c506e98ad1ff9c53d4f737f2f411ffcdabbb1fc5a11305b0abd1",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "009-b000p0-pre0a-proc-stat.stdout.txt",
+      "stderr_file": "009-b000p0-pre0a-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214288 98062 1034733 31346445 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 10,
+      "name": "b000p0-pre0a-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "998400\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_file": "010-b000p0-pre0a-frequency.stdout.txt",
+      "stderr_file": "010-b000p0-pre0a-frequency.stderr.txt"
+    },
+    {
+      "record_id": 11,
+      "name": "b000p0-pre0b-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07799999999951979,
+      "stdout_file": "011-b000p0-pre0b-battery.stdout.txt",
+      "stderr_file": "011-b000p0-pre0b-battery.stderr.txt"
+    },
+    {
+      "record_id": 12,
+      "name": "b000p0-pre0b-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:b144cf1de160210f06c0148ff6f8ce2ad3bc0bca05935a781d2a4fbc794ebc22\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "b144cf1de160210f06c0148ff6f8ce2ad3bc0bca05935a781d2a4fbc794ebc22",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "012-b000p0-pre0b-thermal.stdout.txt",
+      "stderr_file": "012-b000p0-pre0b-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 13,
+      "name": "b000p0-pre0b-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:a2847767db8660572aa40936062d2375283593287ddf246e2d639997c1c2ce7c\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214289 98062 1034734 31346483 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "a2847767db8660572aa40936062d2375283593287ddf246e2d639997c1c2ce7c",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "013-b000p0-pre0b-proc-stat.stdout.txt",
+      "stderr_file": "013-b000p0-pre0b-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214289 98062 1034734 31346483 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 14,
+      "name": "b000p0-pre0b-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "787200\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "stdout_file": "014-b000p0-pre0b-frequency.stdout.txt",
+      "stderr_file": "014-b000p0-pre0b-frequency.stderr.txt"
+    },
+    {
+      "record_id": 15,
+      "name": "b000p0-native-A1",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/mgmem_dex_paired",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/input.dex",
+        "--variant",
+        "A1",
+        "--cpu",
+        "2",
+        "--diagnostic"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"schema_version\":1,\"workload\":\"dex_borrowed_parse_and_complete_method_query_v1\",\"success\":true,\"variant\":\"A1\",\"failure_reason\":null,\"source_sha256\":\"83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0\",\"input_bytes\":10540184,\"method_count\":54147,\"result_checksum\":12701547145945416225,\"preload_ns\":16090990,\"total_ns\":280500312,\"setup_ns\":131185521,\"query_ns\":126224948,\"cleanup_ns\":23089843,\"diagnostic\":true,\"phases_overlap\":false,\"a3_observation_API_cost_included\":true,\"memory_allocator_and_lease_used\":false,\"backing_peak_bytes\":10540184,\"input_budget_bytes\":33554432,\"parser_budget_bytes\":268435456,\"closed_backing_bytes\":0,\"lease_final_correct\":true,\"affinity_selected\":true,\"selected_cpu\":2,\"cpu_before\":2,\"cpu_after\":2,\"getrusage_status\":\"AVAILABLE\",\"minor_faults\":29559,\"major_faults\":0,\"user_cpu_ns\":223891000,\"system_cpu_ns\":55631000,\"preloaded_external_bytes\":10540184,\"storage_scope\":\"single_immutable_input_backing_excludes_parser_and_preload_metadata\",\"timing_scope\":\"CPU_task_includes_setup_parse_query_consume_and_final_cleanup_excludes_file_preload_and_process_start\",\"product_scope\":\"independent_DexMeguviz_task_not_BIL_DexKit_or_playback\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.3599999999987631,
+      "stdout_file": "015-b000p0-native-A1.stdout.txt",
+      "stderr_file": "015-b000p0-native-A1.stderr.txt"
+    },
+    {
+      "record_id": 16,
+      "name": "b000p0-post-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "stdout_file": "016-b000p0-post-battery.stdout.txt",
+      "stderr_file": "016-b000p0-post-battery.stderr.txt"
+    },
+    {
+      "record_id": 17,
+      "name": "b000p0-post-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:522af4744d662af221ce2368c23818b1aa0c67fed6e4bd310460f1a63499fadf\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "522af4744d662af221ce2368c23818b1aa0c67fed6e4bd310460f1a63499fadf",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "017-b000p0-post-thermal.stdout.txt",
+      "stderr_file": "017-b000p0-post-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 18,
+      "name": "b000p0-post-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:0c6d927b53790471529463ccebd945091deda2f0e7e429f82657cc61da853384\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214311 98062 1034741 31346514 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "0c6d927b53790471529463ccebd945091deda2f0e7e429f82657cc61da853384",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "018-b000p0-post-proc-stat.stdout.txt",
+      "stderr_file": "018-b000p0-post-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214311 98062 1034741 31346514 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 19,
+      "name": "b000p0-post-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "787200\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_file": "019-b000p0-post-frequency.stdout.txt",
+      "stderr_file": "019-b000p0-post-frequency.stderr.txt"
+    },
+    {
+      "record_id": 20,
+      "name": "b000p1-pre0a-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "stdout_file": "020-b000p1-pre0a-battery.stdout.txt",
+      "stderr_file": "020-b000p1-pre0a-battery.stderr.txt"
+    },
+    {
+      "record_id": 21,
+      "name": "b000p1-pre0a-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:cc74c8a772eaf585aaf1eceaaaa9c9d9034fc74ee8a5c2312a8482aa1850e52a\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "cc74c8a772eaf585aaf1eceaaaa9c9d9034fc74ee8a5c2312a8482aa1850e52a",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "021-b000p1-pre0a-thermal.stdout.txt",
+      "stderr_file": "021-b000p1-pre0a-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 22,
+      "name": "b000p1-pre0a-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:45b489d9e6820b7f4f16e8a300e9bc5c324d3019261093fdee27ce60f513f401\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214311 98062 1034741 31346539 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "45b489d9e6820b7f4f16e8a300e9bc5c324d3019261093fdee27ce60f513f401",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "022-b000p1-pre0a-proc-stat.stdout.txt",
+      "stderr_file": "022-b000p1-pre0a-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214311 98062 1034741 31346539 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 23,
+      "name": "b000p1-pre0a-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "998400\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_file": "023-b000p1-pre0a-frequency.stdout.txt",
+      "stderr_file": "023-b000p1-pre0a-frequency.stderr.txt"
+    },
+    {
+      "record_id": 24,
+      "name": "b000p1-pre0b-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_file": "024-b000p1-pre0b-battery.stdout.txt",
+      "stderr_file": "024-b000p1-pre0b-battery.stderr.txt"
+    },
+    {
+      "record_id": 25,
+      "name": "b000p1-pre0b-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:526764ef8c9e70ed3532cc0a6a5aba914b97f85889f93824985b830b057e96b8\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "526764ef8c9e70ed3532cc0a6a5aba914b97f85889f93824985b830b057e96b8",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "025-b000p1-pre0b-thermal.stdout.txt",
+      "stderr_file": "025-b000p1-pre0b-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 26,
+      "name": "b000p1-pre0b-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:42a251f6b6c824dabd04436b67f018160b76c4ed0109bafbbc99e4df8ae3b8e6\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214311 98062 1034741 31346575 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.04700000000048021,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "42a251f6b6c824dabd04436b67f018160b76c4ed0109bafbbc99e4df8ae3b8e6",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "026-b000p1-pre0b-proc-stat.stdout.txt",
+      "stderr_file": "026-b000p1-pre0b-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214311 98062 1034741 31346575 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 27,
+      "name": "b000p1-pre0b-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "998400\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.04700000000048021,
+      "stdout_file": "027-b000p1-pre0b-frequency.stdout.txt",
+      "stderr_file": "027-b000p1-pre0b-frequency.stderr.txt"
+    },
+    {
+      "record_id": 28,
+      "name": "b000p1-native-A3",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/mgmem_dex_paired",
+        "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0/input.dex",
+        "--variant",
+        "A3",
+        "--cpu",
+        "2",
+        "--diagnostic"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"schema_version\":1,\"workload\":\"dex_borrowed_parse_and_complete_method_query_v1\",\"success\":true,\"variant\":\"A3\",\"failure_reason\":null,\"source_sha256\":\"83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0\",\"input_bytes\":10540184,\"method_count\":54147,\"result_checksum\":12701547145945416225,\"preload_ns\":19420208,\"total_ns\":276579948,\"setup_ns\":131070365,\"query_ns\":123513854,\"cleanup_ns\":21995729,\"diagnostic\":true,\"phases_overlap\":false,\"a3_observation_API_cost_included\":true,\"memory_allocator_and_lease_used\":true,\"backing_peak_bytes\":10540184,\"input_budget_bytes\":33554432,\"parser_budget_bytes\":268435456,\"closed_backing_bytes\":0,\"lease_final_correct\":true,\"affinity_selected\":true,\"selected_cpu\":2,\"cpu_before\":2,\"cpu_after\":2,\"getrusage_status\":\"AVAILABLE\",\"minor_faults\":29558,\"major_faults\":0,\"user_cpu_ns\":246276000,\"system_cpu_ns\":29316000,\"preloaded_external_bytes\":10540184,\"storage_scope\":\"single_immutable_input_backing_excludes_parser_and_preload_metadata\",\"timing_scope\":\"CPU_task_includes_setup_parse_query_consume_and_final_cleanup_excludes_file_preload_and_process_start\",\"product_scope\":\"independent_DexMeguviz_task_not_BIL_DexKit_or_playback\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.35900000000037835,
+      "stdout_file": "028-b000p1-native-A3.stdout.txt",
+      "stderr_file": "028-b000p1-native-A3.stderr.txt"
+    },
+    {
+      "record_id": 29,
+      "name": "b000p1-post-battery",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "292\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_file": "029-b000p1-post-battery.stdout.txt",
+      "stderr_file": "029-b000p1-post-battery.stderr.txt"
+    },
+    {
+      "record_id": 30,
+      "name": "b000p1-post-thermal",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "thermalservice"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:c4400510e08b816f6bb036f2a6a6d1af005004876f01475a1a550ecb62a06bcb\n{\n  \"thermal_status\": 0,\n  \"scope\": \"Only exact Thermal Status integer retained; not a CPU temperature reading.\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "c4400510e08b816f6bb036f2a6a6d1af005004876f01475a1a550ecb62a06bcb",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "030-b000p1-post-thermal.stdout.txt",
+      "stderr_file": "030-b000p1-post-thermal.stderr.txt",
+      "selected_inventory": {
+        "thermal_status": 0,
+        "scope": "Only exact Thermal Status integer retained; not a CPU temperature reading."
+      }
+    },
+    {
+      "record_id": 31,
+      "name": "b000p1-post-proc-stat",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/stat"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:3ada2c0fe845efde43705b6b514700b463052e381ad2d4fa9a02292f2fe7caa9\n{\n  \"selected_cpu\": 2,\n  \"selected_proc_stat_line\": \"cpu2 1214336 98062 1034746 31346607 5640 81455 11044 1228 23780 0\"\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.04700000000048021,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "3ada2c0fe845efde43705b6b514700b463052e381ad2d4fa9a02292f2fe7caa9",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "031-b000p1-post-proc-stat.stdout.txt",
+      "stderr_file": "031-b000p1-post-proc-stat.stderr.txt",
+      "selected_inventory": {
+        "selected_cpu": 2,
+        "selected_proc_stat_line": "cpu2 1214336 98062 1034746 31346607 5640 81455 11044 1228 23780 0"
+      }
+    },
+    {
+      "record_id": 32,
+      "name": "b000p1-post-frequency",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/sys/devices/system/cpu/cpu2/cpufreq/scaling_cur_freq"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "787200\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06199999999989814,
+      "stdout_file": "032-b000p1-post-frequency.stdout.txt",
+      "stderr_file": "032-b000p1-post-frequency.stderr.txt"
+    },
+    {
+      "record_id": 33,
+      "name": "after-processes",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:3245d4a2cf03d5aa83380d6a2a45266ab66e76717ce25513bb4cb0989db3f417\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 1002,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.10900000000037835,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "3245d4a2cf03d5aa83380d6a2a45266ab66e76717ce25513bb4cb0989db3f417",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "033-after-processes.stdout.txt",
+      "stderr_file": "033-after-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 1002,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 34,
+      "name": "after-instrumentation",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:eb235a621ec6136876f946c6cd6f138b16c622d5e4faf900a6c05be03226ab24\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.11000000000058208,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "eb235a621ec6136876f946c6cd6f138b16c622d5e4faf900a6c05be03226ab24",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "034-after-instrumentation.stdout.txt",
+      "stderr_file": "034-after-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 35,
+      "name": "phase-boot-after",
+      "command": [
+        "C:\\Users\\Administrator\\AppData\\Local\\Android\\Sdk\\platform-tools\\adb.exe",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000010186,
+      "stdout_value_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "035-phase-boot-after.stdout.txt",
+      "stderr_file": "035-phase-boot-after.stderr.txt"
+    }
+  ],
+  "binary_manifest": [],
+  "tests": {},
+  "qualification": {
+    "scope": "INDEPENDENT_NATIVE_PARSER_TASK_ONLY",
+    "BIL_auto_enable": false,
+    "16kb": "UNAVAILABLE",
+    "MTE": "UNAVAILABLE",
+    "energy": "UNAVAILABLE"
+  },
+  "cleanup": "Own directory retained. No automatic kill or delete.",
+  "phase": "diagnostic",
+  "native_session_rows": 2,
+  "admission": {
+    "file_name": "device-window-admission.json",
+    "sha256": "091e20f3e73a261b4962458272d1e35e34454ef4ad01a8e6aa8ccaa2d975ca57",
+    "state": "RELEASED_FOR_MEMORY",
+    "owner_evidence": {
+      "thread_id": "01a1814c-ad83-7681-833e-fdf32a513e45",
+      "explicit_statement": "设备已释放、可供 Memory 使用；我方目前没有排队的设备任务，后续如需使用会先协调。",
+      "prior_run": "gpu_gate_v2_1793324951",
+      "prior_run_terminal_state": "INTERRUPTED_INCOMPLETE",
+      "release_summary_sha256": "da1c9b57d6d4d6ca58f5b5cc1f0ff0bc85cace7b13d48b945aa50dd01dc21b2f",
+      "source_receipt_directory": "MeguvizPack/coordination/validation/gpu-inflight-gpu_gate_v2_1793324951/device-release-1793330888381736900",
+      "app_data_preserved": true,
+      "instrumentation_active": false
+    },
+    "explicitly_idle_processes": []
+  },
+  "command_journal": {
+    "path": "diagnostic-commands.jsonl",
+    "events": 51,
+    "durability": "Each changed last public command revision is appended and fsynced before snapshot.",
+    "snapshot_interval_seconds": 2.0
+  },
+  "safety_receipt": {
+    "sha256": "88889fd3571e6e4e33c3711b5db430594f53e5718f6d026e9cd9e06b93dca9dc",
+    "state": "PASS",
+    "abi": "arm64-v8a",
+    "page_bytes": 4096
+  },
+  "protocol_sha256": "e9fe5ebc2259e5977f4f0966e1ae430c6c7fea6cdc0e7ee60e9114d1575dd8e5",
+  "local_artifacts": {
+    "executable": {
+      "name": "mgmem_dex_paired",
+      "bytes": 14406784,
+      "sha256": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391"
+    },
+    "library": {
+      "name": "libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    "input": {
+      "name": "input.dex",
+      "bytes": 10540184,
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0"
+    }
+  },
+  "workload_contract": {
+    "cpu": 2,
+    "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "expected_method_count": 54147,
+    "expected_result_checksum": 12701547145945416225
+  },
+  "before_occupancy": {
+    "checked_at_utc": "2026-10-30T04:04:35.425011+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "latest_prelaunch_gate": {
+    "attempt": 1,
+    "first": {
+      "captured_at_utc": "2026-10-30T04:04:41.182626+00:00",
+      "battery_deci_c": 292,
+      "battery_sensor_is_CPU_temperature": false,
+      "thermal_status": 0,
+      "selected_cpu": 2,
+      "selected_cpu_ticks_first_eight": [
+        1214311,
+        98062,
+        1034741,
+        31346539,
+        5640,
+        81455,
+        11044,
+        1228
+      ],
+      "selected_cpu_stat_observed_monotonic_ns": 11132890000000,
+      "scaling_cur_freq_khz": 998400,
+      "frequency_observation": "AVAILABLE"
+    },
+    "second": {
+      "captured_at_utc": "2026-10-30T04:04:41.538720+00:00",
+      "battery_deci_c": 292,
+      "battery_sensor_is_CPU_temperature": false,
+      "thermal_status": 0,
+      "selected_cpu": 2,
+      "selected_cpu_ticks_first_eight": [
+        1214311,
+        98062,
+        1034741,
+        31346575,
+        5640,
+        81455,
+        11044,
+        1228
+      ],
+      "selected_cpu_stat_observed_monotonic_ns": 11133250000000,
+      "scaling_cur_freq_khz": 998400,
+      "frequency_observation": "AVAILABLE"
+    },
+    "selected_cpu_background_busy": 0.0,
+    "actual_stat_observation_window_seconds": 0.36,
+    "gate_reasons": [],
+    "valid": true
+  },
+  "after_occupancy": {
+    "checked_at_utc": "2026-10-30T04:04:42.399781+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "completed_at_utc": "2026-10-30T04:04:42.462448+00:00"
+}

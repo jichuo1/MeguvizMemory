@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "state": "STAGED",
+  "created_at_utc": "2026-10-30T04:04:30.055499+00:00",
+  "device_serial_sha256": "5579a8acd744122d3c611cdd981053250cb9d87432bee2fe9c176bf6e96b7382",
+  "device_directory": "/data/local/tmp/meguvizmemory-paired-20261030T040423Z-29e4213c10a0",
+  "boot_id_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d",
+  "artifacts": {
+    "executable": {
+      "name": "mgmem_dex_paired",
+      "bytes": 14406784,
+      "sha256": "c282433806a60937d15c98222f0f37005495b2fb35ba7596839cb2b9442b1391"
+    },
+    "library": {
+      "name": "libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    "input": {
+      "name": "input.dex",
+      "bytes": 10540184,
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0"
+    }
+  },
+  "workload_contract": {
+    "cpu": 2,
+    "input_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "expected_method_count": 54147,
+    "expected_result_checksum": 12701547145945416225
+  },
+  "protocol_at_stage_sha256": "e9fe5ebc2259e5977f4f0966e1ae430c6c7fea6cdc0e7ee60e9114d1575dd8e5",
+  "cleanup": "Own directory retained. No automatic deletion, overwrite or process termination."
+}
