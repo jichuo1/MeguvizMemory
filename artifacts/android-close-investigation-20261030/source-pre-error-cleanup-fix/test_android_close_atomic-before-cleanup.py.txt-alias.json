@@ -1,0 +1,5 @@
+{
+  "original_path": "tools/test_android_close_atomic.py",
+  "snapshot": "artifacts/android-close-investigation-20261030/source-pre-error-cleanup-fix/test_android_close_atomic-before-cleanup.py.txt",
+  "sha256": "824e5d67711c3807665c1d1cb28c8c23f68969c93ad0b51647690c277aa2c74f"
+}

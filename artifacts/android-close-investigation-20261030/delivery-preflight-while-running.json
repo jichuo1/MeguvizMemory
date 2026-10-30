@@ -1,0 +1,12 @@
+{
+  "state": "VERIFIED_READ_ONLY_PREFLIGHT",
+  "scope": "INTERIM_WHILE_FINAL_DEVICE_LONG_RUNNING_NOT_RELEASE",
+  "tested_long_qualification": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+  "distribution_smoke_qualification": "PASS_SCOPED",
+  "distribution_long_qualification": "NOT_QUALIFIED",
+  "distribution_host": "PASS_SCOPED_HOST_RELEASE_29_ASAN_29",
+  "source_count": 267,
+  "privacy_scan": "PASS",
+  "preview_source_lock_sha256": "b4fb0d3d07399acfc28e434e3abc11ce45daf70a82619511cf0a9b4a13b58955",
+  "qualification_note": "The still-running final round was explicitly not promoted; final source lock and manifest will be regenerated after completion."
+}

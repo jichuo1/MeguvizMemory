@@ -1,0 +1,17 @@
+{
+  "state": "EXACT_SOURCE_IDENTITIES_MATCH_WINDOWS_OS_TEST",
+  "files": [
+    {
+      "source": "tools/run_android_close_round.py",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-windows-sharing-executed/run_android_close_round.py.txt",
+      "sha256": "24683dedf077a744997758e7c01d1322865e6e6409ca8731449694cedbda5191",
+      "bytes": 25554
+    },
+    {
+      "source": "tools/test_android_close_atomic_windows.py",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-windows-sharing-executed/test_android_close_atomic_windows.py.txt",
+      "sha256": "2d494630d64243de0ff0d5da7b8a8aa01782a94b34a7ab2db7078ccef1a8f2e9",
+      "bytes": 7677
+    }
+  ]
+}

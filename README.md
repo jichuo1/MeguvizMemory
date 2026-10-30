@@ -2,8 +2,9 @@
 
 显式 CPU 内存域、System provider、有界 arena 和可验证的所有权/借用合同。当前版本为 **0.2.0 功能工程预览**，公共原生接口使用 `mgmem_*_v1` / ABI 1.1。独立于 BIL、Xposed、GPU 后端及 Android UI；不接管进程全局 allocator。
 
-本阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
-当前消费者阶段已收尾：DEX外部导入、图像压力/预算/异步关闭及原生900秒循环通过；JNI可重入锁问题已修复，Host Release/ASan各18项和双ABI R8短测通过。**API33 Android长稳重复等待仍未定位，新模块长稳不合格**；按用户要求结束本轮，BIL不接入。见[交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)。
+首个0.2功能阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
+上一消费者阶段（closefix1）完成DEX外部导入、图像压力/预算/异步关闭及原生900秒循环；当时JNI可重入锁修复后的API33 Android长稳未获资格。旧阶段结果见[交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)，不覆盖下述新版验证。
+最新Android关闭阶段：本机停滞复现时观察到cgroup冻结；JNI自动通知重试与错误路径已修复。最终脱敏安装版API33 arm64真机15分钟采样无冻结、关闭归零，API34 x86_64模拟器短测通过；这是限定设备与工作量的功能/稳定性证据。见[关闭调查](docs/ANDROID_CLOSE_INVESTIGATION_20261030.md)。
 提供 CMake 安装包、C ABI 与可选 C++17 move-only RAII 适配。没有新增第三方生产依赖。
 
 本批交付范围与证据见 [STATE.md](STATE.md)、[验证记录](docs/VERIFICATION.md) 和 [TASKS.json](TASKS.json)。功能验证、设备运行、性能收益、TLB 机制和发布资格分别记录；研究模型中的 3.55% 等数值不代表本库实测。

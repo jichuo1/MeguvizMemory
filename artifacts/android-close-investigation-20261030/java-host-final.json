@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "scope": "FRAMEWORK_STUB_LIFECYCLE_TESTS_NOT_ANDROID_RUNTIME",
+  "status": "PASS",
+  "checks": 38,
+  "actual_device_operations": 0,
+  "real_android_api_compile": true,
+  "sources": [
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java",
+      "sha256": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "sha256": "324ce30512f07f5dd1f291828d8189ddc6bd4264d4b38f0bcb7a0cc71766cd79"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java",
+      "sha256": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c"
+    },
+    {
+      "path": "tools/verify_android_pressure.py",
+      "sha256": "d6f3e747f650baeb309555e2e67e53aab597a25c453710008a6e0089ac77f4eb"
+    }
+  ],
+  "limitations": [
+    "Stub Debug.MemoryInfo values are synthetic, never residency measurements.",
+    "Actual callback delivery and JNI/domain close require Android device qualification."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "state": "PASS_SYNTHETIC_IO_AND_OWN_CLEANUP_NOT_DEVICE",
+  "actual_test": {
+    "scope": "CROSS_PLATFORM_SYNTHETIC_IO_NO_DEVICE",
+    "state": "PASS",
+    "transient_permission_errors": 2,
+    "transient_attempts": 3,
+    "fsync_before_replace": true,
+    "persistent_elapsed_seconds": 0.9060000000026776,
+    "persistent_attempts": 31,
+    "last_complete_preserved": true,
+    "pending_preserved_and_not_overwritten": true,
+    "error_path_redacted": true,
+    "own_cleanup_before_sidecar": true,
+    "cleanup_timeout_and_denial_unknown": true,
+    "pending_sha256": "047e104caef8960787b753a34a596087e8563c28d826cafb87e808bdd15ec1cb"
+  },
+  "runner_sha256": "24683dedf077a744997758e7c01d1322865e6e6409ca8731449694cedbda5191",
+  "postflight_sha256": "bda57a0603583f875c25f3bdd527789176459faca87008afe277a5b93783122b",
+  "test_sha256": "b224d0e77154866b6afc933633332dfd600d3798b2998b0dfcada8f87bcfe0f3",
+  "frozen_retry_runner_alias_sha256": "359e50c460aad0dbaed8410745c9541b748076361e0a2a846ebc214913a3c862",
+  "frozen_retry_plan_sha256": "26523894a9fc274565c0fddebbab3cd5d345d3f06740a41b2ba4f6ab27cb69de",
+  "scope": "Mocked own-stop + transport wait; no ADB, no conclusion about actual device-process absence",
+  "device_operations": 0
+}

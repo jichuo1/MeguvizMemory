@@ -1,0 +1,163 @@
+{
+  "state": "PASS_INSTALLED_BYTE_IDENTITY_AND_POSTFLIGHT",
+  "scope": "READ_ONLY_API33_INSTALLED_BYTES_AND_POSTFLIGHT",
+  "source_sha256": "bda57a0603583f875c25f3bdd527789176459faca87008afe277a5b93783122b",
+  "atomic_helper_sha256": "24683dedf077a744997758e7c01d1322865e6e6409ca8731449694cedbda5191",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "long_receipt_sha256": "1546c1d3e3bd8a286c4c1fb2e0f9ad852afa32f0ef55ae0a213da06ede42279f",
+  "build_receipt_sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc",
+  "installed_APK_sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677",
+  "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+  "jni_member_sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59",
+  "core_member_sha256": "327e06e5b7206a2074e8d3f6f7cbe72998d948baadec55565f4c4f49e71f6b22",
+  "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+  "before_gate": {
+    "result": "PASS_OBSERVATIONAL_ONLY",
+    "process_rows": 848,
+    "matching_tests": 0,
+    "own_processes": 1,
+    "active_instrumentation": 0,
+    "process_inventory_sha256": "0115c4c3cfa826d943e5529d9193e61f69462714f33c5cb1b77179bf8473cd21",
+    "activity_inventory_sha256": "15ae40a33d024e90eb4f9775bd1409ec3db06d2c710fa0a6f74365a81cca142c"
+  },
+  "after_gate": {
+    "result": "PASS_OBSERVATIONAL_ONLY",
+    "process_rows": 848,
+    "matching_tests": 0,
+    "own_processes": 1,
+    "active_instrumentation": 0,
+    "process_inventory_sha256": "16e1a76091fdd8de5925da92b1deec35193c2c3150241520229f2713258f1a6d",
+    "activity_inventory_sha256": "9807f441591f3768a9d2543115acd27e847257d0612e7da907bc49171e489eac"
+  },
+  "own_activity_resumed": false,
+  "protocol_and_lifecycle_pass": true,
+  "installed_byte_identity_verified": true,
+  "commands": [
+    {
+      "name": "before-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "0115c4c3cfa826d943e5529d9193e61f69462714f33c5cb1b77179bf8473cd21",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "15ae40a33d024e90eb4f9775bd1409ec3db06d2c710fa0a6f74365a81cca142c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "device-api",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "42817c432a683116970d4048f2ddf476ff8dfca7a5d178bfa3a56679862e36aa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "device-abi",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "93a5f09ca2fe8b37c612145e5749beaf159a7218b686023da3c3c22d9d363327",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "device-model",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "a28e87ee24a958a61bfa993a364545ff4c6e4031cb2ae39d20f6a59715f00a65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "device-page_bytes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "30f236f92d107cedc1eab7b3d6dafa316df3657ac88e59ece8df2944b6c995ca",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot-before",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installed-package-path-before",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "83244b83889ddfc5f1796b832421df158223bfd6faa074bef9c8875c621c3a98",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "device-hash-installed",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "5b7ecfee17f534cc797b0d6fe151d6dbabdb0c29b92a35aae735699a36ef6c45",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "pull-installed-own-APK",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "3990413fed2f787c6aedff0d3bd8615d8e303c81cecc2243e8c356f69c25bc77"
+    },
+    {
+      "name": "verify-installed-certificate",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "3afd1f08d1f1d58acdadfd4432cde900aecfb5724add92a247a3565a936a90ab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "verify-installed-package",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "1bd6dc1646362c9aada430d496b637d49a224b5bdedfb1c68d517fd8de673178",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "installed-package-path-after",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "83244b83889ddfc5f1796b832421df158223bfd6faa074bef9c8875c621c3a98",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot-after",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "16e1a76091fdd8de5925da92b1deec35193c2c3150241520229f2713258f1a6d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "9807f441591f3768a9d2543115acd27e847257d0612e7da907bc49171e489eac",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "shared_device_lock": false,
+  "raw_APK_and_logs": "PRIVATE_BUILD_DIRECTORY_ONLY",
+  "uninstall_performed": false,
+  "data_cleared": false,
+  "process_stopped": false,
+  "global_policy_modified": false,
+  "qualification": "OBSERVATIONAL_POSTFLIGHT_NOT_PERFORMANCE_OR_FORMAL_RELEASE",
+  "device": {
+    "api": 33,
+    "abi": "arm64-v8a",
+    "model": "2210132C",
+    "page_bytes": 4096
+  },
+  "finished_at_utc": "2026-10-30T15:10:17.473128+00:00"
+}

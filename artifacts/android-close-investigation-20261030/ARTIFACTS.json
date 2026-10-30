@@ -1,0 +1,1900 @@
+{
+  "schema_version": 2,
+  "version": "0.2.0",
+  "native_abi": "1.1",
+  "tested_pressure_revision": "retryfix2",
+  "distribution_pressure_revision": "final-shareable",
+  "qualification": "ENGINEERING_PREVIEW_NOT_FORMAL_RELEASE_NOT_PERFORMANCE",
+  "source_identity": {
+    "kind": "SOURCE_HASH_BUILD_NOT_DELIVERY_COMMIT_BUILD",
+    "source_lock": {
+      "path": "artifacts/android-close-investigation-20261030/SOURCE_LOCK.json",
+      "bytes": 44738,
+      "sha256": "71fd6769c56c5b38e60d808a31ef7f466dfcf948d4b8355e8d128716c075d188"
+    },
+    "source_set_sha256": "e1abf256767f21665b0589aa28e8a932d7153547821689e9167e8ea525276907"
+  },
+  "frozen_plans": {
+    "distribution-long-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-long-plan.json",
+        "bytes": 5413,
+        "sha256": "c57e175bd91bde884705241127d29875f9a1582d98a6f202d10a2919005b3dc9"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/native/pressure_jni.cpp",
+          "verified_bytes": {
+            "path": "adapters/android/native/pressure_jni.cpp",
+            "bytes": 21545,
+            "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8Instrumentation.java",
+            "bytes": 42282,
+            "sha256": "f589cd9a313e4b09d4c1b4dc6931b5568d1ae7a6ba71ca1267d7204caeb70975"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+            "bytes": 6226,
+            "sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+            "bytes": 8380,
+            "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+          "verified_bytes": {
+            "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+            "bytes": 153753,
+            "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/mapping.txt",
+            "bytes": 57137,
+            "sha256": "7095168933c16a87a04443e52adbe1a2f180a3644968486200e18d25e40dd2e7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 487982,
+            "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+            "bytes": 40068,
+            "sha256": "d755ce04ecdb1f6a3331450fe6551cf0ce687550c491764bea41a08611d17dc6"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/seeds.txt",
+            "bytes": 13271,
+            "sha256": "8c18357a0340dc7928e613804e1d9dc307ca993e22524a3201e2feb13ca27df1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+            "bytes": 86816,
+            "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "tools/freeze_android_close_round.py",
+            "bytes": 5462,
+            "sha256": "a117ebd5064637d4e458620a01060aab53269a375a9df8fb73ec0f7a562362c7"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-atomic-retry/run_android_close_round.py.txt",
+            "bytes": 19833,
+            "sha256": "0c9a979468657ac020ee1ea63e01b4c68dea95e265204cc6930a797dcbda1c29"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "retryfix_foreground_long",
+      "minimum_ms": 900000
+    },
+    "distribution-long-retry-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-long-retry-plan.json",
+        "bytes": 5413,
+        "sha256": "26523894a9fc274565c0fddebbab3cd5d345d3f06740a41b2ba4f6ab27cb69de"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/native/pressure_jni.cpp",
+          "verified_bytes": {
+            "path": "adapters/android/native/pressure_jni.cpp",
+            "bytes": 21545,
+            "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8Instrumentation.java",
+            "bytes": 42282,
+            "sha256": "f589cd9a313e4b09d4c1b4dc6931b5568d1ae7a6ba71ca1267d7204caeb70975"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+            "bytes": 6226,
+            "sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+            "bytes": 8380,
+            "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+          "verified_bytes": {
+            "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+            "bytes": 153753,
+            "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/mapping.txt",
+            "bytes": 57137,
+            "sha256": "7095168933c16a87a04443e52adbe1a2f180a3644968486200e18d25e40dd2e7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 487982,
+            "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+            "bytes": 40068,
+            "sha256": "d755ce04ecdb1f6a3331450fe6551cf0ce687550c491764bea41a08611d17dc6"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/seeds.txt",
+            "bytes": 13271,
+            "sha256": "8c18357a0340dc7928e613804e1d9dc307ca993e22524a3201e2feb13ca27df1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+            "bytes": 86816,
+            "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "tools/freeze_android_close_round.py",
+            "bytes": 5462,
+            "sha256": "a117ebd5064637d4e458620a01060aab53269a375a9df8fb73ec0f7a562362c7"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-error-cleanup-fix/run_android_close_round.py.txt",
+            "bytes": 23445,
+            "sha256": "359e50c460aad0dbaed8410745c9541b748076361e0a2a846ebc214913a3c862"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "retryfix_foreground_long",
+      "minimum_ms": 900000
+    },
+    "distribution-smoke-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-smoke-plan.json",
+        "bytes": 5406,
+        "sha256": "fd38f2347c4272843211323976e253b69f617d90736b7df1f919a3ba6dc89677"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/native/pressure_jni.cpp",
+          "verified_bytes": {
+            "path": "adapters/android/native/pressure_jni.cpp",
+            "bytes": 21545,
+            "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8Instrumentation.java",
+            "bytes": 42282,
+            "sha256": "f589cd9a313e4b09d4c1b4dc6931b5568d1ae7a6ba71ca1267d7204caeb70975"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+            "bytes": 6226,
+            "sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+            "bytes": 8380,
+            "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+          "verified_bytes": {
+            "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+            "bytes": 153753,
+            "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/mapping.txt",
+            "bytes": 57137,
+            "sha256": "7095168933c16a87a04443e52adbe1a2f180a3644968486200e18d25e40dd2e7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 487982,
+            "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+            "bytes": 40068,
+            "sha256": "d755ce04ecdb1f6a3331450fe6551cf0ce687550c491764bea41a08611d17dc6"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/seeds.txt",
+            "bytes": 13271,
+            "sha256": "8c18357a0340dc7928e613804e1d9dc307ca993e22524a3201e2feb13ca27df1"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-final-r8-arm64/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-final-r8-arm64/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+            "bytes": 86816,
+            "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "tools/freeze_android_close_round.py",
+            "bytes": 5462,
+            "sha256": "a117ebd5064637d4e458620a01060aab53269a375a9df8fb73ec0f7a562362c7"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-atomic-retry/run_android_close_round.py.txt",
+            "bytes": 19833,
+            "sha256": "0c9a979468657ac020ee1ea63e01b4c68dea95e265204cc6930a797dcbda1c29"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "retryfix_foreground_smoke",
+      "minimum_ms": 5000
+    },
+    "freezer-bootstrap-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/freezer-bootstrap-plan.json",
+        "bytes": 5458,
+        "sha256": "59050b4943d9b9f884ac65a79a09c006ce57b6ff016e76bbdbdf2fcba8d5ef05"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-reason-test/PressureR8Instrumentation.java.txt",
+            "bytes": 41192,
+            "sha256": "e5a45ee98a7e8802e649f686ad38ff7dd5c09c67704e07fcf08c12f5ee8f5a08"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/freezer-bootstrap-build-final.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/freezer-bootstrap-build-final.json",
+            "bytes": 8375,
+            "sha256": "df758d0fce5a0c223c8141ea9c7785c230df56cdd24854e7a9af507dc58c52a0"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/source-pre-retry/pressure_jni.cpp.txt",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-retry/pressure_jni.cpp.txt",
+            "bytes": 19336,
+            "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+          }
+        },
+        {
+          "frozen_path": "artifacts/continuation-20261030/android-build/pressure-closefix-build.json",
+          "verified_bytes": {
+            "path": "artifacts/continuation-20261030/android-build/pressure-closefix-build.json",
+            "bytes": 6194,
+            "sha256": "796eff67808721929a9f9ce9d2c6d34c8eb745aa22df79affc9a8ecbbdeec771"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/mapping.txt",
+            "bytes": 55464,
+            "sha256": "a607771914028f5a0606a0f048b50654cb01cbe2ba3885bf7b4e1a6ca72d4906"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 2355758,
+            "sha256": "4853e95a089eac027062fae1bd4db1e3797398573c0dc97b81cb3a7b2a514a93"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/r8-dex/classes.dex",
+            "bytes": 39436,
+            "sha256": "0a993ccbc7f9181224ce9d6329cfda05cd40beb8445febf411548498629b364e"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/seeds.txt",
+            "bytes": 13163,
+            "sha256": "988db9c4b7d729c63ff93565c4a3feb8f42237cfc60d632cdb13468a7633e0f4"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-bootstrap-final/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-bootstrap-final/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "build/continuation-pressure-jni-arm64-closefix/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/continuation-pressure-jni-arm64-closefix/libmgmem_pressure_jni.so",
+            "bytes": 573168,
+            "sha256": "53f8d4609666a285b24fe36d9b886dcb396b6e58a3c7281adde850f55a3a4a71"
+          }
+        },
+        {
+          "frozen_path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+          "verified_bytes": {
+            "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+            "bytes": 660379,
+            "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-bootstrap-prev/freeze_android_close_round.py.txt",
+            "bytes": 5250,
+            "sha256": "97064842a656e9fd839088b22baec9d55ba51d79afee4358814c54b792d38d2c"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-runner-cleanup/run_android_close_round.py.txt",
+            "bytes": 19034,
+            "sha256": "db6a3d17e46768cded69f277425cc94a6eabecd21ed7f4786cdbe8eaddbbe6b4"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "same_apk_background_foreground",
+      "minimum_ms": 60000
+    },
+    "freezer-control-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/freezer-control-plan.json",
+        "bytes": 5282,
+        "sha256": "8097fe043499c643b45436282504dd31711a9dbc8ab8dd4694e3faf3cc17f5ea"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-baseline/AndroidManifest-r8-before-bootstrap.xml.txt",
+            "bytes": 692,
+            "sha256": "d92566df6c746a1c550d44dcfd8df98cae413defe435767405de461251a7102a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-baseline/PressureR8ForegroundActivity-before-bootstrap.java.txt",
+            "bytes": 2373,
+            "sha256": "1bbe7d66da2855be7fd9d1d6ef085a20033d212beb67fd0b2f86195ddbbb9bf8"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-baseline/PressureR8Instrumentation-before-bootstrap.java.txt",
+            "bytes": 39328,
+            "sha256": "1b4ff8a212395f9283e3336c78a702c2d477703a75cf1c841faeac272791ab86"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/freezer-control-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/freezer-control-build.json",
+            "bytes": 8264,
+            "sha256": "b627c78eebd6276ce7925fbcda01d39a5aa5cba1af32930ed0905d65ab1e9e07"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/source-pre-retry/pressure_jni.cpp.txt",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-retry/pressure_jni.cpp.txt",
+            "bytes": 19336,
+            "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+          }
+        },
+        {
+          "frozen_path": "artifacts/continuation-20261030/android-build/pressure-closefix-build.json",
+          "verified_bytes": {
+            "path": "artifacts/continuation-20261030/android-build/pressure-closefix-build.json",
+            "bytes": 6194,
+            "sha256": "796eff67808721929a9f9ce9d2c6d34c8eb745aa22df79affc9a8ecbbdeec771"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/mapping.txt",
+            "bytes": 49401,
+            "sha256": "02b7f232db2c41ab6acd5a8eaa542913e08d3df95531f34e92fee965f72ad6e3"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 2355758,
+            "sha256": "0f119ca178505210e5d5490b4a360c20aa16fa38d5ce75fac15e93d3a4b6171a"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/r8-dex/classes.dex",
+            "bytes": 38440,
+            "sha256": "42c3dcd06d9f00552e863a8fd6dbb117402d76c6183ccf2ac3d2219af1fb3585"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/seeds.txt",
+            "bytes": 12547,
+            "sha256": "ed325a92c2aeb768e8834ec6054a65117e9d762b712b7a16d342af7d4a482262"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-freezer-control-apk/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-freezer-control-apk/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "build/continuation-pressure-jni-arm64-closefix/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/continuation-pressure-jni-arm64-closefix/libmgmem_pressure_jni.so",
+            "bytes": 573168,
+            "sha256": "53f8d4609666a285b24fe36d9b886dcb396b6e58a3c7281adde850f55a3a4a71"
+          }
+        },
+        {
+          "frozen_path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+          "verified_bytes": {
+            "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+            "bytes": 660379,
+            "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-baseline/build_pressure_r8-before-bootstrap.py.txt",
+            "bytes": 14040,
+            "sha256": "1d9d87aa54b34d0be7882ba27d3f2b3ff974a695af916511f49a646679696b4d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-baseline/freeze_android_close_round-v1.py.txt",
+            "bytes": 4926,
+            "sha256": "388a217848d13de6198a2c646fc000faee264bb803daae704e68c0db1921f8be"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-bootstrap-prev/run_android_close_round.py.txt",
+            "bytes": 16334,
+            "sha256": "3c3b241a7461ae267588caf6f732e155f3cdf57efe960415bda9ce8732ed8641"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "same_apk_background_foreground",
+      "minimum_ms": 60000
+    },
+    "retry-long-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/retry-long-plan.json",
+        "bytes": 5342,
+        "sha256": "d123b2ded8a0903c87566b9e4984dff2d1cc66140bc3e8bbb32ccac285848c67"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/native/pressure_jni.cpp",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-jni-errors/pressure_jni.cpp.txt",
+            "bytes": 20024,
+            "sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-reason-test/PressureR8Instrumentation.java.txt",
+            "bytes": 41192,
+            "sha256": "e5a45ee98a7e8802e649f686ad38ff7dd5c09c67704e07fcf08c12f5ee8f5a08"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/retry-arm64-aar-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/retry-arm64-aar-build.json",
+            "bytes": 6156,
+            "sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/retry-r8-arm64-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/retry-r8-arm64-build.json",
+            "bytes": 8371,
+            "sha256": "abe4cb023cf41b79c105d3625ba308e48b29a1cc4886089d30e9b96e23363f01"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-aar-build/MeguvizMemory-Android-Pressure-0.2.0-retryfix2.aar",
+          "verified_bytes": {
+            "path": "build/android-close-retry-aar-build/MeguvizMemory-Android-Pressure-0.2.0-retryfix2.aar",
+            "bytes": 661903,
+            "sha256": "1e5b2419cf148f80385e8bbd751dc5d0f769fc2bbae0b6d2a4ae494284887ddf"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-jni-arm64/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/android-close-retry-jni-arm64/libmgmem_pressure_jni.so",
+            "bytes": 578464,
+            "sha256": "03e8364fadcacdf21da7315b061b9350212ce4cac735e4dc5ecb2a04dc2edd91"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/mapping.txt",
+            "bytes": 55464,
+            "sha256": "a607771914028f5a0606a0f048b50654cb01cbe2ba3885bf7b4e1a6ca72d4906"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 2372142,
+            "sha256": "a3b118bb51b6dd251faad411b15a0b98ee5a59b80717bf6d7aeadcfb8653198b"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/r8-dex/classes.dex",
+            "bytes": 39436,
+            "sha256": "0a993ccbc7f9181224ce9d6329cfda05cd40beb8445febf411548498629b364e"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/seeds.txt",
+            "bytes": 13163,
+            "sha256": "262002bb93c22207e3464dfdd6371aa9c5dee8b4455f4e14a7c42a703a5315b0"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-reason-test/freeze_android_close_round.py.txt",
+            "bytes": 5278,
+            "sha256": "036ea7e7dd0fb9d11fb862d487939e055a6c2444a85cc5616e368bc031b3e579"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-runner-cleanup/run_android_close_round.py.txt",
+            "bytes": 19034,
+            "sha256": "db6a3d17e46768cded69f277425cc94a6eabecd21ed7f4786cdbe8eaddbbe6b4"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "retryfix_foreground_long",
+      "minimum_ms": 900000
+    },
+    "retry-smoke-plan.json": {
+      "state": "VERIFIED",
+      "plan": {
+        "path": "artifacts/android-close-investigation-20261030/retry-smoke-plan.json",
+        "bytes": 5335,
+        "sha256": "ddc118289b309b3dd9b83be0c196d33bd519b8b722b8c652942cf59b6ca93931"
+      },
+      "verified_files": [
+        {
+          "frozen_path": "adapters/android/native/pressure_jni.cpp",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-jni-errors/pressure_jni.cpp.txt",
+            "bytes": 20024,
+            "sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/AndroidManifest-r8.xml",
+          "verified_bytes": {
+            "path": "adapters/android/sample/AndroidManifest-r8.xml",
+            "bytes": 736,
+            "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+          "verified_bytes": {
+            "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+            "bytes": 2677,
+            "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+          }
+        },
+        {
+          "frozen_path": "adapters/android/sample/PressureR8Instrumentation.java",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-reason-test/PressureR8Instrumentation.java.txt",
+            "bytes": 41192,
+            "sha256": "e5a45ee98a7e8802e649f686ad38ff7dd5c09c67704e07fcf08c12f5ee8f5a08"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/retry-arm64-aar-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/retry-arm64-aar-build.json",
+            "bytes": 6156,
+            "sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139"
+          }
+        },
+        {
+          "frozen_path": "artifacts/android-close-investigation-20261030/retry-r8-arm64-build.json",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/retry-r8-arm64-build.json",
+            "bytes": 8371,
+            "sha256": "abe4cb023cf41b79c105d3625ba308e48b29a1cc4886089d30e9b96e23363f01"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-aar-build/MeguvizMemory-Android-Pressure-0.2.0-retryfix2.aar",
+          "verified_bytes": {
+            "path": "build/android-close-retry-aar-build/MeguvizMemory-Android-Pressure-0.2.0-retryfix2.aar",
+            "bytes": 661903,
+            "sha256": "1e5b2419cf148f80385e8bbd751dc5d0f769fc2bbae0b6d2a4ae494284887ddf"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-jni-arm64/libmgmem_pressure_jni.so",
+          "verified_bytes": {
+            "path": "build/android-close-retry-jni-arm64/libmgmem_pressure_jni.so",
+            "bytes": 578464,
+            "sha256": "03e8364fadcacdf21da7315b061b9350212ce4cac735e4dc5ecb2a04dc2edd91"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/consumer-r8.pro",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/consumer-r8.pro",
+            "bytes": 313,
+            "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/mapping.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/mapping.txt",
+            "bytes": 55464,
+            "sha256": "a607771914028f5a0606a0f048b50654cb01cbe2ba3885bf7b4e1a6ca72d4906"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+            "bytes": 2372142,
+            "sha256": "a3b118bb51b6dd251faad411b15a0b98ee5a59b80717bf6d7aeadcfb8653198b"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/r8-dex/classes.dex",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/r8-dex/classes.dex",
+            "bytes": 39436,
+            "sha256": "0a993ccbc7f9181224ce9d6329cfda05cd40beb8445febf411548498629b364e"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/seeds.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/seeds.txt",
+            "bytes": 13163,
+            "sha256": "262002bb93c22207e3464dfdd6371aa9c5dee8b4455f4e14a7c42a703a5315b0"
+          }
+        },
+        {
+          "frozen_path": "build/android-close-retry-r8-arm64/usage.txt",
+          "verified_bytes": {
+            "path": "build/android-close-retry-r8-arm64/usage.txt",
+            "bytes": 821,
+            "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+          }
+        },
+        {
+          "frozen_path": "tools/build_packed_art.py",
+          "verified_bytes": {
+            "path": "tools/build_packed_art.py",
+            "bytes": 10564,
+            "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+          }
+        },
+        {
+          "frozen_path": "tools/build_pressure_r8.py",
+          "verified_bytes": {
+            "path": "tools/build_pressure_r8.py",
+            "bytes": 14969,
+            "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+          }
+        },
+        {
+          "frozen_path": "tools/freeze_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-reason-test/freeze_android_close_round.py.txt",
+            "bytes": 5278,
+            "sha256": "036ea7e7dd0fb9d11fb862d487939e055a6c2444a85cc5616e368bc031b3e579"
+          }
+        },
+        {
+          "frozen_path": "tools/run_android_close_round.py",
+          "verified_bytes": {
+            "path": "artifacts/android-close-investigation-20261030/source-pre-runner-cleanup/run_android_close_round.py.txt",
+            "bytes": 19034,
+            "sha256": "db6a3d17e46768cded69f277425cc94a6eabecd21ed7f4786cdbe8eaddbbe6b4"
+          }
+        },
+        {
+          "frozen_path": "tools/run_arm64_validation.py",
+          "verified_bytes": {
+            "path": "tools/run_arm64_validation.py",
+            "bytes": 23760,
+            "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+          }
+        },
+        {
+          "frozen_path": "tools/run_continuation_device.py",
+          "verified_bytes": {
+            "path": "tools/run_continuation_device.py",
+            "bytes": 20694,
+            "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+          }
+        },
+        {
+          "frozen_path": "tools/verify_dex_import.py",
+          "verified_bytes": {
+            "path": "tools/verify_dex_import.py",
+            "bytes": 10581,
+            "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+          }
+        }
+      ],
+      "purpose": "retryfix_foreground_smoke",
+      "minimum_ms": 5000
+    }
+  },
+  "baseline_freezer": {
+    "state": "TWO_OWN_CGROUP_FREEZE_OBSERVATIONS_20_OF_20_THREADS",
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/baseline-freezer.json",
+      "bytes": 1287,
+      "sha256": "c1010dc8a87b61243a63b27d6b6b18a91bce95387e5e6de9d455537664bc72a0"
+    },
+    "lldb": {
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/baseline-lldb-summary.json",
+        "bytes": 725,
+        "sha256": "43672c517bc2f06248e3ad964a29521fecce1811827dd82870563564360b6030"
+      },
+      "state": "NO_THREAD_STACK_CAPTURED",
+      "manual_own_server_detach": "REPORTED_TRACER_ZERO_NOT_FREEZER_RELEASE"
+    },
+    "causation": "OBSERVED_ENVIRONMENT_IN_THIS_REPRODUCTION_NOT_ACTOR_OR_ALL_HISTORICAL_STALLS"
+  },
+  "short_controls": {
+    "rounds": [
+      {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/freezer-control-background/receipt.json",
+          "bytes": 8886,
+          "sha256": "27c1b42fb46d9ace23a46ad2c3808dadf7f441e8dd62542dae8d49ed35be9a0a"
+        },
+        "state": "ENVIRONMENT_FROZEN_INCOMPLETE",
+        "foreground": false,
+        "prestart_activity": false,
+        "observed_frozen": true,
+        "samples": 3,
+        "normal_close_proven": false
+      },
+      {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/freezer-control-foreground/receipt.json",
+          "bytes": 8559,
+          "sha256": "da7330c5ee99c4bc8a73325fa006ba5e26e65d6efd8e24c34b3ce96c9372e78d"
+        },
+        "state": "ENVIRONMENT_FROZEN_INCOMPLETE",
+        "foreground": true,
+        "prestart_activity": false,
+        "observed_frozen": true,
+        "samples": 3,
+        "normal_close_proven": false
+      },
+      {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/freezer-bootstrap-background/receipt.json",
+          "bytes": 8643,
+          "sha256": "338e4b56da5d52d66914ddc40764702a459777c250dbb02ba79c09aad6e8398b"
+        },
+        "state": "ENVIRONMENT_FROZEN_INCOMPLETE",
+        "foreground": false,
+        "prestart_activity": false,
+        "observed_frozen": true,
+        "samples": 2,
+        "normal_close_proven": false
+      },
+      {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/freezer-bootstrap-foreground/receipt.json",
+          "bytes": 20567,
+          "sha256": "66d49469c5c1c8b930755722cac19eb3d7ecfe9eac8517ad6eb951d3dbc808db"
+        },
+        "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+        "foreground": true,
+        "prestart_activity": true,
+        "observed_frozen": false,
+        "samples": 24,
+        "normal_close_proven": true
+      }
+    ],
+    "causation": "SAME_APK_OBSERVATIONAL_ASSOCIATION_ONLY; BOOTSTRAP AND RESTART ALSO DIFFER",
+    "scope": "TWO_CONTROL_PAIRS_FOUR_SHORT_WINDOWS_NOT_PERFORMANCE_OR_ALL_DEVICES"
+  },
+  "host_retry_regression": {
+    "state": "PASS_SCOPED_HOST_RELEASE_22_ASAN_22",
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/retry-host/summary.json",
+      "bytes": 6400,
+      "sha256": "fd1fe30eba91cffe6d181f79932bcb061d773053c178a06955c18aae260b3409"
+    },
+    "red_counterexample": {
+      "path": "artifacts/android-close-investigation-20261030/retry-host/red-receipt.json",
+      "bytes": 2038,
+      "sha256": "37c11e4e773ab9578006bd3cbacaf9ba61a979bef013bc670408c8a7aa4e893a"
+    },
+    "new_tests": [
+      "auto-attach-recovery",
+      "auto-concurrent-poll",
+      "auto-error-quarantine",
+      "auto-java-recovery"
+    ],
+    "limits": [
+      "Fake JNI VM; no ART/device qualification",
+      "Error quarantine uses fake sentinel global refs and deliberately retains uncertain state until isolated test process ends",
+      "Permanent VM unavailability retains pins and a low-frequency reaper thread; no dynamic DSO unload",
+      "Same Android cgroup freeze root cause is not inferred"
+    ]
+  },
+  "retry_smoke": {
+    "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/retry-smoke/receipt.json",
+      "bytes": 13027,
+      "sha256": "1290535cd4b913b7ea8bebdda3b01fcfaae7ec3422c7250c2f9b531b2d7f8b95"
+    },
+    "stop_reason": null,
+    "qualified": true,
+    "freezer_samples": 3,
+    "observed_frozen": false,
+    "qualification_reason": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+    "reasons": [],
+    "actual_duration_ms": 6058,
+    "iterations_completed": 92
+  },
+  "retry_long": {
+    "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/retry-long/receipt.json",
+      "bytes": 137893,
+      "sha256": "4d78502e6cfdeeac7215d9317b75d8cb1f61a09e9ad481fc0b3b5ff95f0de7a9"
+    },
+    "stop_reason": null,
+    "qualified": true,
+    "freezer_samples": 343,
+    "observed_frozen": false,
+    "qualification_reason": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+    "reasons": [],
+    "actual_duration_ms": 901086,
+    "iterations_completed": 15048
+  },
+  "tested_long_binary": {
+    "APK": {
+      "path": "build/android-close-retry-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2372142,
+      "sha256": "a3b118bb51b6dd251faad411b15a0b98ee5a59b80717bf6d7aeadcfb8653198b"
+    },
+    "build_receipt": {
+      "path": "artifacts/android-close-investigation-20261030/retry-r8-arm64-build.json",
+      "bytes": 8371,
+      "sha256": "abe4cb023cf41b79c105d3625ba308e48b29a1cc4886089d30e9b96e23363f01"
+    },
+    "native_source_sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd",
+    "native_library_sha256": "03e8364fadcacdf21da7315b061b9350212ce4cac735e4dc5ecb2a04dc2edd91",
+    "qualification": "PASS_OBSERVED_UNFROZEN_SAMPLES"
+  },
+  "distribution_binary": {
+    "APK": {
+      "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 487982,
+      "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+    },
+    "build_receipt": {
+      "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+      "bytes": 8380,
+      "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+    },
+    "native_build_receipt": {
+      "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+      "bytes": 6226,
+      "sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad"
+    },
+    "native_notice_receipt": {
+      "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-notice.json",
+      "bytes": 705,
+      "sha256": "8dd4dab998fe6f0f732479b468c5c838d3737f541ecea254d7a9a75f3f0c9833"
+    },
+    "native_source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+    "Java_backend_source_sha256": "324ce30512f07f5dd1f291828d8189ddc6bd4264d4b38f0bcb7a0cc71766cd79",
+    "byte_equal_to_tested_APK": false,
+    "smoke": {
+      "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-smoke/receipt.json",
+        "bytes": 13074,
+        "sha256": "bad7bdcc2044cbeda6bfd40000bbae53d7811ea435a4398f7347313272210a64"
+      },
+      "stop_reason": null,
+      "qualified": true,
+      "freezer_samples": 3,
+      "observed_frozen": false,
+      "qualification_reason": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+      "reasons": [],
+      "actual_duration_ms": 6030,
+      "iterations_completed": 88,
+      "distribution_APK_sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677",
+      "reason_checks_required": true
+    },
+    "first_long": {
+      "state": "FAILED_OR_BLOCKED",
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-long/receipt.json",
+        "bytes": 109546,
+        "sha256": "05c115194bddedfaa0cc6474131be04cddd8d215522e9b93855854cd4d63f7c6"
+      },
+      "stop_reason": "HOST_RECEIPT_ATOMIC_REPLACE_PERMISSION_DENIED_WINERROR5",
+      "qualified": false,
+      "freezer_samples": 322,
+      "observed_frozen": false,
+      "qualification_reason": "ROUND_NOT_COMPLETED_OR_NORMAL_CLOSE_NOT_PROVEN"
+    },
+    "long": {
+      "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-long-retry/receipt.json",
+        "bytes": 144900,
+        "sha256": "1546c1d3e3bd8a286c4c1fb2e0f9ad852afa32f0ef55ae0a213da06ede42279f"
+      },
+      "stop_reason": null,
+      "qualified": true,
+      "freezer_samples": 366,
+      "observed_frozen": false,
+      "qualification_reason": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+      "reasons": [],
+      "actual_duration_ms": 901089,
+      "iterations_completed": 14959,
+      "distribution_APK_sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677",
+      "reason_checks_required": true,
+      "protocol_and_lifecycle_pass_before_postflight": true
+    },
+    "postflight": {
+      "state": "PASS_INSTALLED_BYTE_IDENTITY_AND_POSTFLIGHT",
+      "qualified": true,
+      "reasons": [],
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/distribution-postflight.json",
+        "bytes": 6811,
+        "sha256": "3d2c61c33318679a52133bc0f469befa41e7ab4e34f554cbdfb2a43f35392d43"
+      },
+      "installed_byte_identity_verified": true,
+      "device_UI_recovery": "ACTIVITY_NOT_RESUMED",
+      "scope": "OBSERVATIONAL_PROCESS_GATES_NO_SHARED_LOCK; ACTIVITY_UNKNOWN_DOES_NOT_PROVE_UI_RESTORED"
+    },
+    "long_qualification": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+    "old_long_result_transferred": false
+  },
+  "android_long_qualification": "PASS_FOR_DISTRIBUTION_BINARY_ONLY",
+  "API34_x86_64": {
+    "guard": {
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/api34-retry-guard-resume2/receipt.json",
+        "bytes": 2028,
+        "sha256": "ce5def91dfeaa94ebf002cf5df6c5da0e9d15ae135ae051a2eb94f708c56e8a9"
+      },
+      "observed_state": "PASS_EXPECTED_FAIL_STOP_UNKNOWN",
+      "state": "PASS_EXPECTED_INJECTION_NOT_NORMAL_CLOSE",
+      "qualified": true,
+      "reasons": [],
+      "normal_domain_close_qualified": false
+    },
+    "smoke": {
+      "receipt": {
+        "path": "artifacts/android-close-investigation-20261030/api34-retry-smoke-resume2/receipt.json",
+        "bytes": 6386,
+        "sha256": "6434e1482623a93ebb230e870ae0040b4a9c9809f7cbb2926c54dd3eb140a525"
+      },
+      "observed_state": "PASS_SCOPED_API34_EMULATOR_FUNCTIONAL",
+      "state": "PASS_SCOPED_SHORT_NOT_LONG",
+      "qualified": true,
+      "reasons": [],
+      "android_long_qualified": false
+    },
+    "limits": "OWN_JAVA_STACK_SUMMARY_AND_SHORT_API34_FUNCTIONAL_ONLY; NOT_ANDROID_LONG_OR_API33_CAUSATION"
+  },
+  "API34_source_redaction": {
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/api34-retry-guard/source-redaction.json",
+      "bytes": 1444,
+      "sha256": "0112cc9df855995f045e89093ad97e2bc8472a3a03199515b20633aeabc19ac3"
+    },
+    "executed_helper_sha256": "59ef070322c3e3dc45dafc0ee94540972532cdb186e78af840092634162b7993",
+    "originals": "EXACT_HASH_VERIFIED_IN_IGNORED_BUILD_NOT_PACKAGED",
+    "public_review_copies": [
+      {
+        "path": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-v1.sanitized.txt",
+        "bytes": 17639,
+        "sha256": "d0daa6e79d958e8eb43d01b8a6e822929b5e160cacf61421b90c18b801f641f6"
+      },
+      {
+        "path": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-resume-v2.sanitized.txt",
+        "bytes": 19997,
+        "sha256": "4d3c64a9169eea36a0dcb02974c200424fb515a9e02b1285d48715070697bb05"
+      }
+    ],
+    "review_copies_executed": false
+  },
+  "tested_API34_x86_64_runtime": "PASS_RETRYFIX2_TESTED_BINARY_SCOPED_SHORT_ONLY",
+  "distribution_API34_x86_64": {
+    "state": "PASS_SCOPED_API34_FINAL_SHORT_NOT_LONG",
+    "qualified": true,
+    "android_long_qualified": false,
+    "reasons": [],
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/api34-distribution-smoke/receipt.json",
+      "bytes": 7748,
+      "sha256": "e1b84b08c70f411f21c56ddb24b4b30f371081a687a25ed71dda4c71a7e75b27"
+    },
+    "postflight": {
+      "path": "artifacts/android-close-investigation-20261030/api34-distribution-postflight.json",
+      "bytes": 1512,
+      "sha256": "cc809d9b52c70eb5ee72d74568a8c5938428d4f70807a1e1ae343380d1310f0d"
+    },
+    "iterations_completed": 32,
+    "actual_duration_ms": 8138,
+    "APK_sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2",
+    "scope": "X86_64_EMULATOR_FUNCTIONAL_ONLY_NOT_ARM64_OR_PERFORMANCE"
+  },
+  "distribution_API34_x86_64_runtime": "PASS_SCOPED_FINAL_SHORT_NOT_LONG",
+  "diagnostic_component_scope": {
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/diagnostic-component-security-final.json",
+      "bytes": 665,
+      "sha256": "c8e47b4af675f3f7db23745eb7e903e0fe847f98b69f5d5f86e77283af2883a0"
+    },
+    "exported": true,
+    "required_permission": "android.permission.DUMP",
+    "authorized_callers": "SIGNATURE_PRIVILEGED_OR_DEVELOPMENT_AUTHORIZED_NOT_ONLY_SHELL",
+    "production_AAR_contains_activity": false,
+    "ordinary_app_denial_runtime_test": "NOT_RUN"
+  },
+  "artifact_builds": [
+    {
+      "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+      "bytes": 8380,
+      "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+    },
+    {
+      "path": "artifacts/android-close-investigation-20261030/final-r8-x86_64-build.json",
+      "bytes": 8804,
+      "sha256": "1d4d84166958d13a5d1f32110a3b882265157e749f1f9d9da63b2cd1d6c1f7e0"
+    }
+  ],
+  "SDK_strip_proof": {
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/manifest.json",
+      "bytes": 12997,
+      "sha256": "fc386af062643815155f1730b80f1f8546a9c906eb5b74291f74117dea919763"
+    },
+    "state": "PASS_SDK_PATH_SCAN_WINDOWS_CONSUMER_ANDROID_RUNTIME_NOT_STARTED",
+    "SDKs": [
+      {
+        "profile": "windows-x64",
+        "sdk": {
+          "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-windows-x64-strip-debug.zip",
+          "bytes": 93068,
+          "sha256": "b0156697431e5baa3e2b35dae5b4f0aa008ff39bacba822b5a9ccabdbf57e237"
+        },
+        "transformations": 4
+      },
+      {
+        "profile": "android-arm64-v8a",
+        "sdk": {
+          "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-arm64-v8a-strip-debug.zip",
+          "bytes": 247534,
+          "sha256": "9abeee3b75a660390612d6c7dcea12eb9975f9a398e736709bfc5c1598eb69ce"
+        },
+        "transformations": 3
+      },
+      {
+        "profile": "android-x86_64",
+        "sdk": {
+          "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-x86_64-strip-debug.zip",
+          "bytes": 125240,
+          "sha256": "f28dae05b9992ccf0ec95b14829b52a91fcbc6ca4fb678fa2873c990f57f3533"
+        },
+        "transformations": 2
+      }
+    ],
+    "static_archive_semantics": {
+      "state": "PASS_ARCHIVE_SECTIONS_AND_RELOCATIONS_RECOMPUTED",
+      "profiles": [
+        {
+          "profile": "windows-x64",
+          "section_count": 696,
+          "relocations": 956,
+          "section_sha256": "08535555d84b2a30b9569f07afdb44b1b91615dd81b0bda55909e78a4aeda3e8",
+          "relocations_sha256": "f96b33f77f0038529d745fbae505658313be0e048166a8de59cfe447c4eefccd"
+        },
+        {
+          "profile": "android-arm64-v8a",
+          "section_count": 38,
+          "relocations": 211,
+          "section_sha256": "e5199322053be791dd33d0cf394c6787febfe121d3859625cf834ccf676ff239",
+          "relocations_sha256": "32f083f79ffeffa62edbfb5208fe0d22969c286b786b37ce6e1e72da89a832e3"
+        },
+        {
+          "profile": "android-x86_64",
+          "section_count": 38,
+          "relocations": 196,
+          "section_sha256": "aea545e974aba68329830e28154a169a19d572c3024e46854c30d6a69abfc33f",
+          "relocations_sha256": "47e11a65dbaaea2ac3bff7feb8e726d6c17bef85b9a8baa42152e841050dbdd9"
+        }
+      ],
+      "receipts": [
+        {
+          "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/archive-independent-reverification.json",
+          "bytes": 2093,
+          "sha256": "cbe64e873f2133358bb185677dce3d12cb31eee3047ed4652bc6c2e4eb4e510f"
+        },
+        {
+          "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/coff-relocations.json",
+          "bytes": 926,
+          "sha256": "9912ba2b4d42daf8964f213a204a8154314454a16f3bebeb953aba762093cc7a"
+        },
+        {
+          "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/android-static-sections-relocations.json",
+          "bytes": 1716,
+          "sha256": "f94a7717665ee34e2b24535d200fb2db708adea72cce99126007ddabfdaa8955"
+        }
+      ],
+      "scope": "LINK_CONTENT_ONLY_NOT_DEVICE_OR_PERFORMANCE_QUALIFICATION"
+    },
+    "scope": "LOADABLE_BYTES_SYMBOLS_NONDEBUG_SECTIONS_CHECKED_RUNTIME_QUALIFICATION_SEPARATE"
+  },
+  "JNI_strip_proof": {
+    "state": "PASS_ELF_LOAD_AND_DYNAMIC_SYMBOLS_RECOMPUTED",
+    "ABIs": {
+      "arm64-v8a": {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/jni-final-arm64-arm64-v8a.json",
+          "bytes": 2002,
+          "sha256": "a0c7a56e50b8fd01dabca80455dc4c34940734fb859917133ebf27be6f1367aa"
+        },
+        "unstripped": {
+          "path": "build/android-close-final-jni-arm64-unstripped/libmgmem_pressure_jni.so",
+          "bytes": 472680,
+          "sha256": "a1c5a3ec9db58d7e45332038e53bd0cd11c1371f405a3c643e41354ddb02289f"
+        },
+        "distributed": {
+          "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+          "bytes": 86816,
+          "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+        },
+        "source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+        "prior_long_result_transferred": false
+      },
+      "x86_64": {
+        "receipt": {
+          "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/jni-final-x86-x86_64.json",
+          "bytes": 1994,
+          "sha256": "31099c026a72b08177f961a4ac6b83bcaa28766404c410f604a2eb7d0b6e7f68"
+        },
+        "unstripped": {
+          "path": "build/android-close-final-jni-x86_64-unstripped/libmgmem_pressure_jni.so",
+          "bytes": 456232,
+          "sha256": "d573c9df819fe9d19dbe961b165b6ce5dd957a325337f101e2e7b568f4d040a3"
+        },
+        "distributed": {
+          "path": "build/android-close-shareable/delivery-v2/jni-final-x86/x86_64/libmgmem_pressure_jni.so",
+          "bytes": 76616,
+          "sha256": "81c1f3f8e015c64159998dee9729591a8f4c03c85f2446088e83a6763142ae0f"
+        },
+        "source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+        "prior_long_result_transferred": false
+      }
+    },
+    "limits": "NATIVE_LOADER_DEVICE_AND_LONG_EVIDENCE_ARE_SEPARATE"
+  },
+  "distribution_member_proof": {
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/final-aar-apk-members.json",
+      "bytes": 2298,
+      "sha256": "21c117f8cf85796cdc6f5d66ef5d2a4e56611f8e07d859bf037d2dfd7a948b83"
+    },
+    "state": "PASS_AAR_APK_MEMBER_IDENTITY_AND_RECURSIVE_PATH_SCAN",
+    "ABIs": [
+      {
+        "abi": "arm64-v8a",
+        "AAR": {
+          "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+          "bytes": 153753,
+          "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+        },
+        "APK": {
+          "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+          "bytes": 487982,
+          "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+        }
+      },
+      {
+        "abi": "x86_64",
+        "AAR": {
+          "path": "build/android-close-final-r8-x86_64/MeguvizMemory-Android-Pressure-0.2.0-x86_64.aar",
+          "bytes": 145737,
+          "sha256": "2772ca6a2bf6b7a31a0c5d97605d8382dd6d14ce5430365944c8022793696388"
+        },
+        "APK": {
+          "path": "build/android-close-final-r8-x86_64/MeguvizMemory-R8-Stability-Probe.apk",
+          "bytes": 430632,
+          "sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2"
+        }
+      }
+    ],
+    "scope": "PACKAGE_MEMBERS_ONLY_NOT_DEVICE_RUNTIME_OR_TRANSFERRED_LONG_RESULT"
+  },
+  "distribution_host_regression": {
+    "state": "PASS_SCOPED_HOST_RELEASE_29_ASAN_29",
+    "qualified": true,
+    "receipt": {
+      "path": "artifacts/android-close-investigation-20261030/jni-errors-host/summary.json",
+      "bytes": 8967,
+      "sha256": "5031f80f088029eb6107088a8480f1e95a233d8e272d4d825133f3a791ed51c8"
+    },
+    "error_injection": "SIX_SNAPSHOT_FAULT_CASES_ISOLATED_NOT_PRODUCTION_NORMAL_ZERO",
+    "binding_matrix": "12_INJECTED_PENDING_JNI_EXCEPTION_CASES",
+    "physical_device_qualification": false
+  },
+  "public_capture_goldens": {
+    "scope": "FOUR_HASH_LOCKED_PUBLIC_CAPTURES_NOT_NEW_DEVICE_EVIDENCE",
+    "manifest": {
+      "path": "tests/fixtures/continuation-validation/provenance.json",
+      "bytes": 3668,
+      "sha256": "987871c17e40fbeb1ae17012b84a2bc9feb2d9255b1fc3fb329a7b58a216f123"
+    },
+    "fixtures": [
+      {
+        "path": "tests/fixtures/continuation-validation/android-api34.stdout.txt",
+        "bytes": 2049,
+        "sha256": "358ede15f389676b4324a14b8987129c38d1341cebec8ebd740c7daecf3767aa"
+      },
+      {
+        "path": "tests/fixtures/continuation-validation/dex-arm64.stdout.txt",
+        "bytes": 3353,
+        "sha256": "bb74f8333b30937ab966262a34b229ff698953754f3aaab36f63dd0d5a777f9f"
+      },
+      {
+        "path": "tests/fixtures/continuation-validation/image-system.derived.json",
+        "bytes": 769,
+        "sha256": "499adde3c2ab6e8bcfb4bb9703b03bc0a4d137d3454de0ea51ae9fccbfc990e2"
+      },
+      {
+        "path": "tests/fixtures/continuation-validation/image-arena.derived.json",
+        "bytes": 768,
+        "sha256": "2cec887d77734537627a57eae8b7957eb2a406b9831f330c034fdb8bdbb0e8b9"
+      }
+    ]
+  },
+  "packages": [
+    {
+      "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-windows-x64-strip-debug.zip",
+      "bytes": 93068,
+      "sha256": "b0156697431e5baa3e2b35dae5b4f0aa008ff39bacba822b5a9ccabdbf57e237"
+    },
+    {
+      "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-arm64-v8a-strip-debug.zip",
+      "bytes": 247534,
+      "sha256": "9abeee3b75a660390612d6c7dcea12eb9975f9a398e736709bfc5c1598eb69ce"
+    },
+    {
+      "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-x86_64-strip-debug.zip",
+      "bytes": 125240,
+      "sha256": "f28dae05b9992ccf0ec95b14829b52a91fcbc6ca4fb678fa2873c990f57f3533"
+    },
+    {
+      "path": "dist/meguviz-memory-packed-reader-0.1.0.jar",
+      "bytes": 5212,
+      "sha256": "b527d6333e3e379aab7a4b858973f9acb28d610686312200f438c142a0373ce6"
+    },
+    {
+      "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-final-shareable.aar",
+      "bytes": 153753,
+      "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+    },
+    {
+      "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-x86_64-final-shareable.aar",
+      "bytes": 145737,
+      "sha256": "2772ca6a2bf6b7a31a0c5d97605d8382dd6d14ce5430365944c8022793696388"
+    }
+  ],
+  "diagnostic_APKs": [
+    {
+      "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 487982,
+      "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677",
+      "abi": "arm64-v8a",
+      "package_proof": {
+        "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+        "badging_sha256": "1bd6dc1646362c9aada430d496b637d49a224b5bdedfb1c68d517fd8de673178",
+        "signature": {
+          "state": "PASS_SINGLE_EXPECTED_CERTIFICATE",
+          "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+          "verification_stdout_sha256": "3afd1f08d1f1d58acdadfd4432cde900aecfb5724add92a247a3565a936a90ab"
+        }
+      }
+    },
+    {
+      "path": "build/android-close-final-r8-x86_64/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 430632,
+      "sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2",
+      "abi": "x86_64",
+      "package_proof": {
+        "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+        "badging_sha256": "d0098c499547e6cbf86332a6d90ca2a1888419ec0bc0b62e19f28ab385839a79",
+        "signature": {
+          "state": "PASS_SINGLE_EXPECTED_CERTIFICATE",
+          "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+          "verification_stdout_sha256": "3afd1f08d1f1d58acdadfd4432cde900aecfb5724add92a247a3565a936a90ab"
+        }
+      }
+    }
+  ],
+  "bundle": {
+    "path": "dist/MeguvizMemory-0.2.0-Android-Close-Resolution-20261030.zip",
+    "sha256_sidecar": "MeguvizMemory-0.2.0-Android-Close-Resolution-20261030.zip.sha256",
+    "hash_location": "SIDECAR_AVOIDS_SELF_REFERENCE"
+  },
+  "privacy": "ONLY_TWO_VERIFIED_OWN_APKS; NO_RAW_INPUT_DEX/APK, SERIALS, AUTHORIZATIONS, KEYS OR RAW_COMMAND_LOGS",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+  "performance": "NOT_MEASURED_NO_NEW_QUALIFICATION",
+  "energy": "UNAVAILABLE",
+  "formal_release": "NOT_QUALIFIED",
+  "limits": [
+    "Freezer samples are observational and cannot prove no freeze between samples",
+    "Foreground and background controls are associative; bootstrap/restart also differ",
+    "JNI fake VM tests do not independently qualify ART",
+    "Long PASS, if achieved, means bounded repeated create-close only; not 24h or single long-lived domain",
+    "RSS/PSS are whole-process observations, not domain attribution or a savings claim",
+    "16KB loader, MTE/HWASan, energy, BIL host/UI and formal release remain separate"
+  ]
+}

@@ -2,19 +2,17 @@
 
 更新：2026-10-30。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
-## 本轮进行中
+## 当前阶段
 
-API33旧APK重现停滞，目标自身cgroup两次为frozen=1，20/20线程处于do_freezer_trap；触发方及以前每次是否同因仍未知。同一诊断APK后台再次冻结，先启动受保护窗口并以no-restart保持同一进程后，前台完成1000周期/62.846秒，24次采样未见冻结，窗口正常结束。启动方式同时不同，不作单变量性能或因果结论。
+API33停滞已在独立复现中观察到目标自身cgroup冻结，触发者及历史每次是否同因未知。相同APK后台再次冻结；另一次在instrumentation内启动前台Activity时，[Activity尚未resumed即观察到冻结](artifacts/android-close-investigation-20261030/freezer-control-foreground/receipt.json)。先由shell预启动受保护诊断窗口、再以no-restart保持同一进程的组合，短对照完成1000周期且采样未见冻结。两种前台启动方式和重启时序不同，不构成单变量因果结论。JNI的独立自动通知及错误分支缺口已修复，Host Release/ASan各29项通过。
 
-JNI附着失败后无调用者poll不会自动通知的缺口已修复；源20863的独立API33真机前台长轮完成15,048周期/901.086秒，343次采样未见冻结，窗口结束及正常域归零通过。API34旧修复版短测78周期通过。
-
-后续另修JNI pending异常与压力快照错误路径，最终源码Host Release/ASan各29项通过；去debug路径的最终安装版真机短测88周期通过，并验证未知快照原因、无poll自动收尾与归零。最终制品独立15分钟真机长轮正在运行，不转授先前二进制结果；API34最终版短测进行中。BIL未接入，性能未测。
+最终去debug路径的安装版在API33 arm64真机独立运行 901.089 秒、14959 周期，366次自身cgroup采样未见冻结；窗口正常结束，预算、跨关闭lease、无调用者poll自动收尾、未知原因及正常域归零通过。API34 x86_64独立模拟器的同版短测通过，未建立API34长稳。BIL未接入，性能未测。详见[关闭调查与验证](docs/ANDROID_CLOSE_INVESTIGATION_20261030.md)。
 
 ## 当前已交付
 
 - 核心：System/custom provider、有界 arena、唯一 backing 和 reservation 预算、owner/读写 lease、非阻塞 begin_close、collect/drain、reset/trim、C++ RAII、CMake install/export。
 - 0.2 新能力：SYSTEM 完整外部 region 导入、runtime 路由和重叠拒绝、软预算；Android pressure worker、ComponentCallbacks2/JNI 异步关闭及自身 RSS/PSS/private-dirty；独立 packed reader。
-- 0.2 功能证据：Host Release/ASan 各10项；packed Java32、真实 Kotlin oracle288、ART32；API33 arm64/4KB 设备原生9项、Android20项及针对自身包的 AMS 注入通过。详情见 [0.2阶段收尾](docs/FEATURE_STAGE_20261030.md)。这些是限定用例的功能证据，不构成长期稳定性、资源节省、R8 或产品资格。
+- 0.2 首阶段功能证据：Host Release/ASan 各10项；packed Java32、真实 Kotlin oracle288、ART32；API33 arm64/4KB 设备原生9项、Android20项及针对自身包的 AMS 注入通过。详情见 [0.2阶段收尾](docs/FEATURE_STAGE_20261030.md)。该阶段仅有上述限定证据，不单独构成后续长期稳定性、资源节省、R8或产品资格。
 - 真实消费者：安装后的 Memory SDK 已由冻结 DexMeguviz 源码和 P6 文件图像工作区消费。v2 在 API33 arm64/4KB 实际通过 core3 和消费者196项（DEX32、图像工作区156、图像计时合同8）。
 
 ## 历史实验与归因
@@ -25,7 +23,7 @@ JNI附着失败后无调用者poll不会自动通知的缺口已修复；源2086
 
 普通直接借用删除一份10,540,184B输入及复制；1080p三行环少2,067,840B payload，当前arena chunk下少2,008,064B backing。以上是普通消费者优化，不是 Memory 增量或 RSS 结论。已有BIL scratch/holder/staging复用不重复计功。自身 RSS/PSS 已能观测，但尚无同完成量资源净收益；能量没有合格方法。
 
-## 本轮继续工作
+## 上一阶段历史
 
 本阶段按用户要求快速收尾：DEX外部导入、图像压力/预算/异步关闭组合及Host/arm64原生900秒循环通过；最终JNI锁修复Release/ASan各18项、8组原/新反例及双ABI真实R8短测通过。Android长稳没有取得资格：首个API33子项1260秒超时，closefix新轮仍停在iteration48/cycle.idempotent-close，缺根因栈；新API34轮仍有进度，但按用户快速收尾要求提前结束。旧模块API34完整900秒结果独立保留，不提升新模块资格。仅结束本项目诊断进程，不清应用数据、不停止其他会话。详情见[阶段交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)。
 

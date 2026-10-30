@@ -1,0 +1,31 @@
+{
+  "state": "PASS_SYNTHETIC_ATOMIC_IO_NOT_DEVICE",
+  "scope": "CROSS_PLATFORM_MOCK_PERMISSION_ERROR_WITH_REAL_FSYNC_AND_ATOMIC_REPLACE",
+  "actual_test": {
+    "scope": "CROSS_PLATFORM_SYNTHETIC_IO_NO_DEVICE",
+    "state": "PASS",
+    "transient_permission_errors": 2,
+    "transient_attempts": 3,
+    "fsync_before_replace": true,
+    "persistent_elapsed_seconds": 0.9059999999954016,
+    "persistent_attempts": 30,
+    "last_complete_preserved": true,
+    "pending_preserved_and_not_overwritten": true,
+    "error_path_redacted": true,
+    "pending_sha256": "047e104caef8960787b753a34a596087e8563c28d826cafb87e808bdd15ec1cb"
+  },
+  "source_hashes": {
+    "runner": "359e50c460aad0dbaed8410745c9541b748076361e0a2a846ebc214913a3c862",
+    "postflight": "23757f5d27eca645ccc4562e95eb60a1bf1ec5a5399c40a572b8018a203b929d",
+    "test": "824e5d67711c3807665c1d1cb28c8c23f68969c93ad0b51647690c277aa2c74f"
+  },
+  "prior_failed_round": {
+    "original_receipt_sha256": "94017afaad2cba90cd36e2784a97f419363daf97e5f3438b0c2c3baa330e8d65",
+    "public_redacted_sha256": "05c115194bddedfaa0cc6474131be04cddd8d215522e9b93855854cd4d63f7c6",
+    "original_runner_sha256": "0c9a979468657ac020ee1ea63e01b4c68dea95e265204cc6930a797dcbda1c29",
+    "public_state": "FAILED_OR_BLOCKED",
+    "sampling_unchanged": true
+  },
+  "device_operations": 0,
+  "performance": "NOT_MEASURED"
+}

@@ -16,6 +16,71 @@ ROOT=Path(__file__).resolve().parents[1]
 PACKAGE='io.github.jichuo1.meguviz.memory.pressureprobe.r8'
 COMPONENT=PACKAGE+'/io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation'
 ACTIVITY=PACKAGE+'/io.github.jichuo1.meguviz.memory.android.PressureR8ForegroundActivity'
+ATOMIC_REPLACE_RETRY_SECONDS=0.9
+class ReceiptPublicationError(RuntimeError):
+    """A sanitized publication failure; complete target and pending are kept."""
+def safe_reason(error):
+    if isinstance(error,ReceiptPublicationError):return str(error)
+    if isinstance(error,PermissionError):return 'HOST_PERMISSION_DENIED'
+    value=str(error)
+    if isinstance(error,RuntimeError) and re.fullmatch(r'[A-Za-z0-9_.-]{1,120}',value):return value
+    return 'UNEXPECTED_'+type(error).__name__
+def write_receipt_atomic(path,value):
+    path=Path(path);pending=path.with_suffix('.pending')
+    data=(json.dumps(value,ensure_ascii=False,indent=2,allow_nan=False)+'\n').encode('utf-8')
+    try:
+        # Never truncate an earlier failed pending update; the caller can
+        # inspect the prior complete target and its exact pending successor.
+        with pending.open('xb') as stream:
+            stream.write(data);stream.flush();os.fsync(stream.fileno())
+    except FileExistsError as error:
+        raise ReceiptPublicationError('HOST_RECEIPT_PENDING_ALREADY_EXISTS') from error
+    except OSError as error:
+        raise ReceiptPublicationError('HOST_RECEIPT_PENDING_WRITE_FAILED') from error
+    deadline=time.monotonic()+ATOMIC_REPLACE_RETRY_SECONDS
+    while True:
+        try:
+            os.replace(pending,path);return
+        except PermissionError as error:
+            remaining=deadline-time.monotonic()
+            if remaining<=0:raise ReceiptPublicationError('HOST_RECEIPT_ATOMIC_REPLACE_PERMISSION_DENIED') from error
+            time.sleep(min(.025,remaining))
+            if time.monotonic()>=deadline:
+                raise ReceiptPublicationError('HOST_RECEIPT_ATOMIC_REPLACE_PERMISSION_DENIED') from error
+        except OSError as error:
+            raise ReceiptPublicationError('HOST_RECEIPT_ATOMIC_REPLACE_FAILED') from error
+def cleanup_running_child(child,stop_own):
+    """Stop this run's own app, then wait for its transport without saving.
+
+    The caller records the returned state after this bounded operation. A
+    transport exit is not proof of normal domain close or device-process exit.
+    """
+    stop_ok=False;error_type=None
+    try:
+        row=stop_own()
+        stop_ok=not row.get('timed_out') and row.get('exit_code')==0 and not row.get('output_has_error')
+    except Exception as error:error_type=type(error).__name__
+    try:code=child.wait(timeout=15)
+    except subprocess.TimeoutExpired:
+        return {'state':'OWN_STOP_RETURNED_TRANSPORT_TIMEOUT' if stop_ok else 'OWN_STOP_FAILED_TRANSPORT_TIMEOUT',
+                'remote_process_state':'UNKNOWN','error_type':error_type}
+    except Exception as error:
+        return {'state':'OWN_STOP_OR_TRANSPORT_WAIT_FAILED','remote_process_state':'UNKNOWN','error_type':type(error).__name__}
+    return {'state':'OWN_STOP_RETURNED_TRANSPORT_EXITED' if stop_ok else 'OWN_STOP_FAILED_TRANSPORT_EXITED',
+            'transport_exit_code':code,'remote_process_state':'OWN_PROCESS_ABSENCE_NOT_VERIFIED' if stop_ok else 'UNKNOWN',
+            'error_type':error_type}
+def publication_failure_marker(receipt,out,error):
+    reason=receipt.get('reason') or safe_reason(error)
+    if not re.fullmatch(r'[A-Za-z0-9_.-]{1,120}',reason):reason='HOST_RECEIPT_PUBLICATION_FAILED'
+    marker={'state':'FAILED_OR_BLOCKED','reason':reason,'normal_close_proven':False,
+            'device_serial_sha256':receipt['device_serial_sha256'],'source_sha256':receipt['source_sha256'],
+            'sample_count':len(receipt['cgroup_samples']),'own_error_cleanup':receipt.get('own_error_cleanup','NOT_ATTEMPTED'),
+            'remote_process_state':receipt.get('remote_process_state','UNKNOWN'),
+            'scope':'LAST_COMPLETE_AND_ANY_CREATED_PENDING_NOT_OVERWRITTEN'}
+    for label,path in [('last_complete_sha256',out/'receipt.json'),('pending_sha256',out/'receipt.pending')]:
+        try:marker[label]=digest(path) if path.is_file() else None
+        except OSError:marker[label]=None
+    return marker
 def sha(data):return hashlib.sha256(data).hexdigest()
 def digest(path):return sha(path.read_bytes())
 def now():return datetime.now(timezone.utc).isoformat()
@@ -44,17 +109,19 @@ def main():
                  'stall_seconds':a.stall_seconds,'AMS_injection':False},'gates':[],'commands':[],
       'cgroup_samples':[],'raw_transport':'IGNORED_BUILD_ONLY','BIL':'NOT_MODIFIED','performance':'NOT_MEASURED'}
     def save():
-        temp=out/'receipt.pending';data=(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n').encode()
-        with temp.open('wb') as f:f.write(data);f.flush();os.fsync(f.fileno())
-        os.replace(temp,out/'receipt.json')
-    def adb(label,parts,required=True,timeout=20,journal=True):
+        write_receipt_atomic(out/'receipt.json',receipt)
+    def adb(label,parts,required=True,timeout=20,journal=True,persist=True):
         try:
             result=subprocess.run([str(a.adb),'-s',a.serial,*parts],capture_output=True,timeout=timeout)
             row={'name':label,'exit_code':result.returncode,'timed_out':False,'stdout_sha256':sha(result.stdout),'stderr_sha256':sha(result.stderr)}
             stdout,stderr=result.stdout,result.stderr
         except subprocess.TimeoutExpired as e:
             stdout,stderr=e.stdout or b'',e.stderr or b'';row={'name':label,'exit_code':None,'timed_out':True,'stdout_sha256':sha(stdout),'stderr_sha256':sha(stderr),'remote_state':'UNKNOWN'}
-        if journal or row['timed_out'] or (required and row['exit_code']!=0):receipt['commands'].append(row);save()
+        if not persist:
+            row['output_has_error']=bool(re.search(rb'(?im)^\s*(?:error|permission denial|permission denied|unknown command)',stdout+b'\n'+stderr))
+        if journal or row['timed_out'] or (required and row['exit_code']!=0):
+            receipt['commands'].append(row)
+            if persist:save()
         if required and (row['exit_code']!=0 or row['timed_out']):raise RuntimeError(label+'_failed_or_unknown')
         return row,stdout.decode('utf-8','replace')
     def gate(label):
@@ -147,7 +214,7 @@ def main():
           '-e','stall_timeout_ms',str(a.stall_seconds*1000),'-e','capture_stack_on_halt','true',COMPONENT]
         child=subprocess.Popen(command,stdout=stream_out,stderr=stream_err);started=time.monotonic();last_change=started
         receipt['state']='RUNNING';receipt['instrumentation_started_at_utc']=now();save();print(json.dumps({'state':'RUNNING','foreground':a.foreground}),flush=True)
-        last_value=None;target_pid=None;last_sample=None
+        last_value=None;target_pid=None;last_sample=None;next_stdout=started+45
         while time.monotonic()-started<a.outer_seconds:
             if child.poll() is not None:break
             current=progress();pid=read_own_pid()
@@ -166,6 +233,12 @@ def main():
                     receipt['state']='OBSERVATION_GAP_INCOMPLETE';receipt['stop_reason']='FREEZER_SAMPLE_GAP_OVER_10_SECONDS';save();break
             if last_value and time.monotonic()-last_change>=a.stall_seconds:
                 receipt['state']='PROGRESS_STALLED_INCOMPLETE';receipt['stop_reason']='NO_OWN_PROGRESS_WITHIN_BOUND';save();break
+            if time.monotonic()>=next_stdout:
+                current=receipt.get('last_own_progress') or {};iteration=current.get('iteration')
+                print(json.dumps({'event':'PROGRESS','elapsed_seconds':round(time.monotonic()-started,1),
+                    'iteration':iteration if type(iteration) is int else None,'cgroup_samples':len(receipt['cgroup_samples']),
+                    'frozen_samples':sum(s.get('mode')=='1' or s.get('frozen')=='1' for s in receipt['cgroup_samples'])}),flush=True)
+                next_stdout=time.monotonic()+45
             save();time.sleep(a.poll_seconds)
         else:receipt['state']='OUTER_TIMEOUT_INCOMPLETE';receipt['stop_reason']='OUTER_BOUND'
         if child.poll() is None:
@@ -197,11 +270,16 @@ def main():
         _,boot=adb('boot-after',['shell','cat','/proc/sys/kernel/random/boot_id'])
         if sha(boot.strip().encode())!=receipt['boot_id_sha256']:raise RuntimeError('device_rebooted')
     except Exception as error:
-        receipt.update(state='FAILED_OR_BLOCKED',reason=str(error),normal_close_proven=False)
+        receipt.update(state='FAILED_OR_BLOCKED',reason=safe_reason(error),normal_close_proven=False)
         # An active child is owned by this run; isolate it without touching other apps.
         if child is not None and child.poll() is None:
-            try:adb('stop-own-on-error',['shell','am','force-stop',PACKAGE]);child.wait(timeout=15)
-            except Exception:receipt['remote_process_state']='UNKNOWN'
+            def stop_own():
+                row,stdout=adb('stop-own-on-error',['shell','am','force-stop',PACKAGE],required=False,journal=False,persist=False)
+                row['output_has_error']=row.get('output_has_error',False) or bool(re.search(r'(?im)^\s*(?:error|permission denial|unknown command)',stdout))
+                if not row['timed_out']:receipt['commands'].append(row)
+                return row
+            cleanup=cleanup_running_child(child,stop_own)
+            receipt['own_error_cleanup']=cleanup['state'];receipt['remote_process_state']=cleanup['remote_process_state']
         elif prestart_initiated:
             try:
                 remaining=read_own_pid()
@@ -219,7 +297,17 @@ def main():
     finally:
         if stream_out and not stream_out.closed:stream_out.close()
         if stream_err and not stream_err.closed:stream_err.close()
-        receipt['finished_at_utc']=now();save()
+        receipt['finished_at_utc']=now()
+        try:save()
+        except ReceiptPublicationError as error:
+            # The last complete snapshot and its pending successor stay intact.
+            # A separate new sidecar records failure if the filesystem permits.
+            marker=publication_failure_marker(receipt,out,error);reason=marker['reason']
+            try:write_receipt_atomic(out/'receipt.failure.json',marker)
+            except (OSError,ReceiptPublicationError):pass
+            print(json.dumps({'state':'FAILED_OR_BLOCKED','reason':reason,'receipt_publication':'INCOMPLETE',
+                              'pending_present':(out/'receipt.pending').is_file()}),flush=True)
+            raise SystemExit(2)
     print(json.dumps({'state':receipt['state'],'foreground':a.foreground,'samples':len(receipt['cgroup_samples']),'reason':receipt.get('reason')}),flush=True)
     raise SystemExit(0 if receipt['state']=='PASS_OBSERVED_UNFROZEN_SAMPLES' else 2)
 if __name__=='__main__':main()

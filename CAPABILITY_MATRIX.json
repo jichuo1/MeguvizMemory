@@ -35,7 +35,7 @@
     "actual_16kb_loader": "UNAVAILABLE",
     "mte_hwasan": "UNAVAILABLE",
     "apk_aar_packaging": "PRESSURE_AAR_AND_DIAGNOSTIC_APK_IMPLEMENTED",
-    "API34_plus_pressure_R8": "CLOSEFIX_API34_X86_64_SMOKE_PASS_NEW_LONG_INCOMPLETE",
+    "API34_plus_pressure_R8": "PASS_API34_X86_64_FINAL_SANITIZED_R8_SHORT_ONLY",
     "evidence": "docs/FEATURE_STAGE_20261030.md"
   },
   "consumers": {
@@ -117,7 +117,7 @@
     "family_bridge": "CONTRACT_AUDIT_ONLY",
     "BIL": "NOT_INTEGRATED",
     "performance": "NO_NEW_QUALIFICATION",
-    "jni_close_fix": "HOST18_ASAN18_AND_DUAL_ABI_R8_SMOKE_PASS_ANDROID_LONG_BLOCKED"
+    "jni_close_fix": "AUTO_RETRY_AND_EXCEPTION_ISOLATION_HOST29_ASAN29_API33_FINAL_15M_API34_FINAL_SHORT"
   },
   "scope_note": "Top-level current fields describe 0.2; historical_0_1_and_draft fields are superseded snapshots, not current missing implementation.",
   "historical_0_1_and_draft": {
@@ -212,19 +212,30 @@
     "manifest": "artifacts/continuation-20261030/ARTIFACTS.json"
   },
   "android_close_resolution_20261030": {
-    "state": "FINAL_DISTRIBUTION_SMOKE_PASS_LONG_RUNNING",
-    "user_scope": "API33_REPRODUCIBLE_FREEZER_AND_CLOSE_SAFETY_NO_BIL",
-    "baseline": "EXACT_PRIOR_APK_OWN_CGROUP_FREEZE_1_20_OF_20_THREADS_FREEZER_WAIT",
+    "state": "SCOPED_ANDROID_CLOSE_RESOLUTION_COMPLETE",
+    "scope": "API33_ARM64_SAMPLED_FOREGROUND_15_MINUTES_AND_API34_X86_64_SHORT_ONLY",
+    "baseline": "OLD_APK_REPRODUCED_OWN_CGROUP_FREEZE_1_AND_20_OF_20_THREADS_FREEZER_WAIT",
     "same_APK_control": "BACKGROUND_FROZEN; FOREGROUND_PRESTART_NO_RESTART_1000_CYCLES_PASS_UNFROZEN_SAMPLES",
-    "retryfix2_phone_long": "PASS_15048_CYCLES_901086MS_343_UNFROZEN_SAMPLES_SOURCE_20863",
+    "close_auto_retry": "IMPLEMENTED_FAKE_VM_REPRO_HOST_AND_REAL_NO_CALLER_POLL_CLOSE",
     "JNI_exception_and_snapshot_fix": "HOST_RELEASE_ASAN_29_PASS_7_OLD_NEW_COUNTEREXAMPLES",
-    "final_shareable_arm64_smoke": "PASS_88_CYCLES_REASON_CHECKS_NO_POLL_CLOSE_ZERO",
-    "final_shareable_arm64_long": "RUNNING_FROZEN_PLAN_900_SECONDS",
-    "API34_retryfix2": "PASS_SCOPED_X86_64_EMULATOR_SHORT_78_CYCLES",
-    "API34_final_shareable": "INDEPENDENT_SHORT_VERIFICATION_IN_PROGRESS",
-    "distribution": "STRIPPED_DEBUG_NO_PRIVATE_PATHS; LOAD_SEGMENT_EQUIVALENCE_AND_SEPARATE_DEVICE_IDENTITY",
+    "final_shareable_arm64_smoke": "PASS_REASON_CHECKS_NO_CALLER_POLL_BUDGET_CLOSE_ZERO",
+    "final_shareable_arm64_long": "PASS_FROZEN_PLAN_ACTUAL_DISTRIBUTION_APK_OBSERVED_UNFROZEN_SAMPLES",
+    "final_long_iterations": 14959,
+    "final_long_duration_ms": 901089,
+    "final_long_checks": 224546,
+    "final_long_cgroup_samples": 366,
+    "final_long_max_sample_gap_seconds": 3.3909999999959837,
+    "API34_final_shareable": "PASS_SCOPED_X86_64_EMULATOR_SHORT_NOT_LONG",
     "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
     "performance": "NOT_MEASURED",
-    "evidence": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md"
+    "limits": [
+      "Samples do not prove absence of brief freezes between observations",
+      "15-minute repeated create/close is not 24h or single long-lived domain qualification",
+      "Background and foreground startup/restart differ; no single-variable performance causation",
+      "Permanent VM failure retains refs and one retry thread per registration outside domain budget",
+      "16KB, MTE/HWASan, energy, BIL product and formal release are not qualified"
+    ],
+    "evidence": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md",
+    "manifest": "artifacts/android-close-investigation-20261030/ARTIFACTS.json"
   }
 }

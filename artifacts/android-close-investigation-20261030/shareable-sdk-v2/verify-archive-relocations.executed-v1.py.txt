@@ -1,0 +1,71 @@
+"""Independently recompute normalized COFF/ELF archive evidence without mutations."""
+from pathlib import Path
+import hashlib,json,re,subprocess
+
+ROOT=Path(__file__).resolve().parents[2]
+BASE=ROOT/'artifacts/android-close-investigation-20261030/shareable-sdk-v2'
+TOOL=Path.home()/'AppData/Local/Android/Sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/windows-x86_64/bin/llvm-readobj.exe'
+sha=lambda path:hashlib.sha256(path.read_bytes()).hexdigest()
+canonical=lambda value:hashlib.sha256(json.dumps(value,separators=(',',':')).encode()).hexdigest()
+
+def readobj(path,*options):
+    return subprocess.check_output([str(TOOL),*options,str(path)],text=True,timeout=30)
+def sections(path,kind):
+    source=readobj(path,'--sections','--section-data');blocks=re.findall(r'(?ms)^  Section \{\n(.*?)^  \}',source);rows=[]
+    for block in blocks:
+        if kind=='ELF' and 'SHF_ALLOC' not in block:continue
+        match=re.search(r'(?m)^    Name: (\S+)',block)
+        if not match:continue
+        name=match.group(1)
+        if kind=='COFF' and name.startswith('.debug'):continue
+        size=int(re.search(r'(?m)^    '+('Size' if kind=='ELF' else 'RawDataSize')+r': (\d+)',block).group(1))
+        match=re.search(r'(?ms)^    SectionData \(\n(.*?)^    \)',block)
+        pieces=[''.join(re.findall(r'\b[0-9A-F]{2,8}\b',line.split('|')[0].split(':',1)[1]))
+                for line in match.group(1).splitlines() if ':' in line] if match else []
+        payload=bytes.fromhex(''.join(pieces));assert not payload or len(payload)==size
+        if kind=='COFF':rows.append([name,size,hashlib.sha256(payload).hexdigest()])
+        else:
+            type_=re.search(r'(?m)^    Type: (\S+)',block).group(1)
+            flags=re.search(r'(?m)^    Flags \[ \((0x[0-9A-Fa-f]+)\)',block).group(1)
+            align=int(re.search(r'(?m)^    AddressAlignment: (\d+)',block).group(1))
+            rows.append([name,type_,flags,size,align,hashlib.sha256(payload).hexdigest()])
+    assert rows;return rows
+def relocations(path,kind):
+    source=readobj(path,'--relocations');groups=re.findall(r'(?ms)^  Section \(\d+\) (\S+) \{\n(.*?)^  \}',source)
+    rows=[]
+    for name,content in groups:
+        if (name.startswith('.debug') if kind=='COFF' else '.debug' in name):continue
+        lines=[re.sub(r'\s+\(\d+\)\s*$','',line.strip()) if kind=='COFF' else line.strip()
+               for line in content.splitlines() if line.strip()]
+        rows.append([name,lines])
+    assert rows;return rows
+def main():
+    prior_coff=json.loads((BASE/'coff-relocations.json').read_text())
+    prior_android=json.loads((BASE/'android-static-sections-relocations.json').read_text())
+    pairs=[('windows-x64','COFF',ROOT/'install/features-host/lib/mgmem_pressure.lib',ROOT/'build/android-close-shareable/delivery-v2/sdk/windows-x64/lib/mgmem_pressure.lib')]
+    pairs += [(abi,'ELF',ROOT/prefix/'lib/libmgmem_pressure.a',ROOT/'build/android-close-shareable/delivery-v2/sdk'/('android-'+abi)/'lib/libmgmem_pressure.a') for abi,prefix in [('arm64-v8a','install/features-arm64'),('x86_64','install/continuation-x86_64')]]
+    profiles={}
+    for label,kind,original,candidate in pairs:
+        original_sections=sections(original,kind);candidate_sections=sections(candidate,kind)
+        original_relocations=relocations(original,kind);candidate_relocations=relocations(candidate,kind)
+        assert original_sections==candidate_sections and original_relocations==candidate_relocations
+        record={'original_sha256':sha(original),'candidate_sha256':sha(candidate),'section_count':len(original_sections),
+                'section_semantics_sha256':canonical(original_sections),'relocation_groups':len(original_relocations),
+                'relocation_count':sum(len(group[1]) for group in original_relocations),'relocation_semantics_sha256':canonical(original_relocations)}
+        if kind=='COFF':
+            assert record['original_sha256']==prior_coff['original_sha256'] and record['candidate_sha256']==prior_coff['candidate_sha256']
+            assert record['relocation_groups']==prior_coff['relocation_groups'] and record['relocation_count']==prior_coff['relocations']
+            assert record['relocation_semantics_sha256']==prior_coff['normalized_relocations_sha256']
+        else:
+            expected=prior_android['profiles'][label]
+            assert record['original_sha256']==expected['original_sha256'] and record['candidate_sha256']==expected['candidate_sha256']
+            assert record['section_semantics_sha256']==expected['allocatable_sections_sha256']
+            assert record['relocation_semantics_sha256']==expected['non_debug_relocations_sha256']
+        profiles[label]=record
+    output=BASE/'archive-independent-reverification.json'
+    if output.exists():raise RuntimeError('refuse_overwrite_evidence')
+    result={'state':'PASS_INDEPENDENT_ARCHIVE_RECOMPUTATION','readobj_sha256':sha(TOOL),'executed_script_sha256':sha(Path(__file__)),
+            'profiles':profiles,'limits':['COFF compares all non-debug section payloads and normalized relocation names/types/offsets.','ELF archive compares allocated section payloads/types/flags/alignment and non-debug relocation symbols/types/addends.','Runtime, performance and old binary identity are separate.']}
+    output.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8',newline='\n')
+    print(json.dumps({'state':result['state'],'receipt_sha256':sha(output),'script_sha256':result['executed_script_sha256']}))
+if __name__=='__main__':main()

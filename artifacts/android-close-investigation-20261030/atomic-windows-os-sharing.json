@@ -1,0 +1,31 @@
+{
+  "state": "PASS_REAL_WINDOWS_OS_SHARING",
+  "scope": "SYNTHETIC_OWN_FILES_ACTUAL_WIN32_SHARE_DENIAL_NO_DEVICE",
+  "runner_source_sha256": "24683dedf077a744997758e7c01d1322865e6e6409ca8731449694cedbda5191",
+  "test_source_sha256": "2d494630d64243de0ff0d5da7b8a8aa01782a94b34a7ab2db7078ccef1a8f2e9",
+  "share_mode": "READ_WRITE_ALLOWED_DELETE_NOT_SHARED",
+  "transient": {
+    "real_sharing_violations": 1,
+    "first_winerror": 5,
+    "replace_attempts": 2,
+    "old_and_pending_complete_while_locked": true,
+    "after_release_replacement_succeeded": true,
+    "elapsed_seconds": 0.031000000002677552
+  },
+  "persistent": {
+    "winerrors": [
+      5
+    ],
+    "attempts": 30,
+    "elapsed_seconds": 0.9219999999986612,
+    "old_complete_preserved": true,
+    "pending_complete_preserved": true,
+    "pending_not_overwritten_by_second_call": true,
+    "pending_sha256": "2b119b8dfaefa5af00a0f66bf68f4b9f7808ab50a3a21a971d83406b24bf86f4"
+  },
+  "mechanism": "Real kernel32 CreateFileW handle and unmocked OS replace; wrapper only records actual return/errors",
+  "limitations": [
+    "Synthetic files only, no current device receipt read",
+    "Not a device/runtime/performance test"
+  ]
+}

@@ -34,6 +34,11 @@ jobs:
         run: python tools/test_continuation_validation.py
       - name: Diagnostic debugger identity and detach regressions
         run: python tools/test_lldb_own_app.py
+      - name: Android close receipt atomic publication regressions
+        run: python tools/test_android_close_atomic.py
+      - name: Windows close receipt real sharing regression
+        if: runner.os == 'Windows'
+        run: python tools/test_android_close_atomic_windows.py --output artifacts/android-close-investigation-20261030/ci-atomic-windows.json
       - name: Install
         run: cmake --install build/core --config Release
       - name: Configure installed consumer

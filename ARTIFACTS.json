@@ -392,9 +392,9 @@
   "current_android_close_resolution": {
     "version": "0.2.0",
     "native_abi": "1.1",
-    "status": "FINAL_SHAREABLE_SMOKE_PASS_LONG_RUNNING",
-    "prior_test_binary": "15_MINUTE_PASS_SOURCE_20863_NOT_TRANSFERRED",
-    "current_distribution": "SANITIZED_SOURCE_7C845_SEPARATE_DEVICE_VALIDATION",
-    "results": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md"
+    "status": "FINAL_SHAREABLE_API33_SAMPLED_15M_API34_SHORT_ENGINEERING_PREVIEW",
+    "manifest": "artifacts/android-close-investigation-20261030/ARTIFACTS.json",
+    "source_lock": "artifacts/android-close-investigation-20261030/SOURCE_LOCK.json",
+    "performance": "NOT_MEASURED"
   }
 }

@@ -1,0 +1,5 @@
+{
+  "original_path": "tools/verify_android_close_postflight.py",
+  "snapshot": "artifacts/android-close-investigation-20261030/source-pre-error-cleanup-fix/verify_android_close_postflight-before-cleanup.py.txt",
+  "sha256": "23757f5d27eca645ccc4562e95eb60a1bf1ec5a5399c40a572b8018a203b929d"
+}
