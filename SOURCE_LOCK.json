@@ -3,7 +3,7 @@
   "scope": "SCOPED_SOURCE_TREE_LOCK",
   "roots": {
     "MeguvizMemory": {
-      "head": "68fac01117f70434290086ca60f957155a093d48",
+      "head": "764bfee5143b938e0e1b7f6329df56e9bbe3888c",
       "dirty": true,
       "state": "READ_ONLY_LOCAL_CHECK"
     },
@@ -14,8 +14,8 @@
     }
   },
   "external_parser_source": "LOCKED",
-  "source_set_sha256": "5292585709723f1aedf36b5650db7fa27dc36d8db1f250f9e3766ead2cf7c01e",
-  "file_count": 119,
+  "source_set_sha256": "a74880f7cc170fa8f3a955322b346c2f5d276088935d2e86f50caadd36c6098a",
+  "file_count": 138,
   "files": [
     {
       "root": "DexMeguviz",
@@ -416,26 +416,26 @@
     {
       "root": "MeguvizMemory",
       "path": ".github/workflows/core.yml",
-      "bytes": 2046,
-      "sha256": "1289c143b0e86b99ea64eb3bbaff2a18099e3b4045ed3b2cb023392b84363fc1"
+      "bytes": 3069,
+      "sha256": "7d795a263d0707c7f8485ed72db464deb51c0dddf3d507258c4c8ddccf6fbf82"
     },
     {
       "root": "MeguvizMemory",
       "path": ".gitignore",
-      "bytes": 277,
-      "sha256": "4a3cf1c1288e23b08bdaa78d40e9a0287617d2213a59b4344acb526388bda40e"
+      "bytes": 371,
+      "sha256": "37c2c5f4998609baaea2418952df01f598cdbdef548849c781b52806377e29a7"
     },
     {
       "root": "MeguvizMemory",
       "path": "ARTIFACTS.json",
-      "bytes": 14198,
-      "sha256": "3d3395ec6230b0b25fa8b340c7901f349d4b041388c028b795701a692045a874"
+      "bytes": 14482,
+      "sha256": "5d2b817e667c2166ef29a9b23828e3e0feb759ad82ad4aa2c32f0bb738dbc654"
     },
     {
       "root": "MeguvizMemory",
       "path": "CAPABILITY_MATRIX.json",
-      "bytes": 3324,
-      "sha256": "54134a233298183adda0dce4272416db8c81a3b3be963880a1aee40191133345"
+      "bytes": 3913,
+      "sha256": "572a43802f3857bed14ca0cd923c13c317a81606d7a8f417032ac99fba36a97a"
     },
     {
       "root": "MeguvizMemory",
@@ -446,26 +446,38 @@
     {
       "root": "MeguvizMemory",
       "path": "README.md",
-      "bytes": 3902,
-      "sha256": "09a79e9812ba8db1f0296285b6f720ddda7e746d7fbae065040fca6f39dcd97f"
+      "bytes": 4418,
+      "sha256": "e9b1b2ce22c66414a44870b9d5cd611c8685108fdaa592ebd67f57d9b11783d5"
     },
     {
       "root": "MeguvizMemory",
       "path": "STATE.md",
-      "bytes": 3909,
-      "sha256": "63d4573f490dc739800acc2fab60876a11c4ee20413418efec1d6948fc86937e"
+      "bytes": 4956,
+      "sha256": "9b52dc427d6104341d84a56352e72ffa6bd4b9f5caf36047173e2b579e35d847"
     },
     {
       "root": "MeguvizMemory",
       "path": "TASKS.json",
-      "bytes": 39372,
-      "sha256": "039ecbe3b1115f7d2c5f3251998aebc2e7350cd7e08ee50ceb9e61427323635b"
+      "bytes": 43065,
+      "sha256": "21994f122eab448964bd8023d820f08c9a39ab95514959b70ef4a094597a916b"
     },
     {
       "root": "MeguvizMemory",
       "path": "bench/TLB_QUALIFICATION.json",
       "bytes": 9419,
       "sha256": "b0a0c00ec9973791f91c0922793c4e50e562dfcaa8f99e58d713b889c8f30f88"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "bench/dex_borrow_v2.json",
+      "bytes": 4915,
+      "sha256": "ce294e5884a622b48c00deae6890ef3f636c12e4319b25ea6a69db9e1b852d54"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "bench/image_workspace_v2.json",
+      "bytes": 4733,
+      "sha256": "791474007f66398b72cc953728e5950efb1bcded573d9887da4cbd9daf4a8955"
     },
     {
       "root": "MeguvizMemory",
@@ -487,6 +499,12 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "bench/paired_protocol_v2_draft.json",
+      "bytes": 4612,
+      "sha256": "e8b25a3d3e518e2094c61cb436674a66097bf01f73083f02ab65691791acf958"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "bench/protocol.json",
       "bytes": 8773,
       "sha256": "7f7a55126cd57a1f26dcff10e33482c5751879f2fe4ed9aca79f741c000ccb3d"
@@ -494,8 +512,8 @@
     {
       "root": "MeguvizMemory",
       "path": "bench/real-dex-workload.json",
-      "bytes": 3183,
-      "sha256": "e396cbeccd7f1080638cf5475f92eee169ae28b835a9a7bb841e595bbbf5b65e"
+      "bytes": 3385,
+      "sha256": "f3bd6590154290a6346c147765fcd08afeec31211f3ee2c6fb9a342a22f54c82"
     },
     {
       "root": "MeguvizMemory",
@@ -512,8 +530,8 @@
     {
       "root": "MeguvizMemory",
       "path": "consumers/dex/CMakeLists.txt",
-      "bytes": 1518,
-      "sha256": "11f4e73be7af981502a5cbb2432db56e908e64e210edf0632ba5390f2dc5f659"
+      "bytes": 2331,
+      "sha256": "d0e0319d00aa687e81abbad97c08eaedbb204eff6dd9d2e97b4c6b21719a3108"
     },
     {
       "root": "MeguvizMemory",
@@ -529,15 +547,27 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "consumers/dex/paired_v2.cpp",
+      "bytes": 26574,
+      "sha256": "1b156fc937b05a04e2c772c876ede193a05d0d1340a93d65301f7a202c37b577"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "consumers/image/CMakeLists.txt",
-      "bytes": 501,
-      "sha256": "b9b34cb145a840d40af6bbcdfac37603763e36a294cd4ad988feeb5e9dfe26f0"
+      "bytes": 853,
+      "sha256": "0f930fff347a5b141a11bf1ff9e36f67c4887dc95b3590fa51ede61878d7b9b3"
     },
     {
       "root": "MeguvizMemory",
       "path": "consumers/image/main.cpp",
       "bytes": 7412,
       "sha256": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "consumers/image/paired.cpp",
+      "bytes": 18129,
+      "sha256": "b5d62b2ef7275ba6a7ecdf8ee8b889e89fc4a033a1bbd00d924fe09473b77b9b"
     },
     {
       "root": "MeguvizMemory",
@@ -577,15 +607,51 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "docs/BIL_CPU_CANDIDATES_00572940.md",
+      "bytes": 2979,
+      "sha256": "c339dc24c40aef7f8aa6393b49c41cd9c962c0b3130859fc4b3eaa652004bff8"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "docs/CANDIDATE_EXIT_GATES.md",
+      "bytes": 2102,
+      "sha256": "4bd94170b0ff1e95e5e272d34d8fe494203da3aa9d6a7fd38baa11f56e38800c"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "docs/DEX_BORROW_CONTRACT.md",
+      "bytes": 7049,
+      "sha256": "adfa210a783e4efd99c73beb65a797ac5f8095b518f9e18367e6822d9f0286b1"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "docs/INTEGRATION.md",
       "bytes": 10520,
       "sha256": "55ce93cfab2112f540b28ded79b464bf449e2fccfc9d4e7b69bca69447db5312"
     },
     {
       "root": "MeguvizMemory",
+      "path": "docs/MECHANISM_CLAIMS_20261030.md",
+      "bytes": 3424,
+      "sha256": "a24a20c062975f77abaec74d5c0fd0f53ad9b1a6d6eda5656157c93b5b611c1a"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "docs/PERFORMANCE_A1_A3.md",
       "bytes": 8894,
       "sha256": "6742c7a1bc594f5784151616e1e94e12079cbb73fb178381050c7065d9192928"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "docs/PROTOCOL_FREEZE_CHECKLIST.md",
+      "bytes": 8253,
+      "sha256": "220ae64a060fe0c063883159c9dcf3b03d6ed9954175362e0a962168fabdab80"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "docs/RESEARCH_EVIDENCE_20261030.md",
+      "bytes": 4715,
+      "sha256": "bb55f697dd5dfb1c390b1b3947f97a673f91b35d98e8a8e45ccd395a57f3a447"
     },
     {
       "root": "MeguvizMemory",
@@ -679,6 +745,12 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/audit_paired_archive.py",
+      "bytes": 9651,
+      "sha256": "f303d52894f4008a6a9a071bd79c6d3be846d67273122b12ee25c260d631f476"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/host-build.cmd",
       "bytes": 442,
       "sha256": "4b8a019b87401147759e8ffe99326876f8963d6681ae16655fd3a318a8ca9946"
@@ -688,6 +760,12 @@
       "path": "tools/paired_analysis.py",
       "bytes": 20382,
       "sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/paired_analysis_v2.py",
+      "bytes": 24413,
+      "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee"
     },
     {
       "root": "MeguvizMemory",
@@ -703,6 +781,12 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/record_research_evidence.py",
+      "bytes": 17682,
+      "sha256": "2de0e906a7d58764eea395b2cb6d7e5451a9da8f7249bb5cb02a62416a86cc77"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/run_arm64_validation.py",
       "bytes": 23760,
       "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
@@ -715,9 +799,21 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/run_paired_device_v2.py",
+      "bytes": 2047,
+      "sha256": "db87cfd26ac3eed8a8fb33e5d7d17f748943897f1addf8a0b789fd5ca4db7411"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/source_lock.py",
-      "bytes": 7541,
-      "sha256": "ea44444e8336643e945a0ae74a3befef971eb495f089a7d31ad218d631b984c3"
+      "bytes": 7788,
+      "sha256": "9a303c1d2e01bcec56589f1d9369c8c4fc926465740b8ca3d6434b92905f03f3"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/test_audit_paired_archive.py",
+      "bytes": 2392,
+      "sha256": "a4268595df59757d3299e6b578b16edf859c1b97e8641bdf2533929c649b7991"
     },
     {
       "root": "MeguvizMemory",
@@ -727,9 +823,27 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/test_paired_analysis_v2.py",
+      "bytes": 16025,
+      "sha256": "487d54e1045c1ea2fc00e2b3c0efd0a20bde0a4db276b8e0ad1abba9f65f252a"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/verify_consumers.py",
       "bytes": 12518,
       "sha256": "5718defa6af7f95566c0062f0ecea64833c3788dc7904ec5ed3ea36c8a20ba59"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/verify_dex_borrow_v2.py",
+      "bytes": 9005,
+      "sha256": "3a27348a660f8491a24f566d184332fb6795cd5e5db0e7f5ef449a697a290355"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/verify_image_workspace_v2.py",
+      "bytes": 12374,
+      "sha256": "3dd0cd54a2e071eb05bc93a3a18d5f828bbefa7595dc70f3c01d2b5654e03310"
     }
   ],
   "rules": [
@@ -739,6 +853,7 @@
     "External include/src/third_party/cmake and root build/manifests are a conservative superset of build inputs.",
     "Build/install outputs, Git internals, caches, symlinks and common secret/env files are excluded.",
     "Private research attachments are excluded from the public source-file list; optional archive identity contains only size and SHA256.",
+    "Private preparatory indexes under docs/research are excluded; reviewed public summaries are recorded from docs instead.",
     "A source-tree lock is not a clean-commit, build, install, runtime or release receipt."
   ],
   "private_research_archive": {

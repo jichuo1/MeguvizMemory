@@ -136,7 +136,8 @@
         "tools/source_lock.py",
         "docs/audit/consumers.md",
         "artifacts/verification-20261030/research-arithmetic.json",
-        "artifacts/arm64-20261030/safety/receipt.json"
+        "artifacts/arm64-20261030/safety/receipt.json",
+        "docs/RESEARCH_EVIDENCE_20261030.md"
       ],
       "remaining": [
         "No verified product baseline or installed BIL Memory artifact",
@@ -189,9 +190,9 @@
       "dependency_contract": "MM 002",
       "acceptance": "A0…A4适用对照、制品hash、阶段计时边界、trace与独立样本；medianMs现为第二快；QUANTIFICATION模型与MEASUREMENT_TEMPLATE实测隔离",
       "status": "PARTIAL",
-      "implementation": "PROTOCOL_READY_HOST_FUNCTIONAL_ONLY",
-      "functional_validation": "PASSED_HOST_PROTOCOL_AND_ORACLES",
-      "device_validation": "BLOCKED_PRODUCT_BASELINE_NOT_COLLECTED",
+      "implementation": "HISTORICAL_ARM64_PROTOCOL_AND_NEW_HOST_STRATEGY_HARNESSES_OFFLINE_V2_DRAFT",
+      "functional_validation": "PASS_HOST_ORACLES_OFFLINE_RECOMPUTE_AND_VALIDATOR_SEPARATE_FROM_DEVICE",
+      "device_validation": "HISTORICAL_ARM64_INDEPENDENT_CPU_CAPTURE_COMPLETE_BIL_PRODUCT_NOT_STARTED",
       "performance_validation": "INCONCLUSIVE_INDEPENDENT_CPU_ONLY",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
@@ -200,24 +201,34 @@
       "measurement_template": "bench/protocol.json",
       "outputs": {
         "protocol_ready": "READY",
-        "scope": "HOST_FUNCTIONAL_DIAGNOSTIC_ONLY",
-        "formal_performance_protocol": "INCOMPLETE_FOR_PERFORMANCE",
+        "scope": "SCOPED_HOST_INDEPENDENT_ARM64_AND_BIL_PRODUCT_SEPARATELY",
+        "formal_performance_protocol": "HISTORICAL_RETRY1_EXECUTED_NEW_V2_NOT_FROZEN",
         "real_product_baseline": "BLOCKED",
         "arm64_real_workload_protocol": "FROZEN_BEFORE_PILOT_AND_FORMAL",
-        "arm64_complete_paired_round": "32_BLOCKS_128_SESSIONS_ALL_FUNCTIONAL_AND_ENVIRONMENT_PASS",
-        "performance_qualification": "INCONCLUSIVE_TREND_WARNING_POINT_BELOW_TARGET"
+        "arm64_complete_paired_round": "32_BLOCKS_128_TASKS_FUNCTIONAL_ENVIRONMENT_COMPLETE",
+        "performance_qualification": "INCONCLUSIVE_TREND_WARNING_POINT_BELOW_TARGET",
+        "new_source_strategy_v2": "HOST_FUNCTIONAL_PASS_NO_DEVICE_SAMPLING",
+        "new_window_protocol_v2": "OFFLINE_VALIDATOR_ONLY_NOT_FROZEN_NO_LIVE_COLLECTOR"
       },
       "evidence": [
         "bench/protocol.json",
         "docs/BASELINE_PROTOCOL.md",
         "bench/paired_protocol_retry1.json",
-        "artifacts/arm64-20261030/paired-retry1/report.json"
+        "artifacts/arm64-20261030/paired-retry1/report.json",
+        "docs/RESEARCH_EVIDENCE_20261030.md"
       ],
       "remaining": [
-        "Freeze actual matched consumer variants and device artifacts",
-        "Independent pilot and justified session count",
-        "Formal balanced sessions, regression budget and energy method"
-      ]
+        "Freeze new exact device/artifact/window/cadence/budget/timeout profile before any new device pilot",
+        "Implement and qualify a live collector; current v2 entry point is offline only",
+        "Defend outer inference and achieved precision separately from pilot feasibility",
+        "BIL production baseline and energy/resource regression remain separate"
+      ],
+      "scoped_status": {
+        "host": "PASS_FUNCTIONAL_ORACLES_AND_OFFLINE_TOOLING",
+        "independent_arm64_retry1": "COMPLETE_CAPTURE_PERFORMANCE_INCONCLUSIVE",
+        "BIL_product": "NOT_STARTED_NO_INTEGRATION",
+        "new_v2": "HOST_FUNCTIONAL_ONLY_PROTOCOL_DRAFT_DEVICE_NOT_STARTED"
+      }
     },
     {
       "id": "MM-004",
@@ -478,7 +489,7 @@
       "dependency_contract": "MM 003、MM 008",
       "acceptance": "system/arena/成熟后端同条件比较；A1→A3净增量、接口/迁移成本归因，保留回归结果",
       "status": "BLOCKED",
-      "implementation": "IMPLEMENTED_REAL_DEX_A1_NATIVE_SYSTEM_A3_INSTALLED_ARENA_PAIRED_HARNESS",
+      "implementation": "HISTORICAL_A1_A3_AND_NEW_FOUR_SOURCE_STRATEGY_HARNESS",
       "functional_validation": "PASSED_HOST_AND_REAL_ARM64_COMPLETE_54147_METHOD_QUERY",
       "device_validation": "PASSED_API37_ARM64_4K_SELECTED_WORKLOAD",
       "performance_validation": "INCONCLUSIVE_COMPLETE_32_BLOCKS_TIME_TREND",
@@ -490,7 +501,10 @@
         "bench/real-dex-workload.json",
         "artifacts/arm64-20261030/paired/report.json",
         "artifacts/arm64-20261030/paired-retry1/report.json",
-        "docs/PERFORMANCE_A1_A3.md"
+        "docs/PERFORMANCE_A1_A3.md",
+        "docs/RESEARCH_EVIDENCE_20261030.md",
+        "docs/DEX_BORROW_CONTRACT.md",
+        "artifacts/research-20261030/dex/functional_receipt.json"
       ],
       "remaining": [
         "No verified BIL production hotpath equivalence",
@@ -507,7 +521,10 @@
           0.02331589922167354
         ],
         "owned_backing_ratio": 1.0,
-        "adoption": "KEEP_SYSTEM_NO_BIL_CHANGE"
+        "adoption": "KEEP_SYSTEM_NO_BIL_CHANGE",
+        "new_v2_host_functional": "PASS_32_OF_32_REAL_INPUT_CASES",
+        "new_borrow_contract": "PASS_65_FROZEN_SDK_FILES_NO_SDK_MODIFICATION",
+        "new_device_performance": "NOT_STARTED_NOT_FROZEN"
       }
     },
     {
@@ -558,12 +575,16 @@
         "two_distinct_installed_consumers_host": "PASS",
         "parser": "REAL_DEXMEGUVIZ_BORROWED_SOURCE_QUERY",
         "image": "REAL_P6_FILE_INTEGER_LUMA_AND_BOX_BLUR",
-        "full_dependency_completion": "NOT_CLAIMED_MM_008_CPP_PARTIAL_OUTPUT_USED"
+        "full_dependency_completion": "NOT_CLAIMED_MM_008_CPP_PARTIAL_OUTPUT_USED",
+        "image_workspace_v2": "PASS_156_HOST_FUNCTIONAL_RESOURCE_CASES",
+        "ordinary_layout_resource_reduction": "VERIFIED_REQUESTED_BACKING_ONLY_NOT_MEMORY_INCREMENT_OR_RSS"
       },
       "evidence": [
         "consumers/dex/CMakeLists.txt",
         "consumers/image/CMakeLists.txt",
-        "artifacts/verification-20261030/consumers/receipt.json"
+        "artifacts/verification-20261030/consumers/receipt.json",
+        "docs/RESEARCH_EVIDENCE_20261030.md",
+        "artifacts/research-20261030/image/image_oracle_receipt.json"
       ],
       "remaining": [
         "Formal performance and device qualification of applicable real consumers",
@@ -647,7 +668,7 @@
       "acceptance": "最终 ELF、依赖闭包、实际 loader、真实页设备",
       "status": "PARTIAL",
       "implementation": "ANDROID_THREE_ABI_BUILDS_AND_STATIC_ELF_CHECKS_IMPLEMENTED",
-      "functional_validation": "STATIC_ELF_PASS_ONLY",
+      "functional_validation": "PASS_STATIC_ELF_AND_4K_ARM64_X86_64_FUNCTIONAL_SUBSETS",
       "device_validation": "PASS_4K_ARM64_AND_X86_64_EMULATOR_REAL_16KB_UNAVAILABLE",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
@@ -663,14 +684,16 @@
         ],
         "cpp_runtime": "STATIC",
         "actual_4k_x86_64_loader": "PASS",
-        "actual_16k_loader": "UNAVAILABLE",
-        "arm64_armv7_physical_execution": "UNAVAILABLE"
+        "actual_16k_loader": "UNAVAILABLE_NOT_EXECUTED",
+        "arm64_physical_execution": "PASS_API37_4K_CORE_C_CPP_HISTORICAL_ARTIFACTS",
+        "armv7_physical_execution": "UNAVAILABLE_NOT_EXECUTED"
       },
       "evidence": [
         "artifacts/verification-20261030/elf-x86_64.txt",
         "artifacts/verification-20261030/elf-arm64-v8a.txt",
         "artifacts/verification-20261030/elf-armeabi-v7a.txt",
-        "artifacts/verification-20261030/android-api34-x86_64-core.txt"
+        "artifacts/verification-20261030/android-api34-x86_64-core.txt",
+        "artifacts/arm64-20261030/safety/receipt.json"
       ],
       "remaining": [
         "Run real 16 KiB loader",
@@ -942,5 +965,73 @@
     "conditional_model_state": "RESEARCH_ARITHMETIC_ONLY_NOT_LOCAL_MEASURED",
     "measurement_template_rule": "Use nullable raw fields and exact artifact/workload identities; no model-to-measurement substitution.",
     "rule": "Preserve A0/A1 consumer attribution, applicable A2 storage controls, A3 core and optional A4 combination; report regression and migration costs. No product performance or energy estimate is asserted."
+  },
+  "research_followup_20261030": {
+    "scope": "FINITE_HOST_RESEARCH_ENGINEERING_DELIVERY_NOT_FULL_MM_COMPLETION",
+    "report_archive_sha256": "de1e57232d287ee86d2cca5287b0471b94838ba7bfce126e73ae0f32b8e05631",
+    "tasks": [
+      {
+        "id": "MM-003.R1",
+        "parents": [
+          "MM-001",
+          "MM-002",
+          "MM-003",
+          "MM-018"
+        ],
+        "status": "COMPLETE_SCOPED_OFFLINE_AUDIT",
+        "evidence": "artifacts/research-20261030/evidence_manifest.json"
+      },
+      {
+        "id": "MM-012.R2",
+        "parents": [
+          "MM-001",
+          "MM-003",
+          "MM-012"
+        ],
+        "status": "PASS_LOCAL_FROZEN_SDK_CONTRACT",
+        "evidence": "artifacts/research-20261030/dex/borrow_contract_gate.json"
+      },
+      {
+        "id": "MM-012.R3",
+        "parents": [
+          "MM-003",
+          "MM-012"
+        ],
+        "status": "PASS_HOST_FUNCTIONAL_ONLY_DEVICE_NOT_STARTED",
+        "evidence": "artifacts/research-20261030/dex/functional_receipt.json"
+      },
+      {
+        "id": "MM-003.R4",
+        "parents": [
+          "MM-003"
+        ],
+        "status": "PASS_OFFLINE_TOOLING_DRAFT_NOT_FROZEN",
+        "evidence": "artifacts/research-20261030/offline_validator_receipt.json"
+      },
+      {
+        "id": "MM-014.R5",
+        "parents": [
+          "MM-012",
+          "MM-014"
+        ],
+        "status": "PASS_HOST_FUNCTIONAL_RESOURCE_ONLY",
+        "evidence": "artifacts/research-20261030/image/image_oracle_receipt.json"
+      },
+      {
+        "id": "MM-022.R6",
+        "parents": [
+          "MM-002",
+          "MM-010",
+          "MM-020",
+          "MM-021",
+          "MM-022"
+        ],
+        "status": "COMPLETE_SCOPED_LEDGER_NO_BIL_IMPLEMENTATION",
+        "evidence": "docs/CANDIDATE_EXIT_GATES.md"
+      }
+    ],
+    "device": "NOT_USED_THIS_BATCH",
+    "BIL": "UNCHANGED_NOT_INTEGRATED",
+    "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE"
   }
 }

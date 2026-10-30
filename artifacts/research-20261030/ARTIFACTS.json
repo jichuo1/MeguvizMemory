@@ -1,0 +1,1518 @@
+{
+  "schema_version": 1,
+  "scope": "RESEARCH_NEXT_BATCH_HOST_FUNCTIONAL_AND_ARM64_CROSS_BUILD_PROVENANCE",
+  "integrity_checks_passed": true,
+  "integrity_scope": "IDENTITY_AND_RECEIPT_CONSISTENCY_NOT_PERFORMANCE_QUALIFICATION",
+  "evidence_counts": {
+    "historical_blocks": 32,
+    "historical_tasks": 128,
+    "dex_host_cases": 32,
+    "image_host_cases": 156,
+    "offline_validator_cases": 36
+  },
+  "new_consumer_provenance": {
+    "identity": "DIRTY_SCOPED_SOURCE_HASH_BUILD_BEFORE_DELIVERY_COMMIT",
+    "compiled_from_report_commit": false,
+    "rule": "Receipt source/executable hashes and current scoped source lock are checked separately; no report or delivery commit is asserted as the compiler input.",
+    "host_image_source_limit": "Host image receipt embeds executable/verifier hashes; current native/CMake source hashes are additionally locked by the arm64 cross-build receipt, not embedded in the host executable.",
+    "host_image_runtime_limit": "Image receipt does not embed a loaded-library hash; the current installed DLL matches the original SDK and DEX receipt. This is not retroactive image-loader proof."
+  },
+  "original_sdk": {
+    "compiled_source_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
+    "identity_preserved": true,
+    "manifest": {
+      "path": "ARTIFACTS.json",
+      "bytes": 14482,
+      "sha256": "5d2b817e667c2166ef29a9b23828e3e0feb759ad82ad4aa2c32f0bb738dbc654",
+      "roles": [
+        "original_sdk_manifest",
+        "current_source_lock_entry"
+      ]
+    },
+    "local_archive_identities": [
+      {
+        "path": "dist/MeguvizMemory-0.1.0-Windows-x64.zip",
+        "bytes": 40231,
+        "sha256": "06e8819ca49677339d1e54bde18f1d721d156d18cd34c16de128656398cba63e",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      },
+      {
+        "path": "dist/MeguvizMemory-0.1.0-Windows-x64-static.zip",
+        "bytes": 76288,
+        "sha256": "ee4550ef70c1a9c1bcfe1587901438b2212283e880ab1401394f03d2b1e39e26",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      },
+      {
+        "path": "dist/MeguvizMemory-0.1.0-Android-x86_64.zip",
+        "bytes": 1212230,
+        "sha256": "6b0f09e77c90eb95681a72b67610fc17542a535d9c937f916f33b51861adecb7",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      },
+      {
+        "path": "dist/MeguvizMemory-0.1.0-Android-arm64-v8a.zip",
+        "bytes": 1219380,
+        "sha256": "22de54e694b8ac4ac31e8ae07b4fe90c429711967cf1f992072ba48e8da96739",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      },
+      {
+        "path": "dist/MeguvizMemory-0.1.0-Android-armeabi-v7a.zip",
+        "bytes": 1145322,
+        "sha256": "1d65000b8e945dea8a531884377d39eeef24b98f38a0dcaa0fe0cee8b0ec1118",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      },
+      {
+        "path": "dist/MeguvizMemory-0.1.0-DexConsumer-inputs.zip",
+        "bytes": 2998877,
+        "sha256": "c4c409fec90549f0b6140bf11e8150426ba3e749e0d8ef2be00637177e3c0239",
+        "roles": [
+          "local_archive_identity_only"
+        ],
+        "available_locally": true,
+        "body_copied_or_published": false
+      }
+    ]
+  },
+  "current_source_lock": {
+    "path": "SOURCE_LOCK.json",
+    "bytes": 27864,
+    "sha256": "d990b46423aa49e37441b5fa077e738f2becafd52b86ef903ee31c551705a4c3",
+    "roles": [
+      "current_scoped_source_lock"
+    ]
+  },
+  "historical_source_lock": {
+    "path": "artifacts/research-20261030/historical-source-lock.json",
+    "bytes": 23999,
+    "sha256": "76ed99a47e38d34445fb1a11da4cc9e3a88918c323a27372905b8361c54c0581",
+    "roles": [
+      "receipt",
+      "reference"
+    ]
+  },
+  "files": [
+    {
+      "path": "artifacts/research-20261030/arm64_cross_build.json",
+      "bytes": 3999,
+      "sha256": "a896244b2fc3829338115f506563d94de54e63f21951d9935ba8d3be752e020f",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/dex/borrow_contract_gate.json",
+      "bytes": 18235,
+      "sha256": "2aff1efce7e5736adef3652ee37392e9e757c2f8c546fd0949b407bda293ee71",
+      "roles": [
+        "receipt",
+        "reference"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/dex/functional_receipt.json",
+      "bytes": 95228,
+      "sha256": "685d27d4d73763fdd0bff70ce9399f5e13e14cd73a110275c3a655a3256a6ec9",
+      "roles": [
+        "receipt",
+        "real_host_payload_adapter_source"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/evidence_manifest.json",
+      "bytes": 2606,
+      "sha256": "e31244623955a7de9ede7fe535e68f2f43576c61f0ef1a4a5e7c0cc5fe45648d",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/historical-source-lock.json",
+      "bytes": 23999,
+      "sha256": "76ed99a47e38d34445fb1a11da4cc9e3a88918c323a27372905b8361c54c0581",
+      "roles": [
+        "receipt",
+        "reference"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/image/image_oracle_receipt.json",
+      "bytes": 410654,
+      "sha256": "4300f61af95e88fcfdd46d9da641c14e56ad4737f2e97ccd73babe33383690db",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/image/workspace_model_check.json",
+      "bytes": 23845,
+      "sha256": "168e0fa62c9b03395e7f6789a525affcce0e49ec2d98aaacfa675e3a649aa9e8",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/independent_recompute.json",
+      "bytes": 854,
+      "sha256": "a5d8a157629644b43d7e879d4f8709ec5398205de70f2612ecedec8d0bd054fb",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/offline_validator_receipt.json",
+      "bytes": 10907,
+      "sha256": "7b5d95e36b7192147e8c5a751741fce1fd5e8af4b75945ed3a9eecfb748c70c7",
+      "roles": [
+        "receipt"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/scoped_status_diff.md",
+      "bytes": 768,
+      "sha256": "fdb9479884283283b31cb85f450456ac46eb3d1e512844848dd672c0f1067d48",
+      "roles": [
+        "scoped_state_explanation"
+      ]
+    }
+  ],
+  "binary_artifacts": [
+    {
+      "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2",
+      "bytes": 15069328,
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+      "roles": [
+        "arm64_cross_build_binary"
+      ]
+    },
+    {
+      "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2_diagnostic",
+      "bytes": 15082968,
+      "sha256": "cf6968e23ff0a04eed869909a86f0ad9d7619a9cd7f4843de31a8deac870bc2d",
+      "roles": [
+        "arm64_cross_build_binary"
+      ]
+    },
+    {
+      "path": "build/dex-borrow-v2/mgmem_dex_paired_v2.exe",
+      "bytes": 465408,
+      "sha256": "7e7928ba5ad26b319fd5df8e89c7fd869ca9f68f3bfe5b0465432b84a3a04992",
+      "roles": [
+        "host_consumer_binary"
+      ]
+    },
+    {
+      "path": "build/dex-borrow-v2/mgmem_dex_paired_v2_diagnostic.exe",
+      "bytes": 466432,
+      "sha256": "694f4f5ad74eef96d7dcf65678297a8d9cd1e6b257714213bd89f1b0880691c1",
+      "roles": [
+        "host_consumer_binary"
+      ]
+    },
+    {
+      "path": "build/image-v2-arm64/mgmem_image_paired",
+      "bytes": 3440464,
+      "sha256": "bec4e946349b9e3ed317aab9f7f36609fcbb3aeccdc86e4270c51aaf46b61bd0",
+      "roles": [
+        "arm64_cross_build_binary"
+      ]
+    },
+    {
+      "path": "build/image-v2/mgmem_image_paired.exe",
+      "bytes": 68096,
+      "sha256": "6013d55c84e2b459297a27ef06467a9a0c09571d18451a757c8ee5bf1e527b0c",
+      "roles": [
+        "host_consumer_binary"
+      ]
+    },
+    {
+      "path": "install/android-arm64-v8a/lib/libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+      "roles": [
+        "arm64_cross_build_binary"
+      ]
+    },
+    {
+      "path": "install/host/bin/mgmem.dll",
+      "bytes": 32768,
+      "sha256": "cf459867b51ad8c12c3a9a6b0eb5f374659168ac0efa5754b57ebeeacbfe8c50",
+      "roles": [
+        "installed_runtime"
+      ]
+    }
+  ],
+  "source_and_protocol_files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 298,
+      "sha256": "dca00a5d378d9dc9f869226e9baf2be34e37600576a6d1902e4f0dc01d8f3961",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": ".github/workflows/core.yml",
+      "bytes": 3069,
+      "sha256": "7d795a263d0707c7f8485ed72db464deb51c0dddf3d507258c4c8ddccf6fbf82",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 371,
+      "sha256": "37c2c5f4998609baaea2418952df01f598cdbdef548849c781b52806377e29a7",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "ARTIFACTS.json",
+      "bytes": 14482,
+      "sha256": "5d2b817e667c2166ef29a9b23828e3e0feb759ad82ad4aa2c32f0bb738dbc654",
+      "roles": [
+        "original_sdk_manifest",
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "CAPABILITY_MATRIX.json",
+      "bytes": 3913,
+      "sha256": "572a43802f3857bed14ca0cd923c13c317a81606d7a8f417032ac99fba36a97a",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 5416,
+      "sha256": "5de251c0376223a0663e788a2004eed02f1cb159fd60774512eb9f24382ace61",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "README.md",
+      "bytes": 4418,
+      "sha256": "e9b1b2ce22c66414a44870b9d5cd611c8685108fdaa592ebd67f57d9b11783d5",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "SOURCE_LOCK.json",
+      "bytes": 27864,
+      "sha256": "d990b46423aa49e37441b5fa077e738f2becafd52b86ef903ee31c551705a4c3",
+      "roles": [
+        "current_scoped_source_lock"
+      ]
+    },
+    {
+      "path": "STATE.md",
+      "bytes": 4956,
+      "sha256": "9b52dc427d6104341d84a56352e72ffa6bd4b9f5caf36047173e2b579e35d847",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "TASKS.json",
+      "bytes": 43065,
+      "sha256": "21994f122eab448964bd8023d820f08c9a39ab95514959b70ef4a094597a916b",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "artifacts/research-20261030/dex/functional_receipt.json",
+      "bytes": 95228,
+      "sha256": "685d27d4d73763fdd0bff70ce9399f5e13e14cd73a110275c3a655a3256a6ec9",
+      "roles": [
+        "receipt",
+        "real_host_payload_adapter_source"
+      ]
+    },
+    {
+      "path": "bench/TLB_QUALIFICATION.json",
+      "bytes": 9419,
+      "sha256": "b0a0c00ec9973791f91c0922793c4e50e562dfcaa8f99e58d713b889c8f30f88",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/dex_borrow_v2.json",
+      "bytes": 4915,
+      "sha256": "ce294e5884a622b48c00deae6890ef3f636c12e4319b25ea6a69db9e1b852d54",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/image_workspace_v2.json",
+      "bytes": 4733,
+      "sha256": "791474007f66398b72cc953728e5950efb1bcded573d9887da4cbd9daf4a8955",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/paired_protocol_draft.json",
+      "bytes": 11605,
+      "sha256": "bd61f6e5b86d4833eafc6df7576d83dda23e6867d3ea36260920a0a682d357b1",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/paired_protocol_resolved.json",
+      "bytes": 3434,
+      "sha256": "b5f10c45da1a187fa5c8ed0bfd898134d15fccf25af3164db98f3204a00783ff",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/paired_protocol_retry1.json",
+      "bytes": 4405,
+      "sha256": "7e864ad7ea74e26857cf9a04c9ac162fc20bff1b71bf9ac5a6d32cf1e8592492",
+      "roles": [
+        "current_source_lock_entry",
+        "protected_historical_evidence"
+      ]
+    },
+    {
+      "path": "bench/paired_protocol_v2_draft.json",
+      "bytes": 4612,
+      "sha256": "e8b25a3d3e518e2094c61cb436674a66097bf01f73083f02ab65691791acf958",
+      "roles": [
+        "current_source_lock_entry",
+        "draft_protocol",
+        "offline_test_protocol"
+      ]
+    },
+    {
+      "path": "bench/protocol.json",
+      "bytes": 8773,
+      "sha256": "7f7a55126cd57a1f26dcff10e33482c5751879f2fe4ed9aca79f741c000ccb3d",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/real-dex-workload.json",
+      "bytes": 3385,
+      "sha256": "f3bd6590154290a6346c147765fcd08afeec31211f3ee2c6fb9a342a22f54c82",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "bench/tlb_owned.cpp",
+      "bytes": 14615,
+      "sha256": "ab834fd60b02b6ccfa107b1af2efd16514cee28316c3747d7d45867705ed9e31",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/AGENTS.md",
+      "bytes": 1528,
+      "sha256": "ea6f523b12b1d5c6da868332edcb5957dba544c280fcb1ec4119a8e5f7ec7173",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/CMakeLists.txt",
+      "bytes": 53278,
+      "sha256": "b5948dc567cf7a4be846c49aa93c71768d10239fc8bf7e08e6a1a593f040bb77",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/CMakePresets.json",
+      "bytes": 761,
+      "sha256": "73f89b73b14fb167168803db7459373a0e8ab8f6be68dcb063292d7f6d0169a5",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/DexMeguviz_Engineering_Plan.md",
+      "bytes": 98106,
+      "sha256": "a1b585748f170f699d5f7eaaa27bfbe220234c4f0999281befa3267828b5e809",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/PROJECT_STATUS.json",
+      "bytes": 6527,
+      "sha256": "d2b5e774df60cf9959012123562192f17b58fe91a956faf91ddd8ef541feeb79",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/README.md",
+      "bytes": 7696,
+      "sha256": "9494e44d87f508bd6eb0a528873b43331708c599378b34bd72776269b63c0b74",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/THIRD_PARTY_NOTICES",
+      "bytes": 1105,
+      "sha256": "858cd5f15c5567248409c437742e31070b44806053e7d969ebbaa163033cfc84",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/backlog.json",
+      "bytes": 69247,
+      "sha256": "9122fb993674e280ba1b85dc877ace3ad73491fa0587d37dc0e3117a3a0e8390",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/cli/diff/dexdiff.py",
+      "bytes": 23993,
+      "sha256": "3729987e838f345b77b24899456465fb8c7dc058363bca613099629c6d4c9e17",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/cli/json.hpp",
+      "bytes": 9228,
+      "sha256": "4eeeb84c8f08e2d0a8bc2df1f6595fb105609feceb2894ea1164adfce76230f6",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/cli/main.cpp",
+      "bytes": 63429,
+      "sha256": "179c6c1c7f4169b4a83da154ddea656c63d462662b26cff2fa27f45cba0addb4",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/cmake/dependencies.cmake",
+      "bytes": 1099,
+      "sha256": "4c037abb5d9dc898f8e7db6244ee94a8f26e948148f0135b7e53015419b1a73b",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/cmake/fuzz.cmake",
+      "bytes": 2827,
+      "sha256": "8274f8e94aa2cac1881ead76af25cb308bf53c96a0eb6609d32754bee073f34d",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/dex-handoff-2026-10-28.md",
+      "bytes": 3522,
+      "sha256": "3566885863b8f8b071d1fed0e860b121d5a892489015ec932d0e015c49062d8d",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/include/dexmeguviz/dexmeguviz.h",
+      "bytes": 22556,
+      "sha256": "c0ef3f65ba0900f5c4e9ab6159a107b3d7cf80f49b73697acc7f006a58abda7f",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/analysis/cfg/cfg.cpp",
+      "bytes": 14221,
+      "sha256": "b302ed86ee9bff78bc53327228447c9bd122b5abc64f04c1f1bd9ce1885b04d2",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/analysis/cfg/cfg.hpp",
+      "bytes": 2795,
+      "sha256": "469c41bd8898f8dc53028e925fa220c999ac35dcb902a123cbe7e4d8a193f5a9",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/analysis/dataflow/dataflow.cpp",
+      "bytes": 9845,
+      "sha256": "4fc36ff1ad3833acf22d02063e149966c61298f9e294b638de2e24c8f661ba6d",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/analysis/dataflow/dataflow.hpp",
+      "bytes": 1633,
+      "sha256": "dc28f40fb35d0f557bf2b4eb1feb4dfdd8f5f65f5cd3d74a5ec4d4bd7276bab2",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/c_api/api.cpp",
+      "bytes": 12881,
+      "sha256": "d682c8c0bdb8803b9ebadb5af7de79af4fa782a3ff47fd69d08e6b99d4ada25c",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/c_api/job.cpp",
+      "bytes": 13343,
+      "sha256": "277264c547013167c910ecc649623ed269ba534165426b62313ba1bb5ec8f824",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/c_api/query_execution.cpp",
+      "bytes": 22269,
+      "sha256": "63fe44315eaf3337545373c94f21270a0a6bf40ce6ea276ea085b0d68e317f6a",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/c_api/runtime.hpp",
+      "bytes": 25642,
+      "sha256": "5c65028a4c4e9ac1133235e8609f321d76006b6f8b9dfc7f1a3b03e828d95a1d",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/c_api/source_input.cpp",
+      "bytes": 15502,
+      "sha256": "8a97781b36a3b622878606fbf150063e48874ee56ea11a0bcb53413343a9e822",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/budget/account.hpp",
+      "bytes": 4594,
+      "sha256": "b1394d6bb9e36b70c25584324920fd3f512b101b30e39085ed0ce9773c76a7ec",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/entity.hpp",
+      "bytes": 6097,
+      "sha256": "9f4b5066d559452cab98719f7b2d5b835b28909ecc8d58fab33b38963f92cedb",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/evaluate.cpp",
+      "bytes": 39019,
+      "sha256": "3ae71f8e19274e93e0b217bde28abe517cab4d288b2216f8d49f49567201d82f",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/evaluate.hpp",
+      "bytes": 5467,
+      "sha256": "cb79b4b6b4cb887ac0ee44400fefe30a9accf4b700a452a15b4564e7d6f02d18",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/hierarchy.hpp",
+      "bytes": 6725,
+      "sha256": "6c301d84f934ddea31450e160299a786f85b8be6ecfa0c1ed01f9adf4f9679a7",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/inherited_fields.hpp",
+      "bytes": 7199,
+      "sha256": "43a8a4780f737109ef51059eecf93acae4d79efedb00243929b99d72a70c91a4",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/interface_fields.hpp",
+      "bytes": 12582,
+      "sha256": "39c405dcc239cda6a7f24d34a69ea239fd38d2a01c8ee4d8ce831d080d03b33e",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/interface_fields_v11.hpp",
+      "bytes": 15609,
+      "sha256": "dca735fe5db9fc38bc08085954354983471819ea08ad75d573828bdfffa73ad0",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/execution/reference/relational.inc",
+      "bytes": 38317,
+      "sha256": "c888bd41705cbd7a312eba7baa849d5f4396b13fbf2dc2076a61af4914952a27",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/README.md",
+      "bytes": 6775,
+      "sha256": "2cad883de8a8253343962f9342642f8b71279b739492c6b0e0ea227be1423f14",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/method_facts.cpp",
+      "bytes": 2884,
+      "sha256": "e312d51be88046b07e3a84259b54cce9e1bfaf0ac17c27144d0ab125c796bc8b",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/method_facts.hpp",
+      "bytes": 1880,
+      "sha256": "eeacc977f908f97368cd9d98312ecd2bfe8b1c8bcae503bdf7c572bb20e76a6d",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/symbols.hpp",
+      "bytes": 3590,
+      "sha256": "8bb9797a1854fdafc65c13f3d268fe9e186522dd0f63a5300bc3437849a39cdd",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/use_relations/use_scan.cpp",
+      "bytes": 6079,
+      "sha256": "b5df32c5fe1eae33e12f5092c250240c450d1582f5a2dab7d882e4a252232227",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/facts/use_relations/use_scan.hpp",
+      "bytes": 3003,
+      "sha256": "50cc2addbe671da538d06272c96a08e4f2767708f446af4db2604cb1b3437f61",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/checked_leb128.hpp",
+      "bytes": 1725,
+      "sha256": "d1130c3c888fa6850d2fcf2ba4576f9503011c2baf81151b81d09da954cdab20",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/debug_positions.cpp",
+      "bytes": 8546,
+      "sha256": "cb1986766012b6cbbf34d01dd783d85fb2b24558d324f7a592b6acff1f9c87fa",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/debug_positions.hpp",
+      "bytes": 2127,
+      "sha256": "e0494bc3b7d57d1541e636e90b2dfef844efa37aaebf742d77f67f5e07937103",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/instructions/README.md",
+      "bytes": 5093,
+      "sha256": "88180151670a8eeeb2a770400b27277ad5c7c16f6f0797ad774044cfbba14ace",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/instructions/decoder.cpp",
+      "bytes": 23874,
+      "sha256": "ed24e5cd4a796377afa099038e503e66b01bcd6e51937391afec52680bfb7de0",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/instructions/decoder.hpp",
+      "bytes": 4091,
+      "sha256": "c3c101a9585cbc8ca598603897a1ea007b8cb286d7fb20a1e88cc002624c475a",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/reader.cpp",
+      "bytes": 61142,
+      "sha256": "40b7e4edeefa74b512ff69032b1af45763dddd7a443266f85ebd54cb10cf177e",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/format/reader.hpp",
+      "bytes": 5204,
+      "sha256": "d1a943ab76ceb6f142d5aded737faf7b9d2642989a8d729e9400a761cb8cfaba",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/query/compile.cpp",
+      "bytes": 51385,
+      "sha256": "a9b96f87d3a2e412b48cbd204589f0035dfae79bd0df54d6e773f4bf5a1c29a0",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/query/ir.hpp",
+      "bytes": 5368,
+      "sha256": "42d33c8b11b20141251958b440e24b233684a846d25114301c3b2bd2fe98f0c0",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/query/json.hpp",
+      "bytes": 8503,
+      "sha256": "1c06fd2b1dd99e122925a6a29b4066d18ef9a48026158892e3e2dbedfc2338df",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/query/numeric_match.hpp",
+      "bytes": 2351,
+      "sha256": "7ed6af0856287db1e8e510fd0725d53e322818806e7435aea72e0547e9441c7e",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/query/reflection_flags.hpp",
+      "bytes": 1797,
+      "sha256": "d72cf53572ed3d2880172c872e65d16e0f5e7f280af90941ff066e2e04e0ea7b",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/source/archive/archive.cpp",
+      "bytes": 23404,
+      "sha256": "c3937c2c322bc2b00d724a8c558975648b25181801d42be43e54dfbeae343343",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/source/archive/archive.hpp",
+      "bytes": 2041,
+      "sha256": "58202bc68cc87ca796dd716af03abc99486276c1c3713642e4743d6c66933a59",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/source/sha1.hpp",
+      "bytes": 1765,
+      "sha256": "c1a0fdc9f9cafaf3b40df80bbdc6a9415d76b1a1b3aba59acbb3aa83dd0fd0d5",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/src/source/sha256.hpp",
+      "bytes": 2852,
+      "sha256": "00680f200e5b9a5077dc662c6281ab400492a004126ca9d0d12215837848d37c",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/miniz/LICENSE",
+      "bytes": 1184,
+      "sha256": "0115478d567121238cf6cc1c0c361926cf07a49d9e4c9e66da97fac6a01646b3",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/miniz/miniz.c",
+      "bytes": 350352,
+      "sha256": "e2c1aeb66eef9191d8c3feb164db2def2335a61d039bf04ed849f6b042433b30",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/miniz/miniz.h",
+      "bytes": 76822,
+      "sha256": "b53b62ed122e559b8f679e3cb787a0b0035fe87a58f909da0e44931678f4e85f",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/miniz/upstream-lock.json",
+      "bytes": 1891,
+      "sha256": "c79b1b1d582434401f8c58c67ba2ec4693526e3fe2282da5d1389e928ab3332a",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/sqlite/UPSTREAM-NOTICE.txt",
+      "bytes": 304,
+      "sha256": "eeb865eb9ee7eec90f9dc3d5536f33ba74528e97c8ba021bee61a6ee135463d5",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/sqlite/sqlite3.c",
+      "bytes": 9582521,
+      "sha256": "0c657666d819f261cc4007526ad57e1669de9949df7a8ea847aa284a2bf0ee52",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/sqlite/sqlite3.h",
+      "bytes": 695729,
+      "sha256": "d6c84557261893439b341d2e6c35187ae3ea24fbfd843ad94616f72d89242b8c",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/sqlite/sqlite3ext.h",
+      "bytes": 39547,
+      "sha256": "48963abfefb41ac329ef9d706acb5eadba952a99a748285c9ded6b5e0942721b",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "build/locked-inputs/DexMeguviz/third_party/sqlite/upstream-lock.json",
+      "bytes": 1710,
+      "sha256": "ff242decb438cd916cd9a7f141e9c89639f95f0f64b461f898101e3610e7a908",
+      "roles": [
+        "current_source_lock_entry",
+        "frozen_sdk_source"
+      ]
+    },
+    {
+      "path": "cmake/MeguvizMemoryConfig.cmake.in",
+      "bytes": 179,
+      "sha256": "46b192f9cf495c3d28c8755e30584375d206a3d04dc7c7ae4b6b3ee0cff06491",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "bytes": 2331,
+      "sha256": "d0e0319d00aa687e81abbad97c08eaedbb204eff6dd9d2e97b4c6b21719a3108",
+      "roles": [
+        "current_source_lock_entry",
+        "dex_build_source",
+        "arm64_consumer_build_source"
+      ]
+    },
+    {
+      "path": "consumers/dex/main.cpp",
+      "bytes": 13405,
+      "sha256": "1cff9621e97f631dee98930ca14440d73d99542743fd7ff58140418b76ef4785",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "consumers/dex/paired.cpp",
+      "bytes": 20796,
+      "sha256": "ca1795d5db4871b1c842267b12037c5f6b308769074e93f4d32b8525f7f351a1",
+      "roles": [
+        "current_source_lock_entry",
+        "protected_historical_evidence"
+      ]
+    },
+    {
+      "path": "consumers/dex/paired_v2.cpp",
+      "bytes": 26574,
+      "sha256": "1b156fc937b05a04e2c772c876ede193a05d0d1340a93d65301f7a202c37b577",
+      "roles": [
+        "current_source_lock_entry",
+        "dex_build_source",
+        "arm64_consumer_build_source"
+      ]
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "bytes": 853,
+      "sha256": "0f930fff347a5b141a11bf1ff9e36f67c4887dc95b3590fa51ede61878d7b9b3",
+      "roles": [
+        "current_source_lock_entry",
+        "arm64_consumer_build_source"
+      ]
+    },
+    {
+      "path": "consumers/image/main.cpp",
+      "bytes": 7412,
+      "sha256": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "consumers/image/paired.cpp",
+      "bytes": 18129,
+      "sha256": "b5d62b2ef7275ba6a7ecdf8ee8b889e89fc4a033a1bbd00d924fe09473b77b9b",
+      "roles": [
+        "current_source_lock_entry",
+        "arm64_consumer_build_source"
+      ]
+    },
+    {
+      "path": "docs/ADR-001-ownership-and-abi.md",
+      "bytes": 4950,
+      "sha256": "ebb4162d71e911fa0cf3f0ffa4d7fc0a93df17e0e233273571467c2b052852b6",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/ALLOCATION_OWNERSHIP.md",
+      "bytes": 3160,
+      "sha256": "1a9b2f60fc9777f8003ef11d0ea23afa8190403c76e9c2a8094d5449ecc43240",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/ARM64_VALIDATION.md",
+      "bytes": 9675,
+      "sha256": "ae811bbf88a43838d5e6bc36affe6580ff2ad3bbe0bec87f6d7b0ba33dbef34f",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/BASELINE_PROTOCOL.md",
+      "bytes": 8089,
+      "sha256": "05afa074961c1927bd61f8fe44f65b96a622f7a25cad35b2dd7b8fb8e12386f5",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/BENCHMARK_RESULTS.md",
+      "bytes": 2427,
+      "sha256": "45ad16f1366fd22160f4e0d4735b629632887ed27956f1bc8da8df5a22754897",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/BIL_ADOPTION_DECISION.md",
+      "bytes": 4888,
+      "sha256": "1a4238934cd6d1eda8e2596a239a7c26bb8316c734dc9636589bec064604b0b0",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/BIL_CPU_CANDIDATES_00572940.md",
+      "bytes": 2979,
+      "sha256": "c339dc24c40aef7f8aa6393b49c41cd9c962c0b3130859fc4b3eaa652004bff8",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/CANDIDATE_EXIT_GATES.md",
+      "bytes": 2102,
+      "sha256": "4bd94170b0ff1e95e5e272d34d8fe494203da3aa9d6a7fd38baa11f56e38800c",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/DEX_BORROW_CONTRACT.md",
+      "bytes": 7049,
+      "sha256": "adfa210a783e4efd99c73beb65a797ac5f8095b518f9e18367e6822d9f0286b1",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/INTEGRATION.md",
+      "bytes": 10520,
+      "sha256": "55ce93cfab2112f540b28ded79b464bf449e2fccfc9d4e7b69bca69447db5312",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/MECHANISM_CLAIMS_20261030.md",
+      "bytes": 3424,
+      "sha256": "a24a20c062975f77abaec74d5c0fd0f53ad9b1a6d6eda5656157c93b5b611c1a",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/PERFORMANCE_A1_A3.md",
+      "bytes": 8894,
+      "sha256": "6742c7a1bc594f5784151616e1e94e12079cbb73fb178381050c7065d9192928",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/PROTOCOL_FREEZE_CHECKLIST.md",
+      "bytes": 8253,
+      "sha256": "220ae64a060fe0c063883159c9dcf3b03d6ed9954175362e0a962168fabdab80",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/RESEARCH_EVIDENCE_20261030.md",
+      "bytes": 4715,
+      "sha256": "bb55f697dd5dfb1c390b1b3947f97a673f91b35d98e8a8e45ccd395a57f3a447",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/VERIFICATION.md",
+      "bytes": 8448,
+      "sha256": "6c23c12acb7f2c8c09e786a1f46c748a1883ef9d69b3abf372d97cb82c5d006b",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/audit/consumers.md",
+      "bytes": 16161,
+      "sha256": "274ed27ad319cc72d8e3001ed16e2f727ab662f73fa422e8d3dc9b5c876247d2",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/audit/cpu-candidate-20261030.md",
+      "bytes": 8371,
+      "sha256": "0b0ecf5af2146e22f2042d389dc5e91fc4436b631d083d002c091783b640d47a",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/audit/device-occupancy-20261030.md",
+      "bytes": 4542,
+      "sha256": "6859166b7ce1fb802d61d7dad9aa34d33e1d223cb0b944be16105a198f50a915",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/audit/statistical-review-20261030.md",
+      "bytes": 5983,
+      "sha256": "38494de592977bc54d8952aaacba4bd1e9c89c97ffc6c5743806ded2f81d9c60",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "docs/research-review.md",
+      "bytes": 7926,
+      "sha256": "297e23eb070ed6804e26d8c28ac67a6827fbd587d3ec47b0e0c90d7314d7d2ef",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "include/mgmem/memory.hpp",
+      "bytes": 8758,
+      "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "bytes": 6222,
+      "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "src/mgmem.cpp",
+      "bytes": 24818,
+      "sha256": "72a8b622f9b6b52f4cbbf60db898f50f252b67b4d250b7f6b33d1bbaaabe28fc",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tests/c_consumer.c",
+      "bytes": 1456,
+      "sha256": "65269f393b8c86d3305ffc940c8cb92c04d74077cf7997e0cf4fcde12594a789",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tests/core_tests.cpp",
+      "bytes": 31501,
+      "sha256": "679c367c8148729150feae4a300c4be2eef070f62cfb64cc067802e4928b990d",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tests/cpp_consumer.cpp",
+      "bytes": 9526,
+      "sha256": "672e2deae248d5478af030cf623d0f4e72a3d11bf85f665b5de4155a8913c265",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tests/runtime_tests.cpp",
+      "bytes": 2418,
+      "sha256": "3790affd3475a5dd813257b37aae8874296ce4d84b5864412a1c5a3b1dbb29cb",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "third_party_notices/README.md",
+      "bytes": 525,
+      "sha256": "14398a48c99f662ecc22644f8f7516b2ee6c51931e743c97b2eed6e53e8ede0d",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "third_party_notices/llvm-NOTICE.txt",
+      "bytes": 130424,
+      "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/audit_paired_archive.py",
+      "bytes": 9651,
+      "sha256": "f303d52894f4008a6a9a071bd79c6d3be846d67273122b12ee25c260d631f476",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/host-build.cmd",
+      "bytes": 442,
+      "sha256": "4b8a019b87401147759e8ffe99326876f8963d6681ae16655fd3a318a8ca9946",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/paired_analysis.py",
+      "bytes": 20382,
+      "sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee",
+      "roles": [
+        "current_source_lock_entry",
+        "protected_historical_evidence"
+      ]
+    },
+    {
+      "path": "tools/paired_analysis_v2.py",
+      "bytes": 24413,
+      "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee",
+      "roles": [
+        "current_source_lock_entry",
+        "offline_validator_source"
+      ]
+    },
+    {
+      "path": "tools/record_arm64_evidence.py",
+      "bytes": 6974,
+      "sha256": "2e674cadbf42ea6b6304eef46b132946090cf4415fa83e8efe5f2576737acb6e",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/record_artifacts.py",
+      "bytes": 6918,
+      "sha256": "3627d5e90b0f697ca3006feea9789d350b2879ddf1e19ed679fb38f90f16d092",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/record_research_evidence.py",
+      "bytes": 17682,
+      "sha256": "2de0e906a7d58764eea395b2cb6d7e5451a9da8f7249bb5cb02a62416a86cc77",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/run_arm64_validation.py",
+      "bytes": 23760,
+      "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/run_paired_device.py",
+      "bytes": 33269,
+      "sha256": "e96af715bab510a4a6eccf237e095437620d4d97c7a8c670ccdca9889049a707",
+      "roles": [
+        "current_source_lock_entry",
+        "protected_historical_evidence"
+      ]
+    },
+    {
+      "path": "tools/run_paired_device_v2.py",
+      "bytes": 2047,
+      "sha256": "db87cfd26ac3eed8a8fb33e5d7d17f748943897f1addf8a0b789fd5ca4db7411",
+      "roles": [
+        "current_source_lock_entry",
+        "offline_validator_source"
+      ]
+    },
+    {
+      "path": "tools/source_lock.py",
+      "bytes": 7788,
+      "sha256": "9a303c1d2e01bcec56589f1d9369c8c4fc926465740b8ca3d6434b92905f03f3",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/test_audit_paired_archive.py",
+      "bytes": 2392,
+      "sha256": "a4268595df59757d3299e6b578b16edf859c1b97e8641bdf2533929c649b7991",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/test_capture_journal.py",
+      "bytes": 8803,
+      "sha256": "12673174cadb6b5032024b3d9dce289b4d3917a7e83d51c747a46ea86a981772",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/test_paired_analysis_v2.py",
+      "bytes": 16025,
+      "sha256": "487d54e1045c1ea2fc00e2b3c0efd0a20bde0a4db276b8e0ad1abba9f65f252a",
+      "roles": [
+        "current_source_lock_entry",
+        "offline_validator_source"
+      ]
+    },
+    {
+      "path": "tools/verify_consumers.py",
+      "bytes": 12518,
+      "sha256": "5718defa6af7f95566c0062f0ecea64833c3788dc7904ec5ed3ea36c8a20ba59",
+      "roles": [
+        "current_source_lock_entry"
+      ]
+    },
+    {
+      "path": "tools/verify_dex_borrow_v2.py",
+      "bytes": 9005,
+      "sha256": "3a27348a660f8491a24f566d184332fb6795cd5e5db0e7f5ef449a697a290355",
+      "roles": [
+        "current_source_lock_entry",
+        "dex_build_source"
+      ]
+    },
+    {
+      "path": "tools/verify_image_workspace_v2.py",
+      "bytes": 12374,
+      "sha256": "3dd0cd54a2e071eb05bc93a3a18d5f828bbefa7595dc70f3c01d2b5654e03310",
+      "roles": [
+        "current_source_lock_entry",
+        "image_verifier_source"
+      ]
+    }
+  ],
+  "historical_files_verified_unchanged": [
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+      "bytes": 649882,
+      "sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-plan.json",
+      "bytes": 8918,
+      "sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/report.json",
+      "bytes": 20413,
+      "sha256": "40fe90483845bc74d31f4175dbb39ef2e129d687a562ee9d732832d9c51ad729"
+    },
+    {
+      "path": "consumers/dex/paired.cpp",
+      "bytes": 20796,
+      "sha256": "ca1795d5db4871b1c842267b12037c5f6b308769074e93f4d32b8525f7f351a1"
+    },
+    {
+      "path": "tools/run_paired_device.py",
+      "bytes": 33269,
+      "sha256": "e96af715bab510a4a6eccf237e095437620d4d97c7a8c670ccdca9889049a707"
+    },
+    {
+      "path": "tools/paired_analysis.py",
+      "bytes": 20382,
+      "sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee"
+    },
+    {
+      "path": "bench/paired_protocol_retry1.json",
+      "bytes": 4405,
+      "sha256": "7e864ad7ea74e26857cf9a04c9ac162fc20bff1b71bf9ac5a6d32cf1e8592492"
+    }
+  ],
+  "qualification": {
+    "new_host_functional": "PASS_SCOPED_CASES_ONLY",
+    "new_arm64_cross_build": "PASS_BUILD_ONLY",
+    "new_device_execution": "NOT_PERFORMED",
+    "historical_performance": "INCONCLUSIVE",
+    "new_performance": "NOT_STARTED_PROTOCOL_NOT_FROZEN",
+    "BIL_integration": "NOT_SELECTED",
+    "actual_16KB_loader": "NOT_EXECUTED",
+    "MTE_HWASAN": "NOT_EXECUTED",
+    "RSS_PSS_energy_PMU_PFN": "UNQUALIFIED"
+  },
+  "privacy_and_recursion": "Explicit public receipt allowlist only. No APK/DEX or private artifacts/local, prompts, machine paths, binary/archive bodies, this manifest's own hash, or combined-bundle identity is included."
+}

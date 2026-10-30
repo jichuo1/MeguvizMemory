@@ -6,6 +6,8 @@
 /artifacts/arm64-20261030/paired/commands/
 /artifacts/arm64-20261030/paired-retry1/commands/
 /research/
+# Private preparatory indexes; publish reviewed summaries from docs/ instead.
+/docs/research/
 /.venv/
 __pycache__/
 *.user

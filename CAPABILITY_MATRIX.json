@@ -69,7 +69,7 @@
     "page_hint": "NOT_SELECTED",
     "slab": "NOT_SELECTED"
   },
-  "product_performance": "INCONCLUSIVE_INDEPENDENT_CPU_ONLY_BIL_NOT_INTEGRATED",
+  "product_performance": "NOT_STARTED_BIL_NOT_INTEGRATED",
   "energy_rss_pss": "UNAVAILABLE",
   "formal_release": "NOT_QUALIFIED_ENGINEERING_PREVIEW",
   "independent_arm64_cpu_experiment": {
@@ -96,5 +96,17 @@
     "RSS_PSS": "NOT_COLLECTED_NO_RESIDENCY_CLAIM",
     "energy": "NOT_MEASURED_NO_SAME_COMPLETED_WORK_ENERGY_METHOD",
     "PMU_PFN": "NOT_COLLECTED_MECHANISM_UNKNOWN"
+  },
+  "research_followup_20261030": {
+    "DEX_source_contract": "PASS_65_FROZEN_FILES",
+    "DEX_host_functional": "PASS_32_CASES",
+    "image_host_functional_resource": "PASS_156_CASES",
+    "protocol": "OFFLINE_VALIDATOR_PASS_DRAFT_NOT_FROZEN_NO_LIVE_COLLECTOR",
+    "new_arm64_binaries": "CROSS_BUILD_ONLY_NOT_EXECUTED",
+    "new_device_performance": "NOT_STARTED",
+    "RSS_PSS_energy": "NOT_MEASURED",
+    "mechanism": "NO_NEW_PMU_PFN_OR_TRANSLATION_EVIDENCE",
+    "ordinary_consumer_resource_savings": "VERIFIED_LOGICAL_CAPACITY_NOT_MEMORY_SPEEDUP",
+    "evidence": "docs/RESEARCH_EVIDENCE_20261030.md"
   }
 }

@@ -47,6 +47,8 @@ def scoped_files(root: Path, directories: tuple[str, ...], output: Path):
                                  not (Path(current) / child).is_symlink())
             for name in sorted(files):
                 path = Path(current) / name
+                if path.relative_to(root).as_posix().startswith("docs/research/"):
+                    continue
                 if path.is_file() and not path.is_symlink() and allowed(path) and path.resolve() != output:
                     yield path
     for path in sorted(root.iterdir(), key=lambda item: item.name):
@@ -124,6 +126,7 @@ def main() -> int:
             "External include/src/third_party/cmake and root build/manifests are a conservative superset of build inputs.",
             "Build/install outputs, Git internals, caches, symlinks and common secret/env files are excluded.",
             "Private research attachments are excluded from the public source-file list; optional archive identity contains only size and SHA256.",
+            "Private preparatory indexes under docs/research are excluded; reviewed public summaries are recorded from docs instead.",
             "A source-tree lock is not a clean-commit, build, install, runtime or release receipt."
         ],
     }

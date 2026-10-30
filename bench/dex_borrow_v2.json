@@ -1,0 +1,63 @@
+{
+  "schema_version": 2,
+  "experiment_id": "MM-012-dex-source-strategy-v2-20261030",
+  "state": "HOST_FUNCTIONAL_QUALIFIED_DEVICE_PERFORMANCE_NOT_FROZEN",
+  "old_experiments": "Preserved, never pooled with v2",
+  "contract_gate": "artifacts/research-20261030/dex/borrow_contract_gate.json",
+  "functional_receipt": "artifacts/research-20261030/dex/functional_receipt.json",
+  "workload": "dex_source_strategy_complete_owner_v2",
+  "input": {
+    "bytes": 10540184,
+    "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "methods": 54147,
+    "complete_method_and_text_checksum": "12701547145945416225",
+    "publication": "HASH_ONLY_REAL_INPUT_LOCAL"
+  },
+  "variants": {
+    "D-C0": "direct aligned System owner plus full copy, no Memory allocation/lease",
+    "D-Z0": "ordinary consumer strong A1, direct immutable borrowing of stable preloaded vector",
+    "D-C1": "Memory SYSTEM owner plus identical full copy and writer/read leases",
+    "D-C2": "Memory ARENA owner plus identical full copy and writer/read leases, one chunk and one allocation",
+    "D-Z1": "NOT_APPLICABLE_NO_VALIDATED_MEMORY_EXTERNAL_OWNER_IMPORT",
+    "D-Z2": "NOT_APPLICABLE_NO_VALIDATED_MEMORY_EXTERNAL_OWNER_IMPORT",
+    "A4": "NOT_SELECTED"
+  },
+  "attribution": {
+    "D-Z0_vs_D-C0": "ORDINARY_CONSUMER_COPY_ELIMINATION",
+    "D-C1_vs_D-C0": "MEMORY_MANAGEMENT_DIFFERENCE_SAME_COPY_CONTRACT",
+    "D-C2_vs_D-C1": "ARENA_VS_SYSTEM_SAME_COPY_AND_LEASE_CONTRACT",
+    "D-C2_vs_D-Z0": "WHOLE_STRATEGY_DIFFERENCE_NOT_ALLOCATOR_OR_TLB_ISOLATION",
+    "not_tested": ["parser internal allocator injection", "batch arena reset amortization", "BIL DexKit production path", "TLB mechanism"]
+  },
+  "timing": {
+    "formal_target": "mgmem_dex_paired_v2",
+    "diagnostic_target": "mgmem_dex_paired_v2_diagnostic",
+    "compile_time_separation": true,
+    "excluded": ["file preload and file close", "process startup", "dynamic loader"],
+    "included": ["strategy allocation and required copy", "SDK digest and parse", "complete method query and all text checksum", "snapshot released before final result consumption", "SDK results and engine release", "Memory close and final zero checks where applicable", "common preloaded vector final deallocation"],
+    "diagnostic_phases": ["owner_allocate", "copy_first_touch_and_lease", "engine_create", "snapshot_open_parse_digest", "info_and_retire", "query_and_complete_consume", "sdk_release", "memory_close", "source_final_release", "unattributed_residual"],
+    "notes": ["copy phase includes Memory lease APIs where applicable", "query phase includes early snapshot release before complete result consumption", "SDK release phase includes result destruction or Job join and final SDK callback", "Memory close phase includes final accounting, collect, drain, snapshot and destroy", "source phase includes vector deallocation, never a process RSS claim", "formal build has no diagnostic phase clocks but retains functional validation and accounting costs"]
+  },
+  "resources": {
+    "logical_requested_bytes": "input payload, not additive to backing",
+    "unique_owned_backing_peak_bytes": "additional strategy backing only, zero for D-Z0",
+    "external_source_capacity_bytes": "actual preloaded vector capacity in every group",
+    "borrowed_view_peak_bytes": "same source or input storage viewed by SDK, never another owned backing",
+    "source_plus_input_unique_capacity_bytes": "external source capacity plus unique additional input backing, parser and metadata excluded",
+    "retained_before_collect_bytes": "observed after final lease; one full chunk in D-C2, zero in other groups",
+    "arena_used_bytes": "historical used payload for the one-allocation arena before cleanup, zero for other groups",
+    "input_backing_padding_bytes": "zero for this single exact-size 64-byte-aligned allocation only",
+    "provider_published_count": "Memory successfully published provider backings, not direct System calls or failed attempts",
+    "provider_attempt_count": null,
+    "memory_metadata_bytes": null,
+    "rss_pss_bytes": null,
+    "energy": null,
+    "unknown_reason": "No allocator metadata, process residency, energy or all provider attempts instrumentation was added; null is not zero",
+    "parser_peak_owned_bytes": "separate SDK account high-water mark, not total RSS"
+  },
+  "functional_cases": ["normal", "cross-thread final result release", "invalid immutable lease rejection before retain", "corrupt input rejection after retain", "borrow budget rejection before retain", "closed snapshot query rejection", "existing Job cancellation and joined cross-thread final release"],
+  "sampling_admission": "Only case=normal from the formal target; a later frozen device profile and independent protocol are required",
+  "device_execution": "NOT_STARTED",
+  "performance_qualification": "NOT_STARTED",
+  "bil_adoption": "NO_NEW_EVIDENCE_KEEP_UNCHANGED"
+}

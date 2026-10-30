@@ -1,0 +1,949 @@
+{
+  "schema_version": 1,
+  "task": "MM-014.R5",
+  "status": "PASS",
+  "scope": "REQUESTED_PAYLOAD_AND_PROVIDER_CAPACITY_ONLY",
+  "layout_benefit_owner": "ORDINARY_CONSUMER_NOT_MEMORY",
+  "all_normal_case_model_fields_match": true,
+  "1080p": [
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8300160,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8300160,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8359936,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    }
+  ],
+  "all_models": [
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 5,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 5,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 5,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 5,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        1
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 5,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        2
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 31,
+      "peak_unique_owned_backing_bytes": 31,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 31,
+      "peak_unique_owned_backing_bytes": 31,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1,
+        7
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 31,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 10,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        1
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 10,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 20,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 20,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 20,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 20,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        2
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 20,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 62,
+      "peak_unique_owned_backing_bytes": 62,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 62,
+      "peak_unique_owned_backing_bytes": 62,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        2,
+        7
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 62,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 35,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        1
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 35,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 70,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        7,
+        2
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 70,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 1105,
+      "peak_unique_owned_backing_bytes": 1105,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 935,
+      "peak_unique_owned_backing_bytes": 935,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 1105,
+      "peak_unique_owned_backing_bytes": 1105,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 935,
+      "peak_unique_owned_backing_bytes": 935,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 1105,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        17,
+        13
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 935,
+      "peak_unique_owned_backing_bytes": 65536,
+      "allocation_count": 3,
+      "provider_allocation_count": 1,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 288000,
+      "peak_unique_owned_backing_bytes": 288000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 231360,
+      "peak_unique_owned_backing_bytes": 231360,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 288000,
+      "peak_unique_owned_backing_bytes": 288000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 231360,
+      "peak_unique_owned_backing_bytes": 231360,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 288000,
+      "peak_unique_owned_backing_bytes": 303872,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        320,
+        180
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 231360,
+      "peak_unique_owned_backing_bytes": 238336,
+      "allocation_count": 3,
+      "provider_allocation_count": 2,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "direct",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "direct",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8300160,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "system",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "system",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8300160,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "arena",
+      "layout": "full",
+      "logical_payload_bytes": 10368000,
+      "peak_unique_owned_backing_bytes": 10368000,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    },
+    {
+      "dimensions": [
+        1920,
+        1080
+      ],
+      "provider": "arena",
+      "layout": "ring",
+      "logical_payload_bytes": 8300160,
+      "peak_unique_owned_backing_bytes": 8359936,
+      "allocation_count": 3,
+      "provider_allocation_count": 3,
+      "steady_state_provider_allocations": 0
+    }
+  ],
+  "rss_pss_time_energy": "UNMEASURED_OR_UNQUALIFIED"
+}

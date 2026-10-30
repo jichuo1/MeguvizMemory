@@ -1,0 +1,97 @@
+{
+  "schema_version": 2,
+  "experiment_id": "MM-003-MM-012-dex-source-borrow-v2-20261030",
+  "attempt_id": "v2-draft-no-device-attempt",
+  "estimand_id": "dex_source_strategy_complete_owner_v2",
+  "state": "PROPOSED_NOT_FROZEN_NOT_EXECUTED",
+  "parent_research_kit_sha256": "de1e57232d287ee86d2cca5287b0471b94838ba7bfce126e73ae0f32b8e05631",
+  "parent_protocol_sha256": null,
+  "hash_contract": {
+    "protocol_canonical_sha256": "SHA256 of canonical UTF-8 JSON, sorted keys, compact separators, no NaN",
+    "plan_canonical_sha256": "SHA256 of canonical UTF-8 JSON, sorted keys, compact separators, no NaN",
+    "parent_protocol_sha256": "Exact parent protocol file bytes; null until selected and frozen",
+    "file_sha256_suffix": "Exact file bytes; kept separate from canonical object identity"
+  },
+  "scope": "Ordinary DEX source-owner copy removal; independent workload only",
+  "device_execution": "OUT_OF_SCOPE_FOR_THIS_OFFLINE_BATCH",
+  "primary_contrast": ["D-Z0", "D-C0"],
+  "secondary_copy_controls": ["D-C1", "D-C2"],
+  "secondary_controls_in_primary_estimator": false,
+  "semantic_identity": {
+    "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "input_bytes": 10540184,
+    "method_count": 54147,
+    "result_checksum": 12701547145945416225
+  },
+  "timing": {
+    "included": ["input strategy", "necessary copy/first touch", "engine/open/parse", "full method and text consumption", "SDK and result cleanup", "Memory lifecycle if applicable", "common source backing final release"],
+    "excluded": ["preload", "process start", "loader"],
+    "formal_diagnostic_phases": null,
+    "old_total_metric_comparable": false,
+    "old_data_pooling": false
+  },
+  "sampling": {
+    "outer_hierarchy": "day/environment -> prescheduled window -> session -> block -> task",
+    "pilot_windows": 4,
+    "formal_windows": 12,
+    "sessions_per_window": 1,
+    "blocks_per_session": 8,
+    "tasks_per_block": 4,
+    "pilot_tasks": 128,
+    "formal_tasks": 384,
+    "formal_task_cap": 384,
+    "order_seed": 20261030,
+    "balanced_orders_per_session": ["ABBA", "BAAB"],
+    "primary_unit": "window mean of eight paired block log ratios",
+    "primary_interval": "mean(window means) +/- t(.975,11)*sd(window means)/sqrt(12)",
+    "t_975_df11": 2.200985160082949,
+    "gain_interval_transform": "[1-exp(U), 1-exp(L)]",
+    "precision_target_log_half_width": 0.01,
+    "pilot_feasibility": "t(.975,11)*sd(four pilot window means)/sqrt(12) <= 0.01; rough feasibility screen, not achieved precision",
+    "trend_gate_absolute_half_shift_log": 0.01,
+    "sensitivity_only": "10000 window-cluster bootstrap percentile resamples, seed 20261030",
+    "pilot_pooled": false,
+    "repeated_pilot": false,
+    "favorable_early_stop": false,
+    "independence_status": "UNSUPPORTED_PENDING_OUTER_DESIGN_REVIEW; no trend is not proof"
+  },
+  "environment_limits": {
+    "battery_max_deci_c": 400,
+    "thermal_status_max": 0,
+    "background_cpu_busy_max": 0.5,
+    "status": "PROPOSED_REQUIRE_DEVICE_SPECIFIC_FREEZE",
+    "CPU_temperature": "UNAVAILABLE_UNTIL_SENSOR_CONTRACT_VALIDATED",
+    "DVFS": "OBSERVE_ONLY_NO_ENDPOINT_NORMALIZATION"
+  },
+  "freeze": {
+    "device_profile": null,
+    "artifact_closure": null,
+    "functional_receipt_sha256": null,
+    "scheduled_windows": null,
+    "single_task_timeout_seconds": null,
+    "session_wall_cap_seconds": null,
+    "overall_wall_cap_seconds": null,
+    "maximum_environment_waits": null,
+    "cadence": null,
+    "resource_budgets": null
+  },
+  "stop_rules": [
+    "Any identity/correctness/lifetime failure stops qualification",
+    "Missing or invalid environment/host records make the run INCOMPLETE; retain rows, never replace blocks",
+    "Pilot feasibility above cap stops this protocol; do not extend cap or rerun for favorable precision",
+    "Formal precision or trend failure remains INCONCLUSIVE",
+    "Unsupported outer-independence assumptions remain descriptive/INCONCLUSIVE",
+    "No timing-selected deletion, post-hoc re-clustering or frequency normalization"
+  ],
+  "observer_diagnostic": {
+    "state": "SEPARATE_DRAFT_NOT_IMPLEMENTED_NOT_EXECUTED",
+    "tasks_per_policy": 8,
+    "same_native_variant": "D-C0",
+    "policies": ["existing cadence", "equivalent checks using combined device reads if supported"],
+    "required_equivalence": ["actual busy window and tolerance", "thermal reading time", "missing/failure handling", "observation-to-launch interval"],
+    "pool_with_formal": false,
+    "choose_by_favorable_Memory_effect": false
+  },
+  "performance_qualified": false,
+  "BIL_auto_enable": false
+}

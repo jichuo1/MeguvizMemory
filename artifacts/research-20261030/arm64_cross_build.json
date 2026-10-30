@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "scope": "ANDROID_ARM64_CROSS_BUILD_ONLY_NO_DEVICE_EXECUTION",
+  "status": "PASS",
+  "ndk": "30.0.16248370",
+  "clang": "21.0.0",
+  "minimum_api": 27,
+  "cpp_runtime": "c++_static",
+  "device_executed": false,
+  "actual_16KB_loader": "NOT_EXECUTED",
+  "MTE_HWASAN": "NOT_EXECUTED",
+  "performance_qualified": false,
+  "files": [
+    {
+      "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2",
+      "bytes": 15069328,
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+      "machine": "AArch64",
+      "load_segments": [
+        "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0c19b0 0x0c19b0 R E 0x4000",
+        "LOAD           0x0c19b0 0x00000000000c59b0 0x00000000000c59b0 0x002ae0 0x003650 RW  0x4000",
+        "LOAD           0x0c4490 0x00000000000cc490 0x00000000000cc490 0x0001f8 0x002188 RW  0x4000"
+      ],
+      "needed": [
+        "[libmgmem.so]",
+        "[libm.so]",
+        "[libdl.so]",
+        "[libc.so]"
+      ]
+    },
+    {
+      "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2_diagnostic",
+      "bytes": 15082968,
+      "sha256": "cf6968e23ff0a04eed869909a86f0ad9d7619a9cd7f4843de31a8deac870bc2d",
+      "machine": "AArch64",
+      "load_segments": [
+        "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0c1fc0 0x0c1fc0 R E 0x4000",
+        "LOAD           0x0c1fc0 0x00000000000c5fc0 0x00000000000c5fc0 0x002ae0 0x003040 RW  0x4000",
+        "LOAD           0x0c4aa0 0x00000000000ccaa0 0x00000000000ccaa0 0x0001f8 0x002188 RW  0x4000"
+      ],
+      "needed": [
+        "[libmgmem.so]",
+        "[libm.so]",
+        "[libdl.so]",
+        "[libc.so]"
+      ]
+    },
+    {
+      "path": "build/image-v2-arm64/mgmem_image_paired",
+      "bytes": 3440464,
+      "sha256": "bec4e946349b9e3ed317aab9f7f36609fcbb3aeccdc86e4270c51aaf46b61bd0",
+      "machine": "AArch64",
+      "load_segments": [
+        "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x047b50 0x047b50 R E 0x4000",
+        "LOAD           0x047b50 0x000000000004bb50 0x000000000004bb50 0x002818 0x0034b0 RW  0x4000",
+        "LOAD           0x04a368 0x0000000000052368 0x0000000000052368 0x0000b8 0x002048 RW  0x4000"
+      ],
+      "needed": [
+        "[libmgmem.so]",
+        "[libm.so]",
+        "[libdl.so]",
+        "[libc.so]"
+      ]
+    },
+    {
+      "path": "install/android-arm64-v8a/lib/libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+      "machine": "AArch64",
+      "load_segments": [
+        "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x0346c0 0x0346c0 R E 0x4000",
+        "LOAD           0x0346c0 0x00000000000386c0 0x00000000000386c0 0x001ce8 0x002940 RW  0x4000",
+        "LOAD           0x0363a8 0x000000000003e3a8 0x000000000003e3a8 0x000180 0x0011e8 RW  0x4000"
+      ],
+      "needed": [
+        "[libm.so]",
+        "[libdl.so]",
+        "[libc.so]"
+      ]
+    }
+  ],
+  "consumer_sources": [
+    {
+      "path": "consumers/dex/paired_v2.cpp",
+      "sha256": "1b156fc937b05a04e2c772c876ede193a05d0d1340a93d65301f7a202c37b577"
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "sha256": "d0e0319d00aa687e81abbad97c08eaedbb204eff6dd9d2e97b4c6b21719a3108"
+    },
+    {
+      "path": "consumers/image/paired.cpp",
+      "sha256": "b5d62b2ef7275ba6a7ecdf8ee8b889e89fc4a033a1bbd00d924fe09473b77b9b"
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "sha256": "0f930fff347a5b141a11bf1ff9e36f67c4887dc95b3590fa51ede61878d7b9b3"
+    }
+  ],
+  "configuration_note": "Android find-root mode requires explicit installed MeguvizMemory_DIR; initial image configuration lacked this and failed before compilation. Fixed configuration compiled successfully.",
+  "warnings": "Frozen external Dex SDK retains existing miniz unused-function and relation switch warnings; image helper quoted triggers an unused-function warning with Clang. No SDK changes."
+}

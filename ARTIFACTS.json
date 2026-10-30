@@ -362,5 +362,10 @@
     "paired_capture": "COMPLETE_32_BLOCKS_128_TASKS",
     "performance_qualification": "INCONCLUSIVE_TIME_TREND",
     "BIL_integration": "NOT_SELECTED"
+  },
+  "research_followup": {
+    "manifest": "artifacts/research-20261030/ARTIFACTS.json",
+    "scope": "HOST_FUNCTIONAL_RESOURCE_HARNESSES_AND_ARM64_CROSS_BUILDS_NO_NEW_DEVICE_RESULTS",
+    "old_binary_identities": "PRESERVED_COMPILED_SOURCE_COMMIT_FIELD_REMAINS_ORIGINAL_SDK_ONLY"
   }
 }

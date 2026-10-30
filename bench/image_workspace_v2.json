@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "task": "MM-014.R5",
+  "experiment_id": "image-workspace-v2-functional-resource-20261030",
+  "state": "HOST_FUNCTIONAL_RESOURCE_HARNESS_NO_PERFORMANCE_FREEZE",
+  "entry_point": "consumers/image/paired.cpp",
+  "target": "mgmem_image_paired",
+  "original_async_demo": "consumers/image/main.cpp is unchanged",
+  "providers": {
+    "direct": "Three directly aligned System allocations held for the entire batch; no Memory API call",
+    "system": "Same three persistent allocations through Memory SYSTEM",
+    "arena": "Same three persistent allocations through Memory ARENA with chunk 65536 and budget 67108864"
+  },
+  "layouts": {
+    "full": "RGB 3WH + full luma WH + complete output WH",
+    "ring": "RGB 3WH + gray row ring min(H,3)W + complete output WH"
+  },
+  "comparison_order": [
+    "With provider direct fixed, full versus ring is an ordinary consumer layout contrast",
+    "With one layout fixed, direct versus Memory SYSTEM versus Memory ARENA estimates interface/provider increment",
+    "Use the same persistent three-allocation batch baseline; direct steady-state provider allocations are already zero"
+  ],
+  "semantic_contract": {
+    "input": "P6 RGB8, bounded at 8388608 pixels, file preload outside task",
+    "source": "Common stable preloaded vector; every frame copies the full source into the RGB workspace",
+    "batch": "1 to 32 repeated images of one fixed size; controlled harness only, no production batch demand established",
+    "rounding": "Per pixel (77R+150G+29B)>>8, then edge-clamped sum of nine gray values /9",
+    "conversion_count": "Exactly WH gray conversions per completed frame",
+    "output": "Complete blur output retained until final-frame PGM write completes; every frame is completely checksummed",
+    "lease": "Each Memory writer lease covers its whole allocation; row views do not create independent lease ownership",
+    "cleanup": "Release each worker lease after last access, free owners, collect/drain/destroy; explicit final zero checks",
+    "cancellation": "NOT_APPLICABLE_NO_NEW_CANCEL_API"
+  },
+  "functional_validation": {
+    "runner": "tools/verify_image_workspace_v2.py",
+    "oracle": "Independent Python full-image scalar integer implementation; byte-for-byte complete PGM comparison",
+    "dimensions": [[1,1],[1,2],[1,7],[2,1],[2,2],[2,7],[7,1],[7,2],[17,13],[320,180],[1920,1080]],
+    "batch_sizes": "1 and 3; 1920x1080 uses 1",
+    "failures": ["injected worker exception after admitted RGB copy", "output open failure because target is an existing directory", "truncated input", "checked dimension overflow"],
+    "standard_finish": "All six provider/layout combinations also complete a three-frame batch without early owner close",
+    "close_safety": "Admit leases, release owners and begin close before worker data access; collect is BUSY and drain(0) is TIMEOUT, worker access remains valid; direct keeps owner until join",
+    "resource_oracle": "Independent first-fit chunk capacity simulation with 64-byte alignment; backing and payload remain distinct"
+  },
+  "diagnostic_clock": {
+    "start": "Immediately before workspace/domain creation",
+    "stop": "After all frame workers, complete final output write, all workspace cleanup and common source final release",
+    "includes": ["workspace creation", "lease and observer checks", "thread creation/join", "input copy", "gray and blur", "full checksum", "final output file write", "cleanup"],
+    "status": "Diagnostic only; not low-perturbation performance samples, no timing qualification"
+  },
+  "resource_accounting": {
+    "logical_payload": "Sum of the three allocation requests",
+    "unique_owned_backing": "Direct/System requests or Memory snapshot backing; excludes external source and metadata",
+    "steady_state_provider_allocations": "Actual pre-cleanup provider allocation counter minus initial workspace counter; direct counts its native allocation calls using the same boundary",
+    "external_source_capacity": "std::vector capacity reported separately, never double counted as owned workspace backing",
+    "arena_padding_and_spare": "Part of backing minus live payload; not equated to RSS",
+    "metadata": "UNMEASURED",
+    "rss_pss": "UNMEASURED",
+    "energy": "UNMEASURED",
+    "1080p_model": {
+      "full_payload": 10368000,
+      "ring_payload": 8300160,
+      "payload_reduction": 2067840,
+      "arena_full_backing": 10368000,
+      "arena_ring_backing": 8359936,
+      "arena_backing_reduction": 2008064
+    }
+  },
+  "qualification": {
+    "device": "NOT_STARTED",
+    "formal_performance": "NOT_FROZEN_NOT_STARTED",
+    "mechanism": "No PFN, PMU, translation aggregation, RSS or time benefit claim",
+    "BIL": "UNCHANGED_NO_INTEGRATION"
+  }
+}

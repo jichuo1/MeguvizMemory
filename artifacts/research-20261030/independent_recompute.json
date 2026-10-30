@@ -1,0 +1,28 @@
+{
+  "evidence_type": "OFFLINE_RECOMPUTATION_NOT_NEW_DEVICE_MEASUREMENT",
+  "status": "PASS",
+  "blocks": 32,
+  "tasks": 128,
+  "gain": 0.010793899186631095,
+  "exploratory_gain_interval": [
+    -0.00023435730555698697,
+    0.02331589922167354
+  ],
+  "half_shift_log": -0.010603435100858594,
+  "lag1": 0.14466574364710932,
+  "historical_decision": "INCONCLUSIVE",
+  "planned_precision": {
+    "pilot_cap_unmet": false,
+    "is_achieved_precision": false
+  },
+  "achieved_precision": {
+    "exploratory_log_interval_half_width": 0.011913172510177405,
+    "target_log_half_width": 0.01,
+    "target_met": false,
+    "does_not_override_trend_or_inference_limits": true
+  },
+  "input_reparse": "NOT_PERFORMED_BY_THIS_AUDIT",
+  "device_execution": "NOT_PERFORMED",
+  "independence": "NOT_ESTABLISHED_BY_BLOCK_COUNT_OR_LAG1",
+  "BIL_adoption": "NOT_SELECTED"
+}

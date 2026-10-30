@@ -14,6 +14,11 @@ jobs:
         run: cmake --build build/core --config Release --parallel 2
       - name: Core safety verification
         run: ctest --test-dir build/core -C Release --output-on-failure
+      - name: Historical evidence and offline protocol checks
+        run: |
+          python tools/test_audit_paired_archive.py
+          python tools/audit_paired_archive.py --output-dir artifacts/ci-research
+          python tools/test_paired_analysis_v2.py --output artifacts/ci-research/offline-validator.json
       - name: Windows capture journal regression
         if: runner.os == 'Windows'
         run: python tools/test_capture_journal.py --out-dir build/capture-journal-ci
@@ -32,11 +37,20 @@ jobs:
         run: |
           $env:PATH = "$pwd/install/host/bin;" + $env:PATH
           python tools/verify_consumers.py --image-only --image-exe build/image/Release/mgmem_image.exe --out-dir artifacts/ci-image
+      - name: Verify persistent image workspaces (Linux)
+        if: runner.os == 'Linux'
+        run: LD_LIBRARY_PATH=$PWD/install/host/lib python3 tools/verify_image_workspace_v2.py --image-exe build/image/mgmem_image_paired --out-dir build/image-v2-fixtures --receipt artifacts/ci-image-v2/receipt.json
+      - name: Verify persistent image workspaces (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: python tools/verify_image_workspace_v2.py --image-exe build/image/Release/mgmem_image_paired.exe --runtime-dir install/host/bin --out-dir build/image-v2-fixtures --receipt artifacts/ci-image-v2/receipt.json
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: core-installed-${{ matrix.os }}
           path: |
             install/host
             artifacts/ci-image
+            artifacts/ci-image-v2
+            artifacts/ci-research
             build/core/Testing/Temporary/LastTest.log
             build/capture-journal-ci/regression-receipt.json

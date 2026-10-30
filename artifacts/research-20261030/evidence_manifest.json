@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "scope": "HISTORICAL_RETRY1_OFFLINE_AUDIT",
+  "kit": {
+    "bytes": 116600,
+    "sha256": "de1e57232d287ee86d2cca5287b0471b94838ba7bfce126e73ae0f32b8e05631",
+    "manifest_files_verified": 19,
+    "repository_evidence_matches": [
+      {
+        "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+        "byte_equal": true,
+        "semantic_equal": true,
+        "kit_sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8",
+        "repository_sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8"
+      },
+      {
+        "path": "artifacts/arm64-20261030/paired-retry1/formal-plan.json",
+        "byte_equal": true,
+        "semantic_equal": true,
+        "kit_sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565",
+        "repository_sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565"
+      },
+      {
+        "path": "artifacts/arm64-20261030/paired-retry1/report.json",
+        "byte_equal": false,
+        "semantic_equal": true,
+        "kit_sha256": "c88ef1ba38311f5e5ffcd05dfbb3ad5e84c9b7576db64588b57f27d3c2e33f6f",
+        "repository_sha256": "40fe90483845bc74d31f4175dbb39ef2e129d687a562ee9d732832d9c51ad729"
+      }
+    ],
+    "kit_code_executed": false
+  },
+  "historical_files": [
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+      "bytes": 649882,
+      "sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-plan.json",
+      "bytes": 8918,
+      "sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/report.json",
+      "bytes": 20413,
+      "sha256": "40fe90483845bc74d31f4175dbb39ef2e129d687a562ee9d732832d9c51ad729"
+    },
+    {
+      "path": "consumers/dex/paired.cpp",
+      "bytes": 20796,
+      "sha256": "ca1795d5db4871b1c842267b12037c5f6b308769074e93f4d32b8525f7f351a1"
+    },
+    {
+      "path": "tools/run_paired_device.py",
+      "bytes": 33269,
+      "sha256": "e96af715bab510a4a6eccf237e095437620d4d97c7a8c670ccdca9889049a707"
+    },
+    {
+      "path": "tools/paired_analysis.py",
+      "bytes": 20382,
+      "sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee"
+    },
+    {
+      "path": "bench/paired_protocol_retry1.json",
+      "bytes": 4405,
+      "sha256": "7e864ad7ea74e26857cf9a04c9ac162fc20bff1b71bf9ac5a6d32cf1e8592492"
+    }
+  ],
+  "old_results_rewritten": false,
+  "device_used": false
+}

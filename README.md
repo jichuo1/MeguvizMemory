@@ -8,6 +8,8 @@
 
 已完成 API 37、arm64、4 KB 真机的核心/C/C++ 安全用例；独立真实 DEX A1/A3 比较完成 32 块、128 次任务，性能为 INCONCLUSIVE，当前不接入 BIL。点估计与探索性区间不构成稳定收益，详见 [性能报告](docs/PERFORMANCE_A1_A3.md) 和 [接入决定](docs/BIL_ADOPTION_DECISION.md)。
 
+研究下一批新增 DEX 直接借用/复制四组 harness（宿主32项通过）、图像 full/三行环及持久工作区对照（156项通过）、分采集窗口的离线协议验证器。已确认普通消费者的逻辑容量减少，尚无新真机性能、RSS或能量结论。三个新 arm64 程序仅构建通过，协议仍未冻结。入口见 [研究证据](docs/RESEARCH_EVIDENCE_20261030.md)、[DEX借用合同](docs/DEX_BORROW_CONTRACT.md) 和 [候选退出门槛](docs/CANDIDATE_EXIT_GATES.md)。
+
 ## 构建和安装
 
 ```sh

@@ -33,5 +33,7 @@
     "BIL_integration": "Independent parser task is not the current BIL DexKit/player path. Even positive results require actual BIL hotpath/lifetime and bridge-cost qualification; no automatic switch.",
     "existing_P1_07_P2_05": "EXCLUDED_FROM_MEMORY_INCREMENT"
   },
-  "formal_sampling": "NOT_STARTED_REQUIRES_DEVICE_SAFETY_PASS_AND_PILOT_FROZEN_PLAN"
+  "formal_sampling": "COMPLETED_RETRY1_32_BLOCKS_128_TASKS_PERFORMANCE_INCONCLUSIVE",
+  "formal_sampling_evidence": "artifacts/arm64-20261030/paired-retry1/report.json",
+  "status_correction": "2026-10-30: replace stale NOT_STARTED metadata; old frozen plans/raw rows/reports unchanged"
 }
