@@ -2,3 +2,5 @@
 artifacts/** whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # llvm-readelf intentionally pads section mappings with spaces; keep its raw output.
 artifacts/verification-20261030/elf-*.txt -whitespace
+# Hash-locked captures must keep their exact bytes on Windows and Linux.
+tests/fixtures/continuation-validation/** -text

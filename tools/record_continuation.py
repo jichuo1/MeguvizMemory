@@ -106,7 +106,7 @@ def main():
         with zipfile.ZipFile(path) as archive:
             require(archive.testzip() is None and any("NOTICE" in n.upper() for n in archive.namelist()), "AAR notice/integrity")
     dist = ROOT / "dist"; dist.mkdir(exist_ok=True)
-    bundle = dist / "MeguvizMemory-0.2.0-Consumer-Closeout-20261030.zip"
+    bundle = dist / "MeguvizMemory-0.2.0-Consumer-Closeout-20261030-CI1.zip"
     require(not bundle.exists(), "refuse to overwrite closeout bundle")
     x86_sdk = dist / "MeguvizMemory-0.2.0-Android-x86_64-Closeout-20261030.zip"
     zip_tree(ROOT / "install/continuation-x86_64", x86_sdk)

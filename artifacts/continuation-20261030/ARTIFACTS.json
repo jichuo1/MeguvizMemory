@@ -25,9 +25,9 @@
     "source_lock": {
       "path": "artifacts/continuation-20261030/SOURCE_LOCK.json",
       "bytes": 41718,
-      "sha256": "fd2a9dd1b844af9148e321af359fa122ac0438af34c46ffb41eaa151227bd99f"
+      "sha256": "261fea211b292808236f7ac6949a79463eac17f474200a6ae3cc674f051d68ad"
     },
-    "source_set_sha256": "9b8a951ef493cc840dcd494f3fa634f3d9249120a3651852dbe40f41118f7e9c"
+    "source_set_sha256": "69f93c3ac5f7ee7b8e48821f8cd8f7680a986d550fed2424960e28c940fbbd80"
   },
   "frozen_plans_verified": [
     {
@@ -935,8 +935,8 @@
     "Own process RSS/PSS is not domain attribution or measured net savings"
   ],
   "bundle": {
-    "path": "dist/MeguvizMemory-0.2.0-Consumer-Closeout-20261030.zip",
-    "sha256_sidecar": "MeguvizMemory-0.2.0-Consumer-Closeout-20261030.zip.sha256",
+    "path": "dist/MeguvizMemory-0.2.0-Consumer-Closeout-20261030-CI1.zip",
+    "sha256_sidecar": "MeguvizMemory-0.2.0-Consumer-Closeout-20261030-CI1.zip.sha256",
     "hash_location": "SIDECAR_AVOIDS_SELF_REFERENCE"
   }
 }

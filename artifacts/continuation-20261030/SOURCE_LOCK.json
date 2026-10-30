@@ -3,7 +3,7 @@
   "scope": "SCOPED_SOURCE_TREE_LOCK",
   "roots": {
     "MeguvizMemory": {
-      "head": "ad3a0181fab98f2ba34666295c7744c679cabff1",
+      "head": "67b9dcbbb31b4e6e39d98d47c589971ccc6c5f56",
       "dirty": true,
       "state": "READ_ONLY_LOCAL_CHECK"
     },
@@ -14,7 +14,7 @@
     }
   },
   "external_parser_source": "LOCKED",
-  "source_set_sha256": "9b8a951ef493cc840dcd494f3fa634f3d9249120a3651852dbe40f41118f7e9c",
+  "source_set_sha256": "69f93c3ac5f7ee7b8e48821f8cd8f7680a986d550fed2424960e28c940fbbd80",
   "file_count": 207,
   "files": [
     {
@@ -410,8 +410,8 @@
     {
       "root": "MeguvizMemory",
       "path": ".gitattributes",
-      "bytes": 298,
-      "sha256": "dca00a5d378d9dc9f869226e9baf2be34e37600576a6d1902e4f0dc01d8f3961"
+      "bytes": 419,
+      "sha256": "e68fda31f78ef1038a5512290f24db60dfa3641a720305ac24824252899726f7"
     },
     {
       "root": "MeguvizMemory",
@@ -1082,8 +1082,8 @@
     {
       "root": "MeguvizMemory",
       "path": "tools/record_continuation.py",
-      "bytes": 12831,
-      "sha256": "fdf8c368d8d46ad667ccd29ea144f4db269b81d65cf6945573a685245ae0242f"
+      "bytes": 12835,
+      "sha256": "5141d1e3b4fa47919b45c7e240e2012deb13738bdccdabfeb270df5ec01658c0"
     },
     {
       "root": "MeguvizMemory",
