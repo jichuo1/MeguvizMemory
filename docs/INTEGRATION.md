@@ -32,6 +32,8 @@ target_link_libraries(my_cpu_consumer PRIVATE MeguvizMemory::mgmem)
 
 Dex 工程没有有效 Git HEAD，存在其他会话的开发材料。使用它时锁定实际参与编译源码与 fixture 的哈希，并在构建前后检查漂移。它的已有 miniz 是解析器内部依赖，Memory core 不引入该依赖。文件格式 fixture 的功能通过不等于 BIL 宿主或真实 APK 场景资格。
 
+收尾核验期间，外部会话更新了 Dex 的 CMake 和任务元数据。因此最终验证改用本工作区 `build/locked-inputs/DexMeguviz` 的冻结快照，以 `build/dex-locked` 构建，fixture 也从该快照读取。最终 SOURCE_LOCK 的 DexMeguviz 根指向此快照，不再要求活跃外库永久保持不变。可重放输入另存为本地 `dist/MeguvizMemory-0.1.0-DexConsumer-inputs.zip`，仅记录 hash，不向公开 Git 仓库复制整个外部项目。复现时优先解压该输入并把 `DEXMEGUVIZ_SOURCE_DIR` 指向它。
+
 ## 申请、借用与原始 owner
 
 创建 domain 时固定 provider、模式和 backing 预算。配置表携带 `struct_size`、ABI major/minor 和必需 flag；不支持的版本或必需能力明确拒绝。System 通过每次逻辑申请建立独立 backing；arena 在自有 chunk 中密集分配，最后一次使用结束后才允许 reset 复用。

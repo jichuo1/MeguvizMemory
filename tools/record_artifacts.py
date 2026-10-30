@@ -30,6 +30,9 @@ def main():
     parser.add_argument("--ndk", type=Path, required=True)
     parser.add_argument("--msvc-bin", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=Path("ARTIFACTS.json"))
+    parser.add_argument("--dex-exe", type=Path, default=Path("build/dex/mgmem_dex_consumer.exe"))
+    parser.add_argument("--source-commit", help="Code commit of unchanged compiled core/consumer sources")
+    parser.add_argument("--parser-snapshot", type=Path, help="Local frozen external parser replay-input ZIP")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     result = subprocess.run(["git", "-c", "safe.directory=" + root.as_posix(),
@@ -66,7 +69,7 @@ def main():
     binaries = ["build/host-ninja/mgmem_core_tests.exe", "build/host-ninja/mgmem_c_consumer.exe",
                 "build/host-ninja/mgmem_cpp_consumer.exe", "build/host-ninja/mgmem_runtime_tests.exe",
                 "build/host-asan/mgmem.dll", "build/host-asan/mgmem_core_tests.exe",
-                "build/host-asan/mgmem_cpp_consumer.exe", "build/dex/mgmem_dex_consumer.exe",
+                "build/host-asan/mgmem_cpp_consumer.exe", args.dex_exe.as_posix(),
                 "build/image/mgmem_image.exe", "build/image-static/mgmem_image.exe"]
     binary_records = [entry(root, root / name) for name in binaries]
     toolchains = {"msvc_cl": args.msvc_bin / "cl.exe",
@@ -80,11 +83,11 @@ def main():
     if digest(root / "build/host-ninja/mgmem.dll") != digest(root / "install/host/bin/mgmem.dll"):
         raise RuntimeError("host installed library mismatch")
     receipt = json.loads((root / "artifacts/verification-20261030/consumers/receipt.json").read_text())
-    if receipt["executables"]["image"]["sha256"] != digest(root / "build/image/mgmem_image.exe") or receipt["executables"]["dex"]["sha256"] != digest(root / "build/dex/mgmem_dex_consumer.exe"):
+    if receipt["executables"]["image"]["sha256"] != digest(root / "build/image/mgmem_image.exe") or receipt["executables"]["dex"]["sha256"] != digest(root / args.dex_exe):
         raise RuntimeError("consumer receipts do not match final executable")
     artifact = {"schema_version": 1, "version": "0.1.0", "qualification": "CPU_FUNCTIONAL_ENGINEERING_PREVIEW",
-                "compiled_source_commit": result.stdout.strip(),
-                "source_identity_rule": "Core and consumers match this code commit; SOURCE_LOCK pins the final source/document/evidence snapshot independently.",
+                "compiled_source_commit": args.source_commit or result.stdout.strip(),
+                "source_identity_rule": "MeguvizMemory core and consumer sources match this code commit; external parser inputs are pinned independently by SOURCE_LOCK and the local replay snapshot.",
                 "installed_profiles": installed, "packages": packages,
                 "built_binaries": binary_records, "toolchains": toolchain_records,
                 "runtime_checks": {"host_install_matches_build": True, "consumer_receipts_match_executables": True,
@@ -96,6 +99,9 @@ def main():
                              "artifacts/verification-20261030/host-asan-ctest.txt",
                              "artifacts/verification-20261030/final-android-api34-mgmem_core_tests.txt",
                              "artifacts/verification-20261030/final-android-api34-mgmem_cpp_consumer.txt"]}
+    if args.parser_snapshot:
+        artifact["external_parser_replay_snapshot"] = entry(root, root / args.parser_snapshot)
+        artifact["external_parser_replay_snapshot"]["scope"] = "LOCAL_INPUT_ARCHIVE_NOT_PUBLISHED_TO_GIT"
     args.output.write_text(json.dumps(artifact, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"profiles": len(installed), "packages_verified": len(packages), "output": str(args.output)}))
 

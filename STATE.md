@@ -6,6 +6,8 @@
 
 静态 Windows SDK 已实际安装并通过独立图像 22/22 验证；远端代码提交 `58ed07f` 的 Windows/Linux 构建均通过 4 项 CTest 和安装后的图像 22/22，见 [CI 回执](https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678)。本地 `dist/` 提供 Windows shared/static 与 Android 三 ABI 共五个 SDK ZIP，逐条校验内容等于安装目录，哈希见 ARTIFACTS。
 
+Dex 最终验证采用 `build/locked-inputs/DexMeguviz` 冻结输入、`build/dex-locked` 构建和本地回放输入 ZIP。这样允许原始 Dex 会话继续推进，同时保持本批来源/制品/fixture 稳定；具体使用方法见 INTEGRATION。
+
 具体资源结果保留 arena 的额外 backing，见 [BENCHMARK_RESULTS](docs/BENCHMARK_RESULTS.md)。没有从申请次数推导性能/RSS，不填研究模型为实测。
 
 证据入口：

@@ -13,7 +13,7 @@
       "sha256": "624d78f06440dfc3ed1aacf75109f0787db8a31194b8d1094e2f3b1a1e057513"
     },
     "dex": {
-      "sha256": "9b0aca847ce1df4271a1fc3460bd0eb6463194001e2c43238abd4990e0db7607"
+      "sha256": "18dd7400c289418fc29197f3703e377ebaadcdca34e4ef53a2cc159eb395a167"
     }
   },
   "fixture_generator": "deterministic_rgb_integer_v1",
@@ -89,7 +89,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.6090000000003783,
+      "diagnostic_runner_wall_seconds": 1.5159999999996217,
       "input_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
       "output_sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b",
       "checks": {
@@ -130,7 +130,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.5320000000001528,
+      "diagnostic_runner_wall_seconds": 0.5150000000012369,
       "input_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
       "output_sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b",
       "checks": {
@@ -172,7 +172,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.5149999999994179,
+      "diagnostic_runner_wall_seconds": 0.5319999999992433,
       "input_sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4",
       "output_sha256": "0929aa52f9f2046bf8ce047efff13811d5f24071c98b313dd6f4c0f643a43675",
       "checks": {
@@ -255,7 +255,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.07799999999951979,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
       "output_sha256": "12eb064225ba961b03bf3ebd334b871c5697202ee1123114e56f22a7801ac48a",
       "checks": {
@@ -296,7 +296,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
       "output_sha256": "12eb064225ba961b03bf3ebd334b871c5697202ee1123114e56f22a7801ac48a",
       "checks": {
@@ -338,7 +338,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
       "output_sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69",
       "checks": {
@@ -379,7 +379,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
       "output_sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69",
       "checks": {
@@ -421,7 +421,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.046000000000276486,
+      "diagnostic_runner_wall_seconds": 0.04700000000048021,
       "input_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
       "output_sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78",
       "checks": {
@@ -462,7 +462,7 @@
         "late_worker_close_safe": true
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
       "output_sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78",
       "checks": {
@@ -493,7 +493,7 @@
       "stderr": "Image consumer: truncated input or trailing bytes\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.04700000000048021,
+      "diagnostic_runner_wall_seconds": 0.046999999998661224,
       "input_sha256": "31b969d54700e7cedfdbdfa9447f25ac85e22646f49f0539bf2231f06f08f905",
       "output_sha256": null,
       "checks": {
@@ -518,7 +518,7 @@
       "stderr": "Image consumer: truncated input or trailing bytes\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "31b969d54700e7cedfdbdfa9447f25ac85e22646f49f0539bf2231f06f08f905",
       "output_sha256": null,
       "checks": {
@@ -544,7 +544,7 @@
       "stderr": "Image consumer: image exceeds bounded workspace\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.04699999999957072,
+      "diagnostic_runner_wall_seconds": 0.04700000000048021,
       "input_sha256": "8ab39ed9bd53016c6c51823004de6a165ce5eb30fdc5ecb59f34f67d91601591",
       "output_sha256": null,
       "checks": {
@@ -569,7 +569,7 @@
       "stderr": "Image consumer: image exceeds bounded workspace\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "diagnostic_runner_wall_seconds": 0.030999999999039574,
       "input_sha256": "8ab39ed9bd53016c6c51823004de6a165ce5eb30fdc5ecb59f34f67d91601591",
       "output_sha256": null,
       "checks": {
@@ -595,7 +595,7 @@
       "stderr": "Image consumer: invalid PPM number\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.0929999999998472,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437",
       "output_sha256": null,
       "checks": {
@@ -620,7 +620,7 @@
       "stderr": "Image consumer: invalid PPM number\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.09400000000005093,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437",
       "output_sha256": null,
       "checks": {
@@ -646,7 +646,7 @@
       "stderr": "Image consumer: expected a P6 PPM input\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.07800000000042928,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "2952db5f465d0ee02ab5a888ebda95fc34654834aa8442a25e2a8f7ec575a0ac",
       "output_sha256": null,
       "checks": {
@@ -671,7 +671,7 @@
       "stderr": "Image consumer: expected a P6 PPM input\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.04699999999957072,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "2952db5f465d0ee02ab5a888ebda95fc34654834aa8442a25e2a8f7ec575a0ac",
       "output_sha256": null,
       "checks": {
@@ -697,7 +697,7 @@
       "stderr": "Image consumer: truncated input or trailing bytes\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "d1d3de74f73cf28c327fde2910458c46f3a353fdab530c936b90863b298f9edb",
       "output_sha256": null,
       "checks": {
@@ -722,7 +722,7 @@
       "stderr": "Image consumer: truncated input or trailing bytes\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "diagnostic_runner_wall_seconds": 0.046000000000276486,
       "input_sha256": "d1d3de74f73cf28c327fde2910458c46f3a353fdab530c936b90863b298f9edb",
       "output_sha256": null,
       "checks": {
@@ -748,7 +748,7 @@
       "stderr": "Image consumer: cannot open output\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "diagnostic_runner_wall_seconds": 0.0319999999992433,
       "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
       "output_sha256": null,
       "failure_contract": "Existing directory cannot be opened as an output file; no ACL claim is made.",
@@ -774,7 +774,7 @@
       "stderr": "Image consumer: cannot open output\r\n",
       "parsed_json": null,
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "diagnostic_runner_wall_seconds": 0.031000000000858563,
       "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
       "output_sha256": null,
       "failure_contract": "Existing directory cannot be opened as an output file; no ACL claim is made.",
@@ -788,8 +788,8 @@
     {
       "case_id": "dex-system",
       "command": [
-        "D:\\MeguvizMemory\\build\\dex\\mgmem_dex_consumer.exe",
-        "D:\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex"
+        "D:\\MeguvizMemory\\build\\dex-locked\\mgmem_dex_consumer.exe",
+        "D:\\MeguvizMemory\\build\\locked-inputs\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex"
       ],
       "timeout_seconds": 20.0,
       "exit_code": 0,
@@ -811,7 +811,7 @@
         "runtime_scope": "host_functional"
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.625,
+      "diagnostic_runner_wall_seconds": 0.6560000000008586,
       "input_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
       "output_sha256": null,
       "checks": {
@@ -828,8 +828,8 @@
     {
       "case_id": "dex-arena",
       "command": [
-        "D:\\MeguvizMemory\\build\\dex\\mgmem_dex_consumer.exe",
-        "D:\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex",
+        "D:\\MeguvizMemory\\build\\dex-locked\\mgmem_dex_consumer.exe",
+        "D:\\MeguvizMemory\\build\\locked-inputs\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex",
         "--arena"
       ],
       "timeout_seconds": 20.0,
@@ -852,7 +852,7 @@
         "runtime_scope": "host_functional"
       },
       "json_parse_error": null,
-      "diagnostic_runner_wall_seconds": 0.5309999999999491,
+      "diagnostic_runner_wall_seconds": 0.5309999999990396,
       "input_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
       "output_sha256": null,
       "checks": {

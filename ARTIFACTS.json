@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "qualification": "CPU_FUNCTIONAL_ENGINEERING_PREVIEW",
   "compiled_source_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
-  "source_identity_rule": "Core and consumers match this code commit; SOURCE_LOCK pins the final source/document/evidence snapshot independently.",
+  "source_identity_rule": "MeguvizMemory core and consumer sources match this code commit; external parser inputs are pinned independently by SOURCE_LOCK and the local replay snapshot.",
   "installed_profiles": {
     "host": [
       {
@@ -305,9 +305,9 @@
       "sha256": "3e7af8828269ccea85474bc687dad73b6fd183680c57d7e88602e1f0468908d2"
     },
     {
-      "path": "build/dex/mgmem_dex_consumer.exe",
+      "path": "build/dex-locked/mgmem_dex_consumer.exe",
       "bytes": 432128,
-      "sha256": "9b0aca847ce1df4271a1fc3460bd0eb6463194001e2c43238abd4990e0db7607"
+      "sha256": "18dd7400c289418fc29197f3703e377ebaadcdca34e4ef53a2cc159eb395a167"
     },
     {
       "path": "build/image/mgmem_image.exe",
@@ -348,5 +348,11 @@
     "artifacts/verification-20261030/host-asan-ctest.txt",
     "artifacts/verification-20261030/final-android-api34-mgmem_core_tests.txt",
     "artifacts/verification-20261030/final-android-api34-mgmem_cpp_consumer.txt"
-  ]
+  ],
+  "external_parser_replay_snapshot": {
+    "path": "dist/MeguvizMemory-0.1.0-DexConsumer-inputs.zip",
+    "bytes": 2998877,
+    "sha256": "c4c409fec90549f0b6140bf11e8150426ba3e749e0d8ef2be00637177e3c0239",
+    "scope": "LOCAL_INPUT_ARCHIVE_NOT_PUBLISHED_TO_GIT"
+  }
 }

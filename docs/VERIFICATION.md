@@ -20,11 +20,11 @@
 
 ## 实际复现入口
 
-宿主 CMake/build/install 步骤见 README 与 INTEGRATION。当前机器的实际目录为 `build/host-ninja`、`build/host-asan`、`install/host`、`build/dex`、`build/image`。Python 运行既有解释器，没有安装 Python 依赖：
+宿主 CMake/build/install 步骤见 README 与 INTEGRATION。当前机器的实际目录为 `build/host-ninja`、`build/host-asan`、`install/host`、`build/dex-locked`、`build/image`。Python 运行既有解释器，没有安装 Python 依赖：
 
 ```powershell
 $env:PATH = 'D:/MeguvizMemory/install/host/bin;' + $env:PATH
-python tools/verify_consumers.py --image-exe build/image/mgmem_image.exe --dex-exe build/dex/mgmem_dex_consumer.exe --dex-fixture D:/DexMeguviz/tests/fixtures/generated/minimal.dex --out-dir artifacts/verification-20261030/consumers
+python tools/verify_consumers.py --image-exe build/image/mgmem_image.exe --dex-exe build/dex-locked/mgmem_dex_consumer.exe --dex-fixture build/locked-inputs/DexMeguviz/tests/fixtures/generated/minimal.dex --out-dir artifacts/verification-20261030/consumers
 install/host/bin/mgmem_tlb_owned.exe --matrix
 ```
 
@@ -40,5 +40,6 @@ Android 使用现有 NDK `30.0.16248370` 的 `build/cmake/android.toolchain.cmak
 4. 审查发现独立 core 模块的局部 domain ID 可相同。最终 handle 增加装载期 runtime_origin 路由 cookie，两个实际 DLL 的交叉释放返回 STALE_HANDLE；runtime 卸载后句柄仍禁止复用。
 5. 观察到 arena 为小输入保留更多容量。保留原始结果，默认 System 仍是有效基线，不选择特殊布局，不将调用次数变化写成时长/RSS 收益。
 6. Android 最终重传后测试 ELF 的执行位被重置，首次返回 Permission denied；给本批独立目录的测试文件恢复执行位后重新运行全部 core/C/C++，并核验设备上 libmgmem.so 的 SHA256 等于最终安装制品。该错误没有被计为通过。
+7. 外部 Dex 会话在最终核对后更新 CMake/任务元数据。没有将漂移静默记为哈希通过；最终复制独立配置输入和源码快照，重新构建 parser 与安装消费者并重跑 24 条 oracle 命令。旧回执保留于前一证据提交，最终 SOURCE_LOCK、ARTIFACTS 与回放输入 ZIP 对应冻结版本。
 
 本批没有修改外部 BIL/Dex/Compute/Media 源码或依赖版本，也没有正式发布 Release。公开仓库用于保存工程预览及进度，CPU 正式候选、家族集成和 TLB profile 各自仍需对应门槛。

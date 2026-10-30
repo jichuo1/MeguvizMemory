@@ -16,7 +16,7 @@ import subprocess
 
 
 LOCAL_DIRECTORIES = ("include", "src", "tests", "consumers", "bench", "cmake", "tools", "docs", ".github", "third_party_notices")
-EXTERNAL_DIRECTORIES = ("include", "src", "third_party", "cmake")
+EXTERNAL_DIRECTORIES = ("include", "src", "third_party", "cmake", "cli")
 EXCLUDED_DIRECTORIES = {".git", ".venv", ".codex", ".agents", ".aws", "node_modules", "__pycache__",
                         "build", "install", "dist", "artifacts", ".cache", ".gradle", ".idea"}
 SECRET_SUFFIXES = {".pem", ".key", ".p12", ".pfx", ".keystore", ".jks"}
@@ -63,6 +63,10 @@ def git_identity(root: Path) -> dict:
         # change the global safe.directory list or permit a repo fsmonitor hook.
         command = ["git", "-c", "safe.directory=" + root.as_posix(),
                    "-c", "core.fsmonitor=false", "-C", str(root)]
+        top = subprocess.run(command + ["rev-parse", "--show-toplevel"],
+                             capture_output=True, text=True, timeout=10, check=False)
+        if top.returncode != 0 or Path(top.stdout.strip()).resolve() != root:
+            return {"head": None, "dirty": None, "state": "FROZEN_INPUT_WITHOUT_INDEPENDENT_GIT_ROOT"}
         head = subprocess.run(command + ["rev-parse", "HEAD"],
                               capture_output=True, text=True, timeout=10, check=False)
         if head.returncode != 0:
