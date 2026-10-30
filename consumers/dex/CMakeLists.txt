@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.25)
+project(MeguvizMemoryDexConsumer LANGUAGES C CXX)
+
+# Memory is consumed exclusively from its installed package. The external parser
+# has no install/export contract, so its existing source is an explicit input.
+find_package(MeguvizMemory CONFIG REQUIRED)
+set(DEXMEGUVIZ_SOURCE_DIR "" CACHE PATH "Read-only DexMeguviz source checkout")
+if(NOT EXISTS "${DEXMEGUVIZ_SOURCE_DIR}/include/dexmeguviz/dexmeguviz.h")
+    message(FATAL_ERROR "Set DEXMEGUVIZ_SOURCE_DIR to the real DexMeguviz checkout")
+endif()
+set(DMG_BUILD_TESTS OFF CACHE BOOL "Do not build external parser tests" FORCE)
+set(DMG_WITH_SQLITE OFF CACHE BOOL "No optional SQL bridge needed" FORCE)
+add_subdirectory("${DEXMEGUVIZ_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/dexmeguviz" EXCLUDE_FROM_ALL)
+
+add_executable(mgmem_dex_consumer main.cpp)
+target_compile_features(mgmem_dex_consumer PRIVATE cxx_std_20)
+target_link_libraries(mgmem_dex_consumer PRIVATE MeguvizMemory::mgmem dexmeguviz_core)
+if(MSVC)
+    target_compile_options(mgmem_dex_consumer PRIVATE /W4 /permissive- /utf-8)
+else()
+    target_compile_options(mgmem_dex_consumer PRIVATE -Wall -Wextra -Wpedantic)
+endif()

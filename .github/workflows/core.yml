@@ -1,0 +1,38 @@
+name: core-and-installed-image
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  verify:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Configure
+        run: cmake -S . -B build/core -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install/host
+      - name: Build
+        run: cmake --build build/core --config Release --parallel 2
+      - name: Core safety verification
+        run: ctest --test-dir build/core -C Release --output-on-failure
+      - name: Install
+        run: cmake --install build/core --config Release
+      - name: Configure installed consumer
+        run: cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install/host
+      - name: Build installed consumer
+        run: cmake --build build/image --config Release --parallel 2
+      - name: Verify image outputs (Linux)
+        if: runner.os == 'Linux'
+        run: LD_LIBRARY_PATH=$PWD/install/host/lib python3 tools/verify_consumers.py --image-only --image-exe build/image/mgmem_image --out-dir artifacts/ci-image
+      - name: Verify image outputs (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:PATH = "$pwd/install/host/bin;" + $env:PATH
+          python tools/verify_consumers.py --image-only --image-exe build/image/Release/mgmem_image.exe --out-dir artifacts/ci-image
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: core-installed-${{ matrix.os }}
+          path: |
+            install/host
+            artifacts/ci-image
+            build/core/Testing/Temporary/LastTest.log

@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "task_ids": ["MM-020", "MM-021", "MM-022", "MM-023", "MM-024"],
+  "profile": "CPU_FUNCTIONAL_ONLY",
+  "special_tlb_profile_selected": false,
+  "selection": "NOT_SELECTED",
+  "release_qualification": "NOT_SELECTED",
+  "formal_cpu_release_qualification": "BLOCKED_SEPARATE_FROM_TLB_SELECTION",
+  "default_provider": "System",
+  "default_layout": "dense",
+  "page_hint": "NOT_SELECTED",
+  "mechanism_evidence": "INCONCLUSIVE",
+  "protocol": "bench/protocol.json",
+  "baseline_protocol": "docs/BASELINE_PROTOCOL.md",
+  "claim_evidence": {
+    "attachment_archive_sha256": "627cceaf4cd0c558bc540b6d2a3c7fd51ec4ce7b77eb79ce8abb7580748ecd61",
+    "reviewed": "Attached TLB_CLAIMS.json classifications, model limits and unavailable items; no hardware reproduction.",
+    "original_video_and_frame_ledger": "HISTORICAL_RESEARCHER_RECORD_NOT_REACQUIRED_IN_THIS_BATCH",
+    "raw_sprite_and_crop_files_in_attachment": false,
+    "full_audio_and_subtitles": "UNAVAILABLE",
+    "author_microbenchmark_and_raw_samples": "UNAVAILABLE",
+    "vendor_set_way_slot_contract": "UNAVAILABLE",
+    "claim_scope": "Author model/exercises remain separate from official mechanisms, inference and local observations; marketing names do not select policy."
+  },
+  "functional_harness_receipt": {
+    "state": "PASS",
+    "scope": "IMPLEMENTED_NON_ALIAS_NO_HINT_SUBSET_ONLY",
+    "source": "bench/tlb_owned.cpp",
+    "host_case_count": 48,
+    "host_checksums_passed": 48,
+    "host_raw": "artifacts/verification-20261030/tlb-host-diagnostic.jsonl",
+    "host_matrix": {"stride_pages": [1, 2, 3], "window_pages": [0, 1], "offset": ["rotate", "fixed"], "mode": ["dependent", "independent"], "seed": [1, 7]},
+    "emulator_case_count": 1,
+    "emulator_checksums_passed": 1,
+    "emulator_raw": "artifacts/verification-20261030/android-api34-x86_64-diagnostic.jsonl",
+    "budgets": {"reserved_span_bytes": 67108864, "workload_touched_pages": 1024, "concurrent_instances": 1},
+    "safety": ["checked span/multiply/round-up/window bounds", "actual OS base-page query", "only owned allocation memory", "node alignment and no page crossing", "fixed logical node count and actual access count within comparisons", "first-touch/warm/steady/release recorded separately", "live read/write lease preserves backing until last access", "checksum compared with mathematical complete-cycle oracle"],
+    "cache_line_bytes_assumed": 64,
+    "cache_geometry_verified": false,
+    "remaining_functional_matrix": ["multi-arena phase interleaving", "selected subregion/slot research profiles", "trim/refault profile"],
+    "limitation": "48 correlated diagnostic cases are not 48 independent product-performance sessions; phase times and assumed cache-line geometry establish no specific TLB cause."
+  },
+  "device_and_artifact_matrix": [
+    {
+      "environment": "Windows x64 host",
+      "actual_base_page_bytes": 4096,
+      "cpu_function": "PASS_RELEASE_AND_ASAN_4_CTESTS",
+      "installed_two_consumers": "PASS_24_COMMANDS",
+      "tlb_harness": "PASS_48_CHECKSUM_CASES",
+      "mechanism": "INCONCLUSIVE",
+      "product_performance": "NOT_STARTED"
+    },
+    {
+      "environment": "Android API34 x86_64 emulator",
+      "actual_base_page_bytes": 4096,
+      "real_loader_execution": "PASS_CORE_11_GROUPS_145033_CHECKS_C_AND_CPP_5_CASES",
+      "tlb_harness": "PASS_ONE_CHECKSUM_CASE",
+      "installed_two_real_consumers_on_this_device": "NOT_RUN",
+      "mechanism": "INCONCLUSIVE",
+      "product_performance": "NOT_STARTED",
+      "scope_limit": "Emulation does not qualify a physical target CPU TLB or all Android versions."
+    },
+    {
+      "environment": "Android arm64-v8a build/install",
+      "actual_base_page_bytes": null,
+      "build": "PASS",
+      "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "cpp_runtime": "STATIC",
+      "real_loader_execution": "UNAVAILABLE",
+      "evidence": "artifacts/verification-20261030/elf-arm64-v8a.txt"
+    },
+    {
+      "environment": "Android armeabi-v7a build/install",
+      "actual_base_page_bytes": null,
+      "build": "PASS",
+      "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "cpp_runtime": "STATIC",
+      "real_loader_execution": "UNAVAILABLE",
+      "evidence": "artifacts/verification-20261030/elf-armeabi-v7a.txt"
+    },
+    {
+      "environment": "Android x86_64 ELF",
+      "static_core_elf": "PASS_ALL_PT_LOAD_ALIGN_0x4000",
+      "needed": ["libm.so", "libdl.so", "libc.so"],
+      "cpp_runtime": "STATIC",
+      "real_16k_loader_execution": "UNAVAILABLE",
+      "evidence": "artifacts/verification-20261030/elf-x86_64.txt"
+    }
+  ],
+  "capabilities": {
+    "target_physical_soc_and_core_type": null,
+    "target_os_kernel_firmware_fingerprint": null,
+    "tlb_set_way_slot_geometry": "UNKNOWN",
+    "physical_contiguity": "UNKNOWN",
+    "physical_mapping_compatibility": "UNKNOWN",
+    "hardware_translation_aggregation": "UNKNOWN",
+    "pfn_visibility": "UNAVAILABLE",
+    "pmu_event_definitions": [],
+    "pmu_collection": "UNAVAILABLE",
+    "exposed_translation_cost_fraction": null,
+    "mte_runtime": "UNAVAILABLE",
+    "real_android_16k_loader": "UNAVAILABLE",
+    "rss_pss": "UNAVAILABLE",
+    "temperature_frequency_migration": "UNAVAILABLE",
+    "same_completed_work_energy": "UNAVAILABLE"
+  },
+  "real_consumer_functional_evidence": {
+    "state": "PASS_HOST_ONLY",
+    "consumers": ["DexMeguviz real borrowed-source parser/query", "P6 file CPU luma and box-blur workspace"],
+    "memory_install_contract": "Each independent consumer CMake uses find_package(MeguvizMemory) and the installed Memory package.",
+    "receipt": "artifacts/verification-20261030/consumers/receipt.json",
+    "passing_commands": 24,
+    "semantic_oracles": ["independent Python scalar image output comparison", "real parser copy-in query oracle"],
+    "not_qualified": ["BIL product integration", "physical target TLB strategy", "matched A1/A3/A4 performance", "16 KiB loader", "energy", "family GPU retirement integration"]
+  },
+  "workload_candidate": {
+    "MM-022.candidate_decision": "INCONCLUSIVE",
+    "real_hot_trace_replay": "NOT_STARTED",
+    "reason": "No real CPU access/lifetime/concurrency trace and matched product baseline have established a special-placement candidate.",
+    "existing_bil_scratch": "SOURCE_CONFIRMED_P1_07_ALREADY_PRESENT_A0_TO_A1_ONLY",
+    "packed_reader": "NOT_IMPLEMENTED_IN_THIS_BATCH",
+    "fallback_decision": "Keep System/dense; do not open MM-023 until WORTH_PROTOTYPING evidence exists."
+  },
+  "performance_result": {
+    "state": "NOT_STARTED",
+    "A0": null,
+    "A1": null,
+    "A2": null,
+    "A3": null,
+    "A4": null,
+    "estimate": null,
+    "interval": null,
+    "denominator_variant": null,
+    "energy_joules": null,
+    "rule": "Diagnostic wall times and research MODEL values never populate LOCAL_MEASURED product metrics."
+  },
+  "fallback": {
+    "new_domains": "Use the simple System provider and dense layout with the applicable explicit budget.",
+    "existing_domains": "Complete through origin owner/provider; preserve outstanding leases, explicitly collect, then drain/destroy.",
+    "forbidden": ["moving live stable-address allocations", "force-free on close timeout", "marketing-name policy activation", "global allocator replacement", "ART/direct-buffer takeover", "global THP/sysfs/ASLR/MTE changes", "external MAP_FIXED or PFN/PTE operations"]
+  },
+  "requalification_triggers": ["actual physical CPU/core/firmware or OS/kernel/page configuration changes", "provider/harness/policy version changes", "selected real workload/layout/lifetime changes", "new JNI/family import or retirement contract", "measured regression or budget failure"],
+  "qualification_rule": "Function, mechanism, product performance and release are independent states. The present NOT_SELECTED TLB profile does not block a separately qualified basic CPU profile, and does not waive that profile's own outstanding release gates."
+}

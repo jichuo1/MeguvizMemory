@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "protocol_id": "MM-003-host-functional-diagnostic-v1",
+  "frozen_on": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "status": "FROZEN_FOR_HOST_FUNCTIONAL_AND_DIAGNOSTIC_WORK",
+  "task_outputs": {
+    "MM-003.protocol_ready": "READY",
+    "device_performance_protocol_ready": "INCOMPLETE_FOR_PERFORMANCE",
+    "reason": "Device and real workload pilot, artifact locks and sample-size decision remain required before formal performance qualification."
+  },
+  "scope": {
+    "evidence_type": "HOST_FUNCTIONAL_OR_HOST_DIAGNOSTIC",
+    "android_device_validation": "NOT_COVERED",
+    "bil_product_performance": "NOT_COVERED",
+    "tlb_mechanism_qualification": "NOT_COVERED"
+  },
+  "variants": {
+    "A0": "Historical consumer implementation at a verified source and artifact hash, when available.",
+    "A1": "Current conventional consumer optimization using the existing System allocation path.",
+    "A2": "Memory System provider with the same native allocation primitive, initialization, lifetime, alignment, layout and completed work as A1; otherwise label migration-plus-integration difference.",
+    "A3": "Same completed work through Memory region/arena and lifecycle policy, including interface cost.",
+    "A4": "NOT_SELECTED: no qualified placement/hint profile exists."
+  },
+  "functional_scenarios": [
+    {
+      "id": "MM-005-installed-parser",
+      "kind": "DexMeguviz_dmg_snapshot_open_borrowed_real_minimal_dex",
+      "required_inputs": ["format_and_version", "input_sha256", "input_bytes", "output_oracle", "artifact_sha256", "source_manifest_sha256"],
+      "success": "Installed API performs allocation, actual parsing work and paired release; complete output equals the independent oracle; malformed input and allocation failure return explicit errors."
+    },
+    {
+      "id": "MM-014-installed-image-workspace",
+      "kind": "file_PPM_cpu_image_transform_with_independent_Python_oracle",
+      "required_inputs": ["dimensions", "pixel_format", "algorithm", "initialization_contract", "input_sha256", "output_oracle", "artifact_sha256", "source_manifest_sha256"],
+      "success": "Installed API owns a real image workspace used for a CPU transform distinct from parsing; output equals the independent oracle; dimensions and byte arithmetic are checked; every owner is drained and released."
+    },
+    {
+      "id": "MM-006-lifecycle",
+      "required_cases": ["overflow", "zero_length_policy", "alignment", "allocation_failure", "budget_rejection", "failure_atomicity", "nonoverlapping_live_spans", "cross_thread_release", "lease_before_enqueue", "reset_with_live_lease", "trim_with_live_lease", "begin_close_nonblocking", "release_while_closing", "drain_timeout_preserves_owner", "late_completion", "final_close"],
+      "success": "Zero known failures in the implemented contract; unsupported optional capabilities remain explicit."
+    }
+  ],
+  "owned_region_diagnostic": {
+    "task_id": "MM-021",
+    "profile": "non_alias_no_hint",
+    "primary_metric": "host_process_elapsed_ns_for_actual_accesses",
+    "sample_unit": "One independent process session with a new owned allocation; inner loads are correlated operations, not independent samples.",
+    "maximum_reserved_span_bytes": 67108864,
+    "maximum_touched_pages": 1024,
+    "maximum_total_instances": 1,
+    "maximum_session_seconds": 30,
+    "default_case": {"node_count": 256, "stride_pages": 1, "window_pages": 0, "offset": "rotate", "mode": "dependent", "seed": 1, "access_count": 262144},
+    "functional_matrix": {"stride_pages": [1, 2, 3], "window_pages": [0, 1], "offset": ["rotate", "fixed"], "mode": ["dependent", "independent"], "seed": [1, 7]},
+    "independent_streams": 4,
+    "workload_limits": "node_count<=1024; access_count<=16777216; node_count and access_count divisible by four; access_count a positive multiple of node_count. Matrix uses a fresh allocation per case and records every executed result.",
+    "access_geometry": "span=(node_count-1)*stride_pages*actual_base_page_bytes+max_in_page_offset+node_bytes; checked arithmetic including base-window offset and allocation rounding.",
+    "required_case_metadata": ["actual_base_page_bytes", "logical_stride_pages", "node_count", "node_bytes", "live_payload_bytes", "reserved_span_bytes", "base_window_offset_bytes", "in_page_offset_policy", "assumed_or_measured_cache_line_bytes", "seed", "chain_count", "access_count", "checksum", "allocation_or_mapping_instance"],
+    "required_controls": ["equal logical node count and access count within each comparison", "write first-touch before steady accesses", "balanced or permuted in-page cache-line offsets with a fixed-offset diagnostic control", "node spans never overlap or cross page boundaries", "dependent chain and independent streams identified separately", "all input and output checks before accepting timing", "capacity sweep is separate from fixed-workset placement comparison"],
+    "required_phases": ["allocation", "initialization_and_first_touch", "warm_access", "steady_access", "release"],
+    "phase_overlap_rule": "Record whether phases are nested; do not add nested durations twice. Reset/trim/refault is an additional profile only when implemented.",
+    "minimum_receipt": "Every executed case has raw parameters, result and failure reason. An incomplete case matrix may pass its implemented functional subset but cannot mark full MM-021 complete.",
+    "prohibited_operations": ["MAP_FIXED", "external_address_mapping", "PFN_or_PTE_modification", "global_THP_or_sysfs_writes", "process_policy_changes", "alias_mapping", "production_host_injection"]
+  },
+  "sampling": {
+    "current_round": "FUNCTIONAL_AND_PILOT_ONLY",
+    "timing_and_diagnostic_rounds_separate": true,
+    "formal_performance_qualification": "NOT_STARTED",
+    "future_order": "Paired balanced AB/BA or ABBA independent sessions with the sequence frozen before formal collection.",
+    "sample_size": null,
+    "sample_size_reason": "Decide from an independent pilot and prespecified precision or power requirement; no formal interval without adequate independent units.",
+    "exclusion_rules": ["Invalid output or failed allocation is a recorded failure, not a silent timing exclusion.", "Record every timeout, crash, fallback and rejected input.", "Retain slow successful runs; do not choose the fastest run.", "Any thermal, migration or background-load exclusion requires a numeric threshold frozen before formal collection."],
+    "tail_percentiles": "NOT_REPORTED_WITHOUT_ADEQUATE_INDEPENDENT_SAMPLES"
+  },
+  "formal_performance_gate_not_yet_activated": {
+    "primary_metric": "Independent-session elapsed wall time for identical successfully completed work.",
+    "required_before_activation": ["real target source and artifact hashes", "identical input/output/quality/tier/success qualifications", "actual OS/kernel/ABI/page/core/thermal metadata", "pilot-based sample-size justification", "frozen time and owned-backing regression tolerances", "installed-artifact provenance", "raw-sample and failure retention", "matching-work energy collection method or UNAVAILABLE"],
+    "attribution": {
+      "total_solution": "(A0-A4)/A0",
+      "memory_net": "(A1-A4)/A1",
+      "core_net": "(A1-A3)/A1",
+      "placement_increment": "(A3-A4)/A3",
+      "rule": "Only calculate applicable real variants; never substitute the model or add percentages with different denominators."
+    }
+  },
+  "capabilities": {
+    "special_placement": "NOT_SELECTED",
+    "page_hint": "NOT_SELECTED",
+    "tlb_geometry": "UNKNOWN",
+    "physical_contiguity": "UNKNOWN",
+    "hardware_translation_aggregation": "UNKNOWN",
+    "pfn_visibility": "UNAVAILABLE_UNTIL_MEASURED",
+    "pmu": "UNAVAILABLE_UNTIL_EVENT_AND_PERMISSION_VERIFIED",
+    "mte_runtime": "UNAVAILABLE_UNTIL_DEVICE_TESTED",
+    "rss_pss_energy": "UNAVAILABLE_UNTIL_COLLECTED"
+  },
+  "record_rules": [
+    "Null or UNAVAILABLE is never zero.",
+    "Research MODEL values never populate LOCAL_MEASURED fields.",
+    "Allocation count, cumulative requested, unique backing, retained, retiring, RSS and PSS have separate definitions.",
+    "CPU-summed time is separate from elapsed critical-path time.",
+    "A DTLB refill/miss is not automatically a page walk; retain exact event definitions.",
+    "VA alignment, ELF alignment and logical stride are not physical-contiguity evidence or OS page-size changes.",
+    "Existing P1-07 scratch and packed-reader gains stay in A0-to-A1 after current-source verification.",
+    "A fixture, build or source audit does not count as a real Android device or family-SDK integration receipt."
+  ],
+  "fallback": "Keep System provider and dense layout. Disable experimental profiles for new domains; existing resources drain through their origin owner."
+}

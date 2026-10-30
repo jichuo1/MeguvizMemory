@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-10-30",
+  "cpu_host": {"os": "Windows x64", "compiler": "MSVC 19.51.36247", "release_ctest": "PASS_4_OF_4", "asan_ctest": "PASS_4_OF_4", "base_page_bytes": 4096},
+  "android": {
+    "ndk": "30.0.16248370",
+    "compiler": "Clang 21.0.0",
+    "minimum_api": 27,
+    "built_and_installed_abis": ["x86_64", "arm64-v8a", "armeabi-v7a"],
+    "elf_pt_load_alignment_bytes": 16384,
+    "elf_needed": ["libm.so", "libdl.so", "libc.so"],
+    "emulator": {"api": 34, "abi": "x86_64", "base_page_bytes": 4096, "core_c_cpp_runtime": "PASS", "product_runtime": "NOT_TESTED"},
+    "physical_device": {"api": 37, "abi": "arm64-v8a", "base_page_bytes": 4096, "memory_runtime": "NOT_RUN_CONCURRENT_GPU_SESSION"},
+    "actual_16kb_loader": "UNAVAILABLE",
+    "mte_hwasan": "UNAVAILABLE",
+    "apk_aar_packaging": "NOT_SELECTED_NATIVE_SDK_ONLY"
+  },
+  "consumers": {"installed_Memory_API": "PASS_TWO_DISTINCT_HOST_CONSUMERS", "Dex_SDK": "REAL_SOURCE_BUILD_NO_INSTALLED_DEX_EXPORT", "BIL": "AUDITED_NOT_MODIFIED", "Compute_Media": "REAL_SDK_FOUND_CPU_IMPORT_CONTRACT_NOT_CONFIRMED"},
+  "research": {"pmu": "UNAVAILABLE", "pfn": "UNAVAILABLE", "tlb_geometry": "UNKNOWN", "physical_contiguity": "UNKNOWN", "translation_aggregation": "UNKNOWN", "special_placement": "NOT_SELECTED", "page_hint": "NOT_SELECTED", "slab": "NOT_SELECTED"},
+  "product_performance": "NOT_STARTED",
+  "energy_rss_pss": "UNAVAILABLE",
+  "formal_release": "NOT_QUALIFIED_ENGINEERING_PREVIEW"
+}

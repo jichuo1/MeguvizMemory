@@ -1,0 +1,9 @@
+/build/
+/install/
+/dist/
+/artifacts/local/
+/research/
+/.venv/
+__pycache__/
+*.user
+CMakeUserPresets.json
