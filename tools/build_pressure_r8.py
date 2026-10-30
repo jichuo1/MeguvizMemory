@@ -15,12 +15,14 @@ from pathlib import Path
 import re
 import subprocess
 import zipfile
+import xml.etree.ElementTree as ET
 
 from build_packed_art import dex_classes
 
 ROOT = Path(__file__).resolve().parents[1]
 PACKAGE = "io.github.jichuo1.meguviz.memory.pressureprobe.r8"
 INSTRUMENT = "io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation"
+ACTIVITY = "io.github.jichuo1.meguviz.memory.android.PressureR8ForegroundActivity"
 NATIVE = "io.github.jichuo1.meguviz.memory.android.NativePressureBackend"
 MARKER = "io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker"
 UNUSED = "io.github.jichuo1.meguviz.memory.android.R8UnusedMarker"
@@ -51,7 +53,8 @@ def main():
     args = parser.parse_args()
     out = args.out_dir.resolve()
     require(out.is_relative_to(ROOT / "build") and not out.exists(), "fresh_build_directory_required")
-    require(args.receipt.resolve().is_relative_to(ROOT / "artifacts/continuation-20261030"), "continuation_receipt_required")
+    receipt_roots = (ROOT / "artifacts/continuation-20261030", ROOT / "artifacts/android-close-investigation-20261030")
+    require(any(args.receipt.resolve().is_relative_to(root) for root in receipt_roots), "scoped_receipt_required")
     out.mkdir(parents=True)
     sdk_tools = args.sdk / "build-tools" / args.build_tools
     android = args.sdk / "platforms" / args.platform / "android.jar"
@@ -108,17 +111,29 @@ def main():
             members.append({"member": name, "bytes": len(data), "sha256": hashlib.sha256(data).hexdigest()})
     library = unpacked / "classes.jar"
     source = ROOT / "adapters/android/sample/PressureR8Instrumentation.java"
+    activity_source = ROOT / "adapters/android/sample/PressureR8ForegroundActivity.java"
     manifest = ROOT / "adapters/android/sample/AndroidManifest-r8.xml"
+    manifest_root = ET.parse(manifest).getroot()
+    application = manifest_root.find("application")
+    require(application is not None, "diagnostic_application_required")
+    components = [entry for entry in application if entry.tag in ("activity", "activity-alias", "receiver", "service", "provider")]
+    namespace = "{http://schemas.android.com/apk/res/android}"
+    require(len(components) == 1 and components[0].tag == "activity" and
+            components[0].get(namespace + "name") == ACTIVITY and
+            components[0].get(namespace + "exported") == "true" and
+            components[0].get(namespace + "permission") == "android.permission.DUMP" and
+            components[0].find("intent-filter") is None, "diagnostic_bootstrap_permission_or_components_mismatch")
     classes = out / "consumer-classes"; classes.mkdir()
     separator = ";" if os.name == "nt" else ":"
-    run("javac-consumer", [javac, "--release", "8", "-classpath", str(android) + separator + str(library), "-d", classes, source])
+    run("javac-consumer", [javac, "--release", "8", "-classpath", str(android) + separator + str(library), "-d", classes, source, activity_source])
     consumer_jar = out / "consumer.jar"
     run("jar-consumer", [jar, "--create", "--file", consumer_jar, "-C", classes, "."])
     dex = out / "r8-dex"; dex.mkdir()
     config = out / "consumer-r8.pro"
-    # Only manifest entry and a renameable witness are added. Native names and
+    # Only manifest entries and a renameable witness are added. Native names and
     # onNativeClosed are retained exclusively by the shipped AAR rules.
     config.write_text("-keep class " + INSTRUMENT + " { *; }\n"
+                      "-keep class " + ACTIVITY + " { *; }\n"
                       "-keep,allowobfuscation class " + MARKER + " { *; }\n"
                       "-printusage usage.txt\n"
                       "-printseeds seeds.txt\n", encoding="utf-8", newline="\n")
@@ -136,7 +151,8 @@ def main():
     dex_files = sorted(dex.glob("*.dex")); require(len(dex_files) == 1, "one_dex_expected")
     descriptors = dex_classes(dex_files[0].read_bytes())
     desc = lambda name: "L" + name.replace(".", "/") + ";"
-    require(desc(NATIVE) in descriptors and desc(INSTRUMENT) in descriptors, "native_or_instrument_entry_missing")
+    require(desc(NATIVE) in descriptors and desc(INSTRUMENT) in descriptors and desc(ACTIVITY) in descriptors, "native_or_manifest_entry_missing")
+    require(re.search(r"^" + re.escape(ACTIVITY) + r" -> " + re.escape(ACTIVITY) + r":$", mapping, re.MULTILINE), "diagnostic_activity_name_not_retained")
     require(desc(renamed.group(1)) in descriptors and desc(UNUSED) not in descriptors, "dex_shrink_rename_evidence_missing")
     unsigned = out / "r8-unsigned.apk"
     run("aapt2-link", [aapt, "link", "-I", android, "--manifest", manifest, "--min-sdk-version", "27", "--target-sdk-version", "35", "-o", unsigned])
@@ -165,12 +181,14 @@ def main():
                 "input_aar": identity(input_aar), "base_aar": identity(args.aar), "native_overrides": overrides,
                 "aar_members": members, "certificate_sha256": cert[0].lower(),
                 "signing": "EXISTING_DIAGNOSTIC_KEY_NOT_PRODUCTION", "artifacts": [identity(path) for path in (apk, out / "mapping.txt", out / "usage.txt", out / "seeds.txt", config, dex_files[0])],
-                "sources": [identity(path) for path in (source, manifest, Path(__file__), ROOT / "tools/build_packed_art.py")],
+                "sources": [identity(path) for path in (source, activity_source, manifest, Path(__file__), ROOT / "tools/build_packed_art.py")],
                 "toolchain": [{"name": path.name, "sha256": digest(path)} for path in (r8, android, signer)],
                 "r8_evidence": {"shrinking_enabled": True, "optimization_enabled": True, "obfuscation_enabled": True,
                                 "marker_before": MARKER, "marker_after": renamed.group(1), "unused_class_removed": UNUSED,
                                 "runtime_marker_validation": "Instrumentation reports the name; external runner must compare it to this exact marker_after. No original-name literal comparison inside R8 input.",
                                 "native_class_name_retained": NATIVE, "native_completion_method_retained": "onNativeClosed(int)",
+                                "foreground_activity_name_retained": ACTIVITY,
+                                "foreground_bootstrap": "EXPORTED_EXPLICIT_ONLY_REQUIRES_ANDROID_PERMISSION_DUMP",
                                 "native_keep_rule_source": "AAR proguard.txt unchanged", "dex_class_count": len(descriptors)},
                 "runtime_closure": "Exactly the AAR libmgmem.so and libmgmem_pressure_jni.so; no second Memory core",
                 "device_executed": False, "performance_qualified": False, "BIL_integrated": False, "operations": operations,

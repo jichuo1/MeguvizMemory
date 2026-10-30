@@ -1,0 +1,39 @@
+{
+  "state": "OBSERVED",
+  "scope": "OWN_PID_CGROUP_READ_ONLY_NOT_DEVICE_WIDE",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "target_pid_sha256": "299f29599f2260a92bfa1061e2aa7f8b675089194fdae60e1f3d668c261fbca4",
+  "cgroup_path_sha256": "50156b5bf05ec37d2f26881c70fd6bebad564f2637152e41edf28f2c4714c727",
+  "source_sha256": "7302362c156cbeffc6888da1c1d2dd7fcb49e12215d03d1e3b523f9242f4bab5",
+  "observations": [
+    {
+      "at_utc": "2026-10-30T14:03:35.214522+00:00",
+      "cgroup_freeze": "1",
+      "cgroup_events": [
+        "populated 1",
+        "frozen 1"
+      ],
+      "observed_thread_count": 20,
+      "freezer_wait_thread_count": 20,
+      "wait_channels": {
+        "do_freezer_trap": 20
+      }
+    },
+    {
+      "at_utc": "2026-10-30T14:03:42.313521+00:00",
+      "cgroup_freeze": "1",
+      "cgroup_events": [
+        "populated 1",
+        "frozen 1"
+      ],
+      "observed_thread_count": 20,
+      "freezer_wait_thread_count": 20,
+      "wait_channels": {
+        "do_freezer_trap": 20
+      }
+    }
+  ],
+  "freeze_controller_modified": false,
+  "system_policy_modified": false,
+  "qualifications": "KERNEL_FROZEN_STATE_OBSERVED_NOT_IDENTITY_OF_ACTOR_OR_ALL_PRIOR_HANGS"
+}

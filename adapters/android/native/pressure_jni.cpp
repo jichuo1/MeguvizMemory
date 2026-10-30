@@ -193,7 +193,19 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
         state->close_status=result;state->final_snapshot.last_status=result;
         state->done=true;state->changed.notify_all();
     }
-    publish_closed(id,state);
+    // The Java owner is allowed to close and never poll again. A transient VM
+    // attach or callback failure must not strand its global references and
+    // registration forever. Reuse this reaper, preserving the single-publisher
+    // claim in publish_closed; never free uncertain resources on a timeout.
+    auto delay=std::chrono::milliseconds(25);
+    for (;;) {
+        publish_closed(id,state);
+        std::unique_lock<std::mutex> lock(state->mutex);
+        if (state->completion_published) break;
+        state->changed.wait_for(lock,delay,[&] {return state->completion_published;});
+        if (state->completion_published) break;
+        delay=std::min(delay*2,std::chrono::milliseconds(1000));
+    }
 }
 mgmem_status schedule_close(u64 id) noexcept {
     auto state=bridge(id);if(!state)return MGMEM_IS_CLOSED;

@@ -1,0 +1,366 @@
+Start testing: Oct 30 22:06 中国标准时间
+----------------------------------------------------------
+1/22 Testing: ownership_budget_close
+1/22 Test: ownership_budget_close
+Command: "<workspace>/build/android-close-retry-host/mgmem_core_tests.exe"
+Directory: <workspace>/build/android-close-retry-host
+"ownership_budget_close" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+PASS abi_and_checked_arithmetic
+PASS system_budget_layout_and_rollback
+PASS provider_oom_and_exact_pairing
+PASS allocation_reservation_close_race
+PASS borrow_access_and_handle_identity
+PASS late_cross_thread_lease_after_close
+PASS arena_retained_reset_and_trim
+PASS growth_coexistence_peak
+PASS drain_completion_and_timeout
+PASS drain_poll_during_blocked_collection
+PASS concurrent_system_stress
+{"suite":"mgmem-core-v1","tests":11,"checks":145033,"status":"PASS"}
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"ownership_budget_close" end time: Oct 30 22:06 中国标准时间
+"ownership_budget_close" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/22 Testing: c_abi_consumer
+2/22 Test: c_abi_consumer
+Command: "<workspace>/build/android-close-retry-host/mgmem_c_consumer.exe"
+Directory: <workspace>/build/android-close-retry-host
+"c_abi_consumer" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"consumer":"pure_c_abi","success":true,"backing_after_close":0}
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"c_abi_consumer" end time: Oct 30 22:06 中国标准时间
+"c_abi_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/22 Testing: cpp_raii_consumer
+3/22 Test: cpp_raii_consumer
+Command: "<workspace>/build/android-close-retry-host/mgmem_cpp_consumer.exe"
+Directory: <workspace>/build/android-close-retry-host
+"cpp_raii_consumer" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-cpp-raii","cases":5,"status":"PASS"}
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"cpp_raii_consumer" end time: Oct 30 22:06 中国标准时间
+"cpp_raii_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/22 Testing: external_import
+4/22 Test: external_import
+Command: "<workspace>/build/android-close-retry-host/mgmem_import_tests.exe"
+Directory: <workspace>/build/android-close-retry-host
+"external_import" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-v1","groups":7,"checks":275,"status":"PASS"}
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"external_import" end time: Oct 30 22:06 中国标准时间
+"external_import" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/22 Testing: external_import_poison_retain
+5/22 Test: external_import_poison_retain
+Command: "<workspace>/build/android-close-retry-host/mgmem_import_tests.exe" "--poison-retain"
+Directory: <workspace>/build/android-close-retry-host
+"external_import_poison_retain" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"--poison-retain","status":"PASS"}
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_retain" end time: Oct 30 22:06 中国标准时间
+"external_import_poison_retain" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/22 Testing: external_import_poison_release
+6/22 Test: external_import_poison_release
+Command: "<workspace>/build/android-close-retry-host/mgmem_import_tests.exe" "--poison-release"
+Directory: <workspace>/build/android-close-retry-host
+"external_import_poison_release" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"--poison-release","status":"PASS"}
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_release" end time: Oct 30 22:06 中国标准时间
+"external_import_poison_release" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/22 Testing: external_import_poison_alias
+7/22 Test: external_import_poison_alias
+Command: "<workspace>/build/android-close-retry-host/mgmem_import_tests.exe" "--poison-alias"
+Directory: <workspace>/build/android-close-retry-host
+"external_import_poison_alias" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"provider_alias_external_and_owned","status":"PASS"}
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_alias" end time: Oct 30 22:06 中国标准时间
+"external_import_poison_alias" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/22 Testing: pressure_budget_close
+8/22 Test: pressure_budget_close
+Command: "<workspace>/build/android-close-retry-host/mgmem_pressure_tests.exe"
+Directory: <workspace>/build/android-close-retry-host
+"pressure_budget_close" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-pressure-v1","tests":3,"checks":75,"status":"PASS"}
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"pressure_budget_close" end time: Oct 30 22:06 中国标准时间
+"pressure_budget_close" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/22 Testing: jni_lock_callback-reentry
+9/22 Test: jni_lock_callback-reentry
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "callback-reentry"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_callback-reentry" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"callback-reentry","pass":true,"callbacks":1,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_callback-reentry" end time: Oct 30 22:06 中国标准时间
+"jni_lock_callback-reentry" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/22 Testing: jni_lock_single-publisher
+10/22 Test: jni_lock_single-publisher
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "single-publisher"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_single-publisher" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"single-publisher","pass":true,"callbacks":1,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_single-publisher" end time: Oct 30 22:06 中国标准时间
+"jni_lock_single-publisher" time elapsed: 00:00:00
+----------------------------------------------------------
+
+11/22 Testing: jni_lock_attach-retry
+11/22 Test: jni_lock_attach-retry
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "attach-retry"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_attach-retry" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"attach-retry","pass":true,"callbacks":1,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_attach-retry" end time: Oct 30 22:06 中国标准时间
+"jni_lock_attach-retry" time elapsed: 00:00:00
+----------------------------------------------------------
+
+12/22 Testing: jni_lock_java-exception-retry
+12/22 Test: jni_lock_java-exception-retry
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "java-exception-retry"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_java-exception-retry" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"java-exception-retry","pass":true,"callbacks":2,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_java-exception-retry" end time: Oct 30 22:06 中国标准时间
+"jni_lock_java-exception-retry" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/22 Testing: jni_lock_error-quarantine
+13/22 Test: jni_lock_error-quarantine
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "error-quarantine"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_error-quarantine" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"error-quarantine","pass":true,"callbacks":1,"global_ref_deletes":0,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_error-quarantine" end time: Oct 30 22:06 中国标准时间
+"jni_lock_error-quarantine" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/22 Testing: jni_lock_foreign-release
+14/22 Test: jni_lock_foreign-release
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "foreign-release"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_foreign-release" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"foreign-release","pass":true,"callbacks":0,"global_ref_deletes":0,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":true}
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_foreign-release" end time: Oct 30 22:06 中国标准时间
+"jni_lock_foreign-release" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/22 Testing: jni_lock_foreign-release-bind
+15/22 Test: jni_lock_foreign-release-bind
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "foreign-release-bind"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_foreign-release-bind" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"foreign-release-bind","pass":true,"callbacks":0,"global_ref_deletes":0,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":true,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_foreign-release-bind" end time: Oct 30 22:06 中国标准时间
+"jni_lock_foreign-release-bind" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/22 Testing: jni_lock_foreign-release-snapshot
+16/22 Test: jni_lock_foreign-release-snapshot
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "foreign-release-snapshot"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_foreign-release-snapshot" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"foreign-release-snapshot","pass":true,"callbacks":0,"global_ref_deletes":0,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":true,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_foreign-release-snapshot" end time: Oct 30 22:06 中国标准时间
+"jni_lock_foreign-release-snapshot" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/22 Testing: jni_lock_auto-attach-recovery
+17/22 Test: jni_lock_auto-attach-recovery
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "auto-attach-recovery"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_auto-attach-recovery" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"auto-attach-recovery","pass":true,"callbacks":1,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":true}
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_auto-attach-recovery" end time: Oct 30 22:06 中国标准时间
+"jni_lock_auto-attach-recovery" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/22 Testing: jni_lock_auto-java-recovery
+18/22 Test: jni_lock_auto-java-recovery
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "auto-java-recovery"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_auto-java-recovery" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"auto-java-recovery","pass":true,"callbacks":2,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":true}
+<end of output>
+Test time =   0.24 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_auto-java-recovery" end time: Oct 30 22:06 中国标准时间
+"jni_lock_auto-java-recovery" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/22 Testing: jni_lock_auto-concurrent-poll
+19/22 Test: jni_lock_auto-concurrent-poll
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "auto-concurrent-poll"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_auto-concurrent-poll" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"auto-concurrent-poll","pass":true,"callbacks":1,"global_ref_deletes":2,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":true}
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_auto-concurrent-poll" end time: Oct 30 22:06 中国标准时间
+"jni_lock_auto-concurrent-poll" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/22 Testing: jni_lock_auto-error-quarantine
+20/22 Test: jni_lock_auto-error-quarantine
+Command: "<workspace>/build/android-close-retry-host/mgmem_jni_lock_tests.exe" "auto-error-quarantine"
+Directory: <workspace>/build/android-close-retry-host
+"jni_lock_auto-error-quarantine" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"case":"auto-error-quarantine","pass":true,"callbacks":1,"global_ref_deletes":0,"JNI_operations_outside_Bridge":true,"snapshot_reentered":true,"foreign_actual_JNI_reentry":false,"foreign_release_outside_Bridge":false}
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"jni_lock_auto-error-quarantine" end time: Oct 30 22:06 中国标准时间
+"jni_lock_auto-error-quarantine" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/22 Testing: original_abi10_consumer
+21/22 Test: original_abi10_consumer
+Command: "<workspace>/build/android-close-retry-host/mgmem_abi10_consumer.exe"
+Directory: <workspace>/build/android-close-retry-host
+"original_abi10_consumer" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"consumer":"pure_c_abi","success":true,"backing_after_close":0}
+<end of output>
+Test time =   0.13 sec
+----------------------------------------------------------
+Test Passed.
+"original_abi10_consumer" end time: Oct 30 22:06 中国标准时间
+"original_abi10_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/22 Testing: runtime_origin
+22/22 Test: runtime_origin
+Command: "<workspace>/build/android-close-retry-host/mgmem_runtime_tests.exe" "<workspace>/build/android-close-retry-host/mgmem.dll" "<workspace>/build/android-close-retry-host/mgmem_other_runtime.dll"
+Directory: <workspace>/build/android-close-retry-host
+"runtime_origin" start time: Oct 30 22:06 中国标准时间
+Output:
+----------------------------------------------------------
+{"separate_runtime_handles_rejected":true,"foreign_runtime_import_descriptor_rejected":true}
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"runtime_origin" end time: Oct 30 22:06 中国标准时间
+"runtime_origin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 30 22:06 中国标准时间

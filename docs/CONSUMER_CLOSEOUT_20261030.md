@@ -2,6 +2,8 @@
 
 2026-10-30。按用户“快速收尾”要求结束本阶段。交付core 0.2.0 / ABI1.1及pressure closefix1工程修订，**Android新模块长稳未获资格，BIL不接入**。没有新增生产依赖或发布正式Release。
 
+后续复查：新的独立真机复现已在目标进程自身观察到cgroup冻结；当前工作与当时尚未定位的判断分开记录，见[后续关闭调查](ANDROID_CLOSE_INVESTIGATION_20261030.md)。此前失败记录及其资格不被改写。
+
 ## 已完成的实际验证
 
 DEX独立消费者使用SYSTEM完整region导入：明确runtime cookie、READ lease、origin retain/release、SDK结果跨snapshot/caller/owner关闭延寿、跨线程最后归还。普通direct与import均无额外input backing/复制，source+input唯一容量都是10,540,184B；imported charge是source的子集，不相加、不把普通删除复制的收益归给Memory。Host12功能矩阵、两组短循环、时长门槛和非法参数通过。

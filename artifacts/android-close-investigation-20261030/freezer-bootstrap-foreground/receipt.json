@@ -1,0 +1,567 @@
+{
+  "schema_version": 1,
+  "scope": "OWN_ANDROID_CLOSE_FUNCTIONAL_NOT_PERFORMANCE",
+  "state": "PASS_OBSERVED_UNFROZEN_SAMPLES",
+  "source_sha256": "db6a3d17e46768cded69f277425cc94a6eabecd21ed7f4786cdbe8eaddbbe6b4",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "started_at_utc": "2026-10-30T14:14:42.194843+00:00",
+  "explicit_authorization": "CURRENT_USER_REQUEST_AND_PRIOR_NEW_DEVICE_AUTHORIZATION",
+  "shared_device_lock": false,
+  "profile": {
+    "foreground_requested": true,
+    "prestart_activity": true,
+    "minimum_ms": 60000,
+    "wall_ms": 180000,
+    "outer_seconds": 240,
+    "minimum_iterations": 1000,
+    "cgroup_poll_seconds": 2,
+    "stall_seconds": 30,
+    "AMS_injection": false
+  },
+  "gates": [
+    {
+      "name": "initial",
+      "parsed_processes": 845,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "name": "before-own-activity",
+      "parsed_processes": 845,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "name": "before-instrumentation",
+      "parsed_processes": 853,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "name": "after",
+      "parsed_processes": 856,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    }
+  ],
+  "commands": [
+    {
+      "name": "initial-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "2d8818e0be4e47b84b0836308e98d12a95ac419138ed3d61e09ef5d0994f4e1a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "initial-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "59cd489d692beff6524016625f9417285a10fa5bcb158837855b6d8c03d5208e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "api",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "42817c432a683116970d4048f2ddf476ff8dfca7a5d178bfa3a56679862e36aa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "abi",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "93a5f09ca2fe8b37c612145e5749beaf159a7218b686023da3c3c22d9d363327",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "page",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "30f236f92d107cedc1eab7b3d6dafa316df3657ac88e59ece8df2944b6c995ca",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "model",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "a28e87ee24a958a61bfa993a364545ff4c6e4031cb2ae39d20f6a59715f00a65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "existing-package",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "85e09dea99432300661bb20aad95b3e4cc8c6477fba808c6991d31c17c814ab0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "pull-own-installed",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4a9fe132338fc9aa4ab1c8622a44f34de423daba2d213aceda8f77f67227bb88"
+    },
+    {
+      "name": "own-uid",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "1cf74232e14fb29f865cfa5f2479f0a012b3f4656385a61ba1857762fa63c556",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-own-activity-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "29428a70a2b9253e4085407b4d2cabbbf8a97a3781c5034309006d6b176818c9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-own-activity-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "d6f9ab5b9240eef5bec50740f2a5a797a4935cbb0a0904bd4feaf9424c8089f3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "start-protected-own-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "3a8b3316aaa4a11fe952a2f209a3ca92a475dfd74bf21837948bc243c99f7f61",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-instrumentation-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "0c8203bfb2f9ed6f7f350fae4fbe2e8d7ff2a8722a52c9c8d9fb005373b43401",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-instrumentation-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "53bd66be77fde70712f7f8bc694d296185607473c4efa1645b2d116927bead9c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "9e25b29fac7f1f593291f09719d9748d5d82ef9ba65cd4d2eb31f0b68f05ad6c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "77145e1cbde92529c8155ae43609bff6559ee5a0a60462b6e9da7100ef516066",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot-after",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "cgroup_samples": [
+    {
+      "observed_at_utc": "2026-10-30T14:14:48.382343+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 0.8899999999994179,
+      "gap_seconds": null
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:14:51.404921+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 3.9219999999986612,
+      "gap_seconds": 3.0319999999992433
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:14:54.611822+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 7.125,
+      "gap_seconds": 3.2030000000013388
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:14:57.105940+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 9.625,
+      "gap_seconds": 2.5
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:14:59.525858+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 12.046999999998661,
+      "gap_seconds": 2.4219999999986612
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:02.375061+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 14.889999999999418,
+      "gap_seconds": 2.8430000000007567
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:04.947952+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 17.46799999999712,
+      "gap_seconds": 2.577999999997701
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:07.399542+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 19.90599999999904,
+      "gap_seconds": 2.438000000001921
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:09.960798+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 22.46799999999712,
+      "gap_seconds": 2.561999999998079
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:12.504074+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 25.014999999999418,
+      "gap_seconds": 2.547000000002299
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:15.268389+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 27.78099999999904,
+      "gap_seconds": 2.7659999999996217
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:17.940276+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 30.4529999999977,
+      "gap_seconds": 2.6719999999986612
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:20.755019+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 33.26499999999942,
+      "gap_seconds": 2.812000000001717
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:23.354593+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 35.875,
+      "gap_seconds": 2.610000000000582
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:26.210193+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 38.71799999999712,
+      "gap_seconds": 2.8429999999971187
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:28.964215+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 41.48400000000038,
+      "gap_seconds": 2.7660000000032596
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:31.412615+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 43.92199999999866,
+      "gap_seconds": 2.437999999998283
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:34.360452+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 46.875,
+      "gap_seconds": 2.9530000000013388
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:36.845057+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 49.35900000000038,
+      "gap_seconds": 2.4840000000003783
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:39.438705+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 51.9529999999977,
+      "gap_seconds": 2.5939999999973224
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:41.986262+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 54.5,
+      "gap_seconds": 2.547000000002299
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:44.977297+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 57.48400000000038,
+      "gap_seconds": 2.9840000000003783
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:48.555493+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 61.06199999999808,
+      "gap_seconds": 3.577999999997701
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:15:50.996312+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a",
+      "elapsed_seconds": 63.51499999999942,
+      "gap_seconds": 2.4530000000013388
+    }
+  ],
+  "raw_transport": "IGNORED_BUILD_ONLY",
+  "BIL": "NOT_MODIFIED",
+  "performance": "NOT_MEASURED",
+  "plan_sha256": "59050b4943d9b9f884ac65a79a09c006ce57b6ff016e76bbdbdf2fcba8d5ef05",
+  "device": {
+    "api": 33,
+    "abi": "arm64-v8a",
+    "page_bytes": 4096,
+    "model": "2210132C"
+  },
+  "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+  "APK": {
+    "sha256": "4853e95a089eac027062fae1bd4db1e3797398573c0dc97b81cb3a7b2a514a93",
+    "build_receipt_sha256": "df758d0fce5a0c223c8141ea9c7785c230df56cdd24854e7a9af507dc58c52a0",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8"
+  },
+  "prestart": {
+    "state": "ACTIVITY_STARTED_OWN_PID_UNFROZEN",
+    "pid_sha256": "ffe78307d6436432db8a8792dec73a62272686293d56ee2a72ae81136ca0d202",
+    "freezer": {
+      "observed_at_utc": "2026-10-30T14:14:46.844952+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "8c3b7d0a7ff4fb8ae998f6b47a5d1379fccdef58537737aab3f4ac1943d9cf2a"
+    }
+  },
+  "instrumentation_started_at_utc": "2026-10-30T14:14:47.483928+00:00",
+  "max_cgroup_sample_gap_seconds": 3.577999999997701,
+  "last_own_progress": {
+    "schema_version": 1,
+    "suite": "android-pressure-r8-stability-v1",
+    "diagnostic_revision": 4,
+    "run_id": "13fe87aee1bf",
+    "status": "PASS",
+    "phase": "complete",
+    "iteration": 1000,
+    "checks": 15019,
+    "elapsed_ms": 62846,
+    "cleanup_safe": true,
+    "unsafe_cleanup": false,
+    "inject_main_running_timeout": false,
+    "inject_progress_lock_timeout": false,
+    "foreground_requested": true,
+    "foreground_prestarted": true,
+    "foreground_resumed": true,
+    "foreground_finished": true,
+    "foreground_currently_resumed": false,
+    "fire_and_forget_state": "PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL",
+    "boundary_outcome": "NO_TIMEOUT",
+    "reason": null
+  },
+  "instrumentation_exit_code": 0,
+  "instrumentation_stdout_sha256": "000d171fa8ab9cbc6a64ad254409bad1c001c51db82de463eda256faf2cac403",
+  "instrumentation_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elapsed_seconds": 65.51499999999942,
+  "android_report": {
+    "suite": "android-pressure-r8-stability-v1",
+    "status": "PASS",
+    "checks": 15019,
+    "iterations_requested": 1000,
+    "iterations_completed": 1000,
+    "minimum_duration_ms": 60000,
+    "maximum_duration_ms": 180000,
+    "actual_duration_ms": 62846,
+    "api": 33,
+    "r8_marker_runtime_name": "io.github.jichuo1.meguviz.memory.android.a",
+    "diagnostic_revision": 4,
+    "run_id": "13fe87aee1bf",
+    "inject_main_running_timeout": false,
+    "inject_progress_lock_timeout": false,
+    "stall_timeout_ms": 30000,
+    "foreground_requested": true,
+    "foreground_prestarted": true,
+    "foreground_resumed": true,
+    "foreground_finished": true,
+    "foreground_resume_checks": 2002,
+    "foreground_pause_count_before_finish": 0,
+    "foreground_preexisting_pause_count": 0,
+    "foreground_finish_policy": "OWN_MAIN_FINISH_THEN_OBSERVED_ONSTOP_OR_ONDESTROY",
+    "fire_and_forget_state": "PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL",
+    "fire_and_forget_elapsed_ms": 2,
+    "fire_and_forget_polls": 1,
+    "fire_and_forget_scope": "CALLER_ONLY_CLOSE_AND_NATIVE_EXISTS_NO_AWAIT_SNAPSHOT_OR_NATIVE_POLL",
+    "phase": "complete",
+    "exit_scope": "NORMAL_INSTRUMENTATION_COMPLETION",
+    "progress_file": "cache/mgmem-r8-progress.json",
+    "unknown_work_policy": "PERSIST_UNKNOWN_AND_FAIL_STOP_OWN_PROCESS_NO_CONCURRENT_FREE",
+    "framework": {
+      "application_dispatch": "PASS_SYNTHETIC_BACKGROUND_AND_UI_HIDDEN",
+      "legacy_automatic_delivery": "NOT_OBSERVED_BY_THIS_TEST",
+      "onLowMemory_automatic_delivery": "NOT_OBSERVED_BY_THIS_TEST",
+      "observe_ams": false,
+      "ams_background_injection": "NOT_REQUESTED_SEPARATE_SMOKE_EVIDENCE",
+      "automatic_low_ram_tested": false,
+      "injection_scope": "OWN_DIAGNOSTIC_PACKAGE_ONLY"
+    },
+    "own_process_observations": [
+      {
+        "elapsed_realtime_nanos": 21983965683904,
+        "rss_kb": 152932,
+        "pss_kb": 84376,
+        "private_dirty_kb": 64936,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 21995304068691,
+        "rss_kb": 158168,
+        "pss_kb": 89048,
+        "private_dirty_kb": 69760,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 22008011209832,
+        "rss_kb": 155916,
+        "pss_kb": 86548,
+        "private_dirty_kb": 67216,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 22020722058317,
+        "rss_kb": 155304,
+        "pss_kb": 86163,
+        "private_dirty_kb": 66788,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 22033434138520,
+        "rss_kb": 154320,
+        "pss_kb": 84976,
+        "private_dirty_kb": 65536,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 22045673057786,
+        "rss_kb": 152804,
+        "pss_kb": 83688,
+        "private_dirty_kb": 64240,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 22045710780234,
+        "rss_kb": 152804,
+        "pss_kb": 83708,
+        "private_dirty_kb": 64260,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      }
+    ],
+    "observation_scope": "WHOLE_OWN_PROCESS_NOT_DOMAIN_ATTRIBUTION_NOT_ATOMIC_NOT_SAVINGS",
+    "peak_requested_backing_bytes_per_domain": 1536,
+    "final_backing_bytes_each_domain": 0,
+    "stability_scope": "BOUNDED_CREATE_PRESSURE_RESTORE_MAIN_CLOSE_ASYNC_LAST_RELEASE_CYCLES",
+    "indefinite_leak_freedom_proven": false,
+    "actual_low_memory_event": false,
+    "performance_qualified": false,
+    "BIL_integrated": false,
+    "energy_joules": null,
+    "energy_unavailable_reason": "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD",
+    "process_pid_sha256": "ffe78307d6436432db8a8792dec73a62272686293d56ee2a72ae81136ca0d202"
+  },
+  "normal_close_proven": true,
+  "finished_at_utc": "2026-10-30T14:15:54.419343+00:00"
+}

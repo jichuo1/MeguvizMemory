@@ -1,0 +1,58 @@
+// Isolated actual JNI composition + real pressure worker, fake VM only.
+// Reuse the existing production-source inclusion and fake JNI table verbatim.
+#define main existing_jni_lock_test_main
+#include "../../tests/jni_lock_tests.cpp"
+#undef main
+
+int main() {
+    using namespace test;
+    initialize(); Fixture f; active=&f;
+    mgmem_domain *domain=nullptr;
+    mgmem_domain_options_v1 options{sizeof(options),1,1,0,MGMEM_SYSTEM,0,4096,0,nullptr};
+    if(mgmem_domain_create_v1(&options,&domain)!=MGMEM_OK)return 10;
+    mgmem_domain_lifetime_v1 lifetime{sizeof(lifetime),1,&f,&lifetime_retain,&lifetime_release};
+    mgmem_pressure_options_v1 policy{sizeof(policy),1,4096,2048,0,1,0};
+    if(mgmem_android_pressure_register_v1(domain,&lifetime,&policy,&f.id)!=MGMEM_OK)return 11;
+    f.state=bridge(f.id);
+    if(JNI_NAME(nativeBind)(&env,nullptr,static_cast<jlong>(f.id),
+            reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2))!=MGMEM_OK)return 12;
+    f.detached=true; f.attach_fails=true;
+    // Same state transition and exact reap() body as schedule_close, but a
+    // joinable test thread guarantees that no background test thread survives.
+    f.state->closing.store(true);
+    std::thread reaper([state=f.state,id=f.id]{reap(id,state);});
+    reaper.join();
+    const bool retained_after_failure=exists(f.id) && f.attach_calls==1 && f.calls==0 &&
+        f.global_deletes==0 && f.lifetime_retains==1 && f.lifetime_releases==1 &&
+        f.state->done && !f.state->publishing && !f.state->completion_published &&
+        f.state->listener && f.state->final_buffer;
+    // VM becomes healthy; no Java poll or other JNI action occurs in the gap.
+    f.attach_fails=false;
+    std::this_thread::sleep_for(std::chrono::milliseconds(400));
+    const bool observed_auto_cleanup=!exists(f.id);
+    const bool no_retry=f.attach_calls==1 && f.calls==0 && f.global_deletes==0;
+    // Explicitly recover AFTER the red observation; no refs or foreign domain
+    // are deliberately leaked by this test itself.
+    JNI_NAME(nativePollCompletion)(&env,nullptr,static_cast<jlong>(f.id));
+    const bool manual_cleanup=!exists(f.id) && f.calls==1 && f.global_deletes==2;
+    mgmem_snapshot_v1 snapshot{};
+    const bool external_open=mgmem_domain_snapshot_v1(domain,&snapshot,sizeof(snapshot))==MGMEM_OK && snapshot.state==MGMEM_OPEN;
+    bool domain_zero=mgmem_domain_begin_close_v1(domain)==MGMEM_OK && mgmem_domain_collect_v1(domain)==MGMEM_OK &&
+        mgmem_domain_drain_v1(domain,0)==MGMEM_OK && mgmem_domain_snapshot_v1(domain,&snapshot,sizeof(snapshot))==MGMEM_OK &&
+        snapshot.state==MGMEM_CLOSED && snapshot.backing_bytes==0 && snapshot.reserved_bytes==0 &&
+        snapshot.active_allocations==0 && snapshot.active_leases==0;
+    domain_zero=mgmem_domain_destroy_v1(domain)==MGMEM_OK && domain_zero;
+    const bool setup_and_cleanup=retained_after_failure && no_retry && manual_cleanup && external_open && domain_zero;
+    std::cout<<"{\"suite\":\"reaper_attach_failure_autoclose_counterexample\",\"expected_auto_cleanup\":true,"
+             <<"\"observed_auto_cleanup\":"<<(observed_auto_cleanup?"true":"false")
+             <<",\"no_retry_after_VM_recovery\":"<<(no_retry?"true":"false")
+             <<",\"registry_and_both_global_refs_retained\":"<<(retained_after_failure?"true":"false")
+             <<",\"observed_without_poll_ms\":400,\"manual_poll_then_refs_released\":"<<(manual_cleanup?"true":"false")
+             <<",\"foreign_domain_remained_open\":"<<(external_open?"true":"false")
+             <<",\"final_domain_closed_zero\":"<<(domain_zero?"true":"false")
+             <<",\"reaper_thread_joined\":true,\"real_ART\":false}"
+             <<std::endl;
+    active=nullptr;
+    if(!setup_and_cleanup)return 3;
+    return observed_auto_cleanup?0:1;
+}

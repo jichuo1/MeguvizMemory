@@ -1,0 +1,29 @@
+{
+  "state": "EXACT_PRE_RETRY_SOURCE_SNAPSHOT",
+  "files": [
+    {
+      "source": "adapters/android/native/pressure_jni.cpp",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-pre-retry/pressure_jni.cpp.txt",
+      "bytes": 19336,
+      "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+    },
+    {
+      "source": "tests/jni_lock_tests.cpp",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-pre-retry/jni_lock_tests.cpp.txt",
+      "bytes": 10665,
+      "sha256": "99f09b88447e703b2597169db39993297211023154633766bbcb167409e08ec6"
+    },
+    {
+      "source": "CMakeLists.txt",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-pre-retry/CMakeLists.txt.txt",
+      "bytes": 9846,
+      "sha256": "984d94c5ec0a2b8b7412c329506d391ed2f56e23b3182378fe40a66116e44645"
+    },
+    {
+      "source": "docs/ANDROID_PRESSURE.md",
+      "snapshot": "artifacts/android-close-investigation-20261030/source-pre-retry/ANDROID_PRESSURE.md.txt",
+      "bytes": 7016,
+      "sha256": "7c6892642ea154b6f6e905d843f6abe391490e731f485a1e89c1ee5f991be3f9"
+    }
+  ]
+}

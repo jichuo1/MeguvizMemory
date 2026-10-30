@@ -1,0 +1,19 @@
+{
+  "scope": "ONE_OWN_PACKAGE_SYNTHETIC_BACKGROUND_TRIM_ONLY_NOT_GLOBAL_POLICY",
+  "started_at_utc": "2026-10-30T14:03:55.698937+00:00",
+  "command_exit_code": 255,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "39217960dfb9f8e9249c60b627ceca10a30f43f14b9b9aa04e7ddf5eca00c1cf",
+  "cgroup": {
+    "exit_code": 1,
+    "value": "",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "progress": {
+    "exit_code": 0,
+    "value": null,
+    "sha256": "6659f220965a34b79ceb1a3d2e5c18459af5f25ec6cd8a0f08947c403f099742"
+  },
+  "state": "COMMAND_EXITED_255_AFTER_BASELINE_PROCESS_ENDED_NO_DELIVERY_PROVEN",
+  "interpretation": "No post-freeze wakeup conclusion: baseline cleanup had already ended the own process before this command."
+}

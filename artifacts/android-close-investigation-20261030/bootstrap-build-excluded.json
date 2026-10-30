@@ -1,0 +1,5 @@
+{
+  "state": "EXCLUDED_SOURCE_IDENTITY_NOT_PROVEN",
+  "reason": "Diagnostic Activity and instrumentation changed concurrently with the build; not used for device execution or qualification",
+  "build_receipt_sha256": "ea77296e8cf42137804d8d916d88eafb8a2228773e892ba4fb10ef55fb8035a9"
+}

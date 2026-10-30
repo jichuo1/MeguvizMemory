@@ -1,0 +1,174 @@
+{
+  "state": "PASS_RELEASE_AND_ASAN_SCOPED_HOST_ONLY",
+  "scope": "ACTUAL_PRODUCTION_JNI_FAKE_VM_REAL_MEMORY_AND_PRESSURE",
+  "source_identity": [
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd"
+    },
+    {
+      "path": "tests/jni_lock_tests.cpp",
+      "sha256": "36e7ebfdb9d166dbe3dc4f818b3c67e71aeb0edeeb4539a66d2d5aeb19101558"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "2d9413bbf062978138d11f182e5b3b8fd09c928385ea0a707feb50d961f4d6a2"
+    },
+    {
+      "path": "docs/ANDROID_PRESSURE.md",
+      "sha256": "e1d87cf4caa756e23cb774d83c4fb7f454dee86e4c3759658bdddb54d131321f"
+    }
+  ],
+  "pre_retry_exact_source_snapshot": {
+    "path": "artifacts/android-close-investigation-20261030/source-pre-retry/manifest.json",
+    "sha256": "82118c9b195951261ef873941656d8a61c1fefd9cfbed703b96d75bca45f8fa6"
+  },
+  "red_counterexample": {
+    "path": "artifacts/android-close-investigation-20261030/retry-host/red-receipt.json",
+    "sha256": "37c11e4e773ab9578006bd3cbacaf9ba61a979bef013bc670408c8a7aa4e893a",
+    "test_exit_code": 1,
+    "manual_cleanup_after_observation": true,
+    "physical_freeze_causation": "NOT_ESTABLISHED"
+  },
+  "profiles": [
+    {
+      "profile": "android-close-retry-host",
+      "CTest_count": 22,
+      "tests_passed": 22,
+      "tests": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "pressure_budget_close",
+        "jni_lock_callback-reentry",
+        "jni_lock_single-publisher",
+        "jni_lock_attach-retry",
+        "jni_lock_java-exception-retry",
+        "jni_lock_error-quarantine",
+        "jni_lock_foreign-release",
+        "jni_lock_foreign-release-bind",
+        "jni_lock_foreign-release-snapshot",
+        "jni_lock_auto-attach-recovery",
+        "jni_lock_auto-java-recovery",
+        "jni_lock_auto-concurrent-poll",
+        "jni_lock_auto-error-quarantine",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "address_sanitizer_enabled": false,
+      "original_log_sha256": "59e220acd0434325623f26c2a2ecbed6d5dfaac1e19c71ce2d4599e7bf0909f3",
+      "public_log": {
+        "path": "artifacts/android-close-investigation-20261030/retry-host/android-close-retry-host-ctest-sanitized.log",
+        "sha256": "8603d0d08a991857a820bf2c7233e30490bfa91276782975a65fc2a446560c29"
+      },
+      "binaries": [
+        {
+          "name": "mgmem.dll",
+          "sha256": "c9e753c8b55e7b28125299b788722ce6b6ab328057fbc7f51ce8eab8c4d86066"
+        },
+        {
+          "name": "mgmem_other_runtime.dll",
+          "sha256": "79abc82f3adee397c6430ffeab9b5115952840cb46240cfd60af5452c7ca528f"
+        },
+        {
+          "name": "mgmem_jni_lock_tests.exe",
+          "sha256": "822f2b39a5d4a590b6d018fe834835b5c40f9fed38bfbf125bbb633fcb0e2c37"
+        },
+        {
+          "name": "mgmem_core_tests.exe",
+          "sha256": "f0b90164dcccc1b144fb1296a634d5f2e9cbbfe01beb7170a216d3ac58321d32"
+        },
+        {
+          "name": "mgmem_import_tests.exe",
+          "sha256": "fa39386f9fea3197d6beb193caad0b6b355847afd1367c03c8aefce6756b9405"
+        },
+        {
+          "name": "mgmem_pressure_tests.exe",
+          "sha256": "d52c5ff630a595dfda8abbe3450f8bf149eaff10987932352d84d3ea3ef0dc9a"
+        }
+      ]
+    },
+    {
+      "profile": "android-close-retry-asan",
+      "CTest_count": 22,
+      "tests_passed": 22,
+      "tests": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "pressure_budget_close",
+        "jni_lock_callback-reentry",
+        "jni_lock_single-publisher",
+        "jni_lock_attach-retry",
+        "jni_lock_java-exception-retry",
+        "jni_lock_error-quarantine",
+        "jni_lock_foreign-release",
+        "jni_lock_foreign-release-bind",
+        "jni_lock_foreign-release-snapshot",
+        "jni_lock_auto-attach-recovery",
+        "jni_lock_auto-java-recovery",
+        "jni_lock_auto-concurrent-poll",
+        "jni_lock_auto-error-quarantine",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "address_sanitizer_enabled": true,
+      "original_log_sha256": "1e33c2cafe9570fdfefadf22f9ba3f8c9d9fd513792c18158872d430206f7f46",
+      "public_log": {
+        "path": "artifacts/android-close-investigation-20261030/retry-host/android-close-retry-asan-ctest-sanitized.log",
+        "sha256": "d87b8ba640caaba7d6bdde8aecbad13bcd5b5c3853edd03fe94e2a29b5d9fe67"
+      },
+      "binaries": [
+        {
+          "name": "mgmem.dll",
+          "sha256": "2ab2fb06df0bc4f131084303eb5ce367d22f15e834fa66f09fd65d1e8dc67d74"
+        },
+        {
+          "name": "mgmem_other_runtime.dll",
+          "sha256": "4fe5b5672bbd2869aad17584f03dd94612f2284fb380e9506c9b91545aae0423"
+        },
+        {
+          "name": "mgmem_jni_lock_tests.exe",
+          "sha256": "fba75b1071255c99df5674c91eef4469ec5afe23d82edeae50b0858a3e79ce8f"
+        },
+        {
+          "name": "mgmem_core_tests.exe",
+          "sha256": "914a19c3acaa7976159c689f0e274b9b625279e9aeccc053a39d2a28443040ac"
+        },
+        {
+          "name": "mgmem_import_tests.exe",
+          "sha256": "61061feded7e04e787e11faadb00efade69b3734e80cdc0bd7ff1b125058930a"
+        },
+        {
+          "name": "mgmem_pressure_tests.exe",
+          "sha256": "1df3486e7cfeba9502f6d10e7cfd4ccf8416d6ceba30b03407ca2cc1e5416a2d"
+        }
+      ]
+    }
+  ],
+  "new_tests": [
+    "auto-attach-recovery",
+    "auto-java-recovery",
+    "auto-concurrent-poll",
+    "auto-error-quarantine"
+  ],
+  "limits": [
+    "Fake JNI VM; no ART/device qualification",
+    "Error quarantine uses fake sentinel global refs and deliberately retains uncertain state until isolated test process ends",
+    "Permanent VM unavailability retains pins and a low-frequency reaper thread; no dynamic DSO unload",
+    "Same Android cgroup freeze root cause is not inferred"
+  ],
+  "ASan_runtime_imports_verified": [
+    "mgmem_jni_lock_tests.exe",
+    "mgmem.dll"
+  ],
+  "ASan_runtime_name": "clang_rt.asan_dynamic-x86_64.dll"
+}

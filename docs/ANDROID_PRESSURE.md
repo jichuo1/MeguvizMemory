@@ -28,7 +28,13 @@ Android官方说明，API34起不再通知多数旧RUNNING/MODERATE/COMPLETE级�
 
 自有域awaitClosed成功表示域与控制器都已结束，backing/reservation/live/retiring为零。外部注册的关闭只表示控制器已分离并归还原owner引用；它不主动关闭foreign domain，不能据此声称外部域已CLOSED。正timeout只允许worker调用，主线程只能poll(0)。超时不强制free；callback或provider违反合同产生错误时，不伪造成功关闭。
 
-close需要的后台线程若未能准入，保留注册和owner并显式返回错误，可重试。VM线程附着/完成通知失败时保留可查询的已完成注册，后续Java await/snapshot使用现成JNIEnv补发通知，不把引用丢掉。该JNI模块按进程内稳定装载使用；动态classloader/DSO卸载不在本批资格内。
+这里的poll(0)表示不等待域进入CLOSED，不是严格墙钟上限或lock-free承诺：调用仍可能取得短期registry锁、进入JNI完成通知和Java monitor，进程被系统冻结时也无法继续执行。不要依靠超时撤销已发布的lease；诊断工作需要由应用安排在合适的可运行生命周期中。[Android进程冻结机制](https://source.android.com/docs/core/perf/cached-apps-freezer)
+
+close需要的后台线程若未能准入，保留注册和owner并显式返回错误，可重试。VM线程附着/完成通知失败时保留可查询的已完成注册并自动重试；Java await/snapshot也可用现成JNIEnv补发通知，不把引用丢掉。该JNI模块按进程内稳定装载使用；动态classloader/DSO卸载不在本批资格内。
+
+完成通知若因VM线程附着或Java回调异常失败，**已有reaper线程**会以25 ms起、最高1000 ms的退避继续重试，直到正常或错误状态被单次成功发布；调用者无需继续poll。并发Java poll仍可先完成发布，单publisher保证仅有一次成功提交。Java回调若抛异常，调用可能再次发生；私有完成回调对同一结果幂等。错误状态仍隔离保留不确定引用，不因为重试超时而强制销毁。
+
+VM长期不可用时该注册保留global refs，已有reaper可无限期低频重试；每个此类注册占用一个线程及其资源，均不计入domain backing预算。**不支持在清理和通知仍在途时卸载JNI DSO**；调用方需保持运行库稳定装载。线程永久无法附着时不能声称自动关闭或正常资源归零。
 
 JNI构建只链接安装后的shared `libmgmem.so`，pressure helper为PIC静态组件并入JNI；拒绝把静态Memory SDK嵌入为第二个runtime。AAR包含窄JNI类keep规则，尚不构成BIL/R8产品资格。
 

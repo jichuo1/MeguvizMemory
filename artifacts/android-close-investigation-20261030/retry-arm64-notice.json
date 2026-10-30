@@ -1,0 +1,10 @@
+{
+  "scope": "ANDROID_PRESSURE_RETRYFIX2_ENGINEERING_ABI1_1_NOT_FORMAL_RELEASE",
+  "source_aar_sha256": "d2dcefb922ab8eacc5cb177d12e6f9969e4cfda492539e1f72c4c1c944927d4b",
+  "notice_augmented_aar": {
+    "path": "build/android-close-retry-aar-build/MeguvizMemory-Android-Pressure-0.2.0-retryfix2.aar",
+    "sha256": "1e5b2419cf148f80385e8bbd751dc5d0f769fc2bbae0b6d2a4ae494284887ddf"
+  },
+  "source_jni_sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd",
+  "runtime_and_classes": "UNCHANGED_BY_NOTICE_ASSEMBLY"
+}

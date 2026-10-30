@@ -1,0 +1,46 @@
+{
+  "state": "EXPECTED_RED_AUTOMATIC_CLEANUP_MISSING",
+  "scope": "HOST_FAKE_VM_REAL_NATIVE_REAP_AND_PRESSURE_NOT_ANDROID_CAUSATION",
+  "test_exit_code": 1,
+  "result": {
+    "suite": "reaper_attach_failure_autoclose_counterexample",
+    "expected_auto_cleanup": true,
+    "observed_auto_cleanup": false,
+    "no_retry_after_VM_recovery": true,
+    "registry_and_both_global_refs_retained": true,
+    "observed_without_poll_ms": 400,
+    "manual_poll_then_refs_released": true,
+    "foreign_domain_remained_open": true,
+    "final_domain_closed_zero": true,
+    "reaper_thread_joined": true,
+    "real_ART": false
+  },
+  "inputs": [
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+    },
+    {
+      "path": "tests/jni_lock_tests.cpp",
+      "sha256": "99f09b88447e703b2597169db39993297211023154633766bbcb167409e08ec6"
+    },
+    {
+      "path": "build/reaper-autoclose/reaper_autoclose.cpp",
+      "sha256": "a12713740b4d458bf94a061136b8a4ed4a4fbca049a4fef1dfb20b33e6703eb6"
+    },
+    {
+      "path": "build/reaper-autoclose/out/reaper_autoclose.exe",
+      "sha256": "c3c930a9006aa97a54793249ed731f1e20bb689388d0c59e64b7244d78f05cc1"
+    },
+    {
+      "path": "install/features-host/bin/mgmem.dll",
+      "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+    }
+  ],
+  "method": "Actual reap() executes on an explicitly joined test thread; equivalent close state is set before start. Attach fails once, then fake VM recovers; no Java poll for 400ms. Only after red observation, manual JNI poll safely releases refs, external domain is explicitly closed and verified zero.",
+  "limitations": [
+    "No real ART or Android execution; no claim about physical-device hang cause",
+    "400ms is bounded observation; production reap calls publish_closed once, with no autonomous retry scheduler",
+    "External domain remains caller-owned, not closed by adapter"
+  ]
+}

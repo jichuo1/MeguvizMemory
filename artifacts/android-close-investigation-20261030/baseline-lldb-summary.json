@@ -1,0 +1,14 @@
+{
+  "state": "NO_THREAD_STACK_CAPTURED",
+  "reason": "own_server_or_socket_not_observed",
+  "scope": "OWN_DEBUGGABLE_APP_ONLY",
+  "server_sha256": "69367d1a07e806e0246350b50eb794001b500dc57625aa9ead0cf76009ba07fe",
+  "helper_initial_cleanup_misidentified_server": "PRESERVED_PRIVATE_ORIGINAL_NOT_REPORTED_AS_SUCCESS",
+  "initial_target_still_traced": true,
+  "manual_exact_own_server_only_TERM": true,
+  "target_tracer_zero_and_running_state_verified": true,
+  "forward_removed_exactly": "REMOVED_EXACT_OWN_MAPPING",
+  "raw_receipt_sha256": "b661c542ad13e8391ff1a33a8d2f5d5a98a0fadf94137e642c14e0c11d228e8b",
+  "raw_logs": "LOCAL_PRIVATE_ONLY",
+  "causal_claim": "NONE; OWN_CGROUP_FREEZE_OBSERVED_SEPARATELY"
+}

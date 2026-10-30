@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 // Compile the real production composition with JDK JNI headers. Function tables
@@ -104,13 +105,99 @@ void lifetime_release(void *p) {
     }
     ++f.lifetime_releases;
 }
+void throwing_lifetime_release(void *p) {
+    ++static_cast<Fixture *>(p)->lifetime_releases;
+    throw std::runtime_error("injected lifetime callback violation");
+}
+template <typename Predicate> bool bounded_wait(Predicate predicate,int milliseconds) {
+    const auto end=std::chrono::steady_clock::now()+std::chrono::milliseconds(milliseconds);
+    do {if(predicate())return true;std::this_thread::sleep_for(std::chrono::milliseconds(2));}
+    while(std::chrono::steady_clock::now()<end);
+    return predicate();
+}
+bool auto_retry_case(Fixture &f,const std::string &test_case) {
+    const bool error=test_case=="auto-error-quarantine";
+    const bool racing=test_case=="auto-concurrent-poll";
+    const bool java_failure=test_case=="auto-java-recovery";
+    mgmem_domain *domain=nullptr;
+    mgmem_domain_options_v1 options{sizeof(options),1,1,0,MGMEM_SYSTEM,0,4096,0,nullptr};
+    if(mgmem_domain_create_v1(&options,&domain)!=MGMEM_OK)return false;
+    mgmem_domain_lifetime_v1 life{sizeof(life),1,&f,&lifetime_retain,
+        error?&throwing_lifetime_release:&lifetime_release};
+    mgmem_pressure_options_v1 policy{sizeof(policy),1,4096,2048,0,1,0};
+    if(mgmem_android_pressure_register_v1(domain,&life,&policy,&f.id)!=MGMEM_OK)return false;
+    f.state=bridge(f.id);
+    if(JNI_NAME(nativeBind)(&env,nullptr,static_cast<jlong>(f.id),
+        reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2))!=MGMEM_OK)return false;
+    f.detached=true;f.attach_fails=!java_failure;f.throw_once=java_failure;
+    f.state->closing.store(true);
+    std::atomic<bool> reaper_returned{false};
+    // Exact production reaper on a joinable test thread; join proves the test
+    // itself cannot leave a detached worker accessing its stack fixture.
+    std::thread reaper([state=f.state,id=f.id,&reaper_returned]{reap(id,state);reaper_returned=true;});
+    bool first_failure=true,retained=true,while_publishing=true;
+    if(!java_failure) {
+        first_failure=bounded_wait([&]{
+            std::lock_guard<std::mutex> lock(f.state->mutex);
+            return f.state->done && f.attach_calls>=1 && !f.state->publishing;
+        },2000);
+        {std::lock_guard<std::mutex> lock(f.state->mutex);
+            retained=f.state->listener && f.state->final_buffer && !f.state->completion_published &&
+                exists(f.id) && f.global_deletes==0 && f.calls==0;}
+    }
+    std::thread concurrent_poll;
+    if(racing)f.block_callback=true;
+    f.attach_fails=false; // Fake VM has recovered; ordinary case uses no Java poll.
+    if(racing) {
+        concurrent_poll=std::thread([&]{JNI_NAME(nativePollCompletion)(&env,nullptr,static_cast<jlong>(f.id));});
+        const bool entered=bounded_wait([&]{return f.entered.load();},2000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        while_publishing=entered && f.calls==1 && f.global_deletes==0 && exists(f.id);
+        f.resume=true;f.changed.notify_all();concurrent_poll.join();
+    }
+    const bool automatic=bounded_wait([&]{return reaper_returned.load();},2500);
+    // A failed test must not leave a joinable test thread behind; explicitly
+    // recover only after recording whether autonomous completion succeeded.
+    if(!automatic)JNI_NAME(nativePollCompletion)(&env,nullptr,static_cast<jlong>(f.id));
+    if(!bounded_wait([&]{return reaper_returned.load();},2000)) {
+        std::cout<<"{\"case\":\""<<test_case<<"\",\"pass\":false,\"state\":\"REAPER_STILL_ACTIVE\"}\n"<<std::flush;
+        std::_Exit(3); // Isolated test process: never free a live stack fixture.
+    }
+    reaper.join();
+    const unsigned expected_calls=java_failure?2:1;
+    bool publication=false;
+    {std::lock_guard<std::mutex> lock(f.state->mutex);
+        publication=f.state->completion_published && !f.state->publishing &&
+            f.state->close_status==(error?MGMEM_PROVIDER_ERROR:MGMEM_OK);}
+    const bool retained_error=error && exists(f.id) && f.global_deletes==0 && f.calls==1;
+    const bool normal=(!error && !exists(f.id) && f.global_deletes==2 && f.calls==expected_calls);
+    // Verify a reported error is published exactly once, while its uncertain
+    // state remains quarantined. Fake refs are sentinel values, not JVM refs.
+    if(error) {
+        JNI_NAME(nativePollCompletion)(&env,nullptr,static_cast<jlong>(f.id));
+        publication=publication && f.calls==1 && f.global_deletes==0 && exists(f.id);
+        std::lock_guard<std::mutex> lock(registry_mutex);bridges.erase(f.id);
+    }
+    mgmem_snapshot_v1 snapshot{};
+    const bool external_open=mgmem_domain_snapshot_v1(domain,&snapshot,sizeof(snapshot))==MGMEM_OK && snapshot.state==MGMEM_OPEN;
+    bool zero=mgmem_domain_begin_close_v1(domain)==MGMEM_OK && mgmem_domain_collect_v1(domain)==MGMEM_OK &&
+        mgmem_domain_drain_v1(domain,0)==MGMEM_OK && mgmem_domain_snapshot_v1(domain,&snapshot,sizeof(snapshot))==MGMEM_OK &&
+        snapshot.state==MGMEM_CLOSED && snapshot.backing_bytes==0 && snapshot.reserved_bytes==0 &&
+        snapshot.active_allocations==0 && snapshot.active_leases==0;
+    zero=mgmem_domain_destroy_v1(domain)==MGMEM_OK && zero;
+    return first_failure && retained && while_publishing && automatic && publication && (error?retained_error:normal) &&
+        f.lifetime_retains==1 && f.lifetime_releases==1 && f.jni_unlocked && external_open && zero;
+}
 }
 int main(int argc,char **argv) {
     using namespace test;
     if(argc!=2)return 2;
     initialize();Fixture f;active=&f;const std::string test_case=argv[1];
     bool pass=false;
-    if(test_case=="foreign-release" || test_case=="foreign-release-bind" || test_case=="foreign-release-snapshot") {
+    if(test_case=="auto-attach-recovery" || test_case=="auto-java-recovery" ||
+       test_case=="auto-concurrent-poll" || test_case=="auto-error-quarantine") {
+        pass=auto_retry_case(f,test_case);
+    } else if(test_case=="foreign-release" || test_case=="foreign-release-bind" || test_case=="foreign-release-snapshot") {
         f.foreign_bind=test_case=="foreign-release-bind";f.foreign_snapshot=test_case=="foreign-release-snapshot";
         mgmem_domain *domain=nullptr;
         mgmem_domain_options_v1 options{sizeof(options),1,1,0,MGMEM_SYSTEM,0,4096,0,nullptr};

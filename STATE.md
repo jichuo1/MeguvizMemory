@@ -2,6 +2,12 @@
 
 更新：2026-10-30。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 本轮进行中
+
+API33相同旧APK重现停滞；两次只读采样均确认自身cgroup.freeze=1、events frozen=1，20/20线程处于do_freezer_trap。证据证明本次进程被内核冻结，触发方及此前每次是否同因尚未确认。相同新诊断APK的后台再次冻结；先启动受DUMP权限保护的自身窗口、以no-restart保持同一进程后，前台完成1000周期/62.846秒，24次采样均未观察冻结，窗口正常结束。两组启动方式不同，不能声称单变量因果或性能结果。
+
+独立JNI首次附着/通知失败后无poll不自动重试的缺口已修复，Host Release/ASan各22项通过；修复版API33真机短测通过92周期、6.058秒，预算、关闭、无调用者poll自动移除和归零通过。独立15分钟真机前台长轮按冻结计划运行中；API34独立模拟器验证亦进行中。BIL不接入。
+
 ## 当前已交付
 
 - 核心：System/custom provider、有界 arena、唯一 backing 和 reservation 预算、owner/读写 lease、非阻塞 begin_close、collect/drain、reset/trim、C++ RAII、CMake install/export。

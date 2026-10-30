@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "scope": "REAL_AAR_R8_CONSUMER_BUILD_NOT_DEVICE_EXECUTION",
+  "status": "PASS",
+  "package_name": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+  "instrumentation": "io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation",
+  "abi": "arm64-v8a",
+  "minimum_api": 27,
+  "target_api": 35,
+  "compile_platform": "android-37.0",
+  "build_tools": "37.0.0",
+  "r8_version": "R8 9.2.4-dev (build 084a89126ae0596c599143df57a654646af28313 from go/r8bot (luci-r8-custom-ci-archive-0-4u1w))",
+  "input_aar": {
+    "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+    "bytes": 660379,
+    "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+  },
+  "base_aar": {
+    "path": "dist/MeguvizMemory-Android-Pressure-0.2.0-arm64-closefix1.aar",
+    "bytes": 660379,
+    "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+  },
+  "native_overrides": [],
+  "aar_members": [
+    {
+      "member": "classes.jar",
+      "bytes": 10148,
+      "sha256": "a30b7edd103aca5e6590c8e53b6d15c71b3fffa4254f42052375b253fdba35b6"
+    },
+    {
+      "member": "proguard.txt",
+      "bytes": 82,
+      "sha256": "cdaee8699424bb7d2887cd411b1a71ed2ddcff80c09937f94980882013761b71"
+    },
+    {
+      "member": "jni/arm64-v8a/libmgmem_pressure_jni.so",
+      "bytes": 573168,
+      "sha256": "53f8d4609666a285b24fe36d9b886dcb396b6e58a3c7281adde850f55a3a4a71"
+    },
+    {
+      "member": "jni/arm64-v8a/libmgmem.so",
+      "bytes": 1722920,
+      "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+    }
+  ],
+  "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+  "signing": "EXISTING_DIAGNOSTIC_KEY_NOT_PRODUCTION",
+  "artifacts": [
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2355758,
+      "sha256": "63864cf66ca19b796617f530f54a8f20c28c05231a5f7590a5cd416c2cb35ebc"
+    },
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/mapping.txt",
+      "bytes": 52916,
+      "sha256": "8793cbe3a0ddb35b1687c74d0994f43415af7f674575ea3e2531444b3d0723d6"
+    },
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/usage.txt",
+      "bytes": 821,
+      "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+    },
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/seeds.txt",
+      "bytes": 13061,
+      "sha256": "9a4be8ccbe5ab74455367c0947027b8aea18e5594a0f35fe4015b9c34027c105"
+    },
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/consumer-r8.pro",
+      "bytes": 313,
+      "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+    },
+    {
+      "path": "build/android-close-freezer-bootstrap-apk/r8-dex/classes.dex",
+      "bytes": 39080,
+      "sha256": "1edd5d48cf56e1ea0fc57fcb6222f9ba440a3fd832e919afa4fb25f48541777a"
+    }
+  ],
+  "sources": [
+    {
+      "path": "adapters/android/sample/PressureR8Instrumentation.java",
+      "bytes": 41192,
+      "sha256": "e5a45ee98a7e8802e649f686ad38ff7dd5c09c67704e07fcf08c12f5ee8f5a08"
+    },
+    {
+      "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+      "bytes": 2677,
+      "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest-r8.xml",
+      "bytes": 736,
+      "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+    },
+    {
+      "path": "tools/build_pressure_r8.py",
+      "bytes": 14969,
+      "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+    },
+    {
+      "path": "tools/build_packed_art.py",
+      "bytes": 10564,
+      "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+    }
+  ],
+  "toolchain": [
+    {
+      "name": "d8.jar",
+      "sha256": "a26ee56252adcff6752c379ae255a0ad538ebec60189e078ec6855487107637d"
+    },
+    {
+      "name": "android.jar",
+      "sha256": "bf1b4387cc7ca94fc6ef684f040d9d16fbf16248e181819f020736ea2053f177"
+    },
+    {
+      "name": "apksigner.jar",
+      "sha256": "2defad215d7ff52968a409cde528cdaef7918b115e276b8e3378ca7a178e4180"
+    }
+  ],
+  "r8_evidence": {
+    "shrinking_enabled": true,
+    "optimization_enabled": true,
+    "obfuscation_enabled": true,
+    "marker_before": "io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker",
+    "marker_after": "io.github.jichuo1.meguviz.memory.android.a",
+    "unused_class_removed": "io.github.jichuo1.meguviz.memory.android.R8UnusedMarker",
+    "runtime_marker_validation": "Instrumentation reports the name; external runner must compare it to this exact marker_after. No original-name literal comparison inside R8 input.",
+    "native_class_name_retained": "io.github.jichuo1.meguviz.memory.android.NativePressureBackend",
+    "native_completion_method_retained": "onNativeClosed(int)",
+    "foreground_activity_name_retained": "io.github.jichuo1.meguviz.memory.android.PressureR8ForegroundActivity",
+    "foreground_bootstrap": "EXPORTED_EXPLICIT_ONLY_REQUIRES_ANDROID_PERMISSION_DUMP",
+    "native_keep_rule_source": "AAR proguard.txt unchanged",
+    "dex_class_count": 12
+  },
+  "runtime_closure": "Exactly the AAR libmgmem.so and libmgmem_pressure_jni.so; no second Memory core",
+  "device_executed": false,
+  "performance_qualified": false,
+  "BIL_integrated": false,
+  "operations": [
+    {
+      "operation": "javac-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "jar-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "r8-version",
+      "exit_code": 0,
+      "stdout_sha256": "2f059a980d6f0f0fc7dd97d92e22f00df04d9bff9ca2c147e1fe86c73246e4d8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "r8-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "aapt2-link",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "zipalign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "verify-diagnostic-key",
+      "exit_code": 0,
+      "stdout_sha256": "9255c177c9d8d465fcf0b05714e9e297650dc2021d48e0ac2c51785b99cd8dc9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "sign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "verify-signature",
+      "exit_code": 0,
+      "stdout_sha256": "3afd1f08d1f1d58acdadfd4432cde900aecfb5724add92a247a3565a936a90ab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "zipalign-verify",
+      "exit_code": 0,
+      "stdout_sha256": "1141e73b99d91fcf102e527f4a7fecc81efa9a2a179fa1d5852af29ae4956fc4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limitations": [
+    "R8 build evidence does not prove runtime JNI completion; instrumentation must execute on an admitted device.",
+    "API34+ old automatic low-memory signals are not assumed; synthetic dispatch and own-package AMS outcomes are recorded separately.",
+    "Bounded cycles and own-process RSS/PSS observations do not prove indefinite leak freedom, savings or energy benefit."
+  ]
+}

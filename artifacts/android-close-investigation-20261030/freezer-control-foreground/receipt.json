@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "scope": "OWN_ANDROID_CLOSE_FUNCTIONAL_NOT_PERFORMANCE",
+  "state": "ENVIRONMENT_FROZEN_INCOMPLETE",
+  "source_sha256": "3c3b241a7461ae267588caf6f732e155f3cdf57efe960415bda9ce8732ed8641",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "started_at_utc": "2026-10-30T14:11:01.315127+00:00",
+  "explicit_authorization": "CURRENT_USER_REQUEST_AND_PRIOR_NEW_DEVICE_AUTHORIZATION",
+  "shared_device_lock": false,
+  "profile": {
+    "foreground_requested": true,
+    "minimum_ms": 60000,
+    "wall_ms": 180000,
+    "outer_seconds": 240,
+    "minimum_iterations": 1000,
+    "cgroup_poll_seconds": 2,
+    "stall_seconds": 30,
+    "AMS_injection": false
+  },
+  "gates": [
+    {
+      "name": "initial",
+      "parsed_processes": 850,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "name": "before-instrumentation",
+      "parsed_processes": 850,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "name": "after",
+      "parsed_processes": 847,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    }
+  ],
+  "commands": [
+    {
+      "name": "initial-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "5e5a6440736d1997ad726c5669797904508887518bfb229b7ad8c8a202c59f9e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "initial-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "c8ec86d65395635ddd3611a4aa2371aa8a727525697d3e2fb0b7ebdba6bb19f8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "api",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "42817c432a683116970d4048f2ddf476ff8dfca7a5d178bfa3a56679862e36aa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "abi",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "93a5f09ca2fe8b37c612145e5749beaf159a7218b686023da3c3c22d9d363327",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "page",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "30f236f92d107cedc1eab7b3d6dafa316df3657ac88e59ece8df2944b6c995ca",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "model",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "a28e87ee24a958a61bfa993a364545ff4c6e4031cb2ae39d20f6a59715f00a65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "existing-package",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "d9ac3570c26664b89dadfd022cb7a1dff5769b03e730fc3885f0f950ef81d5ea",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "pull-own-installed",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "66c1a084c2bde2ae8a7f22be3b76af506920a65012ac4c2291e0c477375e0b8f"
+    },
+    {
+      "name": "own-uid",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "1cf74232e14fb29f865cfa5f2479f0a012b3f4656385a61ba1857762fa63c556",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-instrumentation-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "3d2245021812e4c1b0fc32935775aeada5e03728bb593bf87b692ac75b560f99",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "before-instrumentation-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "c81dc4cae1808374e8c88fae5cc3d6889b9a655e4d9fdd5a171b92cd1910840c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "stop-only-own-diagnostic",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-processes",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "aad0c2e79b091070aeb5e6a154a8ef084aeab3e46d6589bf6fb7820d1a701412",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "after-activity",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "5f06059c1f1248a1456e3452fe128c4bc89ea7977e202ae83b225159972ceb23",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "boot-after",
+      "exit_code": 0,
+      "timed_out": false,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "cgroup_samples": [
+    {
+      "observed_at_utc": "2026-10-30T14:11:07.623560+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "7cb3e40cd6dbd56aba269c0790684760cd4ca3f706a31bf80bac1248e6147bca",
+      "elapsed_seconds": 2.687000000001717,
+      "gap_seconds": null
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:11:10.404303+00:00",
+      "mode": "0",
+      "frozen": "0",
+      "populated": "1",
+      "cgroup_path_sha256": "7cb3e40cd6dbd56aba269c0790684760cd4ca3f706a31bf80bac1248e6147bca",
+      "elapsed_seconds": 5.46900000000096,
+      "gap_seconds": 2.7819999999992433
+    },
+    {
+      "observed_at_utc": "2026-10-30T14:11:12.942386+00:00",
+      "mode": "1",
+      "frozen": "1",
+      "populated": "1",
+      "cgroup_path_sha256": "7cb3e40cd6dbd56aba269c0790684760cd4ca3f706a31bf80bac1248e6147bca",
+      "elapsed_seconds": 8.0,
+      "gap_seconds": 2.5309999999990396
+    }
+  ],
+  "raw_transport": "IGNORED_BUILD_ONLY",
+  "BIL": "NOT_MODIFIED",
+  "performance": "NOT_MEASURED",
+  "plan_sha256": "8097fe043499c643b45436282504dd31711a9dbc8ab8dd4694e3faf3cc17f5ea",
+  "device": {
+    "api": 33,
+    "abi": "arm64-v8a",
+    "page_bytes": 4096,
+    "model": "2210132C"
+  },
+  "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+  "APK": {
+    "sha256": "0f119ca178505210e5d5490b4a360c20aa16fa38d5ce75fac15e93d3a4b6171a",
+    "build_receipt_sha256": "b627c78eebd6276ce7925fbcda01d39a5aa5cba1af32930ed0905d65ab1e9e07",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8"
+  },
+  "instrumentation_started_at_utc": "2026-10-30T14:11:04.946592+00:00",
+  "last_own_progress": {
+    "schema_version": 1,
+    "suite": "android-pressure-r8-stability-v1",
+    "diagnostic_revision": 4,
+    "run_id": "13cad98593a0",
+    "status": "RUNNING",
+    "phase": "foreground.launch",
+    "iteration": 0,
+    "checks": 1,
+    "elapsed_ms": 24,
+    "cleanup_safe": true,
+    "unsafe_cleanup": false,
+    "inject_main_running_timeout": false,
+    "inject_progress_lock_timeout": false,
+    "foreground_requested": true,
+    "foreground_resumed": false,
+    "foreground_finished": false,
+    "foreground_currently_resumed": false,
+    "fire_and_forget_state": "NOT_STARTED",
+    "boundary_outcome": "NO_TIMEOUT",
+    "reason": null
+  },
+  "max_cgroup_sample_gap_seconds": 2.7819999999992433,
+  "stop_reason": "OWN_CGROUP_FROZEN",
+  "normal_close_proven": false,
+  "instrumentation_exit_code": 0,
+  "instrumentation_stdout_sha256": "f3ca40e0a3bf20eaf9ab861db129a85ecafc52160588fc2089c7bb0239bc1d94",
+  "instrumentation_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "elapsed_seconds": 8.156000000002678,
+  "finished_at_utc": "2026-10-30T14:11:13.829550+00:00"
+}

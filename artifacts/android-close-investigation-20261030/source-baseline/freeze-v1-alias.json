@@ -1,0 +1,6 @@
+{
+  "path": "tools/freeze_android_close_round.py",
+  "snapshot": "artifacts/android-close-investigation-20261030/source-baseline/freeze_android_close_round-v1.py.txt",
+  "sha256": "388a217848d13de6198a2c646fc000faee264bb803daae704e68c0db1921f8be",
+  "method": "Reverse only recorded bootstrap and sampling-gap edits; verify exact frozen SHA256"
+}

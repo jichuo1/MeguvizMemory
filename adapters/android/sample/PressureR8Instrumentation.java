@@ -1,7 +1,9 @@
 package io.github.jichuo1.meguviz.memory.android;
 
 import android.app.Application;
+import android.app.Activity;
 import android.app.Instrumentation;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,10 +14,17 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -26,12 +35,22 @@ public final class PressureR8Instrumentation extends Instrumentation {
     private long deadline, peakBacking;
     private long started;
     private volatile boolean unsafeCleanup, finished;
-    private boolean injectMainRunningTimeout;
+    private boolean injectMainRunningTimeout, injectProgressLockTimeout, captureStackOnHalt;
+    private boolean foregroundRequested, foregroundPrestarted;
+    private volatile boolean foregroundResumed, foregroundFinished;
+    private volatile PressureR8ForegroundActivity foregroundActivity;
+    private volatile String fireAndForgetState = "NOT_STARTED";
+    private volatile long fireAndForgetElapsedMillis;
+    private volatile int fireAndForgetPolls, foregroundChecks;
+    private int foregroundPauseCountBeforeFinish, foregroundInitialPauseCount;
+    private long stallTimeoutMillis;
     private volatile String currentPhase = "created";
+    private volatile long currentPhaseStarted;
     private volatile String boundaryOutcome = "NO_TIMEOUT";
     private String runId;
-    private AtomicFile progressFile, resultFile;
-    private final Object progressLock = new Object();
+    private AtomicFile progressFile, resultFile, stallFile;
+    private final ReentrantLock progressLock = new ReentrantLock();
+    private final AtomicBoolean terminationClaim = new AtomicBoolean();
     private String lastWrittenPhase;
     private int lastWrittenIteration = -1;
     private static final class UnknownWork extends Error {
@@ -51,39 +70,111 @@ public final class PressureR8Instrumentation extends Instrumentation {
     private JSONObject state(String status, String reason) throws Exception {
         JSONObject value = new JSONObject();
         value.put("schema_version", 1); value.put("suite", "android-pressure-r8-stability-v1");
-        value.put("diagnostic_revision", 3); value.put("run_id", runId);
+        value.put("diagnostic_revision", 4); value.put("run_id", runId);
         value.put("status", status); value.put("phase", currentPhase);
         value.put("iteration", completed); value.put("checks", checks);
         value.put("elapsed_ms", (System.nanoTime() - started) / 1000000L);
         value.put("cleanup_safe", !unsafeCleanup);
         value.put("unsafe_cleanup", unsafeCleanup);
         value.put("inject_main_running_timeout", injectMainRunningTimeout);
+        value.put("inject_progress_lock_timeout", injectProgressLockTimeout);
+        value.put("foreground_requested", foregroundRequested);
+        value.put("foreground_prestarted", foregroundPrestarted);
+        value.put("foreground_resumed", foregroundResumed);
+        value.put("foreground_finished", foregroundFinished);
+        value.put("foreground_currently_resumed", foregroundActivity != null && foregroundActivity.isResumedForDiagnostic());
+        value.put("fire_and_forget_state", fireAndForgetState);
         value.put("boundary_outcome", boundaryOutcome);
         value.put("reason", reason == null ? JSONObject.NULL : reason);
         return value;
     }
     private void phase(String name) {
         currentPhase = name;
-        synchronized (progressLock) {
+        // Publish in memory BEFORE any lock acquisition or fsync. A watchdog
+        // need not wait for progressLock to identify the blocked boundary.
+        currentPhaseStarted = System.nanoTime();
+        progressLock.lock();
+        try {
             if (name.equals(lastWrittenPhase) && completed == lastWrittenIteration) return;
             try { writeAtomic(progressFile, state("RUNNING", null)); }
             catch (Exception error) { throw new AssertionError("own cache progress unavailable", error); }
             lastWrittenPhase = name; lastWrittenIteration = completed;
+        } finally { progressLock.unlock(); }
+    }
+    private static int threadPriority(Thread thread) {
+        String name = thread.getName();
+        if ("main".equals(name)) return 0;
+        if (name.contains("Instrumentation")) return 1;
+        if (name.startsWith("memory-r8-")) return 2;
+        if (name.startsWith("Thread-")) return 3;
+        return 4;
+    }
+    private static String limited(String text, int maximum) {
+        return text.length() <= maximum ? text : text.substring(0, maximum);
+    }
+    private JSONObject stackSnapshot(JSONObject value) throws Exception {
+        Map<Thread, StackTraceElement[]> traces = Thread.getAllStackTraces();
+        ArrayList<Map.Entry<Thread, StackTraceElement[]>> entries = new ArrayList<>(traces.entrySet());
+        entries.sort(Comparator.comparingInt(entry -> threadPriority(entry.getKey())));
+        JSONArray threads = new JSONArray();
+        for (Map.Entry<Thread, StackTraceElement[]> entry : entries) {
+            if (threads.length() >= 20) break;
+            Thread thread = entry.getKey();
+            JSONObject item = new JSONObject();
+            item.put("name", limited(thread.getName(), 160));
+            item.put("id", thread.getId());
+            item.put("state", thread.getState().name());
+            JSONArray frames = new JSONArray();
+            for (StackTraceElement frame : entry.getValue()) {
+                if (frames.length() >= 16) break;
+                frames.put(limited(frame.toString(), 240));
+            }
+            item.put("frames", frames); threads.put(item);
         }
+        value.put("stack_status", "CAPTURED_JAVA_THREADS_ONLY");
+        value.put("observed_threads", traces.size()); value.put("threads", threads);
+        value.put("stack_limits", "FIRST_20_PRIORITY_THREADS_FIRST_16_FRAMES_240_CHARS");
+        return value;
     }
     /** Unknown concurrently executing work must never race ordinary finally
      * cleanup. Persist evidence, then isolate only this diagnostic process. */
-    private synchronized void failStop(String reason) {
+    private void failStop(String reason) {
+        if (!terminationClaim.compareAndSet(false, true)) {
+            // Give the winning reporter a bounded opportunity to persist its
+            // record; never wait on the progress monitor or file operations.
+            long stopBy = System.nanoTime() + 2500000000L;
+            while (System.nanoTime() < stopBy) {
+                try { Thread.sleep(25); }
+                catch (InterruptedException ignored) { /* Continue the bounded handoff. */ }
+            }
+            android.os.Process.killProcess(android.os.Process.myPid());
+            throw new UnknownWork(reason);
+        }
         unsafeCleanup = true;
         boundaryOutcome = "UNKNOWN_RUNNING_WORK";
+        // No fatal handler waits for progressLock or file I/O: both can be the
+        // blocked operation. The bounded reporter has its own AtomicFile.
         try {
-            synchronized (progressLock) {
-                JSONObject value = state("UNKNOWN", reason);
-                value.put("exit_scope", "OWN_DIAGNOSTIC_PROCESS_FAIL_STOP_NO_CONCURRENT_FREE");
-                value.put("native_resource_state", "UNKNOWN_NOT_FORCED_FREE");
-                writeAtomic(progressFile, value); writeAtomic(resultFile, value);
-            }
-        } catch (Exception ignored) { /* Last atomic progress remains available. */ }
+            Thread reporter = new Thread(() -> {
+                try {
+                    JSONObject value = state("UNKNOWN", reason);
+                    value.put("exit_scope", "OWN_DIAGNOSTIC_PROCESS_FAIL_STOP_NO_CONCURRENT_FREE");
+                    value.put("native_resource_state", "UNKNOWN_NOT_FORCED_FREE");
+                    value.put("stack_status", captureStackOnHalt ? "STACK_CAPTURE_REQUESTED" : "NOT_REQUESTED");
+                    writeAtomic(stallFile, value);
+                    if (captureStackOnHalt) {
+                        try { stackSnapshot(value); }
+                        catch (Throwable error) { value.put("stack_status", "UNAVAILABLE_" + error.getClass().getSimpleName()); }
+                        writeAtomic(stallFile, value);
+                    }
+                    if (progressLock.tryLock()) {
+                        try { writeAtomic(progressFile, value); writeAtomic(resultFile, value); }
+                        finally { progressLock.unlock(); }
+                    }
+                } catch (Throwable ignored) { /* External observer retains the last atomic progress. */ }
+            }, "memory-r8-stall-reporter");
+            reporter.setDaemon(true); reporter.start(); reporter.join(2000);
+        } catch (Throwable ignored) { /* Never wait indefinitely for diagnostics. */ }
         android.os.Process.killProcess(android.os.Process.myPid());
         throw new UnknownWork(reason); // Do not enter ordinary cleanup if kill returns.
     }
@@ -91,7 +182,14 @@ public final class PressureR8Instrumentation extends Instrumentation {
         phase("watchdog.start");
         Thread watcher = new Thread(() -> {
             while (!finished) {
-                long remaining = deadline - System.nanoTime();
+                long now = System.nanoTime();
+                long phaseStart = currentPhaseStarted;
+                if (stallTimeoutMillis > 0 && phaseStart > 0 &&
+                        now - phaseStart >= stallTimeoutMillis * 1000000L && currentPhaseStarted == phaseStart) {
+                    if (!finished) failStop("STALL_PHASE_TIMEOUT");
+                    return;
+                }
+                long remaining = deadline - now;
                 if (remaining <= 0) {
                     if (!finished) failStop("OVERALL_WALL_CAP_UNKNOWN_ACTIVE_BOUNDARY");
                     return;
@@ -107,6 +205,118 @@ public final class PressureR8Instrumentation extends Instrumentation {
         if (value == null || "false".equals(value)) return false;
         if ("true".equals(value)) return true;
         throw new IllegalArgumentException(name + " requires true/false");
+    }
+    private void startForegroundActivity() throws Exception {
+        if (!foregroundRequested) return;
+        if (foregroundPrestarted) {
+            phase("foreground.prestarted.lookup");
+            PressureR8ForegroundActivity current = PressureR8ForegroundActivity.currentForDiagnostic();
+            // The caller must have already started and resumed this exact
+            // in-process Activity. Never launch a replacement on failure.
+            if (current == null || !current.isResumedForDiagnostic())
+                failStop("PRESTARTED_FOREGROUND_ACTIVITY_NOT_RESUMED");
+            foregroundActivity = current;
+            foregroundInitialPauseCount = current.pauseCountForDiagnostic();
+            foregroundResumed = true;
+            phase("foreground.prestarted.resumed");
+            return;
+        }
+        AtomicReference<Activity> activity = new AtomicReference<>();
+        AtomicReference<Throwable> failure = new AtomicReference<>();
+        CountDownLatch returned = new CountDownLatch(1);
+        Thread launch = new Thread(() -> {
+            try {
+                Intent intent = new Intent(getTargetContext(), PressureR8ForegroundActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                activity.set(startActivitySync(intent));
+            } catch (Throwable error) { failure.set(error); }
+            finally { returned.countDown(); }
+        }, "memory-r8-foreground-launch");
+        phase("foreground.launch");
+        launch.start();
+        if (!returned.await(10000, TimeUnit.MILLISECONDS)) failStop("FOREGROUND_LAUNCH_RUNNING_TIMEOUT");
+        if (failure.get() != null || !(activity.get() instanceof PressureR8ForegroundActivity))
+            failStop("FOREGROUND_LAUNCH_UNAVAILABLE");
+        foregroundActivity = (PressureR8ForegroundActivity)activity.get();
+        phase("foreground.await-resume");
+        if (!foregroundActivity.awaitFirstResume(3000) || !foregroundActivity.isResumedForDiagnostic())
+            failStop("FOREGROUND_RESUME_UNOBSERVED");
+        foregroundInitialPauseCount = foregroundActivity.pauseCountForDiagnostic();
+        foregroundResumed = true;
+        phase("foreground.resumed");
+    }
+    private void checkForeground() {
+        if (!foregroundRequested) return;
+        ++foregroundChecks;
+        PressureR8ForegroundActivity current = foregroundActivity;
+        if (!foregroundResumed || current == null || !current.isResumedForDiagnostic() || current.pauseCountForDiagnostic() != foregroundInitialPauseCount) {
+            boundaryOutcome = "FOREGROUND_PAUSED_OR_UNAVAILABLE";
+            throw new IllegalStateException("foreground Activity not continuously resumed");
+        }
+    }
+    /** Explicitly observe this Activity's own onStop/onDestroy before success. */
+    private void finishForegroundActivity() throws Exception {
+        PressureR8ForegroundActivity current = foregroundActivity;
+        if (current == null || foregroundFinished) return;
+        Handler main = new Handler(Looper.getMainLooper());
+        CountDownLatch returned = new CountDownLatch(1);
+        AtomicReference<Throwable> error = new AtomicReference<>();
+        AtomicInteger running = new AtomicInteger();
+        Runnable finishTask = () -> {
+            if (!running.compareAndSet(0, 1)) { returned.countDown(); return; }
+            try {
+                // The Activity may have stopped and resumed before admission.
+                // Observe only the stop caused after this specific finish.
+                if (!current.isResumedForDiagnostic() || current.pauseCountForDiagnostic() != foregroundInitialPauseCount)
+                    throw new IllegalStateException("foreground changed before finish");
+                current.prepareStopObservation();
+                current.finish();
+            } catch (Throwable failure) { error.set(failure); }
+            finally { running.set(2); returned.countDown(); }
+        };
+        phase("foreground.finish.post");
+        if (!main.post(finishTask)) failStop("FOREGROUND_FINISH_POST_REFUSED");
+        if (!returned.await(3000, TimeUnit.MILLISECONDS)) {
+            if (running.compareAndSet(0, 3)) main.removeCallbacks(finishTask);
+            if (running.get() != 2) failStop("FOREGROUND_FINISH_TASK_UNCONFIRMED");
+        }
+        if (error.get() != null) failStop("FOREGROUND_FINISH_FAILED");
+        phase("foreground.await-stop");
+        if (!current.awaitStoppedOrDestroyed(5000)) failStop("FOREGROUND_STOP_UNOBSERVED");
+        foregroundFinished = true;
+        phase("foreground.stopped");
+    }
+    private void verifyFireAndForget() throws Exception {
+        phase("fire-forget.reflect");
+        Field tokenField = NativePressureBackend.class.getDeclaredField("registration");
+        Method exists = NativePressureBackend.class.getDeclaredMethod("nativeExists", long.class);
+        tokenField.setAccessible(true); exists.setAccessible(true);
+        long startedAt = System.nanoTime();
+        NativePressureBackend backend = null;
+        try {
+            phase("fire-forget.create"); backend = NativePressureBackend.createArena(4096, 2048, 0, 256);
+            long token = tokenField.getLong(backend);
+            if (!((Boolean)exists.invoke(null, token))) throw new IllegalStateException("new registration absent before close");
+            phase("fire-forget.close"); backend.close();
+            phase("fire-forget.observe-registration");
+            long until = Math.min(deadline, System.nanoTime() + 5000000000L);
+            while (System.nanoTime() < until) {
+                ++fireAndForgetPolls;
+                if (!((Boolean)exists.invoke(null, token))) {
+                    fireAndForgetState = "PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL";
+                    fireAndForgetElapsedMillis = (System.nanoTime() - startedAt) / 1000000L;
+                    return;
+                }
+                Thread.sleep(5);
+            }
+            failStop("FIRE_FORGET_CLOSE_TIMEOUT");
+        } catch (UnknownWork error) { throw error; }
+        catch (Throwable error) {
+            // A created backend with an unobserved close outcome must not be
+            // reported as safely closed or forcibly reclaimed.
+            if (backend != null) failStop("FIRE_FORGET_CLOSE_UNKNOWN_" + error.getClass().getSimpleName());
+            throw new IllegalStateException("fire-and-forget setup failed", error);
+        }
     }
     private void check(boolean value, String reason) {
         ++checks;
@@ -174,6 +384,19 @@ public final class PressureR8Instrumentation extends Instrumentation {
             adapter = new MemoryPressureAdapter(getTargetContext(), backend);
             long size = 256L * (1 + index % 6);
             phase("cycle.hold-probe"); lease = backend.holdRetiringLeaseForDiagnostics(size);
+            if (injectProgressLockTimeout && index == 0) {
+                CountDownLatch held = new CountDownLatch(1);
+                Thread holder = new Thread(() -> {
+                    progressLock.lock();
+                    try { held.countDown(); new CountDownLatch(1).await(); }
+                    catch (InterruptedException ignored) { Thread.currentThread().interrupt(); }
+                    finally { progressLock.unlock(); }
+                }, "memory-r8-progress-lock-holder");
+                holder.setDaemon(true); holder.start();
+                if (!held.await(3000, TimeUnit.MILLISECONDS)) failStop("INJECTED_LOCK_HOLDER_UNKNOWN");
+                phase("diagnostic.inject-progress-lock.blocked");
+                throw new AssertionError("injected progress lock unexpectedly released");
+            }
             long[] initial = available(backend);
             check(initial.length == 16 && initial[3] == size && initial[6] == size, "single retiring backing");
             peakBacking = Math.max(peakBacking, initial[3]);
@@ -258,15 +481,18 @@ public final class PressureR8Instrumentation extends Instrumentation {
             phase("cycle.final-snapshot");
             long[] end = backend.snapshot();
             check(end != null && end[0] == 2 && end[1] == 2 && end[3] == 0 && end[4] == 0 && end[5] == 0 && end[6] == 0 && end[15] == 1, "owned domain/controller closed and zero");
-            phase("cycle.idempotent-close"); adapter.close();
+            phase("cycle.idempotent-close.enter"); adapter.close();
+            phase("cycle.idempotent-close.returned");
+            phase("cycle.idempotent-poll.enter");
             check(adapter.awaitClosed(0), "idempotent close complete");
+            phase("cycle.idempotent-poll.returned");
             ++completed;
         } finally {
             if (!unsafeCleanup) {
                 phase("cycle.finally-cleanup");
                 if (lease != null) lease.close();
-                if (adapter != null) { adapter.close(); adapter.awaitClosed(5000); }
-                else { backend.close(); backend.awaitClosed(5000); }
+                if (adapter != null) { adapter.close(); if (!adapter.awaitClosed(5000)) failStop("CYCLE_CLEANUP_UNCONFIRMED"); }
+                else { backend.close(); if (!backend.awaitClosed(5000)) failStop("CYCLE_SETUP_CLEANUP_UNCONFIRMED"); }
             }
         }
     }
@@ -337,8 +563,8 @@ public final class PressureR8Instrumentation extends Instrumentation {
         } finally {
             if (!unsafeCleanup) {
                 phase("framework.close");
-                if (adapter != null) { adapter.close(); check(adapter.awaitClosed(5000), "framework test clean close"); }
-                else { backend.close(); check(backend.awaitClosed(5000), "framework setup cleanup"); }
+                if (adapter != null) { adapter.close(); boolean closed = adapter.awaitClosed(5000); if (!closed) failStop("FRAMEWORK_CLEANUP_UNCONFIRMED"); check(closed, "framework test clean close"); }
+                else { backend.close(); boolean closed = backend.awaitClosed(5000); if (!closed) failStop("FRAMEWORK_SETUP_CLEANUP_UNCONFIRMED"); check(closed, "framework setup cleanup"); }
             }
         }
     }
@@ -349,33 +575,48 @@ public final class PressureR8Instrumentation extends Instrumentation {
             File cache = getTargetContext().getCacheDir();
             progressFile = new AtomicFile(new File(cache, "mgmem-r8-progress.json"));
             resultFile = new AtomicFile(new File(cache, "mgmem-r8-result.json"));
+            stallFile = new AtomicFile(new File(cache, "mgmem-r8-stall.json"));
             phase("arguments.validate");
             int iterations = (int)bounded("iterations", 100, 1, 100000);
             long minimum = bounded("min_duration_ms", 0, 0, 1800000);
             long maximum = bounded("max_duration_ms", 180000, 1000, 3600000);
             int cadence = (int)bounded("sample_every", 100, 1, 100000);
             boolean observeAms = option("observe_ams");
+            foregroundRequested = option("foreground");
+            foregroundPrestarted = option("foreground_prestarted");
+            if (foregroundPrestarted && !foregroundRequested) throw new IllegalArgumentException("foreground_prestarted requires foreground");
             injectMainRunningTimeout = option("inject_main_running_timeout");
+            injectProgressLockTimeout = option("inject_progress_lock_timeout");
+            captureStackOnHalt = option("capture_stack_on_halt");
+            stallTimeoutMillis = bounded("stall_timeout_ms", 0, 0, 60000);
+            if (stallTimeoutMillis > 0 && stallTimeoutMillis < 1000) throw new IllegalArgumentException("stall timeout minimum");
+            if (injectProgressLockTimeout && stallTimeoutMillis == 0) throw new IllegalArgumentException("injected lock needs stall watchdog");
             if (minimum >= maximum) throw new IllegalArgumentException("duration bounds");
             deadline = started + maximum * 1000000L;
             startDeadlineWatchdog();
             check(Looper.myLooper() != Looper.getMainLooper(), "instrumentation worker required");
+            startForegroundActivity();
+            checkForeground();
             String marker = new R8ConsumerMarker().getClass().getName();
             // R8 may rewrite a class-name string literal together with a class
             // reference. The external validator compares this reported name
             // with the exact mapping from this APK's build receipt instead.
             check(marker != null && !marker.isEmpty(), "R8 runtime marker available");
             JSONObject callback = framework(observeAms);
+            verifyFireAndForget();
             JSONArray observations = new JSONArray(); observations.put(observation());
             while (completed < iterations || (System.nanoTime() - started) / 1000000L < minimum) {
                 if (completed >= 100000) {
                     boundaryOutcome = "CYCLE_CAP_REACHED_AT_SAFE_CHECKPOINT";
                     throw new AssertionError("cycle cap");
                 }
-                cycle(completed);
+                checkForeground(); cycle(completed); checkForeground();
                 if (completed % cadence == 0 && observations.length() < 256) observations.put(observation());
             }
             observations.put(observation());
+            checkForeground();
+            foregroundPauseCountBeforeFinish = foregroundActivity == null ? 0 : foregroundActivity.pauseCountForDiagnostic() - foregroundInitialPauseCount;
+            finishForegroundActivity();
             beforeDeadline();
             JSONObject report = new JSONObject();
             report.put("suite", "android-pressure-r8-stability-v1"); report.put("status", "PASS");
@@ -383,8 +624,23 @@ public final class PressureR8Instrumentation extends Instrumentation {
             report.put("minimum_duration_ms", minimum); report.put("maximum_duration_ms", maximum);
             report.put("actual_duration_ms", (System.nanoTime() - started) / 1000000L);
             report.put("api", Build.VERSION.SDK_INT); report.put("r8_marker_runtime_name", marker);
-            report.put("diagnostic_revision", 3); report.put("run_id", runId);
+            report.put("diagnostic_revision", 4); report.put("run_id", runId);
             report.put("inject_main_running_timeout", injectMainRunningTimeout);
+            report.put("inject_progress_lock_timeout", injectProgressLockTimeout);
+            report.put("stall_timeout_ms", stallTimeoutMillis);
+            report.put("foreground_requested", foregroundRequested);
+            report.put("foreground_prestarted", foregroundPrestarted);
+            report.put("foreground_resumed", foregroundResumed);
+            report.put("foreground_finished", foregroundFinished);
+            report.put("foreground_resume_checks", foregroundChecks);
+            report.put("foreground_pause_count_before_finish", foregroundPauseCountBeforeFinish);
+            report.put("foreground_preexisting_pause_count", foregroundInitialPauseCount);
+            report.put("process_pid", android.os.Process.myPid());
+            report.put("foreground_finish_policy", "OWN_MAIN_FINISH_THEN_OBSERVED_ONSTOP_OR_ONDESTROY");
+            report.put("fire_and_forget_state", fireAndForgetState);
+            report.put("fire_and_forget_elapsed_ms", fireAndForgetElapsedMillis);
+            report.put("fire_and_forget_polls", fireAndForgetPolls);
+            report.put("fire_and_forget_scope", "CALLER_ONLY_CLOSE_AND_NATIVE_EXISTS_NO_AWAIT_SNAPSHOT_OR_NATIVE_POLL");
             report.put("phase", "complete"); report.put("exit_scope", "NORMAL_INSTRUMENTATION_COMPLETION");
             report.put("progress_file", "cache/mgmem-r8-progress.json");
             report.put("unknown_work_policy", "PERSIST_UNKNOWN_AND_FAIL_STOP_OWN_PROCESS_NO_CONCURRENT_FREE");
@@ -395,23 +651,30 @@ public final class PressureR8Instrumentation extends Instrumentation {
             report.put("indefinite_leak_freedom_proven", false); report.put("actual_low_memory_event", false);
             report.put("performance_qualified", false); report.put("BIL_integrated", false);
             report.put("energy_joules", JSONObject.NULL); report.put("energy_unavailable_reason", "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD");
-            synchronized (progressLock) {
+            progressLock.lock();
+            try {
                 currentPhase = "complete";
                 writeAtomic(progressFile, state("PASS", null)); writeAtomic(resultFile, report);
-            }
+            } finally { progressLock.unlock(); }
             finished = true;
             results.putString("report_json", report.toString()); finish(0, results);
         } catch (Throwable error) {
             if (unsafeCleanup) failStop("UNKNOWN_WORK_NO_NORMAL_FINALLY_CLEANUP");
+            try { finishForegroundActivity(); }
+            catch (Throwable failure) {
+                if (unsafeCleanup) failStop("FOREGROUND_FINISH_UNKNOWN");
+                failStop("FOREGROUND_FINISH_UNCONFIRMED");
+            }
             JSONObject report;
             try {
                 report = state("FAIL", error.getClass().getSimpleName());
                 report.put("iterations_completed", completed);
                 report.put("exit_scope", "NORMAL_FAILURE_AFTER_SAFE_CLEANUP");
-                synchronized (progressLock) {
+                progressLock.lock();
+                try {
                     if (progressFile != null) writeAtomic(progressFile, report);
                     if (resultFile != null) writeAtomic(resultFile, report);
-                }
+                } finally { progressLock.unlock(); }
             } catch (Exception unavailable) { report = new JSONObject(); }
             finished = true;
             results.putString("report_json", report.toString());
