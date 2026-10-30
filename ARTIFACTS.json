@@ -373,5 +373,12 @@
     "functional": "PASS_NEW_API33_ARM64_4K_CORE3_AND_CONSUMERS196",
     "performance": "INCOMPLETE_NOT_QUALIFIED",
     "note": "Original SDK compiled commit above remains unchanged; new consumer binaries and frozen/corrected analysis sources have separate exact hashes"
-  }
+  },
+  "current_feature_delivery": {
+    "version": "0.2.0",
+    "native_abi": "1.1",
+    "manifest": "artifacts/features-20261030/ARTIFACTS.json",
+    "scope": "PACKED_IMPORT_PRESSURE_FUNCTIONAL_ENGINEERING_PREVIEW"
+  },
+  "legacy_fields_scope": "version/compiled_source_commit/packages below identify the original 0.1 SDK only; current_feature_delivery identifies the new 0.2 SDK"
 }

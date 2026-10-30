@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "version": "0.2.0",
+  "native_abi": "1.1",
+  "qualification": "FUNCTIONAL_ENGINEERING_PREVIEW_NOT_PERFORMANCE_OR_FORMAL_RELEASE",
+  "source_identity": {
+    "kind": "SCOPED_SOURCE_HASH_BUILD_NOT_DELIVERY_COMMIT",
+    "source_lock": {
+      "path": "SOURCE_LOCK.json",
+      "bytes": 37153,
+      "sha256": "128624d18f0f359706bdc8f54fb155b9a71ee47f97343c2c6ca70a0eb739daa7"
+    },
+    "source_set_sha256": "91f8cfbc27a2af48820a02fd3b1b7e2eb5e33d290cb200b640d664d43eb9680d"
+  },
+  "receipts": [
+    {
+      "path": "artifacts/functional-next-20261030/packed/receipt.json",
+      "bytes": 3777,
+      "sha256": "d225ce1e805abdbce395ffc0a6a3eec21b1f0c65729f8a432d762d1b2d221de4"
+    },
+    {
+      "path": "artifacts/features-20261030/packed-art-build.json",
+      "bytes": 4585,
+      "sha256": "f58a4f54ea08d464c7b5a0019651dd28ad807f9ca7c7dcc275f574ed874598aa"
+    },
+    {
+      "path": "artifacts/features-20261030/android-pressure-java-host-final.json",
+      "bytes": 1168,
+      "sha256": "0c1d5d8a4d1fd8270dd7b53942f26559438cc1172299d7c983ac3bf7114a2e76"
+    },
+    {
+      "path": "artifacts/features-20261030/android-pressure-build.json",
+      "bytes": 6153,
+      "sha256": "16fb26c0c15341e004d40669c29858110a8b4619837f4ae40c63036975bf122c"
+    },
+    {
+      "path": "artifacts/features-20261030/device/features-receipt.json",
+      "bytes": 42217,
+      "sha256": "e8d558eac17d6b3be219b9c5c1f305f13321f26f418f0bf55504a966dc8f80c1"
+    },
+    {
+      "path": "artifacts/features-20261030/device-android-final/features-receipt.json",
+      "bytes": 19965,
+      "sha256": "4d21f1ecbdf33424c6c763a39ae27535bfc6cd729aca414889cde943ee2695df"
+    },
+    {
+      "path": "artifacts/features-20261030/family-contracts.json",
+      "bytes": 3674,
+      "sha256": "5cdc9a8821ba84481bae295d9e0f2deaad27ac61688c2d82767b7e2eafbabe74"
+    }
+  ],
+  "host": [
+    {
+      "profile": "features-host",
+      "tests_passed": 10,
+      "test_names": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "pressure_budget_close",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "original_log_sha256": "62a6f6a5b05749826b8324f910917e9d36ba973015a5a6404e4af5e6346cd129",
+      "public_log": {
+        "path": "artifacts/features-20261030/features-host-ctest-sanitized.log",
+        "bytes": 7410,
+        "sha256": "557b503d3892ba8e7e99907e93b8fd5cf18a62bd90cf3d708dae5938ccb7fbe5"
+      },
+      "address_sanitizer_enabled": false,
+      "binaries": [
+        {
+          "path": "build/features-host/mgmem.dll",
+          "bytes": 39936,
+          "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+        },
+        {
+          "path": "build/features-host/mgmem_other_runtime.dll",
+          "bytes": 39424,
+          "sha256": "4882950229ccb67e46c74504955a6909994d5fadedbc75bfc135587d26ad489d"
+        },
+        {
+          "path": "build/features-host/mgmem_core_tests.exe",
+          "bytes": 63488,
+          "sha256": "7839b8f48d6b33a50ab2ef3e71e1fe3f19ec8c905337c848979531505851f4cf"
+        },
+        {
+          "path": "build/features-host/mgmem_import_tests.exe",
+          "bytes": 51712,
+          "sha256": "1e27f808b854e1d17508cd213204d60b60c507d2840e6e3e2c0792b464c1b1eb"
+        },
+        {
+          "path": "build/features-host/mgmem_pressure_tests.exe",
+          "bytes": 37376,
+          "sha256": "dfba9a2073c4ce4b4da9c1de00682f18af426b60c52a55bf356b5b9835101cee"
+        },
+        {
+          "path": "build/features-host/mgmem_cpp_consumer.exe",
+          "bytes": 29696,
+          "sha256": "cab92dc2ee69ca0b87dfd69676afdfa6eb87039118528ff58405f5793a0def84"
+        },
+        {
+          "path": "build/features-host/mgmem_abi10_consumer.exe",
+          "bytes": 11776,
+          "sha256": "bc9b64894640d2a4b0028d0ec74fa70bd0b0d6a1d397dac011b6fffd02087c9d"
+        },
+        {
+          "path": "build/features-host/mgmem_runtime_tests.exe",
+          "bytes": 13312,
+          "sha256": "f590734d21228381a53a2b9ad13fb38a96495d9fba3da0682c42342fb9f76acf"
+        }
+      ]
+    },
+    {
+      "profile": "features-asan",
+      "tests_passed": 10,
+      "test_names": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "pressure_budget_close",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "original_log_sha256": "023c92e89545a00ed1bc4f941cf26dff162ab1581fde259395ce499022ffab18",
+      "public_log": {
+        "path": "artifacts/features-20261030/features-asan-ctest-sanitized.log",
+        "bytes": 7410,
+        "sha256": "4db1652ffdfe3d915159101fb3bc9cb684c55481e69c0526f93980acf3f65ca8"
+      },
+      "address_sanitizer_enabled": true,
+      "binaries": [
+        {
+          "path": "build/features-asan/mgmem.dll",
+          "bytes": 175616,
+          "sha256": "173d63d72f982a134af84da4498fe8a45707be5d64435fab94614323647fb05e"
+        },
+        {
+          "path": "build/features-asan/mgmem_other_runtime.dll",
+          "bytes": 175616,
+          "sha256": "8946a4d1b4ccc0b2e19d35caed39bc3f4bba17d45861595ef01afd624196da0d"
+        },
+        {
+          "path": "build/features-asan/mgmem_core_tests.exe",
+          "bytes": 186880,
+          "sha256": "4a83af3d2a13cd30e6839a52fb02cdd58f81b8a4dc664d632fc7400490a4ffdf"
+        },
+        {
+          "path": "build/features-asan/mgmem_import_tests.exe",
+          "bytes": 156672,
+          "sha256": "0ec42becdecd00c30499f29f93842501d108689e3efd3c1b4041b72820fce76b"
+        },
+        {
+          "path": "build/features-asan/mgmem_pressure_tests.exe",
+          "bytes": 137728,
+          "sha256": "fd5f52a0516e38aa01cf9d4394cf22fd6727a072d17458d54656194bd801d401"
+        },
+        {
+          "path": "build/features-asan/mgmem_cpp_consumer.exe",
+          "bytes": 88064,
+          "sha256": "268187e8ab1479872417c8fef1b805f6d7e96d7213fe07f5c0955c58b5f2e440"
+        },
+        {
+          "path": "build/features-asan/mgmem_abi10_consumer.exe",
+          "bytes": 42496,
+          "sha256": "4bb9246993c9ac9dc50b4aee829b0fd718df62774f8af3e9a85b95d74e740f71"
+        },
+        {
+          "path": "build/features-asan/mgmem_runtime_tests.exe",
+          "bytes": 43008,
+          "sha256": "a37f1f083a71f972d5778d138122b47bd8c780a507613b94c6e1d6ae65ea9c80"
+        }
+      ]
+    }
+  ],
+  "device": {
+    "profile": {
+      "model": "2210132C",
+      "api": 33,
+      "abi_list": "arm64-v8a,armeabi-v7a,armeabi",
+      "page_bytes": 4096,
+      "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb"
+    },
+    "native_cases": 9,
+    "packed_ART_cases": 32,
+    "android_checks": 20,
+    "AMS_injected_callback": "PASS",
+    "actual_low_memory_event": false,
+    "RSS_kB": 91924,
+    "PSS_kB": 16857,
+    "private_dirty_kB": 10200,
+    "energy_joules": null,
+    "native_ART_not_repeated_after_validator_fix": true
+  },
+  "packages": [
+    {
+      "path": "dist/MeguvizMemory-0.2.0-Windows-x64.zip",
+      "bytes": 94696,
+      "sha256": "7f4b3c93fe4c9902741eb9b23c872cd8e0b523c24a150f458dd6490c7147fd79"
+    },
+    {
+      "path": "dist/MeguvizMemory-0.2.0-Android-arm64-v8a.zip",
+      "bytes": 1286190,
+      "sha256": "4132d4f5c5d61b2c1a38c41e90d925b438992da7e01dc06d8771f273e45ba606"
+    },
+    {
+      "path": "dist/meguviz-memory-packed-reader-0.1.0.jar",
+      "bytes": 5212,
+      "sha256": "b527d6333e3e379aab7a4b858973f9acb28d610686312200f438c142a0373ce6"
+    },
+    {
+      "path": "dist/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "bytes": 659262,
+      "sha256": "0dcc15358cb60b5dfda5c6dbb8c1a04c18526225ba1c38331217e04cbacd030a"
+    }
+  ],
+  "aar_notice_assembly": "Runtime/classes identical to built AAR; existing LLVM notice added for distribution",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+  "family_bridge": "CONTRACT_AUDIT_ONLY_NOT_IMPLEMENTED",
+  "remaining": [
+    "16KB runtime",
+    "MTE/HWASan",
+    "energy measurement",
+    "BIL host parseFrom/Hook/UI",
+    "family bridge runtime",
+    "performance qualification",
+    "formal release"
+  ]
+}

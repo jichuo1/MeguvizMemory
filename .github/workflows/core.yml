@@ -26,6 +26,10 @@ jobs:
       - name: Windows capture journal regression
         if: runner.os == 'Windows'
         run: python tools/test_capture_journal.py --out-dir build/capture-journal-ci
+      - name: Packed reader standalone Java contracts
+        run: python tools/verify_packed_reader.py --java-only --build-dir build/packed-java-ci --receipt artifacts/ci-packed/receipt.json
+      - name: Android pressure Java lifecycle contracts
+        run: python tools/verify_android_pressure.py --out-dir build/pressure-java-ci --receipt artifacts/ci-pressure/receipt.json
       - name: Install
         run: cmake --install build/core --config Release
       - name: Configure installed consumer
@@ -63,5 +67,7 @@ jobs:
             artifacts/ci-image
             artifacts/ci-image-v2
             artifacts/ci-research
+            artifacts/ci-packed
+            artifacts/ci-pressure
             build/core/Testing/Temporary/LastTest.log
             build/capture-journal-ci/regression-receipt.json

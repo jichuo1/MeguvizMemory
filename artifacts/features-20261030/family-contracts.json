@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "scope": "READ_ONLY_FAMILY_CONTRACT_AUDIT_NO_BRIDGE_IMPLEMENTATION",
+  "as_of": "2026-10-30",
+  "roots": {
+    "Compute": {
+      "head": "7581256f1b35b9875b168717e8765a127e30890f",
+      "dirty": true,
+      "modified_content_is_not_identified_by_HEAD_alone": true
+    },
+    "Media": {
+      "head": "4ebbfcd4b56a67e2ea14a6f30d614fe68ab1c765",
+      "dirty": true,
+      "modified_content_is_not_identified_by_HEAD_alone": true
+    }
+  },
+  "files": [
+    {
+      "root": "Compute",
+      "path": "include/meguviz/compute.h",
+      "bytes": 13314,
+      "sha256": "fd35292124d2a385c32e364c1aafbe7a0b7739c0d1d1d1ab20a560ef9d9792cc"
+    },
+    {
+      "root": "Compute",
+      "path": "include/meguviz/compute_android.h",
+      "bytes": 3769,
+      "sha256": "ef94d181598e1033a9eae1e9df28dc8060bcf4d0ce666de8ee1bb7d5de1e2905"
+    },
+    {
+      "root": "Compute",
+      "path": "src/core/runtime.cpp",
+      "bytes": 63936,
+      "sha256": "9e3613a770bbd20c1ec98c782ad5510391442a0a3dc427181a0ec68d2d793558"
+    },
+    {
+      "root": "Media",
+      "path": "include/meguviz/media.h",
+      "bytes": 5669,
+      "sha256": "84b32e6f9840b1f96e77958593e7f630f66c054152252c898e373fd91e05a253"
+    },
+    {
+      "root": "Media",
+      "path": "include/meguviz/media_android.h",
+      "bytes": 4437,
+      "sha256": "2746ae651a6308e6fbab7b7c035063d2a155be4180a6fca853314b94b01153f5"
+    },
+    {
+      "root": "Media",
+      "path": "src/core/media.cpp",
+      "bytes": 10691,
+      "sha256": "44712ab3c35f3d0652d52ef6b2ccb1b5a80f076fcd0c3f7ea60187f3da4b68a4"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "include/meguviz/compute.h",
+      "bytes": 13032,
+      "sha256": "89033ba0e5d9dc52f12b705ee1c0129016b37a55481164e082d498ccae96f1b4"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "include/meguviz/media.h",
+      "bytes": 5505,
+      "sha256": "13acb0c0bba997d6efd1f89a44078c723e5faf4bc547189c1cd68a76eb6f3318"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "lib/cmake/MeguvizCompute/MeguvizComputeConfig.cmake",
+      "bytes": 1833,
+      "sha256": "89ac4e4f1b399e828129ef0d3d31c5721d6e927eaa2bc7b3c4d3314db8f7cc16"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "lib/cmake/MeguvizMedia/MeguvizMediaConfig.cmake",
+      "bytes": 1200,
+      "sha256": "3de98295e57217a240df5ab4276ddf6a98a8bc3fac98abe6d35ff0abf91b4ed8"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "lib/libmeguviz_compute_core.a",
+      "bytes": 3580680,
+      "sha256": "73ac4e40124e0f78e389ae9262f86efe88e23f3617e783bd2fdddef09f584bb6"
+    },
+    {
+      "root": "InstalledIdentitySDK",
+      "path": "lib/libmeguviz_media_core.a",
+      "bytes": 703824,
+      "sha256": "8e7c958107334a71b3fa9c180f9d63cc4434ac2677a461bdc9bb4e0030de32ca"
+    }
+  ],
+  "installed_sdk_profile": "CPU_IDENTITY_NCNN_AND_RIFE_OFF_NOT_GPU_QUALIFICATION",
+  "conclusions": {
+    "Memory_backing_into_Compute": "NO_PUBLIC_HOST_ALLOCATOR_OR_HOST_POINTER_IMPORT_API_OBSERVED",
+    "Compute_READ_map_into_Memory": "ONLY_A_POTENTIAL_FULL_RANGE_CPU_READ_LEASE_ADAPTER_AFTER_NEW_IMPORT_QUALIFICATION",
+    "Media_frame_from_Memory": "REQUIRES_MGC_CONTENT_LEASE_NO_DIRECT_MEMORY_HANDLE",
+    "GPU_AHB_fence_ownership": "REMAINS_ORIGIN_COMPUTE_MEDIA_OWNER",
+    "BIL": "NOT_MODIFIED"
+  },
+  "not_executed": [
+    "family source build",
+    "installed family binary execution",
+    "family bridge runtime",
+    "BIL host parseFrom",
+    "GPU retirement test"
+  ],
+  "post_audit_recheck": {
+    "all_selected_hashes_unchanged": true,
+    "changed": [],
+    "scope": "READ_ONLY_NO_FAMILY_BUILD_OR_BRIDGE_EXECUTION"
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "scope": "FRESH_FEATURE_FUNCTIONAL_ADMISSION_NO_PERFORMANCE_OR_OOM_STRESS",
+  "checked_at_utc": "2026-10-30T10:28:17.227470+00:00",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "result": "PASS_OBSERVATIONAL_ONLY",
+  "inventories": [
+    {
+      "name": "processes",
+      "exit_code": 0,
+      "stdout_sha256": "1126b3ca0089053afde41630607b550037c323f9cfe853fa4cd16e1273253435",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parsed_rows": 847,
+      "matching_tests": []
+    },
+    {
+      "name": "instrumentation",
+      "exit_code": 0,
+      "stdout_sha256": "a3f23aae02d67cad29c3e8783c99f7069ecf40197928a0095acbe444302fd473",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "active_markers": []
+    },
+    {
+      "name": "model",
+      "exit_code": 0,
+      "stdout_sha256": "a28e87ee24a958a61bfa993a364545ff4c6e4031cb2ae39d20f6a59715f00a65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "value": "2210132C"
+    }
+  ]
+}

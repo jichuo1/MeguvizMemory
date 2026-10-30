@@ -124,5 +124,19 @@
     "BIL_integration": "NOT_SELECTED",
     "device_window": "ENDED",
     "analysis_intervals": "NULL_FOR_INCOMPLETE_FORMAL_CORRECTION_ARCHIVED"
+  },
+  "features_0_2": {
+    "native_abi": "1.1",
+    "host_ctest": 10,
+    "host_asan_ctest": 10,
+    "legacy_abi10_client": "PASS",
+    "external_import": "SYSTEM_WHOLE_REGION_SINGLE_MANAGER_RUNTIME",
+    "pressure": "NATIVE_WORKER_AND_ANDROID_COMPONENT_CALLBACKS",
+    "observations": "OWN_PROCESS_RSS_PSS_PRIVATE_DIRTY_AVAILABLE_WITH_UNAVAILABLE_REASONS",
+    "energy": "UNAVAILABLE",
+    "Android_API33_arm64_4K": "PASS_NATIVE9_PACKED32_ANDROID20",
+    "family_bridge": "CONTRACT_AUDIT_ONLY",
+    "BIL": "NOT_INTEGRATED",
+    "performance": "NO_NEW_QUALIFICATION"
   }
 }

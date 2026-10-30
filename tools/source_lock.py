@@ -15,7 +15,7 @@ from pathlib import Path
 import subprocess
 
 
-LOCAL_DIRECTORIES = ("include", "src", "tests", "consumers", "bench", "cmake", "tools", "docs", ".github", "third_party_notices")
+LOCAL_DIRECTORIES = ("include", "src", "tests", "consumers", "adapters", "bench", "cmake", "tools", "docs", ".github", "third_party_notices")
 EXTERNAL_DIRECTORIES = ("include", "src", "third_party", "cmake", "cli")
 EXCLUDED_DIRECTORIES = {".git", ".venv", ".codex", ".agents", ".aws", "node_modules", "__pycache__",
                         "build", "install", "dist", "artifacts", ".cache", ".gradle", ".idea"}

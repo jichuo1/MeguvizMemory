@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "scope": "ART_PACKED_TEST_CONTAINER_BUILD_ONLY_NO_DEVICE",
+  "status": "PASS",
+  "actual_device_operations": 0,
+  "minimum_api": 27,
+  "main_class": "PackedReaderTests",
+  "production_dependencies_added": [],
+  "production_jar": {
+    "path": "build/packed-reader/meguviz-memory-packed-reader-0.1.0.jar",
+    "bytes": 5212,
+    "sha256": "b527d6333e3e379aab7a4b858973f9acb28d610686312200f438c142a0373ce6"
+  },
+  "fresh_java_contracts": {
+    "suite": "packed-reader-java-contract",
+    "cases": 32,
+    "status": "PASS"
+  },
+  "fresh_host_receipt": {
+    "path": "build/packed-art-final/host-build/receipt.json",
+    "bytes": 2689,
+    "sha256": "1197f064c8f0b4a34bf979c752bf885e81024306dcc5bf05464152b2d14f425c"
+  },
+  "test_class_inputs": [
+    {
+      "path": "build/packed-art-final/host-build/classes/PackedReaderTests.class",
+      "bytes": 10922,
+      "sha256": "1f36e6ca69513eff1b222e74042d433c7623b18a140804426cb482bf0e8da1ce"
+    }
+  ],
+  "test_classes_jar": {
+    "path": "build/packed-art-final/packed-contract-test-classes.jar",
+    "bytes": 4794,
+    "sha256": "e987176a23eeeac82b85dcb50146a945769d16c346cda132455dcd33d6b7d771"
+  },
+  "artifact": {
+    "path": "build/packed-art-final/packed-tests.jar",
+    "bytes": 8580,
+    "sha256": "15a855b9e67ecd95315ecbc97235e4590775c86fa81c12dfdd9886e275e6691a"
+  },
+  "dex": {
+    "bytes": 18468,
+    "sha256": "693df562a66d1ea8aebf7ce6fba36d87e8ea015192086a55d1fc5086acf34a80",
+    "version": "038",
+    "class_definitions": [
+      "LPackedReaderTests$0;",
+      "LPackedReaderTests$10;",
+      "LPackedReaderTests$11;",
+      "LPackedReaderTests$12;",
+      "LPackedReaderTests$13;",
+      "LPackedReaderTests$14;",
+      "LPackedReaderTests$15;",
+      "LPackedReaderTests$16;",
+      "LPackedReaderTests$17;",
+      "LPackedReaderTests$18;",
+      "LPackedReaderTests$19;",
+      "LPackedReaderTests$1;",
+      "LPackedReaderTests$2;",
+      "LPackedReaderTests$3;",
+      "LPackedReaderTests$4;",
+      "LPackedReaderTests$5;",
+      "LPackedReaderTests$6;",
+      "LPackedReaderTests$7;",
+      "LPackedReaderTests$8;",
+      "LPackedReaderTests$9;",
+      "LPackedReaderTests;",
+      "Lio/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader$BudgetExceededException;",
+      "Lio/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader$Decision;",
+      "Lio/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader$ScanProvider;",
+      "Lio/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader-IA;",
+      "Lio/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader;"
+    ]
+  },
+  "toolchain": [
+    {
+      "component": "build-tools/37.0.0/lib/d8.jar",
+      "bytes": 20528803,
+      "sha256": "a26ee56252adcff6752c379ae255a0ad538ebec60189e078ec6855487107637d"
+    },
+    {
+      "component": "platforms/android-37.0/android.jar",
+      "bytes": 43044472,
+      "sha256": "bf1b4387cc7ca94fc6ef684f040d9d16fbf16248e181819f020736ea2053f177"
+    }
+  ],
+  "sources": [
+    {
+      "path": "tools/build_packed_art.py",
+      "bytes": 10564,
+      "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+    },
+    {
+      "path": "tools/verify_packed_reader.py",
+      "bytes": 9632,
+      "sha256": "54498a60d1e5ec2b2d1527dfda66556b8e44efa4779350ca9f049334e898cb79"
+    },
+    {
+      "path": "tests/packed/PackedReaderTests.java",
+      "bytes": 8038,
+      "sha256": "f88776db15f67f68cd299e4fa7a76c52bb143db24b986d0a652cd726c14f0075"
+    },
+    {
+      "path": "adapters/packed/src/main/java/io/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader.java",
+      "bytes": 11952,
+      "sha256": "51ace91b00228383e3abf8490a67832463a22c3386ec8754b9c78577d3ac16a9"
+    }
+  ],
+  "commands": [
+    {
+      "name": "fresh_java_contracts",
+      "exit_code": 0,
+      "stdout_sha256": "c17f65851ef055211a7a474b42c65d3b411eaa91ed49544275d70b98d4c52f39",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device_operation": false
+    },
+    {
+      "name": "D8_min_api_27",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "device_operation": false
+    }
+  ],
+  "excluded": [
+    "Kotlin oracle/BIL class files",
+    "Kotlin runtime",
+    "private inputs"
+  ],
+  "qualification": {
+    "host_java_contracts": "PASS_32",
+    "D8_build": "PASS",
+    "ART_execution": "NOT_RUN",
+    "BIL_integration": "NOT_PERFORMED",
+    "performance": "NOT_MEASURED"
+  }
+}

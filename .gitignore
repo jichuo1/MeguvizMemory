@@ -11,6 +11,10 @@
 /artifacts/device-v2-20261030/capture-*/commands/
 /artifacts/device-v2-20261030/capture-*/receipt.json
 /artifacts/device-v2-20261030/capture-*/receipt.json.pending
+/artifacts/features-20261030/admission*.json
+/artifacts/features-20261030/device/commands/
+/artifacts/features-20261030/device-*/commands/
+/artifacts/features-20261030/android-pressure-java-host.json
 /research/
 # Private preparatory indexes; publish reviewed summaries from docs/ instead.
 /docs/research/

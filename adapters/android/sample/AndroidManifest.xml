@@ -1,0 +1,6 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.github.jichuo1.meguviz.memory.pressureprobe">
+  <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="33" />
+  <application android:debuggable="true" android:label="Memory Pressure Probe" android:allowBackup="false" />
+  <instrumentation android:name="io.github.jichuo1.meguviz.memory.android.PressureInstrumentation"
+      android:targetPackage="io.github.jichuo1.meguviz.memory.pressureprobe" android:functionalTest="true" />
+</manifest>

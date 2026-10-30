@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "scope": "ANDROID_PRESSURE_BUILD_AND_DIAGNOSTIC_SIGNING_ONLY",
+  "status": "PASS",
+  "device_executed": false,
+  "performance_qualified": false,
+  "minimum_api": 27,
+  "compile_platform": "android-37.0",
+  "build_tools": "37.0.0",
+  "target_api": 33,
+  "abi": "arm64-v8a",
+  "package_name": "io.github.jichuo1.meguviz.memory.pressureprobe",
+  "instrumentation": "io.github.jichuo1.meguviz.memory.android.PressureInstrumentation",
+  "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+  "signing": "ISOLATED_DIAGNOSTIC_KEY_NOT_PRODUCTION_SIGNING",
+  "artifacts": [
+    {
+      "path": "build/features-pressure-package-final/MeguvizMemory-Pressure-Probe.apk",
+      "bytes": 2339374,
+      "sha256": "8241e46b03cd7dadb6f65ee46bdef884b50c493d884010bf4a0f186910f7f137"
+    },
+    {
+      "path": "build/features-pressure-package-final/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "bytes": 651563,
+      "sha256": "7d0f0cd10bef9f1325f1dff9f3778867e9bcea4b539f3807e9c77656546acbe8"
+    },
+    {
+      "path": "build/features-pressure-package-final/classes.jar",
+      "bytes": 10148,
+      "sha256": "0acc642fb290951d425da66dcb92e0606307c8679fedf449dc4a3a62c2a5ff64"
+    },
+    {
+      "path": "build/features-pressure-jni-arm64/libmgmem_pressure_jni.so",
+      "bytes": 568472,
+      "sha256": "4c0757d8d9486598dde0745c5b2e0d728723d309456a39133ffa72032da0c09f"
+    },
+    {
+      "path": "install/features-arm64/lib/libmgmem.so",
+      "bytes": 1722920,
+      "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+    }
+  ],
+  "sources": [
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java",
+      "sha256": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "sha256": "e9b0f45d3f64a9a022a5375a9cc4b3437c47f3e24258f6d387246996b47210b5"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java",
+      "sha256": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c"
+    },
+    {
+      "path": "adapters/android/sample/PressureInstrumentation.java",
+      "sha256": "68575eeab476460799cdd4e2dc47af2d2e0fd01104e30b2971032bbf9e6f3d37"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest.xml",
+      "sha256": "99c3589214522e0cb6952d94e78246a3c7fade002a0854b99f547bf2b22b3676"
+    },
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "include/mgmem/android_pressure_jni.h",
+      "sha256": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54"
+    },
+    {
+      "path": "tools/build_pressure_android.py",
+      "sha256": "30873b954d85060942bfc62fc8771727ddc47cab5195db3eb799d156d3d9cf7d"
+    }
+  ],
+  "operations": [
+    {
+      "operation": "javac-library",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "944e253db563e556ab4f852197f88117fa2238bd6d2a7295535d8f01f97569e8"
+    },
+    {
+      "operation": "jar-library",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "javac-sample",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "jar-sample",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "d8",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "aapt2-link",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "zipalign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "diagnostic-key",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "351103e180b71114e40c42aee3f6d035306d84011f7040ad610b1ef3f12843f0"
+    },
+    {
+      "operation": "sign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "verify-signature",
+      "exit_code": 0,
+      "stdout_sha256": "33e82e96458a4fac5937c897b793c624abf946e5df78bf29363363b00cb47775",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runtime_closure": "Exactly one installed shared libmgmem.so; pressure helper is linked into JNI, not a second Memory core",
+  "limitations": [
+    "APK framework dispatch test is synthetic; no real low-RAM event or energy gain is claimed.",
+    "AAR includes keep rules, but no product R8/BIL/Lumen qualification was performed."
+  ]
+}

@@ -1,5 +1,7 @@
 # 冻结 Dex SDK 借用合同与 DEX v2
 
+本文件记录0.1/ABI1.0消费者与原v2实验；其中外部import为N/A的结论保留于该历史范围。0.2/ABI1.1已新增安全导入接口，见[EXTERNAL_IMPORT.md](EXTERNAL_IMPORT.md)，但没有据此补做或改写本文件的DEX变体与性能数据。
+
 2026-10-30。该结论只适用于原实验冻结在 `build/locked-inputs/DexMeguviz` 的 SDK 闭包。研究报告无法从公开渠道取得它；本工作区已保留真实副本，因此这项资料阻塞在本地解除。没有读取外部 DexMeguviz 新 HEAD 替代旧实现，没有修改 SDK。
 
 逐文件身份、原 `SOURCE_LOCK.json` 的 SHA256 和 65 个 SDK 文件的核对结果见 [borrow_contract_gate.json](../artifacts/research-20261030/dex/borrow_contract_gate.json)。原源锁中的根提交、dirty 标记与逐文件身份各自保留；报告所在提交不是所有二进制的编译提交。新 v2 二进制、安装 Memory 动态库和消费者源码分别记录哈希，不能把这个主机收据当作旧 arm64 制品重新构建证明。

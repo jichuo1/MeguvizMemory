@@ -90,6 +90,11 @@ struct Backing {
     u64 alignment = 0;
     u64 used = 0;
     bool pending = false;
+    u64 claim = 0;
+    bool external = false;
+    uint32_t access = MGMEM_WRITE;
+    void *external_context = nullptr;
+    void (*external_release)(void *) = nullptr;
 };
 
 struct Allocation {
@@ -106,6 +111,84 @@ struct Lease {
     u64 allocation = 0;
     bool writer = false;
 };
+
+// This registry is scoped to one loaded runtime. It stores no domain pointers.
+// Lock order is domain -> registry, never registry -> domain. Callbacks run with
+// neither lock held. Owned allocations may be legitimately recycled by malloc
+// before an old deallocation callback has returned, so their claims may overlap
+// transiently only while the old callback has no owner/lease. Imports reject
+// overlap with every claim, even those callbacks' still-charged ranges.
+struct RangeClaim { uintptr_t begin; uintptr_t end; u64 external_id; u64 token; bool releasing; };
+std::mutex range_mutex;
+std::list<RangeClaim> range_claims;
+u64 next_claim = 1;
+
+mgmem_status claim_range(const void *data, u64 bytes, u64 external_id, u64 &out) noexcept {
+    out = 0;
+    const auto begin = reinterpret_cast<uintptr_t>(data);
+    if (!data || bytes == 0 || bytes > std::numeric_limits<uintptr_t>::max() - begin)
+        return MGMEM_OVERFLOW;
+    const auto end = begin + static_cast<uintptr_t>(bytes);
+    try {
+        std::lock_guard<std::mutex> lock(range_mutex);
+        if (external_id) for (const auto &claim : range_claims) {
+            if (claim.external_id == external_id || (begin < claim.end && claim.begin < end))
+                return MGMEM_BUSY;
+        }
+        if (next_claim == max_u64) return MGMEM_OVERFLOW;
+        const u64 token = next_claim++;
+        range_claims.push_back({begin, end, external_id, token, false});
+        out = token;
+        return MGMEM_OK;
+    } catch (const std::bad_alloc &) { return MGMEM_OUT_OF_MEMORY; }
+    catch (...) { return MGMEM_PROVIDER_ERROR; }
+}
+
+mgmem_status reserve_owned_claim(u64 &out) noexcept {
+    out = 0;
+    try {
+        std::lock_guard<std::mutex> lock(range_mutex);
+        if (next_claim == max_u64) return MGMEM_OVERFLOW;
+        const u64 token = next_claim++;
+        range_claims.push_back({0, 0, 0, token, false});
+        out = token;
+        return MGMEM_OK;
+    } catch (const std::bad_alloc &) { return MGMEM_OUT_OF_MEMORY; }
+    catch (...) { return MGMEM_PROVIDER_ERROR; }
+}
+
+mgmem_status publish_owned_claim(u64 token, void *data, u64 bytes, bool &unsafe_address) noexcept {
+    unsafe_address = false;
+    if (!data) return MGMEM_OK;
+    const auto begin = reinterpret_cast<uintptr_t>(data);
+    const bool range_valid = bytes <= std::numeric_limits<uintptr_t>::max() - begin;
+    const auto end = range_valid ? begin + static_cast<uintptr_t>(bytes) : std::numeric_limits<uintptr_t>::max();
+    std::lock_guard<std::mutex> lock(range_mutex);
+    auto own = range_claims.end();
+    for (auto it = range_claims.begin(); it != range_claims.end(); ++it) {
+        if (it->token == token) own = it;
+        else if (!it->releasing && begin < it->end && it->begin < end) unsafe_address = true;
+    }
+    if (own == range_claims.end()) { unsafe_address = true; return MGMEM_PROVIDER_ERROR; }
+    own->begin = begin;
+    own->end = end;
+    if (!range_valid) unsafe_address = true;
+    return unsafe_address ? MGMEM_PROVIDER_ERROR : MGMEM_OK;
+}
+
+void releasing_claim(u64 token, bool releasing) noexcept {
+    if (!token) return;
+    std::lock_guard<std::mutex> lock(range_mutex);
+    for (auto &claim : range_claims) if (claim.token == token) { claim.releasing = releasing; return; }
+}
+
+void drop_claim(u64 token) noexcept {
+    if (!token) return;
+    std::lock_guard<std::mutex> lock(range_mutex);
+    for (auto it = range_claims.begin(); it != range_claims.end(); ++it) {
+        if (it->token == token) { range_claims.erase(it); return; }
+    }
+}
 } // namespace
 
 struct mgmem_domain {
@@ -131,6 +214,10 @@ struct mgmem_domain {
     bool maintenance = false;
     bool provider_poisoned = false;
     bool custom_provider = false;
+    u64 external_bytes = 0;
+    u64 external_count = 0;
+    u64 pending_import_bytes = 0;
+    u64 import_count = 0;
     mgmem_provider_v1 provider{};
     std::list<Backing> backing;
     std::map<u64, Allocation> allocations;
@@ -160,14 +247,19 @@ mgmem_status allocate_backing(mgmem_domain &domain, u64 bytes, u64 alignment,
 }
 
 bool deallocate_backing(mgmem_domain &domain, const Backing &backing) noexcept {
-    if (!backing.address) return true;
-    if (domain.custom_provider) {
+    if (!backing.address) { drop_claim(backing.claim); return true; }
+    releasing_claim(backing.claim, true);
+    if (backing.external) {
+        try { backing.external_release(backing.external_context); }
+        catch (...) { releasing_claim(backing.claim, false); return false; }
+    } else if (domain.custom_provider) {
         try {
             domain.provider.deallocate(domain.provider.context, backing.address,
                                        backing.bytes, backing.alignment);
         } catch (...) {
             // A callback violating noexcept might already have freed the address.
             // Do not retry it and risk a double free; this domain becomes poisoned.
+            releasing_claim(backing.claim, false);
             return false;
         }
     } else {
@@ -177,6 +269,7 @@ bool deallocate_backing(mgmem_domain &domain, const Backing &backing) noexcept {
         std::free(backing.address);
 #endif
     }
+    drop_claim(backing.claim);
     return true;
 }
 
@@ -230,7 +323,13 @@ mgmem_status reclaim_system(mgmem_domain &domain, Backing *backing,
     lock.unlock();
     const bool success = deallocate_backing(domain, detached.front());
     lock.lock();
-    if (success) domain.backing_bytes -= detached.front().bytes;
+    if (success) {
+        domain.backing_bytes -= detached.front().bytes;
+        if (detached.front().external) {
+            domain.external_bytes -= detached.front().bytes;
+            --domain.external_count;
+        }
+    }
     else domain.provider_poisoned = true;
     --domain.pending;
     domain.changed.notify_all();
@@ -248,13 +347,19 @@ mgmem_status reclaim_all(mgmem_domain &domain, std::unique_lock<std::mutex> &loc
     ++domain.pending;
     lock.unlock();
     u64 released = 0;
+    u64 external_released = 0, external_count_released = 0;
     bool success = true;
     for (const auto &backing : detached) {
-        if (deallocate_backing(domain, backing)) released += backing.bytes;
+        if (deallocate_backing(domain, backing)) {
+            released += backing.bytes;
+            if (backing.external) { external_released += backing.bytes; ++external_count_released; }
+        }
         else success = false;
     }
     lock.lock();
     domain.backing_bytes -= released;
+    domain.external_bytes -= external_released;
+    domain.external_count -= external_count_released;
     --domain.pending;
     domain.maintenance = false;
     domain.provider_poisoned = !success;
@@ -268,7 +373,8 @@ extern "C" {
 uint32_t mgmem_abi_version_v1(void) { return (MGMEM_ABI_MAJOR << 16) | MGMEM_ABI_MINOR; }
 uint64_t mgmem_capabilities_v1(void) {
     return MGMEM_CAP_SYSTEM | MGMEM_CAP_ARENA | MGMEM_CAP_CUSTOM_PROVIDER |
-           MGMEM_CAP_RW_LEASE | MGMEM_CAP_EXPLICIT_COLLECTION;
+           MGMEM_CAP_RW_LEASE | MGMEM_CAP_EXPLICIT_COLLECTION |
+           MGMEM_CAP_EXTERNAL_IMPORT | MGMEM_CAP_SOFT_BUDGET;
 }
 uint64_t mgmem_runtime_origin_v1(void) { return runtime_origin(); }
 
@@ -337,6 +443,9 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
         if (domain->state != MGMEM_OPEN) return MGMEM_IS_CLOSED;
         if (domain->provider_poisoned) return MGMEM_PROVIDER_ERROR;
         if (domain->maintenance) return MGMEM_BUSY;
+        u64 admitted_charge = 0;
+        if (!add(domain->backing_bytes, domain->reserved_bytes, admitted_charge)) return MGMEM_OVERFLOW;
+        if (admitted_charge > domain->budget) return MGMEM_OUT_OF_BUDGET;
         if (!counters_fit(*domain, bytes, false)) return MGMEM_OVERFLOW;
         u64 id = 0;
         if (!take_id(*domain, id)) return MGMEM_OVERFLOW;
@@ -375,6 +484,12 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
             domain->backing.erase(backing_it);
             throw;
         }
+        const auto claim_status = reserve_owned_claim(backing_it->claim);
+        if (claim_status != MGMEM_OK) {
+            domain->allocations.erase(id);
+            domain->backing.erase(backing_it);
+            return claim_status;
+        }
         domain->reserved_bytes += capacity;
         domain->peak_bytes = std::max(domain->peak_bytes, total);
         ++domain->pending;
@@ -389,6 +504,9 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
         if (status == MGMEM_OK && !counters_fit(*domain, bytes, true)) status = MGMEM_OVERFLOW;
         if (status == MGMEM_OK && domain->state != MGMEM_OPEN) status = MGMEM_IS_CLOSED;
         if (status == MGMEM_OK && domain->provider_poisoned) status = MGMEM_PROVIDER_ERROR;
+        bool unsafe_address = false;
+        const auto claim_status_after_callback = publish_owned_claim(backing_it->claim, address, capacity, unsafe_address);
+        if (claim_status_after_callback != MGMEM_OK) status = claim_status_after_callback;
         backing_it->address = address;
         if (status == MGMEM_OK) {
             backing_it->pending = false;
@@ -409,7 +527,9 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
         domain->allocations.erase(id);
         domain->backing.erase(backing_it);
         lock.unlock();
-        const bool reclaimed = deallocate_backing(*domain, failed);
+        // Never deallocate a provider result that aliases a live region: that
+        // could free the pre-existing owner's storage. Keep its claim charged.
+        const bool reclaimed = !unsafe_address && deallocate_backing(*domain, failed);
         lock.lock();
         domain->reserved_bytes -= capacity;
         --domain->pending;
@@ -420,6 +540,119 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
         }
         domain->changed.notify_all();
         return status;
+    });
+}
+
+mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
+    const mgmem_external_buffer_v1 *buffer, mgmem_handle_v1 *out) {
+    if (!out) return MGMEM_INVALID_ARGUMENT;
+    *out = {};
+    if (!domain || !buffer || buffer->struct_size < sizeof(*buffer)) return MGMEM_INVALID_ARGUMENT;
+    const auto input = *buffer;
+    if (input.abi_major != MGMEM_ABI_MAJOR || input.abi_minor > MGMEM_ABI_MINOR ||
+        input.required_flags != 0) return MGMEM_UNSUPPORTED;
+    if (input.managing_runtime_origin != runtime_origin()) return MGMEM_STALE_HANDLE;
+    if (!input.data || !input.capacity_bytes || !input.external_id || !input.retain || !input.release ||
+        input.reserved || input.access > MGMEM_WRITE || !power_of_two(input.alignment))
+        return MGMEM_INVALID_ARGUMENT;
+    const auto base = reinterpret_cast<uintptr_t>(input.data);
+    if (input.capacity_bytes > std::numeric_limits<size_t>::max() ||
+        input.alignment > std::numeric_limits<size_t>::max() ||
+        input.capacity_bytes > std::numeric_limits<uintptr_t>::max() - base) return MGMEM_OVERFLOW;
+    if ((base & (input.alignment - 1)) != 0) return MGMEM_INVALID_ARGUMENT;
+    return guarded([&]() -> mgmem_status {
+        std::unique_lock<std::mutex> lock(domain->mutex);
+        if (domain->state != MGMEM_OPEN) return MGMEM_IS_CLOSED;
+        if (domain->mode != MGMEM_SYSTEM) return MGMEM_UNSUPPORTED;
+        if (domain->provider_poisoned) return MGMEM_PROVIDER_ERROR;
+        if (domain->maintenance) return MGMEM_BUSY;
+        if (!counters_fit(*domain, input.capacity_bytes, false) || domain->pending == max_u64 ||
+            domain->external_count == max_u64 || domain->import_count == max_u64 ||
+            domain->pending >= max_u64 - domain->external_count) return MGMEM_OVERFLOW;
+        u64 total = 0, charged = 0;
+        if (!add(domain->backing_bytes, domain->reserved_bytes, charged) ||
+            !add(charged, input.capacity_bytes, total)) return MGMEM_OVERFLOW;
+        if (total > domain->budget) return MGMEM_OUT_OF_BUDGET;
+        u64 id = 0;
+        if (!take_id(*domain, id)) return MGMEM_OVERFLOW;
+        domain->backing.emplace_back(Backing{const_cast<void *>(input.data), input.capacity_bytes,
+            input.alignment, input.capacity_bytes, true, 0, true, input.access, input.context, input.release});
+        auto backing_it = std::prev(domain->backing.end());
+        try {
+            domain->allocations.emplace(id,
+                Allocation{&*backing_it, 0, input.capacity_bytes, 0, false, false, true});
+        } catch (...) { domain->backing.erase(backing_it); throw; }
+        const auto claimed = claim_range(input.data, input.capacity_bytes, input.external_id, backing_it->claim);
+        if (claimed != MGMEM_OK) {
+            domain->allocations.erase(id);
+            domain->backing.erase(backing_it);
+            return claimed;
+        }
+        domain->reserved_bytes += input.capacity_bytes;
+        domain->pending_import_bytes += input.capacity_bytes;
+        domain->peak_bytes = std::max(domain->peak_bytes, total);
+        ++domain->pending;
+        lock.unlock();
+        mgmem_status status = MGMEM_PROVIDER_ERROR;
+        bool retained = false, uncertain_retain = false;
+        try { status = input.retain(input.context); retained = status == MGMEM_OK; }
+        catch (...) { uncertain_retain = true; }
+        lock.lock();
+        if (status == MGMEM_OK && domain->state != MGMEM_OPEN) status = MGMEM_IS_CLOSED;
+        if (status == MGMEM_OK && domain->provider_poisoned) status = MGMEM_PROVIDER_ERROR;
+        if (status == MGMEM_OK && (!counters_fit(*domain, input.capacity_bytes, false) ||
+                                  domain->import_count == max_u64 || domain->external_count == max_u64))
+            status = MGMEM_OVERFLOW;
+        // No budget recheck: this operation owns its reservation. A concurrent
+        // soft reduction changes subsequent admission, not accepted work.
+        if (status == MGMEM_OK) {
+            backing_it->pending = false;
+            domain->reserved_bytes -= input.capacity_bytes;
+            domain->pending_import_bytes -= input.capacity_bytes;
+            domain->backing_bytes += input.capacity_bytes;
+            domain->external_bytes += input.capacity_bytes;
+            ++domain->external_count;
+            ++domain->import_count;
+            --domain->pending;
+            commit_allocation(*domain, domain->allocations.find(id)->second, input.capacity_bytes);
+            *out = {domain->id, id, runtime_origin()};
+            domain->changed.notify_all();
+            return MGMEM_OK;
+        }
+        const Backing failed = *backing_it;
+        domain->allocations.erase(id);
+        domain->backing.erase(backing_it);
+        lock.unlock();
+        // Retain failure is contractually failure-atomic. If it threw, ownership
+        // is unknowable; do not call release and risk freeing the caller's owner.
+        bool reclaimed = !uncertain_retain;
+        if (retained) reclaimed = deallocate_backing(*domain, failed);
+        else if (reclaimed) drop_claim(failed.claim);
+        lock.lock();
+        domain->reserved_bytes -= input.capacity_bytes;
+        domain->pending_import_bytes -= input.capacity_bytes;
+        --domain->pending;
+        if (!reclaimed) {
+            domain->provider_poisoned = true;
+            domain->backing_bytes += input.capacity_bytes;
+            domain->external_bytes += input.capacity_bytes;
+            ++domain->external_count;
+            status = MGMEM_PROVIDER_ERROR;
+        }
+        domain->changed.notify_all();
+        return status;
+    });
+}
+
+mgmem_status mgmem_domain_set_budget_v1(mgmem_domain *domain, u64 bytes) {
+    if (!domain) return MGMEM_INVALID_ARGUMENT;
+    return guarded([&]() -> mgmem_status {
+        std::lock_guard<std::mutex> lock(domain->mutex);
+        if (domain->state != MGMEM_OPEN) return MGMEM_IS_CLOSED;
+        if (domain->provider_poisoned) return MGMEM_PROVIDER_ERROR;
+        domain->budget = bytes;
+        domain->changed.notify_all();
+        return MGMEM_OK;
     });
 }
 
@@ -458,6 +691,8 @@ mgmem_status mgmem_borrow_acquire_v1(mgmem_domain *domain, mgmem_handle_v1 handl
         if (found == domain->allocations.end() || !found->second.owner || found->second.pending)
             return MGMEM_STALE_HANDLE;
         auto &allocation = found->second;
+        if (access == MGMEM_WRITE && allocation.backing->external && allocation.backing->access != MGMEM_WRITE)
+            return MGMEM_UNSUPPORTED;
         if (offset > allocation.bytes || length > allocation.bytes - offset)
             return MGMEM_INVALID_ARGUMENT;
         if (allocation.writer || (access == MGMEM_WRITE && allocation.readers != 0)) return MGMEM_BUSY;
@@ -617,6 +852,19 @@ mgmem_status mgmem_domain_snapshot_v1(mgmem_domain *domain, mgmem_snapshot_v1 *o
         result.active_allocations = domain->allocations.size();
         result.active_leases = domain->leases.size();
         result.page_size = domain->page;
+        *out = result;
+        return MGMEM_OK;
+    });
+}
+
+mgmem_status mgmem_domain_import_snapshot_v1(mgmem_domain *domain, mgmem_import_snapshot_v1 *out,
+                                             uint32_t out_size) {
+    if (!domain || !out || out_size < sizeof(*out)) return MGMEM_INVALID_ARGUMENT;
+    return guarded([&]() -> mgmem_status {
+        std::lock_guard<std::mutex> lock(domain->mutex);
+        const mgmem_import_snapshot_v1 result{sizeof(mgmem_import_snapshot_v1), MGMEM_ABI_MAJOR,
+            MGMEM_ABI_MINOR, domain->provider_poisoned ? 1u : 0u,
+            domain->external_bytes, domain->external_count, domain->pending_import_bytes, domain->import_count};
         *out = result;
         return MGMEM_OK;
     });

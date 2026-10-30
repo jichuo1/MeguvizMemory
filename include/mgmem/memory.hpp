@@ -211,6 +211,25 @@ public:
         return MGMEM_OK;
     }
 
+    mgmem_status import_external(const mgmem_external_buffer_v1 &buffer, owned_allocation &out) const noexcept {
+        if (!state_ || out) return MGMEM_INVALID_ARGUMENT;
+        mgmem_handle_v1 handle{};
+        const mgmem_status status = mgmem_import_external_v1(state_->native, &buffer, &handle);
+        if (status != MGMEM_OK) return status;
+        out.state_ = state_;
+        out.handle_ = handle;
+        out.bytes_ = buffer.capacity_bytes;
+        return MGMEM_OK;
+    }
+
+    mgmem_status set_budget(uint64_t bytes) const noexcept {
+        return state_ ? mgmem_domain_set_budget_v1(state_->native, bytes) : MGMEM_INVALID_ARGUMENT;
+    }
+
+    mgmem_status import_snapshot(mgmem_import_snapshot_v1 &out) const noexcept {
+        return state_ ? mgmem_domain_import_snapshot_v1(state_->native, &out, sizeof(out)) : MGMEM_INVALID_ARGUMENT;
+    }
+
     mgmem_status begin_close() const noexcept {
         return state_ ? mgmem_domain_begin_close_v1(state_->native) : MGMEM_INVALID_ARGUMENT;
     }

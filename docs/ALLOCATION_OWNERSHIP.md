@@ -1,9 +1,10 @@
 # Allocation 与 owner 清单
 
-本清单对应 2026-10-30 CPU 工程预览，资源合同见 ADR-001。预算只约束 provider 逻辑 backing 与申请中的 reservation；容器/allocator 元数据、OS 驻留和其他库资源另记。
+本清单对应CPU工程预览，资源合同见ADR-001。0.2/ABI1.1预算约束自有及导入region的唯一请求容量与在途reservation；容器/allocator元数据、OS驻留和其他库资源另记。导入子集账目不再与backing重复相加，详见[外部导入合同](EXTERNAL_IMPORT.md)。
 
 | 存储 | origin-owner / 最终释放者 | 借用与线程 | 结束条件 |
 |---|---|---|---|
+| 导入CPU region（ABI1.1） | 外部origin-owner，Memory retain/release其引用，从不自行free | 一个manager runtime整region唯一owner；READ不可取得WRITE；子视图沿用borrow | 最后owner/lease结束且release callback完成后解除claim；违约不确定资源隔离保留 |
 | System backing | 创建 domain 时复制的 provider；默认 `_aligned_malloc/_aligned_free` 或 `posix_memalign/free` | 同域 allocation owner，可跨线程取得/归还读写 lease | owner 与最后 lease 都退出；由原 provider 同步释放 |
 | arena chunk | 同上，domain 保持唯一 backing 清单 | allocation 在 chunk 内有不重叠 offset/length；所有子对象共享 backing 记账 | 无 owner/lease/pending 时 reset 复用；trim/collect 最终释放 |
 | allocation 元数据 | core 的 map/list | 核心 mutex 下访问；不跨 ABI 暴露容器 | 最后 owner/lease 退出，或申请失败回滚 |

@@ -1,7 +1,8 @@
 # MeguvizMemory 工程状态
 
-更新：2026-10-30。当前交付 **0.1.0 CPU 功能工程预览**，公开仓库 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、BIL 默认切换与性能资格未完成。
+更新：2026-10-30。当前交付 **0.2.0 功能工程预览（native ABI 1.1）**，公开仓库 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、BIL 默认切换与性能资格未完成。
 
+本阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
 v2最新结果：2210132C/API33/arm64/4KB上core3与196消费者功能通过；完整pilot128任务后图像因精度停止，DEX正式轮64次成功后在第5窗口因CPU2背景忙碌率门槛中止。正式计划未完成，性能未取得资格，BIL继续不接入。原报告的不完整区间已另行撤销，见[最终v2结果](docs/DEVICE_V2_RESULTS.md)。
 研究回包的有限下一批已实施：冻结 Dex SDK 65 文件逐一核对，四种 source 策略完成宿主 32/32 功能验证；图像 full/三行环 × direct/System/arena 的持久工作区完成 156/156 独立 oracle/资源/异常/关闭检查。DEX 直接借用省去一份 10,540,184 B 输入与复制；1080p 三行环少 2,067,840 B payload、按当前 arena chunk 少 2,008,064 B backing。以上归普通消费者资源优化，不是 Memory 提速或 RSS 结论。新 DEX 正式/诊断及图像三个 arm64 程序已交叉构建，**未执行新设备实验**。
 

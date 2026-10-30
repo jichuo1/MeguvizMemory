@@ -1,6 +1,6 @@
 # 安装、消费、关闭与回退
 
-本版交付 CPU backing、显式 owner/lease、System provider 和有界 arena。公共入口是 `include/mgmem/mgmem.h` 的 ABI 1.0；当前开发版本为 0.1.0。CPU 宿主功能、Android 构建、真实设备、家族集成、性能和发布是各自独立的资格，具体本轮状态以验证回执与任务状态为准。
+当前功能预览为0.2.0、native ABI1.1，旧ABI1.0的POD布局和符号保持兼容。除原CPU backing、owner/lease、System/arena外，新增唯一外部region导入、软预算及独立Android压力适配。新安装前缀为 `install/features-host` / `install/features-arm64`，不覆盖历史0.1 SDK；旧实验和下文原双消费者收据仍适用于其固定快照。新功能用法与限定验证范围见[阶段收尾](FEATURE_STAGE_20261030.md)、[导入](EXTERNAL_IMPORT.md)、[Android压力](ANDROID_PRESSURE.md)和[packed reader](PACKED_READER.md)。功能、设备、家族集成、性能和发布继续分别资格。
 
 ## 安装后的独立消费
 

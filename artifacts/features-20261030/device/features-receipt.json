@@ -1,0 +1,1137 @@
+{
+  "schema_version": 1,
+  "scope": "ARM64_ART_ANDROID_FEATURES_FUNCTIONAL_ONLY",
+  "started_at_utc": "2026-10-30T10:29:11.219216+00:00",
+  "state": "BLOCKED",
+  "all_passed": false,
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "device_directory": "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+  "device_directory_created": true,
+  "shared_device_lock_acquired": false,
+  "admission_rule": "Original owner release plus observational process gates; no future-exclusion guarantee.",
+  "commands": [
+    {
+      "record_id": 1,
+      "name": "verify-new-APK-certificate",
+      "transport": "HOST_SDK_VALIDATION",
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout_sha256": "3afd1f08d1f1d58acdadfd4432cde900aecfb5724add92a247a3565a936a90ab",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "record_id": 2,
+      "name": "verify-APK-package",
+      "transport": "HOST_SDK_VALIDATION",
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout_sha256": "13a85f3a442f32b33ae47e42911d305b39a2cb6b9004fc55f9cbd14c6ddb9f91",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "record_id": 3,
+      "name": "before-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:066076f2519cee7b61e8057ad8823cb0d964fa93f72991608c776dfbc7695d6b\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 845,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.5,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "066076f2519cee7b61e8057ad8823cb0d964fa93f72991608c776dfbc7695d6b",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "003-before-processes.stdout.txt",
+      "stderr_file": "003-before-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 845,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 4,
+      "name": "before-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:6ac9ccb600113a2b3f837bb7e505870e4c06a8d6255338bc87ffcf7c47ff3bc7\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.25,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "6ac9ccb600113a2b3f837bb7e505870e4c06a8d6255338bc87ffcf7c47ff3bc7",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "004-before-instrumentation.stdout.txt",
+      "stderr_file": "004-before-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 5,
+      "name": "profile-model",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.model"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "2210132C\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "005-profile-model.stdout.txt",
+      "stderr_file": "005-profile-model.stderr.txt"
+    },
+    {
+      "record_id": 6,
+      "name": "profile-api",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "33\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "stdout_file": "006-profile-api.stdout.txt",
+      "stderr_file": "006-profile-api.stderr.txt"
+    },
+    {
+      "record_id": 7,
+      "name": "profile-abi_list",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abilist"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "arm64-v8a,armeabi-v7a,armeabi\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "007-profile-abi_list.stdout.txt",
+      "stderr_file": "007-profile-abi_list.stderr.txt"
+    },
+    {
+      "record_id": 8,
+      "name": "profile-page_bytes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getconf",
+        "PAGESIZE"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "4096\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.10900000000037835,
+      "stdout_file": "008-profile-page_bytes.stdout.txt",
+      "stderr_file": "008-profile-page_bytes.stderr.txt"
+    },
+    {
+      "record_id": 9,
+      "name": "boot-before",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_value_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "009-boot-before.stdout.txt",
+      "stderr_file": "009-boot-before.stderr.txt"
+    },
+    {
+      "record_id": 10,
+      "name": "create-owned-directory",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "mkdir",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09299999999711872,
+      "stdout_file": "010-create-owned-directory.stdout.txt",
+      "stderr_file": "010-create-owned-directory.stderr.txt"
+    },
+    {
+      "record_id": 11,
+      "name": "push-libmgmem.so",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\install\\features-arm64\\lib\\libmgmem.so",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/libmgmem.so"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\install\\features-arm64\\lib\\libmgmem.so: 1 file pushed, 0 skipped. 112.2 MB/s (1722920 bytes in 0.015s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.125,
+      "stdout_file": "011-push-libmgmem.so.stdout.txt",
+      "stderr_file": "011-push-libmgmem.so.stderr.txt"
+    },
+    {
+      "record_id": 12,
+      "name": "hash-libmgmem.so",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/libmgmem.so"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/libmgmem.so\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "012-hash-libmgmem.so.stdout.txt",
+      "stderr_file": "012-hash-libmgmem.so.stderr.txt"
+    },
+    {
+      "record_id": 13,
+      "name": "push-mgmem_core_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_core_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_core_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_core_tests: 1 file pushed, 0 skipped. 119.7 MB/s (509976 bytes in 0.004s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.125,
+      "stdout_file": "013-push-mgmem_core_tests.stdout.txt",
+      "stderr_file": "013-push-mgmem_core_tests.stderr.txt"
+    },
+    {
+      "record_id": 14,
+      "name": "hash-mgmem_core_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_core_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "64df6852722a6629c6590f9ff68bd49c3c5909c82ae89cb3e8b214ec6a2db1d9  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_core_tests\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "014-hash-mgmem_core_tests.stdout.txt",
+      "stderr_file": "014-hash-mgmem_core_tests.stderr.txt"
+    },
+    {
+      "record_id": 15,
+      "name": "push-mgmem_c_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_c_consumer",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_c_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_c_consumer: 1 file pushed, 0 skipped. 19.1 MB/s (13400 bytes in 0.001s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.13999999999941792,
+      "stdout_file": "015-push-mgmem_c_consumer.stdout.txt",
+      "stderr_file": "015-push-mgmem_c_consumer.stderr.txt"
+    },
+    {
+      "record_id": 16,
+      "name": "hash-mgmem_c_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_c_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "53ecb95f1e78ad419a3560e00a7495aba4328932adf5f55049e0f7a9dd142019  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_c_consumer\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.13999999999941792,
+      "stdout_file": "016-hash-mgmem_c_consumer.stdout.txt",
+      "stderr_file": "016-hash-mgmem_c_consumer.stderr.txt"
+    },
+    {
+      "record_id": 17,
+      "name": "push-mgmem_cpp_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_cpp_consumer",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_cpp_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_cpp_consumer: 1 file pushed, 0 skipped. 86.3 MB/s (195720 bytes in 0.002s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.0790000000015425,
+      "stdout_file": "017-push-mgmem_cpp_consumer.stdout.txt",
+      "stderr_file": "017-push-mgmem_cpp_consumer.stderr.txt"
+    },
+    {
+      "record_id": 18,
+      "name": "hash-mgmem_cpp_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_cpp_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "5995f42267494a71cc1f2de1571837a3a26438a0e6a1f99603f30eb560d65904  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_cpp_consumer\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.10900000000037835,
+      "stdout_file": "018-hash-mgmem_cpp_consumer.stdout.txt",
+      "stderr_file": "018-hash-mgmem_cpp_consumer.stderr.txt"
+    },
+    {
+      "record_id": 19,
+      "name": "push-mgmem_import_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_import_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_import_tests: 1 file pushed, 0 skipped. 84.0 MB/s (450752 bytes in 0.005s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.10900000000037835,
+      "stdout_file": "019-push-mgmem_import_tests.stdout.txt",
+      "stderr_file": "019-push-mgmem_import_tests.stderr.txt"
+    },
+    {
+      "record_id": 20,
+      "name": "hash-mgmem_import_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "fbd3bb1b31bb4979ffc50e3a5021fb815db59eb65c6565b8c2b30f1063ee1a57  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "020-hash-mgmem_import_tests.stdout.txt",
+      "stderr_file": "020-hash-mgmem_import_tests.stderr.txt"
+    },
+    {
+      "record_id": 21,
+      "name": "push-mgmem_pressure_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_pressure_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_pressure_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_pressure_tests: 1 file pushed, 0 skipped. 85.7 MB/s (275272 bytes in 0.003s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "stdout_file": "021-push-mgmem_pressure_tests.stdout.txt",
+      "stderr_file": "021-push-mgmem_pressure_tests.stderr.txt"
+    },
+    {
+      "record_id": 22,
+      "name": "hash-mgmem_pressure_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_pressure_tests"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "db5f17c93d99013ad885b8b993e565f6b4401f9b9d9d324c5ddac5f66359a1fa  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_pressure_tests\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "022-hash-mgmem_pressure_tests.stdout.txt",
+      "stderr_file": "022-hash-mgmem_pressure_tests.stderr.txt"
+    },
+    {
+      "record_id": 23,
+      "name": "push-mgmem_abi10_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<workspace>\\build\\features-arm64\\mgmem_abi10_consumer",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_abi10_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<workspace>\\build\\features-arm64\\mgmem_abi10_consumer: 1 file pushed, 0 skipped. 26.4 MB/s (13440 bytes in 0.000s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "stdout_file": "023-push-mgmem_abi10_consumer.stdout.txt",
+      "stderr_file": "023-push-mgmem_abi10_consumer.stderr.txt"
+    },
+    {
+      "record_id": 24,
+      "name": "hash-mgmem_abi10_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_abi10_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "7929264c831637d51fc6a63709845b268078469f0f957722d735c061e0f99c77  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_abi10_consumer\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09299999999711872,
+      "stdout_file": "024-hash-mgmem_abi10_consumer.stdout.txt",
+      "stderr_file": "024-hash-mgmem_abi10_consumer.stderr.txt"
+    },
+    {
+      "record_id": 25,
+      "name": "push-packed-reader-tests.jar",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "push",
+        "<local-input-path-redacted>",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/packed-reader-tests.jar"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "<local-input-path-redacted>: 1 file pushed, 0 skipped. 31.5 MB/s (8580 bytes in 0.000s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.06300000000192085,
+      "stdout_file": "025-push-packed-reader-tests.jar.stdout.txt",
+      "stderr_file": "025-push-packed-reader-tests.jar.stderr.txt"
+    },
+    {
+      "record_id": 26,
+      "name": "hash-packed-reader-tests.jar",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "sha256sum",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/packed-reader-tests.jar"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "15a855b9e67ecd95315ecbc97235e4590775c86fa81c12dfdd9886e275e6691a  /data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/packed-reader-tests.jar\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "026-hash-packed-reader-tests.jar.stdout.txt",
+      "stderr_file": "026-hash-packed-reader-tests.jar.stderr.txt"
+    },
+    {
+      "record_id": 27,
+      "name": "chmod-owned-native",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "chmod",
+        "700",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_core_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_c_consumer",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_cpp_consumer",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_pressure_tests",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_abi10_consumer"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09299999999711872,
+      "stdout_file": "027-chmod-owned-native.stdout.txt",
+      "stderr_file": "027-chmod-owned-native.stderr.txt"
+    },
+    {
+      "record_id": 28,
+      "name": "mgmem_core_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_core_tests"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "PASS abi_and_checked_arithmetic\r\nPASS system_budget_layout_and_rollback\r\nPASS provider_oom_and_exact_pairing\r\nPASS allocation_reservation_close_race\r\nPASS borrow_access_and_handle_identity\r\nPASS late_cross_thread_lease_after_close\r\nPASS arena_retained_reset_and_trim\r\nPASS growth_coexistence_peak\r\nPASS drain_completion_and_timeout\r\nPASS drain_poll_during_blocked_collection\r\nPASS concurrent_system_stress\r\n{\"suite\":\"mgmem-core-v1\",\"tests\":11,\"checks\":145033,\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.125,
+      "stdout_file": "028-mgmem_core_tests.stdout.txt",
+      "stderr_file": "028-mgmem_core_tests.stderr.txt"
+    },
+    {
+      "record_id": 29,
+      "name": "mgmem_c_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_c_consumer"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"pure_c_abi\",\"success\":true,\"backing_after_close\":0}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0790000000015425,
+      "stdout_file": "029-mgmem_c_consumer.stdout.txt",
+      "stderr_file": "029-mgmem_c_consumer.stderr.txt"
+    },
+    {
+      "record_id": 30,
+      "name": "mgmem_cpp_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_cpp_consumer"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-cpp-raii\",\"cases\":5,\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "stdout_file": "030-mgmem_cpp_consumer.stdout.txt",
+      "stderr_file": "030-mgmem_cpp_consumer.stderr.txt"
+    },
+    {
+      "record_id": 31,
+      "name": "mgmem_import_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-import-v1\",\"groups\":7,\"checks\":275,\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "stdout_file": "031-mgmem_import_tests.stdout.txt",
+      "stderr_file": "031-mgmem_import_tests.stderr.txt"
+    },
+    {
+      "record_id": 32,
+      "name": "mgmem_pressure_tests",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_pressure_tests"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-pressure-v1\",\"tests\":3,\"checks\":75,\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "032-mgmem_pressure_tests.stdout.txt",
+      "stderr_file": "032-mgmem_pressure_tests.stderr.txt"
+    },
+    {
+      "record_id": 33,
+      "name": "mgmem_abi10_consumer",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_abi10_consumer"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"pure_c_abi\",\"success\":true,\"backing_after_close\":0}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "033-mgmem_abi10_consumer.stdout.txt",
+      "stderr_file": "033-mgmem_abi10_consumer.stderr.txt"
+    },
+    {
+      "record_id": 34,
+      "name": "mgmem_import_tests-poison-retain",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests",
+        "--poison-retain"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-import-poison\",\"case\":\"--poison-retain\",\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "stdout_file": "034-mgmem_import_tests-poison-retain.stdout.txt",
+      "stderr_file": "034-mgmem_import_tests-poison-retain.stderr.txt"
+    },
+    {
+      "record_id": 35,
+      "name": "mgmem_import_tests-poison-release",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests",
+        "--poison-release"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-import-poison\",\"case\":\"--poison-release\",\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.09399999999732245,
+      "stdout_file": "035-mgmem_import_tests-poison-release.stdout.txt",
+      "stderr_file": "035-mgmem_import_tests-poison-release.stderr.txt"
+    },
+    {
+      "record_id": 36,
+      "name": "mgmem_import_tests-poison-alias",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "LD_LIBRARY_PATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9",
+        "/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/mgmem_import_tests",
+        "--poison-alias"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"mgmem-import-poison\",\"case\":\"provider_alias_external_and_owned\",\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "stdout_file": "036-mgmem_import_tests-poison-alias.stdout.txt",
+      "stderr_file": "036-mgmem_import_tests-poison-alias.stderr.txt"
+    },
+    {
+      "record_id": 37,
+      "name": "after-native-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:847676b852b42fe9f1f9cc664f75e770123219c0b4002db26c6a4c54662aa4ab\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 845,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.4680000000007567,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "847676b852b42fe9f1f9cc664f75e770123219c0b4002db26c6a4c54662aa4ab",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "037-after-native-processes.stdout.txt",
+      "stderr_file": "037-after-native-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 845,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 38,
+      "name": "after-native-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:da0b64512fd21a37a7722f09bc2efe77d994dcc421510f6dc0e9bd3cccb2b280\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.25,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "da0b64512fd21a37a7722f09bc2efe77d994dcc421510f6dc0e9bd3cccb2b280",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "038-after-native-instrumentation.stdout.txt",
+      "stderr_file": "038-after-native-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 39,
+      "name": "packed-ART-contracts",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "CLASSPATH=/data/local/tmp/meguvizmemory-paired-20261030T102911Z-953156525bc9/packed-reader-tests.jar",
+        "app_process",
+        "/system/bin",
+        "PackedReaderTests"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"suite\":\"packed-reader-java-contract\",\"cases\":32,\"status\":\"PASS\"}\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 2.0,
+      "stdout_file": "039-packed-ART-contracts.stdout.txt",
+      "stderr_file": "039-packed-ART-contracts.stderr.txt"
+    },
+    {
+      "record_id": 40,
+      "name": "query-own-existing-APK",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "pm",
+        "path",
+        "io.github.jichuo1.meguviz.memory.pressureprobe"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.13999999999941792,
+      "stdout_file": "040-query-own-existing-APK.stdout.txt",
+      "stderr_file": "040-query-own-existing-APK.stderr.txt"
+    },
+    {
+      "record_id": 41,
+      "name": "install-own-diagnostic-APK",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "install",
+        "<workspace>\\build\\features-pressure-package-final\\MeguvizMemory-Pressure-Probe.apk"
+      ],
+      "timeout_seconds": 60,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "Performing Incremental Install\r\nPerforming Streamed Install\r\nSuccess\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 6.0,
+      "stdout_file": "041-install-own-diagnostic-APK.stdout.txt",
+      "stderr_file": "041-install-own-diagnostic-APK.stderr.txt"
+    },
+    {
+      "record_id": 42,
+      "name": "query-installed-own-APK",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "pm",
+        "path",
+        "io.github.jichuo1.meguviz.memory.pressureprobe"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "packag<redacted-local-path>\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.18799999999828287,
+      "stdout_file": "042-query-installed-own-APK.stdout.txt",
+      "stderr_file": "042-query-installed-own-APK.stderr.txt"
+    }
+  ],
+  "binary_manifest": [],
+  "tests": {},
+  "qualification": {
+    "performance": "NOT_STARTED",
+    "BIL": "NOT_INTEGRATED",
+    "MTE_HWASAN_energy": "NOT_QUALIFIED"
+  },
+  "cleanup": "Dedicated device directory is retained; no automatic deletion or process termination.",
+  "phase": "features",
+  "native_session_rows": 0,
+  "native_cases": [
+    {
+      "name": "mgmem_core_tests",
+      "result": {
+        "suite": "mgmem-core-v1",
+        "tests": 11,
+        "checks": 145033,
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_c_consumer",
+      "result": {
+        "consumer": "pure_c_abi",
+        "success": true,
+        "backing_after_close": 0
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_cpp_consumer",
+      "result": {
+        "suite": "mgmem-cpp-raii",
+        "cases": 5,
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_import_tests",
+      "result": {
+        "suite": "mgmem-import-v1",
+        "groups": 7,
+        "checks": 275,
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_pressure_tests",
+      "result": {
+        "suite": "mgmem-pressure-v1",
+        "tests": 3,
+        "checks": 75,
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_abi10_consumer",
+      "result": {
+        "consumer": "pure_c_abi",
+        "success": true,
+        "backing_after_close": 0
+      },
+      "success": true,
+      "cleanup_scope": "NORMAL_COMPLETE_CLEANUP"
+    },
+    {
+      "name": "mgmem_import_tests-poison-retain",
+      "result": {
+        "suite": "mgmem-import-poison",
+        "case": "--poison-retain",
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "INTENTIONAL_POISON_QUARANTINE_PROCESS_EXIT_NOT_NORMAL_ZERO"
+    },
+    {
+      "name": "mgmem_import_tests-poison-release",
+      "result": {
+        "suite": "mgmem-import-poison",
+        "case": "--poison-release",
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "INTENTIONAL_POISON_QUARANTINE_PROCESS_EXIT_NOT_NORMAL_ZERO"
+    },
+    {
+      "name": "mgmem_import_tests-poison-alias",
+      "result": {
+        "suite": "mgmem-import-poison",
+        "case": "provider_alias_external_and_owned",
+        "status": "PASS"
+      },
+      "success": true,
+      "cleanup_scope": "INTENTIONAL_POISON_QUARANTINE_PROCESS_EXIT_NOT_NORMAL_ZERO"
+    }
+  ],
+  "packed": {
+    "suite": "packed-reader-java-contract",
+    "cases": 32,
+    "status": "PASS"
+  },
+  "android_report": null,
+  "source_sha256": "1d130e3e4faa5a4cf2ee86d4e72cd41b2429ea1621880342fb429105c5180eae",
+  "admission": {
+    "state": "RELEASED_FOR_MEMORY",
+    "sha256": "d8ed2057b096ea872e257a9660c05d521b84531f2bf0eff8865551c9ab8c0bcd",
+    "expires_at_utc": "2026-10-30T11:13:17.227470+00:00",
+    "owner_body": "PRIVATE_NOT_COPIED"
+  },
+  "command_journal": {
+    "path": "features-commands.jsonl",
+    "events": 46,
+    "durability": "Each changed last public command revision is appended and fsynced before snapshot.",
+    "snapshot_interval_seconds": 2.0
+  },
+  "artifacts": [
+    {
+      "name": "libmgmem.so",
+      "bytes": 1722920,
+      "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c",
+      "device_sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+    },
+    {
+      "name": "mgmem_core_tests",
+      "bytes": 509976,
+      "sha256": "64df6852722a6629c6590f9ff68bd49c3c5909c82ae89cb3e8b214ec6a2db1d9",
+      "device_sha256": "64df6852722a6629c6590f9ff68bd49c3c5909c82ae89cb3e8b214ec6a2db1d9"
+    },
+    {
+      "name": "mgmem_c_consumer",
+      "bytes": 13400,
+      "sha256": "53ecb95f1e78ad419a3560e00a7495aba4328932adf5f55049e0f7a9dd142019",
+      "device_sha256": "53ecb95f1e78ad419a3560e00a7495aba4328932adf5f55049e0f7a9dd142019"
+    },
+    {
+      "name": "mgmem_cpp_consumer",
+      "bytes": 195720,
+      "sha256": "5995f42267494a71cc1f2de1571837a3a26438a0e6a1f99603f30eb560d65904",
+      "device_sha256": "5995f42267494a71cc1f2de1571837a3a26438a0e6a1f99603f30eb560d65904"
+    },
+    {
+      "name": "mgmem_import_tests",
+      "bytes": 450752,
+      "sha256": "fbd3bb1b31bb4979ffc50e3a5021fb815db59eb65c6565b8c2b30f1063ee1a57",
+      "device_sha256": "fbd3bb1b31bb4979ffc50e3a5021fb815db59eb65c6565b8c2b30f1063ee1a57"
+    },
+    {
+      "name": "mgmem_pressure_tests",
+      "bytes": 275272,
+      "sha256": "db5f17c93d99013ad885b8b993e565f6b4401f9b9d9d324c5ddac5f66359a1fa",
+      "device_sha256": "db5f17c93d99013ad885b8b993e565f6b4401f9b9d9d324c5ddac5f66359a1fa"
+    },
+    {
+      "name": "mgmem_abi10_consumer",
+      "bytes": 13440,
+      "sha256": "7929264c831637d51fc6a63709845b268078469f0f957722d735c061e0f99c77",
+      "device_sha256": "7929264c831637d51fc6a63709845b268078469f0f957722d735c061e0f99c77"
+    },
+    {
+      "name": "packed-reader-tests.jar",
+      "bytes": 8580,
+      "sha256": "15a855b9e67ecd95315ecbc97235e4590775c86fa81c12dfdd9886e275e6691a",
+      "device_sha256": "15a855b9e67ecd95315ecbc97235e4590775c86fa81c12dfdd9886e275e6691a"
+    }
+  ],
+  "pressure_build_receipt_sha256": "16fb26c0c15341e004d40669c29858110a8b4619837f4ae40c63036975bf122c",
+  "APK": {
+    "sha256": "8241e46b03cd7dadb6f65ee46bdef884b50c493d884010bf4a0f186910f7f137",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe"
+  },
+  "before_occupancy": {
+    "checked_at_utc": "2026-10-30T10:29:12.755474+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "device": {
+    "model": "2210132C",
+    "api": 33,
+    "abi_list": "arm64-v8a,armeabi-v7a,armeabi",
+    "page_bytes": 4096,
+    "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb"
+  },
+  "after-native_occupancy": {
+    "checked_at_utc": "2026-10-30T10:29:16.665117+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "reason": "unexpected_existing_package_path",
+  "completed_at_utc": "2026-10-30T10:29:25.039000+00:00"
+}

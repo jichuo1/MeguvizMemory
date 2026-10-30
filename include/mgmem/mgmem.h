@@ -20,7 +20,7 @@ extern "C" {
 #endif
 
 #define MGMEM_ABI_MAJOR 1u
-#define MGMEM_ABI_MINOR 0u
+#define MGMEM_ABI_MINOR 1u
 #define MGMEM_SYSTEM 0u
 #define MGMEM_ARENA 1u
 #define MGMEM_OPEN 0u
@@ -33,6 +33,8 @@ extern "C" {
 #define MGMEM_CAP_CUSTOM_PROVIDER 4ull
 #define MGMEM_CAP_RW_LEASE 8ull
 #define MGMEM_CAP_EXPLICIT_COLLECTION 16ull
+#define MGMEM_CAP_EXTERNAL_IMPORT 32ull
+#define MGMEM_CAP_SOFT_BUDGET 64ull
 
 typedef uint32_t mgmem_status;
 #define MGMEM_OK 0u
@@ -98,7 +100,7 @@ typedef struct mgmem_snapshot_v1 {
     uint64_t domain_id;
     uint64_t generation;
     uint64_t budget_bytes;
-    uint64_t backing_bytes; /* unique requested provider capacity; excludes metadata/RSS */
+    uint64_t backing_bytes; /* unique managed capacity: owned + imported; excludes metadata/RSS */
     uint64_t reserved_bytes; /* pending provider calls, included in the budget check */
     uint64_t peak_backing_bytes; /* committed + pending high water mark */
     uint64_t live_bytes; /* owner-held payload, even when also borrowed */
@@ -112,6 +114,59 @@ typedef struct mgmem_snapshot_v1 {
     uint64_t page_size;
 } mgmem_snapshot_v1;
 
+/* ABI 1.1: one complete externally-owned region, SYSTEM domains only.
+ * external_id is a stable nonzero identity assigned by its origin owner. During
+ * any import lifetime it must identify exactly this region and callback owner.
+ * Memory imports the entire capacity, not a separately charged child view.
+ * Use ordinary borrow offsets for views. Duplicate identities or overlapping
+ * regions in this loaded runtime return BUSY, including across domains and
+ * overlap with Memory-owned backing. Cross-runtime import coordination is not
+ * supported: a physical region must use one managing Memory runtime only.
+ * managing_runtime_origin must be mgmem_runtime_origin_v1() of that manager;
+ * a descriptor routed to another loaded runtime is rejected. This cookie is
+ * routing protection, not authentication or physical-page alias detection.
+ *
+ * retain is failure-atomic: non-OK MUST leave reference count unchanged. A
+ * successful retain keeps data/context, size and address stable until release.
+ * Both callbacks are thread-safe, no-throw and outside domain/registry locks;
+ * they must not reenter the same domain. Memory never calls free/deallocate on
+ * data. The origin remains responsible for allocator pairing and any other
+ * aliases/access outside Memory leases. READ forbids WRITE acquisition, but is
+ * an API contract, not page protection. Caller keeps its own reference until
+ * this call returns. Callback contract violations poison the domain, retain
+ * uncertain charges/claims, and are never retried or forcibly reclaimed.
+ */
+typedef struct mgmem_external_buffer_v1 {
+    uint32_t struct_size;
+    uint32_t abi_major;
+    uint32_t abi_minor;
+    uint32_t required_flags;
+    const void *data;
+    uint64_t capacity_bytes;
+    uint64_t alignment;
+    uint64_t external_id;
+    uint32_t access;
+    uint32_t reserved;
+    void *context;
+    mgmem_status (*retain)(void *context);
+    void (*release)(void *context);
+    uint64_t managing_runtime_origin;
+} mgmem_external_buffer_v1;
+
+/* Subset of the old snapshot, not additional bytes to add to backing_bytes.
+ * Charged imports with a violating callback remain visible even if publication
+ * failed; import_count counts successfully published imports only. */
+typedef struct mgmem_import_snapshot_v1 {
+    uint32_t struct_size;
+    uint32_t abi_major;
+    uint32_t abi_minor;
+    uint32_t poisoned;
+    uint64_t external_backing_bytes;
+    uint64_t external_backing_count;
+    uint64_t pending_import_bytes;
+    uint64_t import_count;
+} mgmem_import_snapshot_v1;
+
 MGMEM_API uint32_t mgmem_abi_version_v1(void); /* major << 16 | minor */
 /* Deliberately excludes JNI, special placement, page hints and hardware claims. */
 MGMEM_API uint64_t mgmem_capabilities_v1(void);
@@ -120,6 +175,15 @@ MGMEM_API mgmem_status mgmem_checked_mul_v1(uint64_t a, uint64_t b, uint64_t *ou
 MGMEM_API mgmem_status mgmem_checked_round_up_v1(uint64_t bytes, uint64_t alignment, uint64_t *out);
 MGMEM_API mgmem_status mgmem_domain_create_v1(const mgmem_domain_options_v1 *options, mgmem_domain **out);
 MGMEM_API mgmem_status mgmem_allocate_v1(mgmem_domain *domain, uint64_t bytes, uint64_t alignment, mgmem_handle_v1 *out);
+MGMEM_API mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
+    const mgmem_external_buffer_v1 *buffer, mgmem_handle_v1 *out);
+/* A soft admission limit, including zero. Existing owners/leases and operations
+ * with an existing reservation remain valid; no forced reclamation or implicit
+ * close. New admission must fit the new limit. Snapshot may temporarily show
+ * backing_bytes + reserved_bytes > budget_bytes after lowering the limit. */
+MGMEM_API mgmem_status mgmem_domain_set_budget_v1(mgmem_domain *domain, uint64_t bytes);
+MGMEM_API mgmem_status mgmem_domain_import_snapshot_v1(mgmem_domain *domain,
+    mgmem_import_snapshot_v1 *out, uint32_t out_size);
 /* Release consumes the allocation owner, but outstanding leases keep storage alive. */
 MGMEM_API mgmem_status mgmem_release_v1(mgmem_domain *domain, mgmem_handle_v1 allocation);
 /* Readers may coexist. A writer excludes all other leases of that allocation.

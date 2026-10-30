@@ -1,0 +1,174 @@
+Start testing: Oct 30 18:27 中国标准时间
+----------------------------------------------------------
+1/10 Testing: ownership_budget_close
+1/10 Test: ownership_budget_close
+Command: "<workspace>/build/features-host/mgmem_core_tests.exe"
+Directory: <workspace>/build/features-host
+"ownership_budget_close" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+PASS abi_and_checked_arithmetic
+PASS system_budget_layout_and_rollback
+PASS provider_oom_and_exact_pairing
+PASS allocation_reservation_close_race
+PASS borrow_access_and_handle_identity
+PASS late_cross_thread_lease_after_close
+PASS arena_retained_reset_and_trim
+PASS growth_coexistence_peak
+PASS drain_completion_and_timeout
+PASS drain_poll_during_blocked_collection
+PASS concurrent_system_stress
+{"suite":"mgmem-core-v1","tests":11,"checks":145033,"status":"PASS"}
+<end of output>
+Test time =   1.75 sec
+----------------------------------------------------------
+Test Passed.
+"ownership_budget_close" end time: Oct 30 18:27 中国标准时间
+"ownership_budget_close" time elapsed: 00:00:01
+----------------------------------------------------------
+
+2/10 Testing: c_abi_consumer
+2/10 Test: c_abi_consumer
+Command: "<workspace>/build/features-host/mgmem_c_consumer.exe"
+Directory: <workspace>/build/features-host
+"c_abi_consumer" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"consumer":"pure_c_abi","success":true,"backing_after_close":0}
+<end of output>
+Test time =   0.74 sec
+----------------------------------------------------------
+Test Passed.
+"c_abi_consumer" end time: Oct 30 18:27 中国标准时间
+"c_abi_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/10 Testing: cpp_raii_consumer
+3/10 Test: cpp_raii_consumer
+Command: "<workspace>/build/features-host/mgmem_cpp_consumer.exe"
+Directory: <workspace>/build/features-host
+"cpp_raii_consumer" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-cpp-raii","cases":5,"status":"PASS"}
+<end of output>
+Test time =   1.00 sec
+----------------------------------------------------------
+Test Passed.
+"cpp_raii_consumer" end time: Oct 30 18:27 中国标准时间
+"cpp_raii_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/10 Testing: external_import
+4/10 Test: external_import
+Command: "<workspace>/build/features-host/mgmem_import_tests.exe"
+Directory: <workspace>/build/features-host
+"external_import" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-v1","groups":7,"checks":275,"status":"PASS"}
+<end of output>
+Test time =   0.95 sec
+----------------------------------------------------------
+Test Passed.
+"external_import" end time: Oct 30 18:27 中国标准时间
+"external_import" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/10 Testing: external_import_poison_retain
+5/10 Test: external_import_poison_retain
+Command: "<workspace>/build/features-host/mgmem_import_tests.exe" "--poison-retain"
+Directory: <workspace>/build/features-host
+"external_import_poison_retain" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"--poison-retain","status":"PASS"}
+<end of output>
+Test time =   0.60 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_retain" end time: Oct 30 18:27 中国标准时间
+"external_import_poison_retain" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/10 Testing: external_import_poison_release
+6/10 Test: external_import_poison_release
+Command: "<workspace>/build/features-host/mgmem_import_tests.exe" "--poison-release"
+Directory: <workspace>/build/features-host
+"external_import_poison_release" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"--poison-release","status":"PASS"}
+<end of output>
+Test time =   0.70 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_release" end time: Oct 30 18:27 中国标准时间
+"external_import_poison_release" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/10 Testing: external_import_poison_alias
+7/10 Test: external_import_poison_alias
+Command: "<workspace>/build/features-host/mgmem_import_tests.exe" "--poison-alias"
+Directory: <workspace>/build/features-host
+"external_import_poison_alias" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-import-poison","case":"provider_alias_external_and_owned","status":"PASS"}
+<end of output>
+Test time =   0.49 sec
+----------------------------------------------------------
+Test Passed.
+"external_import_poison_alias" end time: Oct 30 18:27 中国标准时间
+"external_import_poison_alias" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/10 Testing: pressure_budget_close
+8/10 Test: pressure_budget_close
+Command: "<workspace>/build/features-host/mgmem_pressure_tests.exe"
+Directory: <workspace>/build/features-host
+"pressure_budget_close" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"suite":"mgmem-pressure-v1","tests":3,"checks":73,"status":"PASS"}
+<end of output>
+Test time =   0.61 sec
+----------------------------------------------------------
+Test Passed.
+"pressure_budget_close" end time: Oct 30 18:27 中国标准时间
+"pressure_budget_close" time elapsed: 00:00:00
+----------------------------------------------------------
+
+9/10 Testing: original_abi10_consumer
+9/10 Test: original_abi10_consumer
+Command: "<workspace>/build/features-host/mgmem_abi10_consumer.exe"
+Directory: <workspace>/build/features-host
+"original_abi10_consumer" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"consumer":"pure_c_abi","success":true,"backing_after_close":0}
+<end of output>
+Test time =   0.84 sec
+----------------------------------------------------------
+Test Passed.
+"original_abi10_consumer" end time: Oct 30 18:27 中国标准时间
+"original_abi10_consumer" time elapsed: 00:00:00
+----------------------------------------------------------
+
+10/10 Testing: runtime_origin
+10/10 Test: runtime_origin
+Command: "<workspace>/build/features-host/mgmem_runtime_tests.exe" "<workspace>/build/features-host/mgmem.dll" "<workspace>/build/features-host/mgmem_other_runtime.dll"
+Directory: <workspace>/build/features-host
+"runtime_origin" start time: Oct 30 18:27 中国标准时间
+Output:
+----------------------------------------------------------
+{"separate_runtime_handles_rejected":true,"foreign_runtime_import_descriptor_rejected":true}
+<end of output>
+Test time =   0.70 sec
+----------------------------------------------------------
+Test Passed.
+"runtime_origin" end time: Oct 30 18:27 中国标准时间
+"runtime_origin" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 30 18:27 中国标准时间

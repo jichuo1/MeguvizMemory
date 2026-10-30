@@ -1,0 +1,1 @@
+-keep class io.github.jichuo1.meguviz.memory.android.NativePressureBackend { *; }

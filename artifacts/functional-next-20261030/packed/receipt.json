@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "scope": "STANDALONE_JVM_PACKED_READER_FUNCTIONAL_ONLY",
+  "status": "PASS",
+  "production_dependencies_added": [],
+  "BIL_modified": false,
+  "java_contracts": {
+    "suite": "packed-reader-java-contract",
+    "cases": 32,
+    "status": "PASS"
+  },
+  "real_kotlin_oracle": {
+    "suite": "real-kotlin-wire-oracle",
+    "status": "PASS",
+    "fixtures": 48,
+    "policy_comparisons": 288,
+    "rescans": 147,
+    "oracle_rewrite_rejections": 79,
+    "baseline_N_plus_N_prime_constructor_calls_model": 5025,
+    "reader_per_element_descriptor_constructions": 0,
+    "native_jni_execution": false,
+    "host_parseFrom_execution": false
+  },
+  "oracle_inputs": [
+    {
+      "repository": "Bilibili_Innocent_Lab",
+      "path": "Bilibili_Innocent_Lab/app/src/main/java/com/Bilibili_Innocent_Lab/xposedmodule/hook/feature/danmakuwire/DanmakuWire.kt",
+      "bytes": 14420,
+      "sha256": "ce221d29a11b1d8b435df751bcd00ba9b173a3b66f949edebcf87ae79c377ae8"
+    },
+    {
+      "repository": "Bilibili_Innocent_Lab",
+      "path": "Bilibili_Innocent_Lab/app/src/main/java/com/Bilibili_Innocent_Lab/xposedmodule/hook/feature/danmakuwire/DanmakuWireFields.kt",
+      "bytes": 940,
+      "sha256": "00b263ea3e347add784c3eaa8e14e76dc8aa7da5a7c12af53a44da62fe8745a8"
+    }
+  ],
+  "oracle_scope": "REAL_HASH_LOCKED_SOURCE_COMPILED_IN_ISOLATION",
+  "oracle_baseline_commit": "00572940c354fbec7b6f311d4ecd6f02e66ea7c5",
+  "external_checkout_heads": {
+    "before": "00572940c354fbec7b6f311d4ecd6f02e66ea7c5",
+    "after": "00572940c354fbec7b6f311d4ecd6f02e66ea7c5"
+  },
+  "bytecode_structure": {
+    "reader_sha256": "8578f086be82676c475b348c92f293edc7274dd8d5f193ee357eef8f7ef7f8c9",
+    "new_reference_classes": [
+      "io/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader",
+      "io/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader$BudgetExceededException",
+      "io/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader$Decision",
+      "java/lang/IllegalArgumentException",
+      "java/lang/IllegalStateException",
+      "java/lang/IndexOutOfBoundsException",
+      "java/lang/String"
+    ],
+    "ElemSignal_ArrayList_Integer_boxing_references": false,
+    "scope": "Static bytecode structure; not an allocation profile"
+  },
+  "sources": [
+    {
+      "path": "adapters/packed/src/main/java/io/github/jichuo1/meguviz/memory/packed/PackedDanmakuReader.java",
+      "sha256": "51ace91b00228383e3abf8490a67832463a22c3386ec8754b9c78577d3ac16a9"
+    },
+    {
+      "path": "tests/packed/PackedReaderTests.java",
+      "sha256": "f88776db15f67f68cd299e4fa7a76c52bb143db24b986d0a652cd726c14f0075"
+    },
+    {
+      "path": "tests/packed/PackedOracleTests.kt",
+      "sha256": "846ac220f18c47af4d837fcdcf5d5c088ee5ec8b1e13540b4e457d7427aef5e7"
+    },
+    {
+      "path": "tools/verify_packed_reader.py",
+      "sha256": "54498a60d1e5ec2b2d1527dfda66556b8e44efa4779350ca9f049334e898cb79"
+    }
+  ],
+  "jar": {
+    "path": "build/packed-reader/meguviz-memory-packed-reader-0.1.0.jar",
+    "bytes": 5212,
+    "sha256": "b527d6333e3e379aab7a4b858973f9acb28d610686312200f438c142a0373ce6",
+    "contents": "Production Java class/nested classes only; oracle/tests/Kotlin runtime excluded"
+  },
+  "attribution": "ORDINARY_CONSUMER_OBJECT_MATERIALIZATION_AVOIDANCE_NOT_MEMORY_GAIN",
+  "limits": [
+    "No native/JNI producer or host parseFrom execution; selected-provider refusal tested by contract fixtures.",
+    "Constructor count is a structural N+N_prime model, not a heap allocation profile or elapsed/RSS/energy claim.",
+    "Copied snapshots and borrowed immutable arrays have separate ownership; neither is a native Memory lease.",
+    "Semantic judging and text normalization remain supplied by the caller; no BIL integration performed."
+  ]
+}

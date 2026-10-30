@@ -295,7 +295,8 @@
         "consumers/dex/main.cpp",
         "artifacts/verification-20261030/consumers/receipt.json",
         "artifacts/verification-20261030/android-api34-x86_64-core.txt",
-        "artifacts/arm64-20261030/safety/receipt.json"
+        "artifacts/arm64-20261030/safety/receipt.json",
+        "artifacts/features-20261030/ARTIFACTS.json"
       ],
       "remaining": [
         "Real Android 16 KiB loader and selected arm physical-device executions",
@@ -332,7 +333,8 @@
         "tests/core_tests.cpp",
         "artifacts/verification-20261030/core-tests.txt",
         "artifacts/verification-20261030/consumers/receipt.json",
-        "artifacts/arm64-20261030/safety/receipt.json"
+        "artifacts/arm64-20261030/safety/receipt.json",
+        "artifacts/features-20261030/ARTIFACTS.json"
       ],
       "remaining": [
         "Selected physical devices, MTE where available and longer resource-stability sessions"
@@ -349,7 +351,7 @@
       "dependency_contract": "MM 005",
       "acceptance": "唯一 allocation 去重、增长峰值、未知外部成本",
       "status": "PARTIAL",
-      "implementation": "IMPLEMENTED_CPU_DOMAIN_BUDGET_AND_SNAPSHOT",
+      "implementation": "SOFT_BUDGET_IMPORT_ACCOUNTING_PRESSURE_CONTROLLER_AND_OWN_RSS_PSS_IMPLEMENTED",
       "functional_validation": "PASSED_HOST",
       "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
@@ -359,19 +361,20 @@
       "outputs": {
         "unique_backing_accounting": "PASS",
         "growth_and_pending_reservation_peak": "PASS",
-        "android_pressure_bridge": "NOT_IMPLEMENTED",
-        "rss_pss_external_cost": "UNAVAILABLE"
+        "android_pressure_bridge": "FUNCTIONAL_FRAMEWORK_AND_JNI_IMPLEMENTED",
+        "rss_pss_external_cost": "OWN_PROCESS_OBSERVATIONS_AVAILABLE_NOT_DOMAIN_ATTRIBUTION"
       },
       "evidence": [
         "include/mgmem/mgmem.h",
         "src/mgmem.cpp",
         "tests/core_tests.cpp",
         "consumers/dex/main.cpp",
-        "artifacts/arm64-20261030/safety/receipt.json"
+        "artifacts/arm64-20261030/safety/receipt.json",
+        "artifacts/features-20261030/ARTIFACTS.json"
       ],
       "remaining": [
-        "Actual platform pressure bridge and private-resident/energy observation",
-        "CPU requested capacity is not RSS/PSS or GPU storage"
+        "Energy measurement remains unavailable",
+        "16KB/MTE and product/release qualification remain separate"
       ]
     },
     {
@@ -403,7 +406,8 @@
       "evidence": [
         "include/mgmem/memory.hpp",
         "docs/INTEGRATION.md",
-        "artifacts/arm64-20261030/safety/receipt.json"
+        "artifacts/arm64-20261030/safety/receipt.json",
+        "artifacts/features-20261030/ARTIFACTS.json"
       ],
       "remaining": [
         "Rust is not required for the selected CPU/C++ profile",
@@ -440,19 +444,25 @@
       "required_outputs": [],
       "dependency_contract": "MM 003",
       "acceptance": "N+N′ 计数、原有 oracle 与 host 校验等价",
-      "status": "PLANNED",
-      "implementation": "NOT_STARTED",
-      "functional_validation": "NOT_STARTED",
-      "device_validation": "NOT_STARTED",
-      "performance_validation": "NOT_STARTED",
+      "status": "PARTIAL",
+      "implementation": "STANDALONE_JAVA_PACKED_READER_IMPLEMENTED_NO_BIL_CHANGE",
+      "functional_validation": "PASS_JAVA32_REAL_KOTLIN288_AND_ANDROID_ART32",
+      "device_validation": "PASS_API33_ARM64_ART32",
+      "performance_validation": "NOT_MEASURED",
       "mechanism_evidence": "NOT_APPLICABLE",
-      "release_qualification": "NOT_STARTED",
+      "release_qualification": "ENGINEERING_PREVIEW_ONLY",
       "scope": "bil_consumer_optimization",
-      "current_source_audit": "Current inspected BIL main still constructs ElemSignal through fromFlattened. No change in this CPU-core/two-consumer batch.",
+      "current_source_audit": "BIL still unchanged; standalone reader is not host integration",
       "evidence": [
-        "docs/audit/consumers.md"
+        "docs/PACKED_READER.md",
+        "artifacts/functional-next-20261030/packed/receipt.json",
+        "artifacts/features-20261030/device/features-receipt.json"
       ],
-      "attribution": "Conventional packed optimization belongs to A0-to-A1, not Memory gain."
+      "attribution": "Conventional packed optimization belongs to A0-to-A1, not Memory gain.",
+      "remaining": [
+        "BIL host parseFrom/Hook/UI not executed",
+        "No heap/RSS/elapsed benefit qualification"
+      ]
     },
     {
       "id": "MM-011",
@@ -610,15 +620,19 @@
       "required_outputs": [],
       "dependency_contract": "MM 007",
       "acceptance": "原有 owner 回收；retiring 与 resident 分开",
-      "status": "NOT_SELECTED",
-      "implementation": "NOT_STARTED",
-      "functional_validation": "NOT_STARTED",
-      "device_validation": "NOT_STARTED",
+      "status": "PARTIAL",
+      "implementation": "ANDROID_COMPONENT_CALLBACKS_JNI_PRESSURE_AND_OBSERVATION_IMPLEMENTED_LUMEN_NOT_SELECTED",
+      "functional_validation": "PASS_NATIVE3_JAVA38_AND_ANDROID20",
+      "device_validation": "PASS_API33_ARM64_4K_SYNTHETIC_FRAMEWORK_AND_AMS_INJECTION",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
-      "release_qualification": "NOT_SELECTED",
+      "release_qualification": "ENGINEERING_PREVIEW_ONLY",
       "scope": "family_integration",
-      "reason": "Standalone CPU platform builds do not constitute an Android/Lumen observation bridge; original Java/Bitmap/HWUI owners remain unchanged."
+      "reason": "Android adapter implemented; Lumen/Bitmap/HWUI ownership not changed, API34+ legacy signals not guaranteed",
+      "evidence": [
+        "docs/ANDROID_PRESSURE.md",
+        "artifacts/features-20261030/device-android-final/features-receipt.json"
+      ]
     },
     {
       "id": "MM-016",
@@ -631,7 +645,7 @@
       "dependency_contract": "MM 008；实际可用的 Compute SDK、固定合同与生命周期资格",
       "acceptance": "不重复 GPU ledger，不破坏 retirement；缺外部制品只交 fixture，真实集成标 BLOCKED",
       "status": "BLOCKED",
-      "implementation": "NOT_STARTED_CONTRACT_UNCONFIRMED",
+      "implementation": "REAL_CONTRACT_REAUDITED_NO_FAMILY_BRIDGE_IMPLEMENTATION",
       "functional_validation": "NOT_STARTED",
       "device_validation": "NOT_STARTED",
       "performance_validation": "NOT_STARTED",
@@ -639,10 +653,11 @@
       "release_qualification": "BLOCKED",
       "scope": "family_integration",
       "external_sdk_state": "REAL_COMPUTE_AND_MEDIA_SOURCES_AND_INSTALLED_SDK_FOUND_IN_MEGUVIZPACK",
-      "blocking_reason": "Existing map/content lease APIs do not establish external Memory backing CPU-import/provider ownership. Freeze that real contract and final SDK profile before a bridge; missing SDK is not the blocker.",
+      "blocking_reason": "Compute host descriptor has no Memory-owned CPU pointer/provider injection; READ-map adapter remains full-range CPU contract candidate, not executed",
       "evidence": [
         "docs/audit/consumers.md",
-        "docs/INTEGRATION.md"
+        "docs/INTEGRATION.md",
+        "docs/FAMILY_MEMORY_CONTRACTS.md"
       ]
     },
     {
@@ -1087,5 +1102,24 @@
     "analysis_correction": "INCOMPLETE_FORMAL_INTERVALS_WITHDRAWN_POINTS_AND_RAW_DATA_UNCHANGED",
     "results": "docs/DEVICE_V2_RESULTS.md",
     "manifest": "artifacts/device-v2-20261030/ARTIFACTS.json"
+  },
+  "functional_feature_stage_20261030": {
+    "state": "SCOPED_FUNCTIONAL_DELIVERY_COMPLETE_FULL_ROADMAP_NOT_DONE",
+    "native_sdk_version": "0.2.0",
+    "native_abi": "1.1",
+    "packed_module_version": "0.1.0",
+    "host_native_release": 10,
+    "host_native_asan": 10,
+    "packed_java": 32,
+    "real_kotlin_oracle_comparisons": 288,
+    "packed_ART": 32,
+    "android_java_stub_checks": 38,
+    "device_native_cases": 9,
+    "android_device_checks": 20,
+    "AMS_injected_callback": "PASS_DIAGNOSTIC_PACKAGE_ONLY",
+    "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+    "family_bridge": "AUDIT_ONLY_NOT_IMPLEMENTED",
+    "energy": "UNAVAILABLE_NO_QUALIFIED_METHOD",
+    "results": "docs/FEATURE_STAGE_20261030.md"
   }
 }
