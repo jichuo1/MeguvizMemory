@@ -24,6 +24,8 @@ REMOTE = re.compile(r"^/data/local/tmp/meguvizmemory-paired-[0-9]{8}T[0-9]{6}Z-[
 BOOT = re.compile(r"[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}")
 SHA256 = re.compile(r"[0-9a-f]{64}")
 ORDERS = (("A1", "A3", "A3", "A1"), ("A3", "A1", "A1", "A3"))
+ATOMIC_REPLACE_RETRY_SECONDS = 0.9
+RECEIPT_SNAPSHOT_SECONDS = 2.0
 
 
 def integer(value, minimum=0, maximum=(1 << 64) - 1):
@@ -34,7 +36,53 @@ def write_json(path, value):
     pending = path.with_name(path.name + ".pending")
     pending.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n",
                        encoding="utf-8", newline="\n")
-    pending.replace(path)
+    deadline = time.monotonic() + ATOMIC_REPLACE_RETRY_SECONDS
+    while True:
+        try:
+            pending.replace(path)
+            return
+        except PermissionError:
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise
+            time.sleep(min(0.025, remaining))
+            if time.monotonic() >= deadline:
+                # Keep both the last complete target and the pending update.
+                # Never claim success or replace atomic publication with a
+                # non-atomic direct write when a Windows reader holds the target.
+                raise
+
+
+def public_value(value):
+    """Private in-memory inventory keys must never reach durable output."""
+    if isinstance(value, dict):
+        return {key: public_value(item) for key, item in value.items()
+                if not str(key).startswith("_")}
+    if isinstance(value, list):
+        return [public_value(item) for item in value]
+    return value
+
+
+def command_hash(command):
+    canonical = json.dumps(command, ensure_ascii=False, sort_keys=True,
+                           separators=(",", ":"), allow_nan=False).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def load_command_journal(path):
+    """Recover latest public command revisions; corruption is an explicit error."""
+    commands, revisions = {}, {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        event = json.loads(line)
+        record_id, revision = event.get("record_id"), event.get("revision")
+        command = event.get("command")
+        if (event.get("event") != "command_revision" or not integer(record_id, 1) or
+                not integer(revision, 1) or revision != revisions.get(record_id, 0) + 1 or
+                not isinstance(command, dict) or command.get("record_id") != record_id or
+                public_value(command) != command or command_hash(command) != event.get("command_sha256")):
+            raise ValueError("invalid_or_incomplete_command_journal_revision")
+        commands[record_id], revisions[record_id] = command, revision
+    return commands
 
 
 def load_json(path):
@@ -63,6 +111,11 @@ class PairedRunner(Runner):
         self.allowed = {}
         self.workload_started = False
         self.local_manifest = {}
+        self._last_snapshot_at = None
+        self._last_snapshot_state = None
+        self._journal_signature = None
+        self._journal_revisions = {}
+        self._journal_events = 0
 
     def redact(self, value):
         value = super().redact(value)
@@ -70,8 +123,42 @@ class PairedRunner(Runner):
             return value.replace(str(self.args.input), "<local-input-path-redacted>")
         return value
 
-    def save(self):
-        write_json(self.root_output / (self.phase + "-receipt.json"), self.redact(self.receipt))
+    def save(self, force=False):
+        commands = self.receipt.get("commands", [])
+        if commands:
+            # Runner.command and publish_inventory only add/update the last
+            # public row. Hash that row alone; full-history serialization is
+            # reserved for the throttled snapshot below.
+            command = self.redact(public_value(commands[-1]))
+            record_id = command["record_id"]
+            digest_value = command_hash(command)
+            signature = (record_id, digest_value)
+            if signature != self._journal_signature:
+                revision = self._journal_revisions.get(record_id, 0) + 1
+                event = {"schema_version": 1, "event": "command_revision",
+                         "recorded_at_utc": utc_now(), "record_id": record_id,
+                         "revision": revision, "command_sha256": digest_value,
+                         "command": command}
+                journal = self.root_output / (self.phase + "-commands.jsonl")
+                with journal.open("a", encoding="utf-8", newline="\n") as stream:
+                    stream.write(json.dumps(event, ensure_ascii=False, allow_nan=False) + "\n")
+                    stream.flush()
+                    os.fsync(stream.fileno())
+                self._journal_signature = signature
+                self._journal_revisions[record_id] = revision
+                self._journal_events += 1
+        self.receipt["command_journal"] = {
+            "path": self.phase + "-commands.jsonl", "events": self._journal_events,
+            "durability": "Each changed last public command revision is appended and fsynced before snapshot.",
+            "snapshot_interval_seconds": RECEIPT_SNAPSHOT_SECONDS,
+        }
+        now, state = time.monotonic(), self.receipt.get("state")
+        if (force or self._last_snapshot_at is None or state != self._last_snapshot_state or
+                now - self._last_snapshot_at >= RECEIPT_SNAPSHOT_SECONDS):
+            write_json(self.root_output / (self.phase + "-receipt.json"),
+                       self.redact(public_value(self.receipt)))
+            self._last_snapshot_at = time.monotonic()
+            self._last_snapshot_state = state
 
     def append(self, row):
         with (self.root_output / (self.phase + ".jsonl")).open("a", encoding="utf-8", newline="\n") as stream:
@@ -468,7 +555,7 @@ def main():
         runner.receipt.update({"state": "FAIL", "all_passed": False, "reason": str(failure)})
     finally:
         runner.receipt["completed_at_utc"] = utc_now()
-        runner.save()
+        runner.save(force=True)
     print(json.dumps({"phase": args.phase, "state": runner.receipt["state"],
                       "all_passed": runner.receipt["all_passed"],
                       "receipt": str(output / (args.phase + "-receipt.json"))}), flush=True)
