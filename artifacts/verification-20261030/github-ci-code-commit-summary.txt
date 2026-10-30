@@ -1,0 +1,12 @@
+verify (windows-latest)	Core safety verification	2026-10-30T03:07:48.4801300Z 1/4 Test #1: ownership_budget_close ...........   Passed    0.03 sec
+verify (windows-latest)	Core safety verification	2026-10-30T03:07:48.4921371Z 2/4 Test #2: c_abi_consumer ...................   Passed    0.01 sec
+verify (windows-latest)	Core safety verification	2026-10-30T03:07:48.4996468Z 3/4 Test #3: cpp_raii_consumer ................   Passed    0.01 sec
+verify (windows-latest)	Core safety verification	2026-10-30T03:07:48.5074630Z 4/4 Test #4: runtime_origin ...................   Passed    0.01 sec
+verify (windows-latest)	Core safety verification	2026-10-30T03:07:48.5080194Z 100% tests passed out of 4
+verify (windows-latest)	Verify image outputs (Windows)	2026-10-30T03:07:55.0856746Z {"all_passed": true, "command_count": 22, "dex_system_arena_results_equal": null, "receipt": "D:\\a\\MeguvizMemory\\MeguvizMemory\\artifacts\\ci-image\\receipt.json"}
+verify (ubuntu-latest)	Core safety verification	2026-10-30T03:07:33.8760497Z 1/4 Test #1: ownership_budget_close ...........   Passed    0.01 sec
+verify (ubuntu-latest)	Core safety verification	2026-10-30T03:07:33.8837982Z 2/4 Test #2: c_abi_consumer ...................   Passed    0.00 sec
+verify (ubuntu-latest)	Core safety verification	2026-10-30T03:07:33.8859074Z 3/4 Test #3: cpp_raii_consumer ................   Passed    0.00 sec
+verify (ubuntu-latest)	Core safety verification	2026-10-30T03:07:33.8879047Z 4/4 Test #4: runtime_origin ...................   Passed    0.00 sec
+verify (ubuntu-latest)	Core safety verification	2026-10-30T03:07:33.8882296Z 100% tests passed, 0 tests failed out of 4
+verify (ubuntu-latest)	Verify image outputs (Linux)	2026-10-30T03:07:35.6284683Z {"all_passed": true, "command_count": 22, "dex_system_arena_results_equal": null, "receipt": "/home/runner/work/MeguvizMemory/MeguvizMemory/artifacts/ci-image/receipt.json"}

@@ -1,0 +1,1 @@
+{"consumer":"DexMeguviz","status":"PASS","mode":"system","input_bytes":448,"method_count":2,"source_sha256":"dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f","copied_oracle_equal":true,"result_checksum":1519602638580005141,"peak_backing_bytes":448,"closed_backing_bytes":0,"runtime_scope":"host_functional"}

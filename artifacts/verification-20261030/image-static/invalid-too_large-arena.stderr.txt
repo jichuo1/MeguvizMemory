@@ -1,0 +1,1 @@
+Image consumer: image exceeds bounded workspace

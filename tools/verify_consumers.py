@@ -74,8 +74,8 @@ def run_command(case_id: str, command: list[str], directory: Path, timeout: floa
     except OSError as failure:
         code, stdout, stderr = None, "", ""
         timed_out, launch_error = False, str(failure)
-    (directory / f"{case_id}.stdout.txt").write_text(stdout, encoding="utf-8")
-    (directory / f"{case_id}.stderr.txt").write_text(stderr, encoding="utf-8")
+    (directory / f"{case_id}.stdout.txt").write_bytes(stdout.encode("utf-8"))
+    (directory / f"{case_id}.stderr.txt").write_bytes(stderr.encode("utf-8"))
     parsed = None
     parse_error = None
     if stdout.strip():

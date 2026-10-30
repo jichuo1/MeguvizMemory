@@ -1,0 +1,27 @@
+{
+  "scope": "RESEARCH_ARITHMETIC_ONLY_NOT_DEVICE_MEASUREMENTS",
+  "python": "3.10.6 | packaged by conda-forge | (main, Oct 24 2022, 16:02:16) [MSC v.1916 64 bit (AMD64)]",
+  "results": [
+    {
+      "script": "calculate_models.py",
+      "script_sha256": "91e72aa62cc97f5ca4c29bf14801baa7a8697b28f11287cfe3e536711e8e0217",
+      "expected": "MODEL_RESULTS.json",
+      "expected_sha256": "4f7e72c0b95af452821c42ea80dfbc8fe7455058e8349e4c9a904a8cd4e2bbbd",
+      "semantic_equal": true
+    },
+    {
+      "script": "calculate_quantification.py",
+      "script_sha256": "b55827d67a3fe3533b0aba4cd109a64736599f51bff3dbb84ac6cde47a48002e",
+      "expected": "QUANTIFICATION_RESULTS.json",
+      "expected_sha256": "c57f123aa93e2746ccd191e3040fbbbf77d51e8fcdb1758d033915b97adc55f3",
+      "semantic_equal": true
+    },
+    {
+      "script": "calculate_tlb_models.py",
+      "script_sha256": "83bd24017eb41655f352337bc4cf0812a9b305c08c66f1ccd6653e7b8eb4b253",
+      "expected": "TLB_MODEL_RESULTS.json",
+      "expected_sha256": "28d513f37d2523dde898652f5c7d328aec894d6c58350c52e0883838fcd23582",
+      "semantic_equal": true
+    }
+  ]
+}

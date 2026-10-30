@@ -1,0 +1,56 @@
+
+Elf file type is DYN (Shared object file)
+Entry point 0x0
+There are 9 program headers, starting at offset 52
+
+Program Headers:
+  Type           Offset   VirtAddr   PhysAddr   FileSiz MemSiz  Flg Align
+  PHDR           0x000034 0x00000034 0x00000034 0x00120 0x00120 R   0x4
+  LOAD           0x000000 0x00000000 0x00000000 0x21ca0 0x21ca0 R E 0x4000
+  LOAD           0x021ca0 0x00025ca0 0x00025ca0 0x00e5c 0x01360 RW  0x4000
+  LOAD           0x022b00 0x0002ab00 0x0002ab00 0x000b0 0x00375 RW  0x4000
+  DYNAMIC        0x022680 0x00026680 0x00026680 0x000c8 0x000c8 RW  0x4
+  GNU_RELRO      0x021ca0 0x00025ca0 0x00025ca0 0x00e5c 0x01360 R   0x1
+  GNU_STACK      0x000000 0x00000000 0x00000000 0x00000 0x00000 RW  0x0
+  NOTE           0x000154 0x00000154 0x00000154 0x000bc 0x000bc R   0x4
+  EXIDX          0x00c9c0 0x0000c9c0 0x0000c9c0 0x00d70 0x00d70 R   0x4
+
+ Section to Segment mapping:
+  Segment Sections...
+   00     
+   01     .note.android.ident .note.gnu.build-id .dynsym .gnu.version .gnu.version_r .gnu.hash .dynstr .rel.dyn .ARM.exidx .rel.plt .ARM.extab .rodata .ARM.extab__lcxx_override .text __lcxx_override .plt 
+   02     .data.rel.ro .fini_array .dynamic .got .got.plt .relro_padding 
+   03     .data .bss 
+   04     .dynamic 
+   05     .data.rel.ro .fini_array .dynamic .got .got.plt .relro_padding 
+   06     
+   07     .note.android.ident .note.gnu.build-id 
+   08     .ARM.exidx 
+   None   .comment .ARM.attributes .debug_loc .debug_abbrev .debug_info .debug_ranges .debug_str .debug_frame .debug_line .symtab .shstrtab .strtab 
+Dynamic section at offset 0x22680 contains 25 entries:
+  Tag        Type           Name/Value
+  0x00000001 (NEEDED)       Shared library: [libm.so]
+  0x00000001 (NEEDED)       Shared library: [libdl.so]
+  0x00000001 (NEEDED)       Shared library: [libc.so]
+  0x0000000e (SONAME)       Library soname: [libmgmem.so]
+  0x0000001e (FLAGS)        BIND_NOW 
+  0x6ffffffb (FLAGS_1)      NOW 
+  0x00000011 (REL)          0xb630
+  0x00000012 (RELSZ)        5008 (bytes)
+  0x00000013 (RELENT)       8 (bytes)
+  0x6ffffffa (RELCOUNT)     145
+  0x00000017 (JMPREL)       0xd730
+  0x00000002 (PLTRELSZ)     1472 (bytes)
+  0x00000003 (PLTGOT)       0x26810
+  0x00000014 (PLTREL)       REL
+  0x00000006 (SYMTAB)       0x210
+  0x0000000b (SYMENT)       16 (bytes)
+  0x00000005 (STRTAB)       0x4f90
+  0x0000000a (STRSZ)        26271 (bytes)
+  0x6ffffef5 (GNU_HASH)     0x3994
+  0x0000001a (FINI_ARRAY)   0x26678
+  0x0000001c (FINI_ARRAYSZ) 8 (bytes)
+  0x6ffffff0 (VERSYM)       0x3330
+  0x6ffffffe (VERNEED)      0x3954
+  0x6fffffff (VERNEEDNUM)   2
+  0x00000000 (NULL)         0x0

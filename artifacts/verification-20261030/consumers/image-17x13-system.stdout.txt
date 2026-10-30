@@ -1,0 +1,1 @@
+{"consumer":"ppm_luma_box_blur","success":true,"mode":"system","pixels":221,"checksum":28565,"peak_backing_bytes":1105,"allocation_count":3,"provider_allocation_count":3,"closed_backing_bytes":0,"late_worker_close_safe":true}

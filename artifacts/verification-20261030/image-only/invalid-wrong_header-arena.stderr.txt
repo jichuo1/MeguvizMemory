@@ -1,0 +1,1 @@
+Image consumer: expected a P6 PPM input

@@ -70,9 +70,9 @@
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "core_or_qualification",
-      "outputs": {"source_lock_tool": "READY", "research_arithmetic_reproduction": "PASS_3_OF_3", "final_release_identity": "REQUIRES_FINAL_SOURCE_AND_ARTIFACT_LOCK"},
-      "evidence": ["tools/source_lock.py", "docs/audit/consumers.md", "build/research-check/receipt.json"],
-      "remaining": ["Preserve final post-edit source/artifact lock with every distributed binary", "No verified product baseline or installed BIL Memory artifact"]
+      "outputs": {"source_lock_tool": "READY", "research_arithmetic_reproduction": "PASS_3_OF_3", "engineering_preview_identity": "SOURCE_AND_ARTIFACT_LOCKED", "final_release_identity": "NOT_QUALIFIED"},
+      "evidence": ["SOURCE_LOCK.json", "ARTIFACTS.json", "tools/source_lock.py", "docs/audit/consumers.md", "artifacts/verification-20261030/research-arithmetic.json"],
+      "remaining": ["No verified product baseline or installed BIL Memory artifact", "Formal product/release identity requires its own qualification"]
     },
     {
       "id": "MM-002",

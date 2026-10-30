@@ -1,0 +1,352 @@
+{
+  "schema_version": 1,
+  "version": "0.1.0",
+  "qualification": "CPU_FUNCTIONAL_ENGINEERING_PREVIEW",
+  "compiled_source_commit": "58ed07f54199a1217ddef47735d4d297357654f4",
+  "source_identity_rule": "Core and consumers match this code commit; SOURCE_LOCK pins the final source/document/evidence snapshot independently.",
+  "installed_profiles": {
+    "host": [
+      {
+        "path": "install/host/bin/mgmem.dll",
+        "bytes": 32768,
+        "sha256": "cf459867b51ad8c12c3a9a6b0eb5f374659168ac0efa5754b57ebeeacbfe8c50"
+      },
+      {
+        "path": "install/host/bin/mgmem_tlb_owned.exe",
+        "bytes": 29696,
+        "sha256": "feb33eed2ac5d76c6bd093ce0f0b3999caecf0c60fe944f08e392f2542356805"
+      },
+      {
+        "path": "install/host/include/mgmem/memory.hpp",
+        "bytes": 8758,
+        "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd"
+      },
+      {
+        "path": "install/host/include/mgmem/mgmem.h",
+        "bytes": 6222,
+        "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf"
+      },
+      {
+        "path": "install/host/lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake",
+        "bytes": 1079,
+        "sha256": "36fab88f69cddbb66cb77ae4157a7e25bbe14ed2b9a430925f0579a04bf39423"
+      },
+      {
+        "path": "install/host/lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake",
+        "bytes": 2827,
+        "sha256": "c626df80d51f26a450ee36ae47e466121b32f0a9a98894687c0b7edc332170c4"
+      },
+      {
+        "path": "install/host/lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake",
+        "bytes": 932,
+        "sha256": "e057918d59b33f23f2bb122073ce9e6a83c42b153e982e6d1029ac6763829df2"
+      },
+      {
+        "path": "install/host/lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake",
+        "bytes": 4343,
+        "sha256": "256397214edc6155af5d7c0f308393da281422821408e611cb13783bc84b89ac"
+      },
+      {
+        "path": "install/host/lib/mgmem.lib",
+        "bytes": 5452,
+        "sha256": "7b474ab568968bc35528fdeeb5c0c4177eb358dc0f70e05789519ee95a1d2dc3"
+      }
+    ],
+    "host-static": [
+      {
+        "path": "install/host-static/include/mgmem/memory.hpp",
+        "bytes": 8758,
+        "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd"
+      },
+      {
+        "path": "install/host-static/include/mgmem/mgmem.h",
+        "bytes": 6222,
+        "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf"
+      },
+      {
+        "path": "install/host-static/lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake",
+        "bytes": 1079,
+        "sha256": "36fab88f69cddbb66cb77ae4157a7e25bbe14ed2b9a430925f0579a04bf39423"
+      },
+      {
+        "path": "install/host-static/lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake",
+        "bytes": 2827,
+        "sha256": "c626df80d51f26a450ee36ae47e466121b32f0a9a98894687c0b7edc332170c4"
+      },
+      {
+        "path": "install/host-static/lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake",
+        "bytes": 888,
+        "sha256": "53e6eb7d56554821ea99d9dd5756a3966f234377639349e34e026df565bae1fd"
+      },
+      {
+        "path": "install/host-static/lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake",
+        "bytes": 4360,
+        "sha256": "afabf40f1bb7093b47baebb5ec24d0b66bbb39ca344c6e8a9071a50cb53d79a6"
+      },
+      {
+        "path": "install/host-static/lib/mgmem.lib",
+        "bytes": 416868,
+        "sha256": "7f877aba63614275265240db027e273f3bc27bbe943f3cb60fdc68fa621044c1"
+      }
+    ],
+    "android-x86_64": [
+      {
+        "path": "install/android-x86_64/bin/mgmem_tlb_owned",
+        "bytes": 3079840,
+        "sha256": "69f8fab67a2fe06eabb47f2f0e857b7a66890ed6ee8ae4066d9f72884ff13077"
+      },
+      {
+        "path": "install/android-x86_64/include/mgmem/memory.hpp",
+        "bytes": 8758,
+        "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd"
+      },
+      {
+        "path": "install/android-x86_64/include/mgmem/mgmem.h",
+        "bytes": 6222,
+        "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf"
+      },
+      {
+        "path": "install/android-x86_64/lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake",
+        "bytes": 1079,
+        "sha256": "36fab88f69cddbb66cb77ae4157a7e25bbe14ed2b9a430925f0579a04bf39423"
+      },
+      {
+        "path": "install/android-x86_64/lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake",
+        "bytes": 2827,
+        "sha256": "c626df80d51f26a450ee36ae47e466121b32f0a9a98894687c0b7edc332170c4"
+      },
+      {
+        "path": "install/android-x86_64/lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake",
+        "bytes": 882,
+        "sha256": "5048f3fd6e528045b0945a6b2ce526d4871649941e3e93388c299c20454797c3"
+      },
+      {
+        "path": "install/android-x86_64/lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake",
+        "bytes": 4344,
+        "sha256": "d16df3d07ae8e86db37dbb950ab6b4d15b650787f719e899429adbb6a13dada9"
+      },
+      {
+        "path": "install/android-x86_64/lib/libmgmem.so",
+        "bytes": 1639384,
+        "sha256": "4c90823a816cee110edbd67cacb4fc0dc926d87cc49440111bf71bcffa31536b"
+      },
+      {
+        "path": "install/android-x86_64/share/MeguvizMemory/licenses/llvm-NOTICE.txt",
+        "bytes": 130424,
+        "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1"
+      }
+    ],
+    "android-arm64-v8a": [
+      {
+        "path": "install/android-arm64-v8a/bin/mgmem_tlb_owned",
+        "bytes": 3297456,
+        "sha256": "8c04959800233c58f11f1c2ec06956f3365d0daca71fc60b8c43ea923d5d2430"
+      },
+      {
+        "path": "install/android-arm64-v8a/include/mgmem/memory.hpp",
+        "bytes": 8758,
+        "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd"
+      },
+      {
+        "path": "install/android-arm64-v8a/include/mgmem/mgmem.h",
+        "bytes": 6222,
+        "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf"
+      },
+      {
+        "path": "install/android-arm64-v8a/lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake",
+        "bytes": 1079,
+        "sha256": "36fab88f69cddbb66cb77ae4157a7e25bbe14ed2b9a430925f0579a04bf39423"
+      },
+      {
+        "path": "install/android-arm64-v8a/lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake",
+        "bytes": 2827,
+        "sha256": "c626df80d51f26a450ee36ae47e466121b32f0a9a98894687c0b7edc332170c4"
+      },
+      {
+        "path": "install/android-arm64-v8a/lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake",
+        "bytes": 882,
+        "sha256": "5048f3fd6e528045b0945a6b2ce526d4871649941e3e93388c299c20454797c3"
+      },
+      {
+        "path": "install/android-arm64-v8a/lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake",
+        "bytes": 4344,
+        "sha256": "d16df3d07ae8e86db37dbb950ab6b4d15b650787f719e899429adbb6a13dada9"
+      },
+      {
+        "path": "install/android-arm64-v8a/lib/libmgmem.so",
+        "bytes": 1665960,
+        "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+      },
+      {
+        "path": "install/android-arm64-v8a/share/MeguvizMemory/licenses/llvm-NOTICE.txt",
+        "bytes": 130424,
+        "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1"
+      }
+    ],
+    "android-armeabi-v7a": [
+      {
+        "path": "install/android-armeabi-v7a/bin/mgmem_tlb_owned",
+        "bytes": 2423000,
+        "sha256": "30d69d32ab53700771fbde38b8f175221d4d3fef42c0664b313443142e05231f"
+      },
+      {
+        "path": "install/android-armeabi-v7a/include/mgmem/memory.hpp",
+        "bytes": 8758,
+        "sha256": "1240bafa697288711ecdcb7f3f997e008966c03c33693eccfca26d01c80a97bd"
+      },
+      {
+        "path": "install/android-armeabi-v7a/include/mgmem/mgmem.h",
+        "bytes": 6222,
+        "sha256": "b312057abb1203396a4d197e18362d851010598554cad509142cae8e20748dbf"
+      },
+      {
+        "path": "install/android-armeabi-v7a/lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake",
+        "bytes": 1079,
+        "sha256": "36fab88f69cddbb66cb77ae4157a7e25bbe14ed2b9a430925f0579a04bf39423"
+      },
+      {
+        "path": "install/android-armeabi-v7a/lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake",
+        "bytes": 2827,
+        "sha256": "335dedd39b9f48a73db107bd07125c5801dfc2c6f59c3e4f1cd103c25288df06"
+      },
+      {
+        "path": "install/android-armeabi-v7a/lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake",
+        "bytes": 882,
+        "sha256": "5048f3fd6e528045b0945a6b2ce526d4871649941e3e93388c299c20454797c3"
+      },
+      {
+        "path": "install/android-armeabi-v7a/lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake",
+        "bytes": 4344,
+        "sha256": "d16df3d07ae8e86db37dbb950ab6b4d15b650787f719e899429adbb6a13dada9"
+      },
+      {
+        "path": "install/android-armeabi-v7a/lib/libmgmem.so",
+        "bytes": 1395460,
+        "sha256": "9074a50f3d59768e46b60008bbeb0df23c30d4aa6a00ce59327839ba7fae1e55"
+      },
+      {
+        "path": "install/android-armeabi-v7a/share/MeguvizMemory/licenses/llvm-NOTICE.txt",
+        "bytes": 130424,
+        "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1"
+      }
+    ]
+  },
+  "packages": [
+    {
+      "path": "dist/MeguvizMemory-0.1.0-Windows-x64.zip",
+      "bytes": 40231,
+      "sha256": "06e8819ca49677339d1e54bde18f1d721d156d18cd34c16de128656398cba63e",
+      "profile": "host",
+      "installed_entries_verified": 9
+    },
+    {
+      "path": "dist/MeguvizMemory-0.1.0-Windows-x64-static.zip",
+      "bytes": 76288,
+      "sha256": "ee4550ef70c1a9c1bcfe1587901438b2212283e880ab1401394f03d2b1e39e26",
+      "profile": "host-static",
+      "installed_entries_verified": 7
+    },
+    {
+      "path": "dist/MeguvizMemory-0.1.0-Android-x86_64.zip",
+      "bytes": 1212230,
+      "sha256": "6b0f09e77c90eb95681a72b67610fc17542a535d9c937f916f33b51861adecb7",
+      "profile": "android-x86_64",
+      "installed_entries_verified": 9
+    },
+    {
+      "path": "dist/MeguvizMemory-0.1.0-Android-arm64-v8a.zip",
+      "bytes": 1219380,
+      "sha256": "22de54e694b8ac4ac31e8ae07b4fe90c429711967cf1f992072ba48e8da96739",
+      "profile": "android-arm64-v8a",
+      "installed_entries_verified": 9
+    },
+    {
+      "path": "dist/MeguvizMemory-0.1.0-Android-armeabi-v7a.zip",
+      "bytes": 1145322,
+      "sha256": "1d65000b8e945dea8a531884377d39eeef24b98f38a0dcaa0fe0cee8b0ec1118",
+      "profile": "android-armeabi-v7a",
+      "installed_entries_verified": 9
+    }
+  ],
+  "built_binaries": [
+    {
+      "path": "build/host-ninja/mgmem_core_tests.exe",
+      "bytes": 62976,
+      "sha256": "645726fd4a1e611f881f9398dad49049fbbf31b593085dd51e91564065a52e73"
+    },
+    {
+      "path": "build/host-ninja/mgmem_c_consumer.exe",
+      "bytes": 11776,
+      "sha256": "127eebb90617d94e6497f9df34621792f361d780227085deec7bd3f3b425b24e"
+    },
+    {
+      "path": "build/host-ninja/mgmem_cpp_consumer.exe",
+      "bytes": 29696,
+      "sha256": "b30188e380e2a332f4b22aab4f9d921dd026d45dfef67eaa61d6ca917f5ba01a"
+    },
+    {
+      "path": "build/host-ninja/mgmem_runtime_tests.exe",
+      "bytes": 12800,
+      "sha256": "f261e63e6a9e3846e23cbb617575e99e38f2c9f8b103aa254d2a0db3b85c393a"
+    },
+    {
+      "path": "build/host-asan/mgmem.dll",
+      "bytes": 151040,
+      "sha256": "ee25866021e8c9f9b5bac453493d1ced57bffb9515635a80327850c03f8b4be5"
+    },
+    {
+      "path": "build/host-asan/mgmem_core_tests.exe",
+      "bytes": 186880,
+      "sha256": "04028877d9d2e5b98d4f882e5e0279a9eb5c5fd324327e6bf701f6da29a30982"
+    },
+    {
+      "path": "build/host-asan/mgmem_cpp_consumer.exe",
+      "bytes": 88064,
+      "sha256": "3e7af8828269ccea85474bc687dad73b6fd183680c57d7e88602e1f0468908d2"
+    },
+    {
+      "path": "build/dex/mgmem_dex_consumer.exe",
+      "bytes": 432128,
+      "sha256": "9b0aca847ce1df4271a1fc3460bd0eb6463194001e2c43238abd4990e0db7607"
+    },
+    {
+      "path": "build/image/mgmem_image.exe",
+      "bytes": 53760,
+      "sha256": "624d78f06440dfc3ed1aacf75109f0787db8a31194b8d1094e2f3b1a1e057513"
+    },
+    {
+      "path": "build/image-static/mgmem_image.exe",
+      "bytes": 70656,
+      "sha256": "c8cffc27dba7d033bb5f2d44d58a56ef77adc0aa30b461e736406c708dd5761d"
+    }
+  ],
+  "toolchains": {
+    "msvc_cl": {
+      "bytes": 893328,
+      "sha256": "c9327f10974a1fa15f503ffd8b52c2b0b20735aa6c56d41134f77ff96608399b"
+    },
+    "ndk_clang": {
+      "bytes": 99559064,
+      "sha256": "5a7b3226976221f6dc1464d850614403dc18e5fddcb43120640f20472c5c960c"
+    },
+    "ndk_source_properties": {
+      "bytes": 107,
+      "sha256": "e73b7dc557cea2da9212c09ee1795434957d62e63b7550eef69fd1887a355d94"
+    }
+  },
+  "runtime_checks": {
+    "host_install_matches_build": true,
+    "consumer_receipts_match_executables": true,
+    "android_emulator_loaded_library_matches_install": true,
+    "android_emulator_base_page_bytes": 4096,
+    "real_16kb_loader": "UNAVAILABLE",
+    "product_performance": "NOT_STARTED"
+  },
+  "receipts": [
+    "artifacts/verification-20261030/consumers/receipt.json",
+    "artifacts/verification-20261030/host-release-ctest.txt",
+    "artifacts/verification-20261030/host-asan-ctest.txt",
+    "artifacts/verification-20261030/final-android-api34-mgmem_core_tests.txt",
+    "artifacts/verification-20261030/final-android-api34-mgmem_cpp_consumer.txt"
+  ]
+}

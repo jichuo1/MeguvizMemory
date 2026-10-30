@@ -6,6 +6,8 @@
 |---|---|---|
 | Windows x64 / MSVC 19.51.36247 / Release | CTest 4/4 PASS | core 11 组、145,033 check；纯 C、C++ RAII 5 case、两个独立 DLL 句柄隔离 |
 | Windows x64 / MSVC AddressSanitizer | CTest 4/4 PASS | core、C、C++ 编译插桩；独立 runtime 测试验证身份，不将未插桩的辅助 DLL 算作完整 ASan 覆盖 |
+| Windows x64 静态 SDK | 安装后图像消费 22/22 PASS | 独立 find_package 工程链接静态 mgmem.lib；没有依赖另一份 Memory DLL |
+| GitHub Windows/Linux | 各 CTest 4/4、安装后图像 22/22 PASS | 代码提交 `58ed07f54199a1217ddef47735d4d297357654f4`；[构建 #40995571678](https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678)；没有冒充 CI 的 Dex SDK 验证 |
 | 安装后的 DexMeguviz 消费者 | System/arena PASS | 真实 borrowed snapshot/query，完整消费两方法结果；与 copy-in oracle 相等；result 跨 snapshot/owner close 保活；最终两个库 borrowed/backing 归零 |
 | 安装后的图像工作区 | 10 正例、12 错误路径 PASS | 五种尺寸×两模式；独立 Python luma/blur oracle 逐字节相等；截断/溢出/错误 header/不可写输出均失败退出 |
 | Android NDK 30 / Clang 21 / API 27 基线 | x86_64、arm64-v8a、armeabi-v7a 构建安装成功 | 未削减 32 位；全部使用 static C++，实际 `libmgmem.so` 仅依赖系统 libm/libdl/libc |
@@ -37,5 +39,6 @@ Android 使用现有 NDK `30.0.16248370` 的 `build/cmake/android.toolchain.cmak
 3. 审查发现 drain 曾同步执行自定义 provider 释放，因此 0ms 可能阻塞。最终方案拆出 cleanup worker 的 collect，drain 只等待；阻塞回调的确定性 CV 测试已通过。
 4. 审查发现独立 core 模块的局部 domain ID 可相同。最终 handle 增加装载期 runtime_origin 路由 cookie，两个实际 DLL 的交叉释放返回 STALE_HANDLE；runtime 卸载后句柄仍禁止复用。
 5. 观察到 arena 为小输入保留更多容量。保留原始结果，默认 System 仍是有效基线，不选择特殊布局，不将调用次数变化写成时长/RSS 收益。
+6. Android 最终重传后测试 ELF 的执行位被重置，首次返回 Permission denied；给本批独立目录的测试文件恢复执行位后重新运行全部 core/C/C++，并核验设备上 libmgmem.so 的 SHA256 等于最终安装制品。该错误没有被计为通过。
 
 本批没有修改外部 BIL/Dex/Compute/Media 源码或依赖版本，也没有正式发布 Release。公开仓库用于保存工程预览及进度，CPU 正式候选、家族集成和 TLB profile 各自仍需对应门槛。

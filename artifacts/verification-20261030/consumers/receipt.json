@@ -1,0 +1,880 @@
+{
+  "schema_version": 1,
+  "protocol_id": "MM-003-host-functional-diagnostic-v1",
+  "scope": "INSTALLED_CONSUMER_HOST_FUNCTIONAL_VERIFICATION",
+  "python_version": "3.10.6 | packaged by conda-forge | (main, Oct 24 2022, 16:02:16) [MSC v.1916 64 bit (AMD64)]",
+  "selected_consumers": [
+    "image",
+    "DexMeguviz"
+  ],
+  "dex_validation": "EXECUTED",
+  "executables": {
+    "image": {
+      "sha256": "624d78f06440dfc3ed1aacf75109f0787db8a31194b8d1094e2f3b1a1e057513"
+    },
+    "dex": {
+      "sha256": "9b0aca847ce1df4271a1fc3460bd0eb6463194001e2c43238abd4990e0db7607"
+    }
+  },
+  "fixture_generator": "deterministic_rgb_integer_v1",
+  "image_oracle": "Python scalar integer luma (77R+150G+29B)//256 then edge-clamped 3x3 sum//9",
+  "fixtures": [
+    {
+      "id": "image-1x1",
+      "width": 1,
+      "height": 1,
+      "input_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
+      "oracle_sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b",
+      "oracle_checksum": 45
+    },
+    {
+      "id": "image-1x7",
+      "width": 1,
+      "height": 7,
+      "input_sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4",
+      "oracle_sha256": "0929aa52f9f2046bf8ce047efff13811d5f24071c98b313dd6f4c0f643a43675",
+      "oracle_checksum": 668
+    },
+    {
+      "id": "image-7x1",
+      "width": 7,
+      "height": 1,
+      "input_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
+      "oracle_sha256": "12eb064225ba961b03bf3ebd334b871c5697202ee1123114e56f22a7801ac48a",
+      "oracle_checksum": 743
+    },
+    {
+      "id": "image-17x13",
+      "width": 17,
+      "height": 13,
+      "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "oracle_sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69",
+      "oracle_checksum": 28565
+    },
+    {
+      "id": "image-320x180",
+      "width": 320,
+      "height": 180,
+      "input_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
+      "oracle_sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78",
+      "oracle_checksum": 7307174
+    }
+  ],
+  "dex_system_arena_results_equal": true,
+  "commands": [
+    {
+      "case_id": "image-1x1-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x1.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x1-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"system\",\"pixels\":1,\"checksum\":45,\"peak_backing_bytes\":5,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "system",
+        "pixels": 1,
+        "checksum": 45,
+        "peak_backing_bytes": 5,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.6090000000003783,
+      "input_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
+      "output_sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-1x1-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x1.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x1-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"arena\",\"pixels\":1,\"checksum\":45,\"peak_backing_bytes\":65536,\"allocation_count\":3,\"provider_allocation_count\":1,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "arena",
+        "pixels": 1,
+        "checksum": 45,
+        "peak_backing_bytes": 65536,
+        "allocation_count": 3,
+        "provider_allocation_count": 1,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.5320000000001528,
+      "input_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
+      "output_sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-1x7-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x7.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x7-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"system\",\"pixels\":7,\"checksum\":668,\"peak_backing_bytes\":35,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "system",
+        "pixels": 7,
+        "checksum": 668,
+        "peak_backing_bytes": 35,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.5149999999994179,
+      "input_sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4",
+      "output_sha256": "0929aa52f9f2046bf8ce047efff13811d5f24071c98b313dd6f4c0f643a43675",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-1x7-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x7.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-1x7-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"arena\",\"pixels\":7,\"checksum\":668,\"peak_backing_bytes\":65536,\"allocation_count\":3,\"provider_allocation_count\":1,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "arena",
+        "pixels": 7,
+        "checksum": 668,
+        "peak_backing_bytes": 65536,
+        "allocation_count": 3,
+        "provider_allocation_count": 1,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.04700000000048021,
+      "input_sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4",
+      "output_sha256": "0929aa52f9f2046bf8ce047efff13811d5f24071c98b313dd6f4c0f643a43675",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-7x1-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-7x1.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-7x1-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"system\",\"pixels\":7,\"checksum\":743,\"peak_backing_bytes\":35,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "system",
+        "pixels": 7,
+        "checksum": 743,
+        "peak_backing_bytes": 35,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.07799999999951979,
+      "input_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
+      "output_sha256": "12eb064225ba961b03bf3ebd334b871c5697202ee1123114e56f22a7801ac48a",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-7x1-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-7x1.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-7x1-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"arena\",\"pixels\":7,\"checksum\":743,\"peak_backing_bytes\":65536,\"allocation_count\":3,\"provider_allocation_count\":1,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "arena",
+        "pixels": 7,
+        "checksum": 743,
+        "peak_backing_bytes": 65536,
+        "allocation_count": 3,
+        "provider_allocation_count": 1,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "input_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
+      "output_sha256": "12eb064225ba961b03bf3ebd334b871c5697202ee1123114e56f22a7801ac48a",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-17x13-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"system\",\"pixels\":221,\"checksum\":28565,\"peak_backing_bytes\":1105,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "system",
+        "pixels": 221,
+        "checksum": 28565,
+        "peak_backing_bytes": 1105,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "output_sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-17x13-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"arena\",\"pixels\":221,\"checksum\":28565,\"peak_backing_bytes\":65536,\"allocation_count\":3,\"provider_allocation_count\":1,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "arena",
+        "pixels": 221,
+        "checksum": 28565,
+        "peak_backing_bytes": 65536,
+        "allocation_count": 3,
+        "provider_allocation_count": 1,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "output_sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-320x180-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-320x180.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-320x180-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"system\",\"pixels\":57600,\"checksum\":7307174,\"peak_backing_bytes\":288000,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "system",
+        "pixels": 57600,
+        "checksum": 7307174,
+        "peak_backing_bytes": 288000,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.046000000000276486,
+      "input_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
+      "output_sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "image-320x180-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-320x180.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-320x180-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"ppm_luma_box_blur\",\"success\":true,\"mode\":\"arena\",\"pixels\":57600,\"checksum\":7307174,\"peak_backing_bytes\":303872,\"allocation_count\":3,\"provider_allocation_count\":3,\"closed_backing_bytes\":0,\"late_worker_close_safe\":true}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "ppm_luma_box_blur",
+        "success": true,
+        "mode": "arena",
+        "pixels": 57600,
+        "checksum": 7307174,
+        "peak_backing_bytes": 303872,
+        "allocation_count": 3,
+        "provider_allocation_count": 3,
+        "closed_backing_bytes": 0,
+        "late_worker_close_safe": true
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "input_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
+      "output_sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78",
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_success": true,
+        "mode": true,
+        "pixels": true,
+        "algorithm_checksum": true,
+        "output_bytes_equal_python_oracle": true,
+        "closed_backing_is_zero": true,
+        "late_worker_close_safe": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-truncated-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-truncated.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-truncated-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: truncated input or trailing bytes\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.04700000000048021,
+      "input_sha256": "31b969d54700e7cedfdbdfa9447f25ac85e22646f49f0539bf2231f06f08f905",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-truncated-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-truncated.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-truncated-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: truncated input or trailing bytes\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "input_sha256": "31b969d54700e7cedfdbdfa9447f25ac85e22646f49f0539bf2231f06f08f905",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-too_large-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-too_large.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-too_large-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: image exceeds bounded workspace\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.04699999999957072,
+      "input_sha256": "8ab39ed9bd53016c6c51823004de6a165ce5eb30fdc5ecb59f34f67d91601591",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-too_large-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-too_large.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-too_large-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: image exceeds bounded workspace\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "input_sha256": "8ab39ed9bd53016c6c51823004de6a165ce5eb30fdc5ecb59f34f67d91601591",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-overflow-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-overflow.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-overflow-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: invalid PPM number\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.0929999999998472,
+      "input_sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-overflow-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-overflow.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-overflow-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: invalid PPM number\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.09400000000005093,
+      "input_sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-wrong_header-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-wrong_header.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-wrong_header-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: expected a P6 PPM input\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.07800000000042928,
+      "input_sha256": "2952db5f465d0ee02ab5a888ebda95fc34654834aa8442a25e2a8f7ec575a0ac",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-wrong_header-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-wrong_header.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-wrong_header-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: expected a P6 PPM input\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.04699999999957072,
+      "input_sha256": "2952db5f465d0ee02ab5a888ebda95fc34654834aa8442a25e2a8f7ec575a0ac",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-trailing_bytes-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-trailing_bytes.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-trailing_bytes-system.pgm",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: truncated input or trailing bytes\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "input_sha256": "d1d3de74f73cf28c327fde2910458c46f3a353fdab530c936b90863b298f9edb",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "invalid-trailing_bytes-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-trailing_bytes.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\invalid-trailing_bytes-arena.pgm"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: truncated input or trailing bytes\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "input_sha256": "d1d3de74f73cf28c327fde2910458c46f3a353fdab530c936b90863b298f9edb",
+      "output_sha256": null,
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "no_output_file_created": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "unwritable-output-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\output-is-a-directory",
+        "--system"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: cannot open output\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.03099999999994907,
+      "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "output_sha256": null,
+      "failure_contract": "Existing directory cannot be opened as an output file; no ACL claim is made.",
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "directory_preserved": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "unwritable-output-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\image\\mgmem_image.exe",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\image-17x13.ppm",
+        "D:\\MeguvizMemory\\artifacts\\verification-20261030\\consumers\\output-is-a-directory"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "Image consumer: cannot open output\r\n",
+      "parsed_json": null,
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.032000000000152795,
+      "input_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "output_sha256": null,
+      "failure_contract": "Existing directory cannot be opened as an output file; no ACL claim is made.",
+      "checks": {
+        "rejected_with_nonzero_exit": true,
+        "did_not_time_out": true,
+        "directory_preserved": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "dex-system",
+      "command": [
+        "D:\\MeguvizMemory\\build\\dex\\mgmem_dex_consumer.exe",
+        "D:\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"DexMeguviz\",\"status\":\"PASS\",\"mode\":\"system\",\"input_bytes\":448,\"method_count\":2,\"source_sha256\":\"dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f\",\"copied_oracle_equal\":true,\"result_checksum\":1519602638580005141,\"peak_backing_bytes\":448,\"closed_backing_bytes\":0,\"runtime_scope\":\"host_functional\"}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "DexMeguviz",
+        "status": "PASS",
+        "mode": "system",
+        "input_bytes": 448,
+        "method_count": 2,
+        "source_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
+        "copied_oracle_equal": true,
+        "result_checksum": 1519602638580005141,
+        "peak_backing_bytes": 448,
+        "closed_backing_bytes": 0,
+        "runtime_scope": "host_functional"
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.625,
+      "input_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
+      "output_sha256": null,
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_pass": true,
+        "mode": true,
+        "input_hash": true,
+        "real_nonempty_query": true,
+        "copied_oracle_equal": true,
+        "closed_backing_is_zero": true
+      },
+      "verdict": "PASS"
+    },
+    {
+      "case_id": "dex-arena",
+      "command": [
+        "D:\\MeguvizMemory\\build\\dex\\mgmem_dex_consumer.exe",
+        "D:\\DexMeguviz\\tests\\fixtures\\generated\\minimal.dex",
+        "--arena"
+      ],
+      "timeout_seconds": 20.0,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "{\"consumer\":\"DexMeguviz\",\"status\":\"PASS\",\"mode\":\"arena\",\"input_bytes\":448,\"method_count\":2,\"source_sha256\":\"dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f\",\"copied_oracle_equal\":true,\"result_checksum\":1519602638580005141,\"peak_backing_bytes\":65536,\"closed_backing_bytes\":0,\"runtime_scope\":\"host_functional\"}\r\n",
+      "stderr": "",
+      "parsed_json": {
+        "consumer": "DexMeguviz",
+        "status": "PASS",
+        "mode": "arena",
+        "input_bytes": 448,
+        "method_count": 2,
+        "source_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
+        "copied_oracle_equal": true,
+        "result_checksum": 1519602638580005141,
+        "peak_backing_bytes": 65536,
+        "closed_backing_bytes": 0,
+        "runtime_scope": "host_functional"
+      },
+      "json_parse_error": null,
+      "diagnostic_runner_wall_seconds": 0.5309999999999491,
+      "input_sha256": "dd0e9527dda007481637b6b43393a8239635e85fa006b452092dcc064c3e456f",
+      "output_sha256": null,
+      "checks": {
+        "command_completed": true,
+        "consumer_reported_pass": true,
+        "mode": true,
+        "input_hash": true,
+        "real_nonempty_query": true,
+        "copied_oracle_equal": true,
+        "closed_backing_is_zero": true
+      },
+      "verdict": "PASS"
+    }
+  ],
+  "all_passed": true,
+  "performance_validation": "NOT_STARTED",
+  "mechanism_evidence": "NOT_APPLICABLE",
+  "limitations": [
+    "Runner wall times include launch, capture and verification; they are not performance samples.",
+    "Each executable uses its installed package link contract; runtime-library identity must be paired with the build/install artifact lock.",
+    "DEX copy-in is a semantic oracle, not a matched storage/performance control.",
+    "Nonzero failure tests do not independently observe native cleanup; ownership/failure tests supply that evidence.",
+    "No Android device, PMU/PFN, RSS/PSS or energy qualification is claimed."
+  ]
+}

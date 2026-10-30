@@ -52,7 +52,7 @@ def scoped_files(root: Path, directories: tuple[str, ...], output: Path):
     for path in sorted(root.iterdir(), key=lambda item: item.name):
         if (path.is_file() and not path.is_symlink() and allowed(path) and path.resolve() != output and
             (path.suffix.lower() in {".md", ".json", ".cmake", ".txt"} or
-             path.name in {"CMakeLists.txt", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES", ".gitignore"})):
+             path.name in {"CMakeLists.txt", "LICENSE", "NOTICE", "THIRD_PARTY_NOTICES", ".gitignore", ".gitattributes"})):
             yield path
 
 
@@ -129,7 +129,7 @@ def main() -> int:
             parser.error("--research-archive must be an existing regular file")
         result["private_research_archive"] = {"bytes": archive.stat().st_size, "sha256": sha256_file(archive)}
     output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    output.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"file_count": len(records), "source_set_sha256": result["source_set_sha256"]}))
     return 0
 

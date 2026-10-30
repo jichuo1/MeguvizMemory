@@ -2,6 +2,8 @@
   "schema_version": 1,
   "as_of": "2026-10-30",
   "cpu_host": {"os": "Windows x64", "compiler": "MSVC 19.51.36247", "release_ctest": "PASS_4_OF_4", "asan_ctest": "PASS_4_OF_4", "base_page_bytes": 4096},
+  "static_sdk": {"platform": "Windows x64", "installed_image_oracle": "PASS_22_OF_22"},
+  "remote_ci": {"code_commit": "58ed07f54199a1217ddef47735d4d297357654f4", "windows": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE", "linux": "PASS_4_CTEST_AND_22_INSTALLED_IMAGE", "run_url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678"},
   "android": {
     "ndk": "30.0.16248370",
     "compiler": "Clang 21.0.0",

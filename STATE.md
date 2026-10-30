@@ -4,6 +4,8 @@
 
 已交付版本化 C ABI、System/custom provider、唯一 backing 记账、有界 arena、allocation owner/读写 lease、reservation 预算、非阻塞资源准入关闭、collect/drain 分工、reset/trim、C++ RAII、CMake install/export，以及真实 DexMeguviz 和文件图像工作区两个安装后消费者。Windows Release 与 ASan 的 4 项 CTest 全过，双消费者验证 24/24 通过；Android 三 ABI 构建安装，API 34 4 KB x86_64 模拟器核心/C/C++ 实际运行通过。
 
+静态 Windows SDK 已实际安装并通过独立图像 22/22 验证；远端代码提交 `58ed07f` 的 Windows/Linux 构建均通过 4 项 CTest 和安装后的图像 22/22，见 [CI 回执](https://github.com/jichuo1/MeguvizMemory/actions/runs/40995571678)。本地 `dist/` 提供 Windows shared/static 与 Android 三 ABI 共五个 SDK ZIP，逐条校验内容等于安装目录，哈希见 ARTIFACTS。
+
 具体资源结果保留 arena 的额外 backing，见 [BENCHMARK_RESULTS](docs/BENCHMARK_RESULTS.md)。没有从申请次数推导性能/RSS，不填研究模型为实测。
 
 证据入口：
