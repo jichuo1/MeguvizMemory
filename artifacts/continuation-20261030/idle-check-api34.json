@@ -1,0 +1,20 @@
+{
+  "state": "PASS_OBSERVATIONAL_ONLY",
+  "checked_at_utc": "2026-10-30T12:53:24.926681+00:00",
+  "device_serial_sha256": "9e132452d06a8247b18b572b7381f807d317e2983d1eb8f41e7026d8d0e56bbc",
+  "inventories": [
+    {
+      "command_kind": "ps",
+      "stdout_sha256": "9b9a7c9d4cba7184943f5d00677b622d38e7489c13cb8b664084610173e1639f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command_kind": "dumpsys",
+      "stdout_sha256": "fd70750423b62239baa9e920ed63dcfb89bbf88dc254362d70488e44cb566144",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "matching_tests": [],
+  "active_instrumentation": [],
+  "shared_device_lock": false
+}

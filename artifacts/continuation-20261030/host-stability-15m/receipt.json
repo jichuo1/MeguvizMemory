@@ -1,0 +1,54 @@
+{
+  "state": "FAIL_OR_INCOMPLETE",
+  "scope": "HOST_CONCURRENT_BOUNDED_STABILITY_NOT_PERFORMANCE",
+  "minimum_seconds_per_workload": 900,
+  "wall_seconds_per_workload": 1200,
+  "source_sha256": "baae9dfc29ee4375c036ace0ef9462e6db80feb7d4c39c2f6dc5a7979bb7a44c",
+  "source_inputs": {
+    "tools/run_host_stability.py": "baae9dfc29ee4375c036ace0ef9462e6db80feb7d4c39c2f6dc5a7979bb7a44c",
+    "tools/run_continuation_device.py": "9e20ef737b11d984173fbe37bd795fbeb0e4d1849c91e7025eebddc54f30033e",
+    "consumers/dex/import_consumer.cpp": "014c1e8ea5ece06b18d6a6f451e5ebe5aa0c7d2a045b5daf00437310263da504",
+    "consumers/image/pressure_stability.cpp": "5fd564c9ad2cb1bbebaa2221367a3514232b37337c66fa2ca54f1a1ff17a7e06"
+  },
+  "binaries": {
+    "mgmem_dex_import_consumer.exe": "534a0f94333a84caeb01f97a6f31b92918c8458fb61f6b36c47a594528972381",
+    "mgmem_image_pressure_stability.exe": "57daae7904583c4fb700f8a0e5c2c7093db2f5c5799b235c4b261f1bdfb48ab2",
+    "mgmem.dll": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+  },
+  "mixed_workloads": [
+    "dex",
+    "image-system",
+    "image-arena"
+  ],
+  "results": {
+    "image-system": {
+      "exit_code": 4294967295,
+      "timed_out": false,
+      "host_elapsed_seconds": 96.5,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "state": "FAIL_OR_INCOMPLETE",
+      "reason": "command_failed_or_incomplete"
+    },
+    "dex": {
+      "exit_code": 4294967295,
+      "timed_out": false,
+      "host_elapsed_seconds": 96.5,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "state": "FAIL_OR_INCOMPLETE",
+      "reason": "command_failed_or_incomplete"
+    },
+    "image-arena": {
+      "exit_code": 4294967295,
+      "timed_out": false,
+      "host_elapsed_seconds": 96.5,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "state": "FAIL_OR_INCOMPLETE",
+      "reason": "command_failed_or_incomplete"
+    }
+  },
+  "raw_outputs": "commands/ locally retained; public checked summaries and hashes",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED"
+}

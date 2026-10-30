@@ -1,0 +1,8 @@
+{
+  "profile": "asan",
+  "state": "PASS",
+  "exit_code": 0,
+  "tests_passed": 18,
+  "log_sha256": "625c87ee4a1f78a42e2494bae7aa9381b84371628ac1491f10bb64dda0c8ec6f",
+  "details_sha256": "2c1af56de7763ae159f04eef7c7eab24939194d7bbce3a9d4c7dbafcb21c24ae"
+}

@@ -1,0 +1,5 @@
+{
+  "exit_code": 1,
+  "stdout": "{\"schema_version\":1,\"success\":false,\"failure_reason\":\"duplicate_owner_not_rejected\"}\n",
+  "stderr": ""
+}

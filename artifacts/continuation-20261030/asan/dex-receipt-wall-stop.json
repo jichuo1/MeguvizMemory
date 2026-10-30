@@ -1,0 +1,24 @@
+{
+  "exit_code": 2,
+  "native": {
+    "schema_version": 1,
+    "workload": "dex_external_import_complete_query",
+    "success": false,
+    "state": "INCOMPLETE",
+    "variant": "import",
+    "case": "cross-thread",
+    "cycles_completed": 0,
+    "cycles_requested_minimum": 65536,
+    "minimum_duration_ms": 0,
+    "new_cycle_admission_wall_ms": 1,
+    "cycle_cap": 65536,
+    "run_duration_ms": 3,
+    "actual_elapsed_ms": 3,
+    "stop_reason": "WALL_BEFORE_REQUIRED_WORK",
+    "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+    "iterations": [],
+    "scope": "independent_DexMeguviz_not_BIL",
+    "performance_qualification": "NOT_MEASURED"
+  },
+  "stderr": ""
+}

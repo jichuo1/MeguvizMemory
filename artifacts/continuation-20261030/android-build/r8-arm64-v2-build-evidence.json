@@ -1,0 +1,21 @@
+{
+  "scope": "R8_BUILD_TRANSFORM_ONLY_NOT_RUNTIME",
+  "files": [
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-v2-mapping.txt",
+      "sha256": "887f0728c771840504f112d9d6c5ac38d8456f5bde7d1662e91f7c45c39458ff"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-v2-usage.txt",
+      "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-v2-seeds.txt",
+      "sha256": "b7af9a5ddac028d5fecefb2261e9d47b5846a174173a596cd6bea9f8eadac717"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-v2-consumer-r8.pro",
+      "sha256": "4c91d8d8e1e58f395bca01277aeb25ccb622b7797445827c01dc7b5529030393"
+    }
+  ]
+}

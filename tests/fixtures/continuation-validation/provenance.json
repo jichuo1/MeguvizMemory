@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "scope": "OFFLINE_VALIDATOR_GOLDENS_FROM_ACTUAL_CAPTURE_NOT_NEW_DEVICE_EVIDENCE",
+  "synthetic_success_records": false,
+  "new_device_execution": false,
+  "fixtures": [
+    {
+      "kind": "android",
+      "file": "android-api34.stdout.txt",
+      "bytes": 2049,
+      "sha256": "358ede15f389676b4324a14b8987129c38d1341cebec8ebd740c7daecf3767aa",
+      "representation": "EXACT_CAPTURE_BYTES",
+      "original_output_path": "artifacts/continuation-20261030/device-api34-smoke-final/commands/android.stdout.txt",
+      "original_output_sha256": "358ede15f389676b4324a14b8987129c38d1341cebec8ebd740c7daecf3767aa",
+      "original_receipt_path": "artifacts/continuation-20261030/device-api34-smoke-final/receipt.json",
+      "original_receipt_sha256": "184fd86db33c7ab182afd8064810ff2f4a27d0624478fe77dcb9e2e30139cc21",
+      "expected": {
+        "api": 34,
+        "marker_after": "io.github.jichuo1.meguviz.memory.android.a",
+        "package_name": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+        "abi": "x86_64",
+        "original_build_receipt_path": "artifacts/continuation-20261030/android-build/r8-x86_64-build-v2.json",
+        "original_build_receipt_sha256": "0109c0b516053cc2a87083ae4cb14e99a96a8969915c5c164958a53d85ab9502",
+        "apk_sha256": "8edcf9e2e981d4450c4feabcf4fd3e3841631a1ea0507e6dab3ca1b0ed917995"
+      }
+    },
+    {
+      "kind": "dex",
+      "file": "dex-arm64.stdout.txt",
+      "bytes": 3353,
+      "sha256": "bb74f8333b30937ab966262a34b229ff698953754f3aaab36f63dd0d5a777f9f",
+      "representation": "EXACT_CAPTURE_BYTES",
+      "original_output_path": "artifacts/continuation-20261030/device-arm64-smoke-final/commands/dex.stdout.txt",
+      "original_output_sha256": "bb74f8333b30937ab966262a34b229ff698953754f3aaab36f63dd0d5a777f9f",
+      "original_receipt_path": "artifacts/continuation-20261030/device-arm64-smoke-final/receipt.json",
+      "original_receipt_sha256": "f4d4cf9b640ba519172bab56e5d1ca8909c53d3171bf9cd15d754314c8b0b5f7"
+    },
+    {
+      "kind": "image",
+      "provider": "system",
+      "file": "image-system.derived.json",
+      "bytes": 769,
+      "sha256": "499adde3c2ab6e8bcfb4bb9703b03bc0a4d137d3454de0ea51ae9fccbfc990e2",
+      "representation": "DERIVED_FROM_ACTUAL_POSTREVIEW_RECEIPT",
+      "derivation": "commands[provider=system].result serialized as sorted compact UTF-8 JSON plus LF; not original stdout bytes",
+      "original_receipt_path": "artifacts/continuation-20261030/image-host-postreview/receipt.json",
+      "original_receipt_sha256": "26ca24f3d0f2bcdf02551fdbf337ba2f3757da77e0002bf0ba1795b1b3cc9697",
+      "original_consumer_source_sha256": "4a11e91cf52b159669a6cd00694ef9440ec205656aa5683352150e37516542b6",
+      "original_executable_sha256": "26a3459ea676399f38cc5fbbcf6fb545a556331e278338fc42802844d4fac393"
+    },
+    {
+      "kind": "image",
+      "provider": "arena",
+      "file": "image-arena.derived.json",
+      "bytes": 768,
+      "sha256": "2cec887d77734537627a57eae8b7957eb2a406b9831f330c034fdb8bdbb0e8b9",
+      "representation": "DERIVED_FROM_ACTUAL_POSTREVIEW_RECEIPT",
+      "derivation": "commands[provider=arena].result serialized as sorted compact UTF-8 JSON plus LF; not original stdout bytes",
+      "original_receipt_path": "artifacts/continuation-20261030/image-host-postreview/receipt.json",
+      "original_receipt_sha256": "26ca24f3d0f2bcdf02551fdbf337ba2f3757da77e0002bf0ba1795b1b3cc9697",
+      "original_consumer_source_sha256": "4a11e91cf52b159669a6cd00694ef9440ec205656aa5683352150e37516542b6",
+      "original_executable_sha256": "26a3459ea676399f38cc5fbbcf6fb545a556331e278338fc42802844d4fac393"
+    }
+  ]
+}

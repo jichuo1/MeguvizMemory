@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "state": "BUILD_CONFIGURATION_CORRECTED_BEFORE_TESTING",
+  "initial_CMAKE_CXX_FLAGS": "/fsanitize=address /Zi",
+  "initial_CMAKE_C_FLAGS": "/fsanitize=address /Zi",
+  "diagnostic": "MSVC C4530: explicit CMAKE_CXX_FLAGS replaced the default /EHsc; exception unwind semantics were not enabled.",
+  "action": "Add /EHsc to CXX flags only, rebuild all affected consumer and frozen SDK translation units before short qualification.",
+  "initial_build_runtime_qualification": "NOT_RUN",
+  "image_CMAKE_C_FLAGS_warning": "Image project enables CXX only; manually supplied C flags are unused. No C source exists in that consumer project.",
+  "frozen_sources_modified": false
+}

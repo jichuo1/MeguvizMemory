@@ -1,0 +1,27 @@
+{
+  "state": "INCOMPLETE_USER_REQUESTED_FAST_CLOSEOUT",
+  "at_utc": "2026-10-30T12:59:47.682900+00:00",
+  "scope": "Only current own diagnostic APK; no normal-domain-close claim",
+  "last_own_progress": {
+    "schema_version": 1,
+    "suite": "android-pressure-r8-stability-v1",
+    "diagnostic_revision": 3,
+    "run_id": "f8f59fc271a",
+    "status": "RUNNING",
+    "phase": "cycle.idempotent-close",
+    "iteration": 48,
+    "checks": 741,
+    "elapsed_ms": 4803,
+    "cleanup_safe": true,
+    "unsafe_cleanup": false,
+    "inject_main_running_timeout": false,
+    "boundary_outcome": "NO_TIMEOUT",
+    "reason": null
+  },
+  "last_progress_sha256": "86dbe66a85aa6642f498c20fa8675d80ebcc8333589407deb5279bf027574d1e",
+  "minimum_900_seconds_met": false,
+  "normal_domain_close_qualified": false,
+  "known_issue": "API33 repeated stalled phase cycle.idempotent-close; root cause undetermined",
+  "no_other_app_or_test_stopped": true,
+  "own_process_absent_after_stop": true
+}

@@ -1,6 +1,6 @@
 # 新配对协议 v2：离线合同与冻结门槛
 
-当前状态：`PROPOSED_NOT_FROZEN_NOT_EXECUTED`。本批新增离线计划生成器和记录校验器，未连接设备、部署或启动 pilot。`tools/run_paired_device_v2.py --execute` 总是以状态码 2 拒绝；即使输入 JSON 自称 FROZEN 也不会执行。尚未实现 live collector 或性能资格 PASS。
+历史设计入口：下文描述最初的离线草案和冻结门槛；当时的`tools/run_paired_device_v2.py --execute`仍明确拒绝执行。后续独立live collector已经实现，冻结计划并实际完成pilot128任务，DEX formal4/12窗口后中止，未取得性能资格。最新状态见[设备最终结果](DEVICE_V2_RESULTS.md)；实际冻结计划位于`artifacts/device-v2-20261030/frozen-suite-retry1/`。下文草案不替代这些已执行的冻结文件，也不授权续采旧实验。
 
 研究包的采样方案是下一次设计的建议。v1 与 retry1 的 plan、JSONL、report、collector、hash 和原 `INCONCLUSIVE` 判定全部保留。不得将新 source-owner 最终释放计时与旧 total 混池。
 

@@ -15,6 +15,13 @@
 /artifacts/features-20261030/device/commands/
 /artifacts/features-20261030/device-*/commands/
 /artifacts/features-20261030/android-pressure-java-host.json
+/artifacts/continuation-20261030/admission-*.json
+/artifacts/continuation-20261030/device-*/commands/
+/artifacts/continuation-20261030/device-*/*.stdout.txt
+/artifacts/continuation-20261030/device-*/*.stderr.txt
+/artifacts/continuation-20261030/host-stability*/commands/
+/artifacts/continuation-20261030/image-host*/system/stdout.json
+/artifacts/continuation-20261030/image-host*/arena/stdout.json
 /research/
 # Private preparatory indexes; publish reviewed summaries from docs/ instead.
 /docs/research/

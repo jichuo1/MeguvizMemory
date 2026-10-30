@@ -1,0 +1,1680 @@
+{
+  "schema_version": 1,
+  "scope": "BOUNDED_MIXED_STABILITY_NOT_PERFORMANCE",
+  "started_at_utc": "2026-10-30T12:07:41.795672+00:00",
+  "state": "PASS",
+  "all_passed": true,
+  "device_serial_sha256": "9e132452d06a8247b18b572b7381f807d317e2983d1eb8f41e7026d8d0e56bbc",
+  "device_directory": "/data/local/tmp/meguvizmemory-arm64-20261030T120741Z-a71ae625a02c",
+  "device_directory_created": false,
+  "shared_device_lock_acquired": false,
+  "admission_rule": "Original owner release plus observational process gates; no future-exclusion guarantee.",
+  "commands": [
+    {
+      "record_id": 1,
+      "name": "before-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:0b2ea61091a5569b4bca95924cdea9a94bdfb92318fe443777356115d5d1466a\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 284,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "0b2ea61091a5569b4bca95924cdea9a94bdfb92318fe443777356115d5d1466a",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "001-before-processes.stdout.txt",
+      "stderr_file": "001-before-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 284,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 2,
+      "name": "before-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:fb95a553a2a171a2f71f8fda93418b765f1de08c279f117d455d13105e68efee\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "fb95a553a2a171a2f71f8fda93418b765f1de08c279f117d455d13105e68efee",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "002-before-instrumentation.stdout.txt",
+      "stderr_file": "002-before-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 3,
+      "name": "boot-before",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0470000000022992,
+      "stdout_value_sha256": "fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "003-boot-before.stdout.txt",
+      "stderr_file": "003-boot-before.stderr.txt"
+    },
+    {
+      "record_id": 4,
+      "name": "api",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "34\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.046999999998661224,
+      "stdout_file": "004-api.stdout.txt",
+      "stderr_file": "004-api.stderr.txt"
+    },
+    {
+      "record_id": 5,
+      "name": "abi",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "x86_64\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0470000000022992,
+      "stdout_file": "005-abi.stdout.txt",
+      "stderr_file": "005-abi.stderr.txt"
+    },
+    {
+      "record_id": 6,
+      "name": "page",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getconf",
+        "PAGESIZE"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "4096\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.046999999998661224,
+      "stdout_file": "006-page.stdout.txt",
+      "stderr_file": "006-page.stderr.txt"
+    },
+    {
+      "record_id": 7,
+      "name": "model",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.model"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sdk_gphone64_x86_64\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0470000000022992,
+      "stdout_file": "007-model.stdout.txt",
+      "stderr_file": "007-model.stderr.txt"
+    },
+    {
+      "record_id": 8,
+      "name": "existing-package",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "pm",
+        "path",
+        "io.github.jichuo1.meguviz.memory.pressureprobe.r8"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "package:/data/app/~~KEgicQS0ogpk1VpOvEoJng==/io.github.jichuo1.meguviz.memory.pressureprobe.r8-ZgasDWhMbPjgtg_Yue-rCg==/base.apk\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "stdout_file": "008-existing-package.stdout.txt",
+      "stderr_file": "008-existing-package.stderr.txt"
+    },
+    {
+      "record_id": 9,
+      "name": "pull-existing-APK",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "pull",
+        "/data/app/~~KEgicQS0ogpk1VpOvEoJng==/io.github.jichuo1.meguviz.memory.pressureprobe.r8-ZgasDWhMbPjgtg_Yue-rCg==/base.apk",
+        "<workspace>\\build\\continuation-installed-x86_64-soak.apk"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "/data/app/~~KEgicQS0ogpk1VpOvEoJng==/io.github.jichuo1.meguviz.memory.pressureprobe.r8-ZgasDWhMbPjgtg_Yue-rCg==/base.apk: 1 file pulled, 0 skipped. 49.2 MB/s (2290216 bytes in 0.044s)\r\n",
+      "diagnostic_runner_elapsed_seconds": 0.09400000000096043,
+      "stdout_file": "009-pull-existing-APK.stdout.txt",
+      "stderr_file": "009-pull-existing-APK.stderr.txt"
+    },
+    {
+      "record_id": 10,
+      "name": "install-own-APK",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "install",
+        "-r",
+        "<workspace>\\build\\continuation-r8-x86_64-v2\\MeguvizMemory-R8-Stability-Probe.apk"
+      ],
+      "timeout_seconds": 120,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "Performing Incremental Install\r\nPerforming Streamed Install\r\nSuccess\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.2649999999994179,
+      "stdout_file": "010-install-own-APK.stdout.txt",
+      "stderr_file": "010-install-own-APK.stderr.txt"
+    },
+    {
+      "record_id": 11,
+      "name": "immediately-before-work-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:bc2dc90cecadfc77fabaf3aa107743c2bfb89d152ef86eccc8ec546231d8ee87\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 285,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "bc2dc90cecadfc77fabaf3aa107743c2bfb89d152ef86eccc8ec546231d8ee87",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "011-immediately-before-work-processes.stdout.txt",
+      "stderr_file": "011-immediately-before-work-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 285,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 12,
+      "name": "immediately-before-work-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:e231c8cbc658fdfbdd6c83b0dffcc926b887d798ebd3377ff01f4f960f5e57eb\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.07800000000133878,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "e231c8cbc658fdfbdd6c83b0dffcc926b887d798ebd3377ff01f4f960f5e57eb",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "012-immediately-before-work-instrumentation.stdout.txt",
+      "stderr_file": "012-immediately-before-work-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "name": "android",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "am",
+        "instrument",
+        "-w",
+        "-r",
+        "-e",
+        "iterations",
+        "1000",
+        "-e",
+        "min_duration_ms",
+        "900000",
+        "-e",
+        "max_duration_ms",
+        "1200000",
+        "-e",
+        "sample_every",
+        "200",
+        "io.github.jichuo1.meguviz.memory.pressureprobe.r8/io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation"
+      ],
+      "started_at_utc": "2026-10-30T12:07:44.165966+00:00",
+      "timeout_seconds": 1260,
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 900.5780000000013,
+      "stdout_sha256": "ebd509806fbed9ad41a222b23d773955e98e122f4b959cd56195078654b2b24e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "record_id": 13
+    },
+    {
+      "record_id": 14,
+      "name": "boot-after",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.125,
+      "stdout_value_sha256": "fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "014-boot-after.stdout.txt",
+      "stderr_file": "014-boot-after.stderr.txt"
+    },
+    {
+      "record_id": 15,
+      "name": "after-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:47d3b158cd95a4e4e60ccbe815556d321d98c52ff0973ae98642cff49708b125\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 273,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.0779999999977008,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "47d3b158cd95a4e4e60ccbe815556d321d98c52ff0973ae98642cff49708b125",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "015-after-processes.stdout.txt",
+      "stderr_file": "015-after-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 273,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 16,
+      "name": "after-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:7cb0fab80d1bc35aa6653193d070139cf1dc9fcafc891e07f0f40b93e6d1ffb6\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.09399999999732245,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "7cb0fab80d1bc35aa6653193d070139cf1dc9fcafc891e07f0f40b93e6d1ffb6",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "016-after-instrumentation.stdout.txt",
+      "stderr_file": "016-after-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    }
+  ],
+  "binary_manifest": [],
+  "tests": {},
+  "qualification": {
+    "arm64_functional": "NOT_APPLICABLE_X86_64",
+    "product_performance": "NOT_STARTED",
+    "actual_16kb_loader": "UNAVAILABLE_UNTIL_OBSERVED",
+    "mte": "UNAVAILABLE_NO_PROCESS_MODE_OR_CONTROLLED_FAULT_TEST",
+    "pfn_pmu_energy": "UNAVAILABLE",
+    "API34_plus": "PASS",
+    "bounded_stability": "PASS_15_MINUTES"
+  },
+  "cleanup": "Dedicated device directory is retained; no automatic deletion or process termination.",
+  "source_sha256": "cf33076626432e56f44961052a703f2e55807a62f4c0a7a30f9d70a1b4c3be2f",
+  "mode": "soak",
+  "results": {
+    "android": {
+      "suite": "android-pressure-r8-stability-v1",
+      "status": "PASS",
+      "checks": 428483,
+      "iterations_requested": 1000,
+      "iterations_completed": 28546,
+      "minimum_duration_ms": 900000,
+      "maximum_duration_ms": 1200000,
+      "actual_duration_ms": 900026,
+      "api": 34,
+      "r8_marker_runtime_name": "io.github.jichuo1.meguviz.memory.android.a",
+      "framework": {
+        "application_dispatch": "PASS_SYNTHETIC_BACKGROUND_AND_UI_HIDDEN",
+        "legacy_automatic_delivery": "NOT_EXPECTED_SINCE_API34_PER_ANDROID_CONTRACT",
+        "onLowMemory_automatic_delivery": "NEVER_CALLED_SINCE_API34_PER_ANDROID_CONTRACT",
+        "ams_background_injection": "COMMAND_ACCEPTED_NO_CALLBACK_OBSERVED",
+        "automatic_low_ram_tested": false,
+        "injection_scope": "OWN_DIAGNOSTIC_PACKAGE_ONLY"
+      },
+      "own_process_observations": [
+        {
+          "elapsed_realtime_nanos": 917315391494,
+          "rss_kb": 75372,
+          "pss_kb": 14064,
+          "private_dirty_kb": 8720,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 923198956525,
+          "rss_kb": 79960,
+          "pss_kb": 14891,
+          "private_dirty_kb": 9480,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 929087022351,
+          "rss_kb": 80312,
+          "pss_kb": 15463,
+          "private_dirty_kb": 10048,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 934886492283,
+          "rss_kb": 79780,
+          "pss_kb": 14737,
+          "private_dirty_kb": 9388,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 940810608258,
+          "rss_kb": 80260,
+          "pss_kb": 15169,
+          "private_dirty_kb": 9820,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 946750648043,
+          "rss_kb": 81052,
+          "pss_kb": 15659,
+          "private_dirty_kb": 10264,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 952724101381,
+          "rss_kb": 81280,
+          "pss_kb": 16151,
+          "private_dirty_kb": 10756,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 958657078920,
+          "rss_kb": 80432,
+          "pss_kb": 15086,
+          "private_dirty_kb": 9692,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 964647172593,
+          "rss_kb": 81288,
+          "pss_kb": 15668,
+          "private_dirty_kb": 10268,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 970653609511,
+          "rss_kb": 81524,
+          "pss_kb": 16136,
+          "private_dirty_kb": 10736,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 976698960052,
+          "rss_kb": 82028,
+          "pss_kb": 16587,
+          "private_dirty_kb": 11188,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 982691957959,
+          "rss_kb": 80660,
+          "pss_kb": 15165,
+          "private_dirty_kb": 9764,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 988648849905,
+          "rss_kb": 80904,
+          "pss_kb": 15609,
+          "private_dirty_kb": 10208,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 994517333732,
+          "rss_kb": 81676,
+          "pss_kb": 16053,
+          "private_dirty_kb": 10652,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1000299259706,
+          "rss_kb": 81924,
+          "pss_kb": 16505,
+          "private_dirty_kb": 11104,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1006722520646,
+          "rss_kb": 80748,
+          "pss_kb": 15297,
+          "private_dirty_kb": 9892,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1015629179035,
+          "rss_kb": 81248,
+          "pss_kb": 15737,
+          "private_dirty_kb": 10332,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1024469548875,
+          "rss_kb": 81764,
+          "pss_kb": 16209,
+          "private_dirty_kb": 10804,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1033409123393,
+          "rss_kb": 82000,
+          "pss_kb": 16653,
+          "private_dirty_kb": 11248,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1042435292200,
+          "rss_kb": 80852,
+          "pss_kb": 15193,
+          "private_dirty_kb": 9780,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1051325990628,
+          "rss_kb": 81092,
+          "pss_kb": 15641,
+          "private_dirty_kb": 10228,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1060183602334,
+          "rss_kb": 81600,
+          "pss_kb": 16089,
+          "private_dirty_kb": 10672,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1069121583415,
+          "rss_kb": 82156,
+          "pss_kb": 16519,
+          "private_dirty_kb": 11100,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1078545989904,
+          "rss_kb": 81100,
+          "pss_kb": 15350,
+          "private_dirty_kb": 9924,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1087916207629,
+          "rss_kb": 81352,
+          "pss_kb": 15806,
+          "private_dirty_kb": 10380,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1096795821593,
+          "rss_kb": 81868,
+          "pss_kb": 16274,
+          "private_dirty_kb": 10848,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1105747803692,
+          "rss_kb": 82372,
+          "pss_kb": 16698,
+          "private_dirty_kb": 11272,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1113869830621,
+          "rss_kb": 80704,
+          "pss_kb": 15270,
+          "private_dirty_kb": 9844,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1120028597068,
+          "rss_kb": 81468,
+          "pss_kb": 15714,
+          "private_dirty_kb": 10288,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1126153160628,
+          "rss_kb": 81720,
+          "pss_kb": 16158,
+          "private_dirty_kb": 10732,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1132394663471,
+          "rss_kb": 82236,
+          "pss_kb": 16634,
+          "private_dirty_kb": 11208,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1138450165290,
+          "rss_kb": 81032,
+          "pss_kb": 15378,
+          "private_dirty_kb": 9952,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1144485533380,
+          "rss_kb": 81536,
+          "pss_kb": 15822,
+          "private_dirty_kb": 10396,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1150572807173,
+          "rss_kb": 82052,
+          "pss_kb": 16262,
+          "private_dirty_kb": 10836,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1156641297064,
+          "rss_kb": 82544,
+          "pss_kb": 16714,
+          "private_dirty_kb": 11288,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1162751898291,
+          "rss_kb": 80860,
+          "pss_kb": 15246,
+          "private_dirty_kb": 9820,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1168785140380,
+          "rss_kb": 81096,
+          "pss_kb": 15682,
+          "private_dirty_kb": 10256,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1174871252089,
+          "rss_kb": 81876,
+          "pss_kb": 16126,
+          "private_dirty_kb": 10700,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1181031852301,
+          "rss_kb": 82104,
+          "pss_kb": 16570,
+          "private_dirty_kb": 11144,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1187103217167,
+          "rss_kb": 80948,
+          "pss_kb": 15374,
+          "private_dirty_kb": 9948,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1193232140453,
+          "rss_kb": 81448,
+          "pss_kb": 15814,
+          "private_dirty_kb": 10388,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1199416850173,
+          "rss_kb": 81964,
+          "pss_kb": 16258,
+          "private_dirty_kb": 10832,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1205540728600,
+          "rss_kb": 82188,
+          "pss_kb": 16698,
+          "private_dirty_kb": 11272,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1211757941976,
+          "rss_kb": 81032,
+          "pss_kb": 15234,
+          "private_dirty_kb": 9808,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1217890559431,
+          "rss_kb": 81272,
+          "pss_kb": 15678,
+          "private_dirty_kb": 10252,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1223968597147,
+          "rss_kb": 81772,
+          "pss_kb": 16122,
+          "private_dirty_kb": 10696,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1229901728843,
+          "rss_kb": 82276,
+          "pss_kb": 16562,
+          "private_dirty_kb": 11136,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1235883143096,
+          "rss_kb": 80856,
+          "pss_kb": 15350,
+          "private_dirty_kb": 9924,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1241948282860,
+          "rss_kb": 81364,
+          "pss_kb": 15798,
+          "private_dirty_kb": 10372,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1248090078089,
+          "rss_kb": 81864,
+          "pss_kb": 16238,
+          "private_dirty_kb": 10812,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1254289651214,
+          "rss_kb": 82364,
+          "pss_kb": 16682,
+          "private_dirty_kb": 11256,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1260435575237,
+          "rss_kb": 80832,
+          "pss_kb": 15366,
+          "private_dirty_kb": 9940,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1266605282087,
+          "rss_kb": 81600,
+          "pss_kb": 15806,
+          "private_dirty_kb": 10380,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1272742176009,
+          "rss_kb": 81824,
+          "pss_kb": 16246,
+          "private_dirty_kb": 10820,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1278870023074,
+          "rss_kb": 82324,
+          "pss_kb": 16690,
+          "private_dirty_kb": 11264,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1284891800829,
+          "rss_kb": 80920,
+          "pss_kb": 15254,
+          "private_dirty_kb": 9828,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1290906978405,
+          "rss_kb": 81408,
+          "pss_kb": 15670,
+          "private_dirty_kb": 10244,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1296907542164,
+          "rss_kb": 81644,
+          "pss_kb": 16114,
+          "private_dirty_kb": 10688,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1302931994888,
+          "rss_kb": 82148,
+          "pss_kb": 16562,
+          "private_dirty_kb": 11136,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1308890085466,
+          "rss_kb": 81008,
+          "pss_kb": 15386,
+          "private_dirty_kb": 9960,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1315011723869,
+          "rss_kb": 81304,
+          "pss_kb": 15809,
+          "private_dirty_kb": 10376,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1321169962165,
+          "rss_kb": 82068,
+          "pss_kb": 16249,
+          "private_dirty_kb": 10816,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1327307494375,
+          "rss_kb": 82308,
+          "pss_kb": 16693,
+          "private_dirty_kb": 11260,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1333475722707,
+          "rss_kb": 81048,
+          "pss_kb": 15397,
+          "private_dirty_kb": 9964,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1339629708453,
+          "rss_kb": 81552,
+          "pss_kb": 15817,
+          "private_dirty_kb": 10384,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1345778804249,
+          "rss_kb": 82052,
+          "pss_kb": 16257,
+          "private_dirty_kb": 10824,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1351966885617,
+          "rss_kb": 82276,
+          "pss_kb": 16697,
+          "private_dirty_kb": 11264,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1358125318547,
+          "rss_kb": 80864,
+          "pss_kb": 15233,
+          "private_dirty_kb": 9800,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1364176264371,
+          "rss_kb": 81380,
+          "pss_kb": 15705,
+          "private_dirty_kb": 10272,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1370195334042,
+          "rss_kb": 81616,
+          "pss_kb": 16121,
+          "private_dirty_kb": 10688,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1376188925836,
+          "rss_kb": 82372,
+          "pss_kb": 16561,
+          "private_dirty_kb": 11128,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1382166190211,
+          "rss_kb": 80996,
+          "pss_kb": 15407,
+          "private_dirty_kb": 9976,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1388291850466,
+          "rss_kb": 81500,
+          "pss_kb": 15851,
+          "private_dirty_kb": 10420,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1394374590613,
+          "rss_kb": 82012,
+          "pss_kb": 16287,
+          "private_dirty_kb": 10856,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1400519218327,
+          "rss_kb": 82432,
+          "pss_kb": 16715,
+          "private_dirty_kb": 11284,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1406652635534,
+          "rss_kb": 80896,
+          "pss_kb": 15403,
+          "private_dirty_kb": 9972,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1412881932206,
+          "rss_kb": 81676,
+          "pss_kb": 15847,
+          "private_dirty_kb": 10416,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1419071796868,
+          "rss_kb": 81912,
+          "pss_kb": 16296,
+          "private_dirty_kb": 10860,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1425222500903,
+          "rss_kb": 82412,
+          "pss_kb": 16738,
+          "private_dirty_kb": 11300,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1431554255250,
+          "rss_kb": 81008,
+          "pss_kb": 15175,
+          "private_dirty_kb": 9864,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1437743853192,
+          "rss_kb": 81244,
+          "pss_kb": 15675,
+          "private_dirty_kb": 10308,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1443947356001,
+          "rss_kb": 81748,
+          "pss_kb": 16195,
+          "private_dirty_kb": 10748,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1450208130841,
+          "rss_kb": 82252,
+          "pss_kb": 16639,
+          "private_dirty_kb": 11192,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1456510963406,
+          "rss_kb": 81096,
+          "pss_kb": 15451,
+          "private_dirty_kb": 10004,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1462751317529,
+          "rss_kb": 81332,
+          "pss_kb": 15887,
+          "private_dirty_kb": 10440,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1468914974807,
+          "rss_kb": 82100,
+          "pss_kb": 16331,
+          "private_dirty_kb": 10884,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1475172521468,
+          "rss_kb": 82340,
+          "pss_kb": 16779,
+          "private_dirty_kb": 11332,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1481474694006,
+          "rss_kb": 80924,
+          "pss_kb": 15319,
+          "private_dirty_kb": 9872,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1487796086576,
+          "rss_kb": 81436,
+          "pss_kb": 15791,
+          "private_dirty_kb": 10344,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1493963948664,
+          "rss_kb": 81928,
+          "pss_kb": 16207,
+          "private_dirty_kb": 10760,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1500122221717,
+          "rss_kb": 82176,
+          "pss_kb": 16679,
+          "private_dirty_kb": 11232,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1506326110254,
+          "rss_kb": 81224,
+          "pss_kb": 15395,
+          "private_dirty_kb": 9948,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1512642851372,
+          "rss_kb": 81464,
+          "pss_kb": 15863,
+          "private_dirty_kb": 10416,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1518893320330,
+          "rss_kb": 81700,
+          "pss_kb": 16279,
+          "private_dirty_kb": 10832,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1525071238672,
+          "rss_kb": 82468,
+          "pss_kb": 16747,
+          "private_dirty_kb": 11300,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1531318328200,
+          "rss_kb": 80728,
+          "pss_kb": 15211,
+          "private_dirty_kb": 9764,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1537474526145,
+          "rss_kb": 81244,
+          "pss_kb": 15683,
+          "private_dirty_kb": 10236,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1543596694006,
+          "rss_kb": 81744,
+          "pss_kb": 16099,
+          "private_dirty_kb": 10652,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1549722416708,
+          "rss_kb": 82240,
+          "pss_kb": 16543,
+          "private_dirty_kb": 11096,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1555843860381,
+          "rss_kb": 80792,
+          "pss_kb": 15327,
+          "private_dirty_kb": 9880,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1561859953410,
+          "rss_kb": 81560,
+          "pss_kb": 15771,
+          "private_dirty_kb": 10324,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1567773402507,
+          "rss_kb": 81796,
+          "pss_kb": 16211,
+          "private_dirty_kb": 10764,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1573675588583,
+          "rss_kb": 82036,
+          "pss_kb": 16655,
+          "private_dirty_kb": 11208,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1579690580069,
+          "rss_kb": 80868,
+          "pss_kb": 15175,
+          "private_dirty_kb": 9728,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1585688355434,
+          "rss_kb": 81120,
+          "pss_kb": 15643,
+          "private_dirty_kb": 10196,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1591563036196,
+          "rss_kb": 81608,
+          "pss_kb": 16059,
+          "private_dirty_kb": 10612,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1597567173328,
+          "rss_kb": 82112,
+          "pss_kb": 16503,
+          "private_dirty_kb": 11056,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1603425304674,
+          "rss_kb": 80972,
+          "pss_kb": 15311,
+          "private_dirty_kb": 9864,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1609258028882,
+          "rss_kb": 81220,
+          "pss_kb": 15775,
+          "private_dirty_kb": 10328,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1615079522710,
+          "rss_kb": 81976,
+          "pss_kb": 16195,
+          "private_dirty_kb": 10748,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1620890538731,
+          "rss_kb": 82216,
+          "pss_kb": 16635,
+          "private_dirty_kb": 11188,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1626679670467,
+          "rss_kb": 80692,
+          "pss_kb": 15315,
+          "private_dirty_kb": 9868,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1632482283136,
+          "rss_kb": 81460,
+          "pss_kb": 15755,
+          "private_dirty_kb": 10308,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1638317338004,
+          "rss_kb": 81708,
+          "pss_kb": 16199,
+          "private_dirty_kb": 10748,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1644054247190,
+          "rss_kb": 82212,
+          "pss_kb": 16635,
+          "private_dirty_kb": 11184,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1649816757053,
+          "rss_kb": 80816,
+          "pss_kb": 15183,
+          "private_dirty_kb": 9732,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1655720460460,
+          "rss_kb": 81332,
+          "pss_kb": 15627,
+          "private_dirty_kb": 10176,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1661672277973,
+          "rss_kb": 81556,
+          "pss_kb": 16067,
+          "private_dirty_kb": 10616,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1667552279519,
+          "rss_kb": 82072,
+          "pss_kb": 16531,
+          "private_dirty_kb": 11080,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1673434585292,
+          "rss_kb": 82564,
+          "pss_kb": 17091,
+          "private_dirty_kb": 11640,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1679302205246,
+          "rss_kb": 81124,
+          "pss_kb": 15763,
+          "private_dirty_kb": 10312,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1685124813720,
+          "rss_kb": 81876,
+          "pss_kb": 16183,
+          "private_dirty_kb": 10732,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1691003704561,
+          "rss_kb": 82128,
+          "pss_kb": 16651,
+          "private_dirty_kb": 11200,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1696936610197,
+          "rss_kb": 82632,
+          "pss_kb": 17159,
+          "private_dirty_kb": 11708,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1702801033973,
+          "rss_kb": 81180,
+          "pss_kb": 15591,
+          "private_dirty_kb": 10140,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1708620558632,
+          "rss_kb": 81692,
+          "pss_kb": 16035,
+          "private_dirty_kb": 10584,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1714438375487,
+          "rss_kb": 81924,
+          "pss_kb": 16475,
+          "private_dirty_kb": 11024,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1720230447804,
+          "rss_kb": 82704,
+          "pss_kb": 16915,
+          "private_dirty_kb": 11460,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1726118293882,
+          "rss_kb": 81252,
+          "pss_kb": 15679,
+          "private_dirty_kb": 10224,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1732016342432,
+          "rss_kb": 81740,
+          "pss_kb": 16119,
+          "private_dirty_kb": 10664,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1737976148904,
+          "rss_kb": 82256,
+          "pss_kb": 16587,
+          "private_dirty_kb": 11132,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1744079236322,
+          "rss_kb": 82492,
+          "pss_kb": 17031,
+          "private_dirty_kb": 11576,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1750078720700,
+          "rss_kb": 81172,
+          "pss_kb": 15651,
+          "private_dirty_kb": 10196,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1755909923109,
+          "rss_kb": 81688,
+          "pss_kb": 16119,
+          "private_dirty_kb": 10664,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1761858396981,
+          "rss_kb": 82180,
+          "pss_kb": 16539,
+          "private_dirty_kb": 11084,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1767946425254,
+          "rss_kb": 82432,
+          "pss_kb": 16983,
+          "private_dirty_kb": 11528,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1773981912024,
+          "rss_kb": 81228,
+          "pss_kb": 15483,
+          "private_dirty_kb": 10028,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1779854242510,
+          "rss_kb": 81468,
+          "pss_kb": 15919,
+          "private_dirty_kb": 10464,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1785756704597,
+          "rss_kb": 81980,
+          "pss_kb": 16387,
+          "private_dirty_kb": 10932,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1791616167146,
+          "rss_kb": 82476,
+          "pss_kb": 16803,
+          "private_dirty_kb": 11348,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1797626836668,
+          "rss_kb": 81032,
+          "pss_kb": 15587,
+          "private_dirty_kb": 10132,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1803780592447,
+          "rss_kb": 81540,
+          "pss_kb": 16035,
+          "private_dirty_kb": 10580,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1809844333444,
+          "rss_kb": 82044,
+          "pss_kb": 16475,
+          "private_dirty_kb": 11020,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        },
+        {
+          "elapsed_realtime_nanos": 1814257845865,
+          "rss_kb": 82644,
+          "pss_kb": 16807,
+          "private_dirty_kb": 11352,
+          "rss_unavailable_reason": null,
+          "android_memory_unavailable_reason": null
+        }
+      ],
+      "observation_scope": "WHOLE_OWN_PROCESS_NOT_DOMAIN_ATTRIBUTION_NOT_ATOMIC_NOT_SAVINGS",
+      "peak_requested_backing_bytes_per_domain": 1536,
+      "final_backing_bytes_each_domain": 0,
+      "stability_scope": "BOUNDED_CREATE_PRESSURE_RESTORE_MAIN_CLOSE_ASYNC_LAST_RELEASE_CYCLES",
+      "indefinite_leak_freedom_proven": false,
+      "actual_low_memory_event": false,
+      "performance_qualified": false,
+      "BIL_integrated": false,
+      "energy_joules": null,
+      "energy_unavailable_reason": "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD"
+    }
+  },
+  "raw_commands": "commands/ retained locally; hashes and checked summaries public",
+  "before_occupancy": {
+    "checked_at_utc": "2026-10-30T12:07:41.995377+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "stability_plan_sha256": "ef0b76f0f9cfde3fe956e98f206e1531ddf2dc42e0bf0c6944528fc8cdcf1644",
+  "boot_id_sha256": "fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "model": "sdk_gphone64_x86_64"
+  },
+  "APK": {
+    "sha256": "8edcf9e2e981d4450c4feabcf4fd3e3841631a1ea0507e6dab3ca1b0ed917995",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "build_receipt_sha256": "0109c0b516053cc2a87083ae4cb14e99a96a8969915c5c164958a53d85ab9502"
+  },
+  "immediately-before-work_occupancy": {
+    "checked_at_utc": "2026-10-30T12:07:44.157456+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "mixed_workloads": [
+    "android"
+  ],
+  "minimum_duration_seconds_per_workload": 900,
+  "performance": "NOT_MEASURED_CONCURRENT_STABILITY_ONLY",
+  "after_occupancy": {
+    "checked_at_utc": "2026-10-30T12:22:45.096993+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "finished_at_utc": "2026-10-30T12:22:45.104006+00:00",
+  "queued_work": false
+}

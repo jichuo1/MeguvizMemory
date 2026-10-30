@@ -3,13 +3,14 @@
 显式 CPU 内存域、System provider、有界 arena 和可验证的所有权/借用合同。当前版本为 **0.2.0 功能工程预览**，公共原生接口使用 `mgmem_*_v1` / ABI 1.1。独立于 BIL、Xposed、GPU 后端及 Android UI；不接管进程全局 allocator。
 
 本阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
+当前消费者阶段已收尾：DEX外部导入、图像压力/预算/异步关闭及原生900秒循环通过；JNI可重入锁问题已修复，Host Release/ASan各18项和双ABI R8短测通过。**API33 Android长稳重复等待仍未定位，新模块长稳不合格**；按用户要求结束本轮，BIL不接入。见[交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)。
 提供 CMake 安装包、C ABI 与可选 C++17 move-only RAII 适配。没有新增第三方生产依赖。
 
 本批交付范围与证据见 [STATE.md](STATE.md)、[验证记录](docs/VERIFICATION.md) 和 [TASKS.json](TASKS.json)。功能验证、设备运行、性能收益、TLB 机制和发布资格分别记录；研究模型中的 3.55% 等数值不代表本库实测。
 
 已完成 API 37、arm64、4 KB 真机的核心/C/C++ 安全用例；独立真实 DEX A1/A3 比较完成 32 块、128 次任务，性能为 INCONCLUSIVE，当前不接入 BIL。点估计与探索性区间不构成稳定收益，详见 [性能报告](docs/PERFORMANCE_A1_A3.md) 和 [接入决定](docs/BIL_ADOPTION_DECISION.md)。
 
-研究下一批新增 DEX 直接借用/复制四组 harness（宿主32项通过）、图像 full/三行环及持久工作区对照（156项通过）、分采集窗口的离线协议验证器。已确认普通消费者的逻辑容量减少，尚无新真机性能、RSS或能量结论。三个新 arm64 程序仅构建通过，协议仍未冻结。入口见 [研究证据](docs/RESEARCH_EVIDENCE_20261030.md)、[DEX借用合同](docs/DEX_BORROW_CONTRACT.md) 和 [候选退出门槛](docs/CANDIDATE_EXIT_GATES.md)。
+DEX直接借用/复制四组、图像full/三行环持久工作区和真实v2采集器均已实现并在新arm64设备执行。core3与196消费者功能用例通过；pilot128任务完成，DEX正式4/12窗口后环境停止，图像因pilot精度不足未进入正式轮。未取得稳定性能或资源净收益，见[v2最终结果](docs/DEVICE_V2_RESULTS.md)。普通借用/布局资源优化与Memory增量分开；自身RSS/PSS已有观测能力，同完成量资源收益及能量仍未验证。
 
 ## 构建和安装
 
@@ -52,7 +53,7 @@ OPEN → begin_close → CLOSING
 
 `begin_close` 不等待任务、不运行 provider 回调；`drain(0)` 只轮询，超时不强制释放。`collect`、`trim` 及最后一次 System release 可能同步调用 provider，需安排在允许阻塞的线程。C++ RAII 的最后一个 wrapper 同样负责同步 cleanup。裸指针、裸 domain 指针及运行库卸载都有外部寿命要求，完整合同见 [ADR](docs/ADR-001-ownership-and-abi.md) 和头文件。
 
-预算约束唯一 provider backing 与 pending reservation，不包含 allocator/容器元数据或 RSS/PSS。arena 的 retained 含 reset 前不能复用的已释放空间，不能把它直接称为 RSS 节省。默认 dense/System；slab、page hint、TLB placement、JNI 和 GPU 桥均未启用。
+预算约束唯一managed backing（owned和imported）与pending reservation，不包含allocator/容器元数据或RSS/PSS。arena的retained含reset前不能复用的已释放空间，不能直接称为RSS节省。Android压力适配JNI已有；通用ByteBuffer借用、slab、page hint、TLB placement和GPU桥未选择。
 
 本仓库保留实现与可审查进度；没有发布正式 Release 或宣称 BIL 性能获益。原始研究附件留在本地 `research/`，公开文档仅记录其 hash、合同摘要及当前实现状态。
 

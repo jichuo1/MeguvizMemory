@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "state": "FROZEN_BEFORE_FINAL_STABILITY",
+  "frozen_at_utc": "2026-10-30T12:07:32.755379+00:00",
+  "scope": "FUNCTIONAL_BOUNDED_MIXED_STABILITY_NOT_PERFORMANCE",
+  "minimum_seconds_per_workload": 900,
+  "maximum_new_work_seconds": 1200,
+  "outer_command_timeout_seconds": 1260,
+  "profiles": {
+    "host": [
+      "DEX import complete 54147-method query + cross-thread final release",
+      "image System + pressure/budget/close",
+      "image arena + pressure/budget/close"
+    ],
+    "arm64_API33": [
+      "DEX import same complete query",
+      "image arena pressure/budget/close",
+      "R8 JNI pressure create/close/release"
+    ],
+    "x86_64_API34": [
+      "R8 JNI pressure create/close/release"
+    ]
+  },
+  "concurrency": "Own profile workloads run concurrently. No speed ratio, independent-sample inference or energy comparison. No unrelated workload is stopped.",
+  "stability_boundary": "Repeated create/close cycles, not single-domain 15-minute retention or 24h/unbounded leak freedom. DEX harness retains Outcome metadata, not source payload; no constant-RSS claim.",
+  "device_admission": "Fresh expiring authorization plus process/instrumentation gates immediately before and after, observational only, no shared lock.",
+  "failure": "Keep all partial/failed receipts; no performance sample pooling; ADB timeout means remote UNKNOWN, no forced device cleanup.",
+  "attribution": "ordinary direct borrow already removes input copy; imported capacity is subset of source, no double count. Image ring/scratch gains not credited to Memory.",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+  "files": [
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java",
+      "bytes": 4904,
+      "sha256": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "bytes": 6119,
+      "sha256": "e9b0f45d3f64a9a022a5375a9cc4b3437c47f3e24258f6d387246996b47210b5"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java",
+      "bytes": 2651,
+      "sha256": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "bytes": 9329,
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "bytes": 17161,
+      "sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest-r8.xml",
+      "bytes": 542,
+      "sha256": "6f03a34d3480798d4873a12a801ee5335729e86eee0309e10b8e07d54c9f5fd1"
+    },
+    {
+      "path": "adapters/android/sample/PressureR8Instrumentation.java",
+      "bytes": 15929,
+      "sha256": "81a2c41091abfc0b62744586484433dfa07c2414008b67f9a9006528413a905a"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-build-v2.json",
+      "bytes": 7870,
+      "sha256": "7176f8001d9ec2ede516b622f81cf406bd125eae679b9a9332f95239515c07a0"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-x86_64-build-v2.json",
+      "bytes": 8280,
+      "sha256": "0109c0b516053cc2a87083ae4cb14e99a96a8969915c5c164958a53d85ab9502"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/input-0.ppm",
+      "bytes": 14,
+      "sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/input-1.ppm",
+      "bytes": 32,
+      "sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/input-2.ppm",
+      "bytes": 676,
+      "sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/input-3.ppm",
+      "bytes": 172815,
+      "sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/oracle-0.pgm",
+      "bytes": 12,
+      "sha256": "2cd654ed74fc130a5577de4c07600a5236386a1c9c4aa1633081e08c3d6b210b"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/oracle-1.pgm",
+      "bytes": 18,
+      "sha256": "0929aa52f9f2046bf8ce047efff13811d5f24071c98b313dd6f4c0f643a43675"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/oracle-2.pgm",
+      "bytes": 234,
+      "sha256": "c832604cf8af24c5cf8e650ba60566c9167379d6f83dda326287c4bbf7fbbe69"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host/oracle-3.pgm",
+      "bytes": 57615,
+      "sha256": "231dca244c9c41fa6d9aec1a2a0855e8c0279d669033613bd4d270ba1f15ad78"
+    },
+    {
+      "path": "build/continuation-20261030/dex-host/mgmem_dex_import_consumer.exe",
+      "bytes": 446976,
+      "sha256": "c367fa60a25aeb5ece506bc5a3b9173d6025341f57b478297b0e1bcc47dd363a"
+    },
+    {
+      "path": "build/continuation-dex-arm64/mgmem_dex_import_consumer",
+      "bytes": 14494800,
+      "sha256": "fefcf34c09e59b20e1d0e67b315f69c42264eef37993f7009021f228b3216bea"
+    },
+    {
+      "path": "build/continuation-image-arm64/mgmem_image_pressure_stability",
+      "bytes": 3684000,
+      "sha256": "8eb9b41f908bffba027ebeeb0218be424ce34acb7554b1c99df5e493482c813c"
+    },
+    {
+      "path": "build/continuation-image-host/mgmem_image_pressure_stability.exe",
+      "bytes": 87552,
+      "sha256": "26a3459ea676399f38cc5fbbcf6fb545a556331e278338fc42802844d4fac393"
+    },
+    {
+      "path": "build/continuation-r8-arm64-v2/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2339374,
+      "sha256": "45a4d713a579aca84bd035d4723d74e65f607619cb96d7f4915f78ccdbbcfabd"
+    },
+    {
+      "path": "build/continuation-r8-x86_64-v2/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2290216,
+      "sha256": "8edcf9e2e981d4450c4feabcf4fd3e3841631a1ea0507e6dab3ca1b0ed917995"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 8185,
+      "sha256": "8df658444ee0b0d762f7057571e62750bd8593f562d248350d31fc62f84b2f03"
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "bytes": 2583,
+      "sha256": "ee6eb8513b81ab72251fe168ba8ca2c7b37ac20e5df2d36bb62f8bbc47b85ba1"
+    },
+    {
+      "path": "consumers/dex/import_consumer.cpp",
+      "bytes": 23151,
+      "sha256": "cc37b84a230646158ec7919b2aa16b034bce1aa2ef920107a55db991e94d23b9"
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "bytes": 1620,
+      "sha256": "8128f030073881080f01722e968f550ba83a9bbb211a4108bd42c2468690bd6e"
+    },
+    {
+      "path": "consumers/image/pressure_stability.cpp",
+      "bytes": 19941,
+      "sha256": "4a11e91cf52b159669a6cd00694ef9440ec205656aa5683352150e37516542b6"
+    },
+    {
+      "path": "include/mgmem/android_pressure_jni.h",
+      "bytes": 961,
+      "sha256": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54"
+    },
+    {
+      "path": "include/mgmem/memory.hpp",
+      "bytes": 9615,
+      "sha256": "82ce029fbb967e1c660ea2df6f865207976a6f8b1de84053183f14d8e2003252"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "bytes": 9521,
+      "sha256": "a1beec7680705e79e73a05250428c9c1c157e7788bc3619f917607f015e24638"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "bytes": 3799,
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "install/continuation-x86_64/lib/libmgmem.so",
+      "bytes": 1692040,
+      "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+    },
+    {
+      "path": "install/features-arm64/lib/libmgmem.so",
+      "bytes": 1722920,
+      "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+    },
+    {
+      "path": "install/features-host/bin/mgmem.dll",
+      "bytes": 39936,
+      "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+    },
+    {
+      "path": "src/mgmem.cpp",
+      "bytes": 37264,
+      "sha256": "f3ac54de95caf855f2ddb6f8f4965b2c3a2bddac876e026d70a4def4f9cc91b4"
+    },
+    {
+      "path": "tools/build_pressure_r8.py",
+      "bytes": 13395,
+      "sha256": "250e20920091a68ce965406af37864da82412d10c27d437369f75fbaf02714e9"
+    },
+    {
+      "path": "tools/run_arm64_validation.py",
+      "bytes": 23760,
+      "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+    },
+    {
+      "path": "tools/run_continuation_device.py",
+      "bytes": 20284,
+      "sha256": "cf33076626432e56f44961052a703f2e55807a62f4c0a7a30f9d70a1b4c3be2f"
+    },
+    {
+      "path": "tools/run_host_stability.py",
+      "bytes": 4922,
+      "sha256": "1b453f0b540f56074c6648a7acde3cbc8d97d8b95a0116f30202ec2c9830df87"
+    },
+    {
+      "path": "tools/validate_arm64_consumers_v2.py",
+      "bytes": 34541,
+      "sha256": "68a196ddc23e15f534fb2a9b101484c1e655ae8b2ffe41d85a82c99e6b3e59a5"
+    },
+    {
+      "path": "tools/verify_dex_import.py",
+      "bytes": 10581,
+      "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+    },
+    {
+      "path": "tools/verify_image_pressure.py",
+      "bytes": 9691,
+      "sha256": "b2af6a21fd26ec82dc4e07a5795a9a482cb5e0ffdc99fbdbee2d86c034d54342"
+    }
+  ],
+  "functional_receipts": [
+    {
+      "path": "artifacts/continuation-20261030/device-api34-smoke-final/receipt.json",
+      "bytes": 22204,
+      "sha256": "184fd86db33c7ab182afd8064810ff2f4a27d0624478fe77dcb9e2e30139cc21"
+    },
+    {
+      "path": "artifacts/continuation-20261030/device-arm64-smoke-final/receipt.json",
+      "bytes": 61329,
+      "sha256": "f4d4cf9b640ba519172bab56e5d1ca8909c53d3171bf9cd15d754314c8b0b5f7"
+    },
+    {
+      "path": "artifacts/continuation-20261030/dex/host-postreview-receipt.json",
+      "bytes": 53619,
+      "sha256": "083377490d833e9995f220f44fd7c58166f15634167ebb7940019ced35477f5c"
+    },
+    {
+      "path": "artifacts/continuation-20261030/image-host-postreview/receipt.json",
+      "bytes": 7087,
+      "sha256": "26ca24f3d0f2bcdf02551fdbf337ba2f3757da77e0002bf0ba1795b1b3cc9697"
+    }
+  ]
+}

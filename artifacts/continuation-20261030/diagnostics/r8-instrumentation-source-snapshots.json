@@ -1,0 +1,16 @@
+{
+  "scope": "FROZEN_DIAGNOSTIC_SOURCES_NOT_NEW_RUNTIME_EVIDENCE",
+  "files": [
+    {
+      "path": "artifacts/continuation-20261030/diagnostics/r8-instrumentation-executed-v2.java.txt",
+      "sha256": "81a2c41091abfc0b62744586484433dfa07c2414008b67f9a9006528413a905a",
+      "kind": "EXACT_CURRENT_BYTES_BEFORE_DIAGNOSTIC_V3_EDIT"
+    },
+    {
+      "path": "artifacts/continuation-20261030/diagnostics/r8-instrumentation-executed-v1.java.txt",
+      "sha256": "bf0eb8bc3e6e9ea6dccc9aed72eae40e1b12c3d6b1cfd4403631663f9bc3179d",
+      "kind": "EXACT_SOURCE_RECOVERED_BY_UNDOING_KNOWN_MARKER_ONLY_PATCH_AND_MATCHING_ORIGINAL_RECEIPT_SHA"
+    }
+  ],
+  "v1_receipt_sha_matched": true
+}

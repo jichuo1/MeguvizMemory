@@ -2,7 +2,7 @@
   "schema_version": 2,
   "as_of": "2026-10-30",
   "report_page": "https://chatgpt.com/space/page_49b429f545708191a153b0840c9ab296",
-  "revision": "CPU functional engineering preview; original 24 MM identifiers and dependency/conditional/output prerequisites retained",
+  "revision": "Current 0.2 functional status; historical experiments explicitly scoped and immutable",
   "scope_note": "CPU FUNCTIONAL ONLY. Task status is full-scope status, never a synonym for a passed local subset. No task is marked DONE merely to satisfy downstream dependencies. Original dependencies, required_outputs and conditional_dependencies remain mandatory for their original complete scope. Named partial outputs authorize only their stated subset; this file is not an automatic scheduler.",
   "contract_origin": {
     "file": "TASKS.json in user-supplied research archive dated 2026-10-28",
@@ -18,15 +18,13 @@
     "scope": "CPU_FUNCTIONAL_WITH_SCOPED_REAL_ARM64_A1_A3_EXPERIMENT",
     "engineering_preview": "AVAILABLE_WITH_RECORDED_LIMITS",
     "formal_release_candidate": "BLOCKED",
-    "host_release_ctest": "PASS_4_OF_4",
-    "host_asan_ctest": "PASS_4_OF_4_AFTER_RUNTIME_PATH_CORRECTION",
-    "android_runtime": "PASS_API37_ARM64_PHYSICAL_4K_AND_API34_X86_64_EMULATOR_4K",
+    "host_release_ctest": "PASS_10_OF_10_FEATURES_0_2",
+    "host_asan_ctest": "PASS_10_OF_10_FEATURES_0_2",
+    "android_runtime": "FEATURES_0_2_API33_ARM64_4K_PASS_HISTORICAL_CORE_API37_AND_API34_SEPARATE",
     "android_compiled_abis": [
-      "x86_64",
-      "arm64-v8a",
-      "armeabi-v7a"
+      "arm64-v8a"
     ],
-    "static_elf_alignment": "PASS_PT_LOAD_0x4000_THREE_ABIS",
+    "static_elf_alignment": "HISTORICAL_0_1_THREE_ABIS_0_2_ARM64_SEPARATE",
     "real_16k_loader": "UNAVAILABLE",
     "mte": "UNAVAILABLE",
     "product_performance": "NOT_STARTED",
@@ -57,7 +55,7 @@
       ],
       "state": "READY",
       "meaning": "Scenario, budgets, sample unit, primary metric, controls and record format are frozen for host functional/diagnostic work, independently of the target-device product baseline.",
-      "scope": "HOST_FUNCTIONAL_AND_SCOPED_PHYSICAL_ARM64_PAIRED_CPU_PROTOCOL",
+      "scope": "HOST_FUNCTIONAL_AND_EXECUTED_SCOPED_ARM64_PROTOCOLS_NO_CURRENT_PERFORMANCE_QUALIFICATION",
       "evidence": [
         "bench/protocol.json",
         "docs/BASELINE_PROTOCOL.md"
@@ -166,7 +164,8 @@
         "cpu_origin_owner_contract": "READY",
         "dex_borrowed_source_owner_contract": "PASS_HOST",
         "image_async_workspace_owner_contract": "PASS_HOST",
-        "family_owner_import_contract": "UNCONFIRMED"
+        "family_owner_import_contract": "UNCONFIRMED",
+        "dex_external_import": "PASS_REAL_CONSUMER_WHOLE_REGION_NO_EXTRA_COPY"
       },
       "evidence": [
         "docs/ADR-001-ownership-and-abi.md",
@@ -202,14 +201,15 @@
       "outputs": {
         "protocol_ready": "READY",
         "scope": "SCOPED_HOST_INDEPENDENT_ARM64_AND_BIL_PRODUCT_SEPARATELY",
-        "formal_performance_protocol": "HISTORICAL_RETRY1_EXECUTED_NEW_V2_NOT_FROZEN",
+        "formal_performance_protocol": "HISTORICAL_RETRY1_AND_NEW_V2_FROZEN_EXECUTED_TERMINAL",
         "real_product_baseline": "BLOCKED",
         "arm64_real_workload_protocol": "FROZEN_BEFORE_PILOT_AND_FORMAL",
         "arm64_complete_paired_round": "32_BLOCKS_128_TASKS_FUNCTIONAL_ENVIRONMENT_COMPLETE",
         "performance_qualification": "INCONCLUSIVE_TREND_WARNING_POINT_BELOW_TARGET",
-        "new_source_strategy_v2": "HOST_FUNCTIONAL_PASS_NO_DEVICE_SAMPLING",
-        "new_window_protocol_v2": "OFFLINE_VALIDATOR_ONLY_NOT_FROZEN_NO_LIVE_COLLECTOR",
-        "v2_new_device": "CORE3_CONSUMERS196_PASS_PILOT128_PASS_FORMAL64_SUCCESS_PLUS1_PRELAUNCH_STOP"
+        "new_source_strategy_v2": "HOST_AND_API33_ARM64_FUNCTIONAL_PASS",
+        "new_window_protocol_v2": "LIVE_COLLECTOR_IMPLEMENTED_FROZEN_EXECUTED_TERMINAL",
+        "v2_new_device": "CORE3_CONSUMERS196_PASS_PILOT128_PASS_FORMAL64_SUCCESS_PLUS1_PRELAUNCH_STOP",
+        "new_device_performance": "FORMAL_INCOMPLETE_ENVIRONMENT_STOP"
       },
       "evidence": [
         "bench/protocol.json",
@@ -220,8 +220,8 @@
         "docs/DEVICE_V2_RESULTS.md"
       ],
       "remaining": [
-        "Freeze new exact device/artifact/window/cadence/budget/timeout profile before any new device pilot",
-        "Implement and qualify a live collector; current v2 entry point is offline only",
+        "New research requires a new device/artifact/window/cadence/budget/timeout freeze; old v2 execution is terminal",
+        "Formal v2 incomplete; no qualified performance result or pooled continuation",
         "Defend outer inference and achieved precision separately from pilot feasibility",
         "BIL production baseline and energy/resource regression remain separate"
       ],
@@ -243,8 +243,8 @@
       "dependency_contract": "MM 002",
       "acceptance": "mgmem 命名、origin-owner、错误/关闭/线程合同",
       "status": "PARTIAL",
-      "implementation": "IMPLEMENTED_ABI_1_0_CPU_CONTRACT",
-      "functional_validation": "PASSED_HOST_AND_ANDROID_X86_64_4K_SUBSET",
+      "implementation": "IMPLEMENTED_ABI_1_1_ADDITIVE_CPU_CONTRACT_ABI_1_0_CLIENT_PASS",
+      "functional_validation": "PASS_FEATURES_HOST10_ASAN10_LEGACY_ABI10_AND_TWO_RUNTIME_DESCRIPTOR_ROUTING",
       "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
@@ -337,7 +337,9 @@
         "artifacts/features-20261030/ARTIFACTS.json"
       ],
       "remaining": [
-        "Selected physical devices, MTE where available and longer resource-stability sessions"
+        "Android adapter API33 long stability remains unqualified after repeated stall",
+        "15-minute repeated native cycles are not 24h, single long-lived domain or indefinite leak freedom",
+        "MTE/HWASan and final release matrix remain separate"
       ]
     },
     {
@@ -353,7 +355,7 @@
       "status": "PARTIAL",
       "implementation": "SOFT_BUDGET_IMPORT_ACCOUNTING_PRESSURE_CONTROLLER_AND_OWN_RSS_PSS_IMPLEMENTED",
       "functional_validation": "PASSED_HOST",
-      "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
+      "device_validation": "PASS_API33_ARM64_FEATURES20_AMS_INJECTED_CALLBACK_NOT_ACTUAL_OOM",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
@@ -432,7 +434,7 @@
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "NOT_SELECTED",
       "scope": "core_or_qualification",
-      "reason": "Selected real consumers are native. No escaping Java ByteBuffer or JNI API is exposed; future JNI selection requires real lifetime qualification."
+      "reason": "General Java ByteBuffer borrowing/batch API not selected; Android pressure JNI with opaque registration and nonescaping probe exists separately under MM-015."
     },
     {
       "id": "MM-010",
@@ -595,7 +597,9 @@
         "image_workspace_v2": "PASS_156_HOST_FUNCTIONAL_RESOURCE_CASES",
         "ordinary_layout_resource_reduction": "VERIFIED_REQUESTED_BACKING_ONLY_NOT_MEMORY_INCREMENT_OR_RSS",
         "new_device_consumers": "DEX32_IMAGE_WORKSPACE156_IMAGE_PERF8_PASS",
-        "image_performance": "PILOT_PRECISION_STOP_NO_FORMAL"
+        "image_performance": "PILOT_PRECISION_STOP_NO_FORMAL",
+        "external_import_consumer": "PASS_HOST12_AND_ARM64_FULL_QUERY",
+        "pressure_image_consumer": "PASS_HOST_TWO_PROVIDERS_AND_ARM64_ARENA_900_SECONDS"
       },
       "evidence": [
         "consumers/dex/CMakeLists.txt",
@@ -623,15 +627,16 @@
       "status": "PARTIAL",
       "implementation": "ANDROID_COMPONENT_CALLBACKS_JNI_PRESSURE_AND_OBSERVATION_IMPLEMENTED_LUMEN_NOT_SELECTED",
       "functional_validation": "PASS_NATIVE3_JAVA38_AND_ANDROID20",
-      "device_validation": "PASS_API33_ARM64_4K_SYNTHETIC_FRAMEWORK_AND_AMS_INJECTION",
+      "device_validation": "CLOSEFIX_R8_SMOKE_PASS_API33_ARM64_AND_API34_X86_64_ANDROID_LONG_NOT_QUALIFIED",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "ENGINEERING_PREVIEW_ONLY",
       "scope": "family_integration",
-      "reason": "Android adapter implemented; Lumen/Bitmap/HWUI ownership not changed, API34+ legacy signals not guaranteed",
+      "reason": "Host lock defects fixed; physical long stall root cause remains undetermined; Lumen unchanged",
       "evidence": [
         "docs/ANDROID_PRESSURE.md",
-        "artifacts/features-20261030/device-android-final/features-receipt.json"
+        "artifacts/features-20261030/device-android-final/features-receipt.json",
+        "docs/CONSUMER_CLOSEOUT_20261030.md"
       ]
     },
     {
@@ -992,7 +997,7 @@
     "rule": "Preserve A0/A1 consumer attribution, applicable A2 storage controls, A3 core and optional A4 combination; report regression and migration costs. No product performance or energy estimate is asserted."
   },
   "research_followup_20261030": {
-    "scope": "FINITE_HOST_RESEARCH_ENGINEERING_DELIVERY_NOT_FULL_MM_COMPLETION",
+    "scope": "HISTORICAL_HOST_ONLY_SNAPSHOT_SUPERSEDED_BY_LIVE_V2_FOR_CURRENT_DEVICE_STATUS",
     "report_archive_sha256": "de1e57232d287ee86d2cca5287b0471b94838ba7bfce126e73ae0f32b8e05631",
     "tasks": [
       {
@@ -1057,7 +1062,8 @@
     ],
     "device": "NOT_USED_THIS_BATCH",
     "BIL": "UNCHANGED_NOT_INTEGRATED",
-    "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE"
+    "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE",
+    "superseded_by": "live_v2_20261030; functional_feature_stage_20261030; continuation_20261030"
   },
   "live_v2_20261030": {
     "state": "TERMINAL_FORMAL_INCOMPLETE_NO_PERFORMANCE_QUALIFICATION",
@@ -1121,5 +1127,21 @@
     "family_bridge": "AUDIT_ONLY_NOT_IMPLEMENTED",
     "energy": "UNAVAILABLE_NO_QUALIFIED_METHOD",
     "results": "docs/FEATURE_STAGE_20261030.md"
+  },
+  "continuation_20261030": {
+    "state": "STAGE_CLOSED_SCOPED_DELIVERY_ANDROID_LONG_NOT_QUALIFIED",
+    "status_normalization": "COMPLETE_24_PREREQUISITE_ARRAYS_UNCHANGED",
+    "dex_external_import": "IMPLEMENTED_HOST12_REAL_ARM64_FULL_QUERY_AND_900_SECOND_CYCLES_PASS",
+    "image_pressure_budget_async_close": "IMPLEMENTED_HOST_SYSTEM_ARENA_AND_ARM64_ARENA_900_SECOND_CYCLES_PASS",
+    "host_Release_ASan": "18_OF_18_EACH_INCLUDING_8_JNI_LOCK_REGRESSIONS",
+    "R8": "CLOSEFIX_DUAL_ABI_REAL_SMOKE_PASS_LONG_NOT_QUALIFIED",
+    "API34_plus": "API34_X86_64_CLOSEFIX_SMOKE_PASS_OLD_MODULE_900_SECONDS_SEPARATE",
+    "jni_close_fix": "PROVEN_CALLBACK_LOCK_REENTRY_DEFECT_FIXED_OLD_PHYSICAL_HANG_CAUSE_UNDETERMINED",
+    "Android_long": "API33_FIRST_TIMEOUT_AND_CLOSEFIX_STALLED_AT_ITERATION48_IDEMPOTENT_CLOSE; API34_NEW_WINDOW_PROGRESSING_STOPPED_FOR_USER_FAST_CLOSEOUT",
+    "device_tests": "ENDED_OWN_APPS_STOPPED_NO_QUEUED_TASKS",
+    "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+    "performance": "NOT_MEASURED_NO_NEW_QUALIFICATION",
+    "results": "docs/CONSUMER_CLOSEOUT_20261030.md",
+    "manifest": "artifacts/continuation-20261030/ARTIFACTS.json"
   }
 }

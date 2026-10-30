@@ -1,0 +1,274 @@
+# compiler: R8
+# compiler_version: 9.2.4-dev
+# min_api: 27
+# compiler_hash: 084a89126ae0596c599143df57a654646af28313
+# common_typos_disable
+# {"id":"com.android.tools.r8.mapping","version":"2.2"}
+# pg_map_id: 416cfccc86b4d3bf6a71b6331a13b2324467e162b843f3c548eb43ed3ddcaa2c
+# pg_map_hash: SHA-256 416cfccc86b4d3bf6a71b6331a13b2324467e162b843f3c548eb43ed3ddcaa2c
+io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter -> a:
+# {"id":"sourceFile","fileName":"MemoryPressureAdapter.java"}
+    android.content.Context context -> a
+    io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend backend -> b
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Lio/github/jichuo1/meguviz/memory/android/NativePressureBackend;"}
+    java.lang.Object state -> c
+    boolean closed -> d
+    boolean unregistered -> e
+    boolean cleanupAccepted -> f
+    boolean closeInProgress -> g
+    java.util.concurrent.atomic.AtomicLong forwarded -> h
+    java.util.concurrent.atomic.AtomicLong ignored -> i
+    1:3:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):26:26 -> <init>
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Landroid/content/Context;Lio/github/jichuo1/meguviz/memory/android/NativePressureBackend;)V"}
+    4:10:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):22:22 -> <init>
+    11:28:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):24:24 -> <init>
+    29:36:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):28:28 -> <init>
+    37:38:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):29:29 -> <init>
+    39:40:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):30:30 -> <init>
+    41:48:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):31:31 -> <init>
+    49:50:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):33:33 -> <init>
+    51:58:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):34:34 -> <init>
+    59:59:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):35:35 -> <init>
+    60:67:void <init>(android.content.Context,io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend):27:27 -> <init>
+    16:26:boolean awaitClosed(long):74:74 -> a
+    27:34:boolean awaitClosed(long):75:75 -> a
+    35:41:boolean awaitClosed(long):76:76 -> a
+    42:49:boolean awaitClosed(long):73:73 -> a
+    6:8:int requestPressure(int):50:50 -> b
+    9:17:int requestPressure(int):51:51 -> b
+    18:18:int requestPressure(int):52:52 -> b
+    19:26:int requestPressure(int):56:56 -> b
+    27:32:int requestPressure(int):57:57 -> b
+    33:34:int requestPressure(int):52:52 -> b
+    35:42:int requestPressure(int):49:49 -> b
+    1:6:void close():80:85 -> close
+    7:8:void close():92:93 -> close
+    9:10:void close():97:98 -> close
+    11:11:void close():100:100 -> close
+    12:13:void close():97:98 -> close
+    14:14:void close():101:101 -> close
+    15:15:void close():82:82 -> close
+    16:16:void close():85:85 -> close
+    1:1:void onConfigurationChanged(android.content.res.Configuration):67:67 -> onConfigurationChanged
+    2:5:void onLowMemory():66:66 -> onLowMemory
+    32:37:void onTrimMemory(int):63:63 -> onTrimMemory
+    38:41:void onTrimMemory(int):64:64 -> onTrimMemory
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend -> io.github.jichuo1.meguviz.memory.android.NativePressureBackend:
+# {"id":"sourceFile","fileName":"NativePressureBackend.java"}
+    1:6:void <clinit>():9:9 -> <clinit>
+    1:1:void <init>(long,long,long,long):16:16 -> <init>
+    2:4:void <init>(long,long,long,long):11:13 -> <init>
+    5:6:void <init>(long,long,long,long):17:18 -> <init>
+    7:7:void <init>(long):20:20 -> <init>
+    8:10:void <init>(long):11:13 -> <init>
+    11:12:void <init>(long):22:23 -> <init>
+    13:13:void <init>(long):21:21 -> <init>
+    1:5:boolean access$100(long):8:8 -> access$100
+    1:4:void access$200(long):8:8 -> access$200
+    1:10:boolean awaitClosed(long):63:72 -> awaitClosed
+    11:13:boolean awaitClosed(long):74:76 -> awaitClosed
+    14:14:boolean awaitClosed(long):74:74 -> awaitClosed
+    15:15:boolean awaitClosed(long):62:62 -> awaitClosed
+    1:10:void beginClose():56:56 -> beginClose
+    11:19:void beginClose():57:57 -> beginClose
+    20:45:void beginClose():58:58 -> beginClose
+    1:8:void bind():26:26 -> bind
+    9:17:void bind():27:27 -> bind
+    18:37:void bind():28:28 -> bind
+    38:45:void bind():26:26 -> bind
+    1:4:void close():79:79 -> close
+    1:1:io.github.jichuo1.meguviz.memory.android.NativePressureBackend createArena(long,long,long,long):33:33 -> createArena
+    2:2:io.github.jichuo1.meguviz.memory.android.NativePressureBackend createArena(long,long,long,long):32:32 -> createArena
+    1:6:io.github.jichuo1.meguviz.memory.android.NativePressureBackend fromNativeRegistration(long):38:38 -> fromNativeRegistration
+    7:12:io.github.jichuo1.meguviz.memory.android.NativePressureBackend fromNativeRegistration(long):39:39 -> fromNativeRegistration
+    13:20:io.github.jichuo1.meguviz.memory.android.NativePressureBackend fromNativeRegistration(long):38:38 -> fromNativeRegistration
+    1:14:io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe holdRetiringLeaseForDiagnostics(long):83:83 -> holdRetiringLeaseForDiagnostics
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(J)Lb;"}
+    15:22:io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe holdRetiringLeaseForDiagnostics(long):84:84 -> holdRetiringLeaseForDiagnostics
+    23:40:void io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe.<init>(long):88:88 -> holdRetiringLeaseForDiagnostics
+    23:40:void io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe.<init>(long,io.github.jichuo1.meguviz.memory.android.NativePressureBackend$1):86 -> holdRetiringLeaseForDiagnostics
+    23:40:io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe holdRetiringLeaseForDiagnostics(long):84 -> holdRetiringLeaseForDiagnostics
+    41:48:io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe holdRetiringLeaseForDiagnostics(long):83:83 -> holdRetiringLeaseForDiagnostics
+    3:7:java.lang.String logicalUnavailableReason(long[],int):51:51 -> logicalUnavailableReason
+    8:10:java.lang.String logicalUnavailableReason(long[],int):52:52 -> logicalUnavailableReason
+    11:23:java.lang.String logicalUnavailableReason(long[],int):53:53 -> logicalUnavailableReason
+    24:31:java.lang.String logicalUnavailableReason(long[],int):52:52 -> logicalUnavailableReason
+    1:10:int notifyPressure(int):42:42 -> notifyPressure
+    11:17:int notifyPressure(int):43:43 -> notifyPressure
+    1:18:void onNativeClosed(int):78:78 -> onNativeClosed
+    1:13:long[] snapshot():46:46 -> snapshot
+    14:33:long[] snapshot():47:47 -> snapshot
+    34:40:long[] snapshot():48:48 -> snapshot
+    41:42:long[] snapshot():47:47 -> snapshot
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe -> b:
+# {"id":"sourceFile","fileName":"NativePressureBackend.java"}
+    long token -> a
+    2:24:boolean readable():89:89 -> a
+    2:21:void close():90:90 -> close
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation -> io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation:
+# {"id":"sourceFile","fileName":"PressureR8Instrumentation.java"}
+    1:4:void <init>():16:16 -> <init>
+    1:4:void $r8$lambda$9z7DqeM3FDRjJr8ixEP53XnLTtg(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):0:0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:16:long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend):37:37 -> available
+    17:25:long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend):39:39 -> available
+    26:28:long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend):41:41 -> available
+    29:37:long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend):42:42 -> available
+    38:45:long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend):43:43 -> available
+    1:4:void $r8$lambda$KUwf9DatAFetHT5Tss_AgdAmJ7w(NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference):0:0 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lb;Ljava/util/concurrent/atomic/AtomicReference;)V"}
+    1:19:void beforeDeadline():34:34 -> beforeDeadline
+    1:3:long bounded(java.lang.String,long,long,long):28:30 -> bounded
+    1:4:void $r8$lambda$kiTFMQdRTL00I93gGt_f5ekPkwU(MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):0:0 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(La;Ljava/util/concurrent/atomic/AtomicReference;)V"}
+    1:9:void check(boolean,java.lang.String):21:21 -> check
+    10:15:void check(boolean,java.lang.String):22:22 -> check
+    1:2:void cycle(int):70:71 -> cycle
+    3:15:void cycle(int):75:87 -> cycle
+    16:17:void cycle(int):89:90 -> cycle
+    18:20:void cycle(int):92:94 -> cycle
+    21:21:void cycle(int):92:92 -> cycle
+    22:25:void cycle(int):95:98 -> cycle
+    26:27:void cycle(int):101:102 -> cycle
+    28:28:void cycle(int):111:111 -> cycle
+    29:29:boolean io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.isClosed():70:70 -> cycle
+    29:29:void cycle(int):112 -> cycle
+    30:32:void cycle(int):112:114 -> cycle
+    33:34:void cycle(int):116:117 -> cycle
+    35:36:void cycle(int):123:124 -> cycle
+    37:42:void cycle(int):126:131 -> cycle
+    43:43:void cycle(int):134:134 -> cycle
+    44:44:boolean io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.isClosed():70:70 -> cycle
+    44:44:void cycle(int):112 -> cycle
+    45:48:void cycle(int):133:136 -> cycle
+    1:2:org.json.JSONObject framework():139:140 -> framework
+    3:3:org.json.JSONObject framework():142:142 -> framework
+    4:4:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.ignoredLifecycleEvents():69:69 -> framework
+    4:4:org.json.JSONObject framework():143 -> framework
+    5:5:org.json.JSONObject framework():144:144 -> framework
+    6:6:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.ignoredLifecycleEvents():69:69 -> framework
+    6:6:org.json.JSONObject framework():145 -> framework
+    7:7:org.json.JSONObject framework():145:145 -> framework
+    8:8:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    8:8:org.json.JSONObject framework():146 -> framework
+    9:9:org.json.JSONObject framework():147:147 -> framework
+    10:10:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    10:10:org.json.JSONObject framework():148 -> framework
+    11:16:org.json.JSONObject framework():148:153 -> framework
+    17:18:org.json.JSONObject framework():156:157 -> framework
+    19:19:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    19:19:org.json.JSONObject framework():158 -> framework
+    20:20:org.json.JSONObject framework():161:161 -> framework
+    21:22:org.json.JSONObject framework():163:164 -> framework
+    23:27:org.json.JSONObject framework():175:179 -> framework
+    28:28:org.json.JSONObject framework():182:182 -> framework
+    29:29:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    29:29:org.json.JSONObject framework():183 -> framework
+    30:30:org.json.JSONObject framework():183:183 -> framework
+    31:31:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    31:31:org.json.JSONObject framework():184 -> framework
+    32:32:org.json.JSONObject framework():184:184 -> framework
+    33:33:long io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.forwardedEvents():68:68 -> framework
+    33:33:org.json.JSONObject framework():185 -> framework
+    34:34:org.json.JSONObject framework():185:185 -> framework
+    35:35:org.json.JSONObject framework():180:180 -> framework
+    36:36:org.json.JSONObject framework():177:177 -> framework
+    37:37:org.json.JSONObject framework():176:176 -> framework
+    38:41:org.json.JSONObject framework():187:190 -> framework
+    42:42:org.json.JSONObject framework():192:192 -> framework
+    43:43:org.json.JSONObject framework():188:188 -> framework
+    44:44:org.json.JSONObject framework():157:157 -> framework
+    45:45:org.json.JSONObject framework():192:192 -> framework
+    1:5:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):104:104 -> lambda$cycle$0
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(La;Ljava/util/concurrent/atomic/AtomicReference;)V"}
+    6:13:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):105:105 -> lambda$cycle$0
+    14:16:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):107:107 -> lambda$cycle$0
+    17:26:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):108:108 -> lambda$cycle$0
+    27:34:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):105:105 -> lambda$cycle$0
+    35:38:void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference):109:109 -> lambda$cycle$0
+    1:6:void lambda$cycle$1(io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference):119:119 -> lambda$cycle$1
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(Lb;Ljava/util/concurrent/atomic/AtomicReference;)V"}
+    7:12:void lambda$cycle$1(io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference):120:120 -> lambda$cycle$1
+    13:20:void lambda$cycle$1(io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference):119:119 -> lambda$cycle$1
+    21:24:void lambda$cycle$1(io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference):121:121 -> lambda$cycle$1
+    1:6:void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):165:170 -> lambda$framework$2
+    7:7:void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):169:169 -> lambda$framework$2
+    8:9:void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):172:173 -> lambda$framework$2
+    10:10:void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):165:165 -> lambda$framework$2
+    11:11:void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):173:173 -> lambda$framework$2
+    1:1:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():23:23 -> observation
+    1:1:org.json.JSONObject observation():57 -> observation
+    2:3:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():25:26 -> observation
+    2:3:org.json.JSONObject observation():57 -> observation
+    4:7:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():28:31 -> observation
+    4:7:org.json.JSONObject observation():57 -> observation
+    8:8:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():29:29 -> observation
+    8:8:org.json.JSONObject observation():57 -> observation
+    9:9:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():27:27 -> observation
+    9:9:org.json.JSONObject observation():57 -> observation
+    10:11:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():33:34 -> observation
+    10:11:org.json.JSONObject observation():57 -> observation
+    12:12:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():23:23 -> observation
+    12:12:org.json.JSONObject observation():57 -> observation
+    13:13:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():35:35 -> observation
+    13:13:org.json.JSONObject observation():57 -> observation
+    14:17:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():38:41 -> observation
+    14:17:org.json.JSONObject observation():57 -> observation
+    18:18:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():43:43 -> observation
+    18:18:org.json.JSONObject observation():57 -> observation
+    19:19:io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation.capture():45:45 -> observation
+    19:19:org.json.JSONObject observation():57 -> observation
+    20:28:org.json.JSONObject observation():58:66 -> observation
+    1:16:void onCreate(android.os.Bundle):25:25 -> onCreate
+    1:2:void onStart():195:196 -> onStart
+    3:6:void onStart():198:201 -> onStart
+    7:13:void onStart():203:209 -> onStart
+    14:28:void onStart():214:228 -> onStart
+    29:31:void onStart():210:212 -> onStart
+    32:32:void onStart():210:210 -> onStart
+    33:33:void onStart():202:202 -> onStart
+    34:35:void onStart():230:231 -> onStart
+    1:19:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):46:46 -> pressure
+      # {"id":"com.android.tools.r8.residualsignature","signature":"(La;I)V"}
+    20:24:int io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter.restoreBudget():60:60 -> pressure
+    20:24:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):49 -> pressure
+      # {"id":"com.android.tools.r8.rewriteFrame","conditions":["throws(Ljava/lang/NullPointerException;)"],"actions":["removeInnerFrames(1)"]}
+    25:36:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):49:49 -> pressure
+    37:39:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):52:52 -> pressure
+    40:48:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):53:53 -> pressure
+    49:56:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):54:54 -> pressure
+    57:76:void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int):51:51 -> pressure
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$0 -> c:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    android.os.ParcelFileDescriptor io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$$InternalSyntheticLambda$1$758265e3d268e76b127bb29bcad3285ecacac61b74fa81919dd5ffa9802b10c3$0.f$0 -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.util.concurrent.atomic.AtomicReference io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$$InternalSyntheticLambda$1$758265e3d268e76b127bb29bcad3285ecacac61b74fa81919dd5ffa9802b10c3$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.util.concurrent.atomic.AtomicReference io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$$InternalSyntheticLambda$1$758265e3d268e76b127bb29bcad3285ecacac61b74fa81919dd5ffa9802b10c3$0.f$2 -> c
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void PressureR8Instrumentation$0.<init>(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void PressureR8Instrumentation$0.run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$1 -> d:
+# {"id":"sourceFile","fileName":"R8$$SyntheticClass"}
+# {"id":"com.android.tools.r8.synthesized"}
+    int PressureR8Instrumentation$1.$r8$classId -> a
+      # {"id":"com.android.tools.r8.synthesized"}
+    java.util.concurrent.atomic.AtomicReference io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$$InternalSyntheticLambda$1$e9a749ae37e5be9f3578330e9d92022768d938361d102cdf2ca9f96b5e1e37f1$0.f$1 -> b
+      # {"id":"com.android.tools.r8.synthesized"}
+    io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation$$InternalSyntheticLambda$1$e9a749ae37e5be9f3578330e9d92022768d938361d102cdf2ca9f96b5e1e37f1$0.f$0 -> c
+      # {"id":"com.android.tools.r8.residualsignature","signature":"Ljava/lang/AutoCloseable;"}
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:10:void PressureR8Instrumentation$1.<init>(java.lang.AutoCloseable,java.util.concurrent.atomic.AtomicReference,int):0:0 -> <init>
+      # {"id":"com.android.tools.r8.synthesized"}
+    1:22:void PressureR8Instrumentation$1.run():0:0 -> run
+      # {"id":"com.android.tools.r8.synthesized"}
+io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation -> R8$$REMOVED$$CLASS$$0:
+# {"id":"sourceFile","fileName":"ProcessMemoryObservation.java"}
+io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker -> io.github.jichuo1.meguviz.memory.android.a:
+# {"id":"sourceFile","fileName":"PressureR8Instrumentation.java"}
+    1:4:void <init>():238:238 -> <init>

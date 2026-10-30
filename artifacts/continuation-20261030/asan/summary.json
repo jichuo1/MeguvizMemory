@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "state": "PASS",
+  "scope": "WINDOWS_X64_ASAN_SHORT_CONSUMER_COMPOSITION",
+  "receipts": [
+    {
+      "path": "artifacts/continuation-20261030/asan/dex-receipt.json",
+      "bytes": 48354,
+      "sha256": "2401ec7be893f7dc207de68b86a40e54c0fb41a83650c702384a5a0c0c562c89"
+    },
+    {
+      "path": "artifacts/continuation-20261030/asan/image-receipt.json",
+      "bytes": 7066,
+      "sha256": "5347886d01392f4e0e09f82576cb9872c5ab070733b128cfb4e9021677871cdb"
+    }
+  ],
+  "binaries": [
+    {
+      "path": "build/continuation-dex-asan/mgmem_dex_import_consumer.exe",
+      "bytes": 3000320,
+      "sha256": "a60ec02929907a5a68fae871a11c97654be5e9f206e1ac5043f5380add773820",
+      "imported_DLLs": [
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "MSVCP140_1.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-convert-l1-1-0.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "clang_rt.asan_dynamic-x86_64.dll",
+        "mgmem.dll"
+      ]
+    },
+    {
+      "path": "build/continuation-image-asan/mgmem_image_pressure_stability.exe",
+      "bytes": 268800,
+      "sha256": "101d6291602eb46a104f749c4b066be1654390755e7f03010aac7ca4d5ec8ea5",
+      "imported_DLLs": [
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-filesystem-l1-1-0.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "clang_rt.asan_dynamic-x86_64.dll",
+        "mgmem.dll"
+      ]
+    }
+  ],
+  "installed_runtime": {
+    "path": "install/features-asan/bin/mgmem.dll",
+    "bytes": 175616,
+    "sha256": "173d63d72f982a134af84da4498fe8a45707be5d64435fab94614323647fb05e",
+    "imported_DLLs": [
+      "KERNEL32.dll",
+      "MSVCP140.dll",
+      "VCRUNTIME140.dll",
+      "VCRUNTIME140_1.dll",
+      "api-ms-win-crt-heap-l1-1-0.dll",
+      "api-ms-win-crt-runtime-l1-1-0.dll",
+      "api-ms-win-crt-stdio-l1-1-0.dll",
+      "api-ms-win-crt-string-l1-1-0.dll",
+      "clang_rt.asan_dynamic-x86_64.dll"
+    ]
+  },
+  "installed_pressure_static_component": {
+    "path": "install/features-asan/lib/mgmem_pressure.lib",
+    "bytes": 661420,
+    "sha256": "2864e7609b77ed852f600a8bb5528d95417acf036fe650cd55b4d0ef9bc9663f"
+  },
+  "ASan_runtime": {
+    "name": "clang_rt.asan_dynamic-x86_64.dll",
+    "bytes": 1881952,
+    "sha256": "d7cb4da3bac32d7d3af185be4703f90f7b46c329f35ba095a47b872bf0b92220"
+  },
+  "compiler": {
+    "family": "MSVC",
+    "version": "19.51.36247.0",
+    "toolset": "14.51.36231"
+  },
+  "build_configuration": {
+    "dex": {
+      "generator": "Ninja",
+      "configuration": "RelWithDebInfo",
+      "CMAKE_CXX_FLAGS": "/DWIN32 /D_WINDOWS /EHsc /fsanitize=address /Zi",
+      "CMAKE_C_FLAGS": "/DWIN32 /D_WINDOWS /fsanitize=address /Zi",
+      "CMAKE_EXE_LINKER_FLAGS": "/INCREMENTAL:NO",
+      "CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO": "/debug /INCREMENTAL:NO",
+      "instrumented_compilation_units": 16,
+      "CXX_unwind_enabled_units": 15,
+      "all_compilation_units_have_address_sanitizer_and_debug_info": true,
+      "last_incremental_link_option": "/INCREMENTAL:NO",
+      "configured_dependency": "install/features-asan/lib/cmake/MeguvizMemory",
+      "build_graph_sha256": "9597af94ae5834c6e008bc6cbfdf3a94098d39b71eef9c695b1c3d2a6274def3",
+      "CMake_cache_sha256": "3f4c80dbbb8acbbe366c569f15f60a9f705053e1abaca62362eb2d5348352cd9"
+    },
+    "image": {
+      "generator": "Ninja",
+      "configuration": "RelWithDebInfo",
+      "CMAKE_CXX_FLAGS": "/DWIN32 /D_WINDOWS /EHsc /fsanitize=address /Zi",
+      "CMAKE_C_FLAGS": "/DWIN32 /D_WINDOWS /fsanitize=address /Zi",
+      "CMAKE_EXE_LINKER_FLAGS": "/INCREMENTAL:NO",
+      "CMAKE_EXE_LINKER_FLAGS_RELWITHDEBINFO": "/debug /INCREMENTAL:NO",
+      "instrumented_compilation_units": 1,
+      "CXX_unwind_enabled_units": 1,
+      "all_compilation_units_have_address_sanitizer_and_debug_info": true,
+      "last_incremental_link_option": "/INCREMENTAL:NO",
+      "configured_dependency": "install/features-asan/lib/cmake/MeguvizMemory",
+      "build_graph_sha256": "c1345ca8d21089f374d9a1b69febd6fef9767c6e2ed5c785f1366b02ce501745",
+      "CMake_cache_sha256": "e798f6a763cac6ca07b994760838c233ca831dc04d8856559c06fe6ed556c423"
+    },
+    "core": {
+      "MGMEM_SANITIZE": "ON",
+      "configuration": "RelWithDebInfo",
+      "base_CXX_flags": "/DWIN32 /D_WINDOWS /EHsc",
+      "target_compile_flags": [
+        "/fsanitize=address",
+        "/Zi"
+      ],
+      "target_link_flags": [
+        "/INCREMENTAL:NO"
+      ],
+      "core_and_pressure_build_graph_sha256": "5c8bdcc37198b949815f15e026f188deb9fe48248201d668a9147838a316d4cc",
+      "installed_bytes_equal_build_outputs": true
+    }
+  },
+  "source_identity": [
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 8185,
+      "sha256": "8df658444ee0b0d762f7057571e62750bd8593f562d248350d31fc62f84b2f03"
+    },
+    {
+      "path": "src/mgmem.cpp",
+      "bytes": 37264,
+      "sha256": "f3ac54de95caf855f2ddb6f8f4965b2c3a2bddac876e026d70a4def4f9cc91b4"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "bytes": 9521,
+      "sha256": "a1beec7680705e79e73a05250428c9c1c157e7788bc3619f917607f015e24638"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "bytes": 3799,
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "bytes": 9329,
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "consumers/dex/import_consumer.cpp",
+      "bytes": 23151,
+      "sha256": "cc37b84a230646158ec7919b2aa16b034bce1aa2ef920107a55db991e94d23b9"
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "bytes": 2583,
+      "sha256": "ee6eb8513b81ab72251fe168ba8ca2c7b37ac20e5df2d36bb62f8bbc47b85ba1"
+    },
+    {
+      "path": "consumers/image/pressure_stability.cpp",
+      "bytes": 19941,
+      "sha256": "4a11e91cf52b159669a6cd00694ef9440ec205656aa5683352150e37516542b6"
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "bytes": 1620,
+      "sha256": "8128f030073881080f01722e968f550ba83a9bbb211a4108bd42c2468690bd6e"
+    },
+    {
+      "path": "tools/verify_dex_import.py",
+      "bytes": 10581,
+      "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+    },
+    {
+      "path": "tools/verify_image_pressure.py",
+      "bytes": 9691,
+      "sha256": "b2af6a21fd26ec82dc4e07a5795a9a482cb5e0ffdc99fbdbee2d86c034d54342"
+    }
+  ],
+  "frozen_Dex_SDK": {
+    "verified_source_files": 65,
+    "source_lock_sha256": "128624d18f0f359706bdc8f54fb155b9a71ee47f97343c2c6ca70a0eb739daa7",
+    "file_hashes_in_receipt": {
+      "path": "artifacts/continuation-20261030/asan/dex-receipt.json",
+      "bytes": 48354,
+      "sha256": "2401ec7be893f7dc207de68b86a40e54c0fb41a83650c702384a5a0c0c562c89"
+    }
+  },
+  "actual_validation": {
+    "DEX_functional_cases": 12,
+    "DEX_short_stability_cycles": 8,
+    "DEX_minimum_duration_gate_ms": 3628,
+    "DEX_wall_stop": "INCOMPLETE",
+    "DEX_invalid_parameter_rejections": 5,
+    "DEX_verifier_wall_seconds": 56.26600000000326,
+    "image_providers": 2,
+    "image_cycles_each": 4,
+    "image_frames_each": 16,
+    "image_actual_duration_ms_each": [
+      674.4256,
+      673.4014
+    ],
+    "ASan_reports_observed": 0,
+    "native_stderr_empty": true,
+    "long_profile": false,
+    "device_executed": false
+  },
+  "configuration_diagnostic": {
+    "path": "artifacts/continuation-20261030/asan/initial-configuration-diagnostic.json",
+    "bytes": 697,
+    "sha256": "1f993c0e069db497acca6ce25829a4b5cc0b577d7c7c314ba5678c6d8075234b"
+  },
+  "production_sources_modified_for_ASan": false,
+  "new_dependencies": false,
+  "limitations": [
+    "Short ASan functional runs only, not the separate 15-minute stability profile.",
+    "MSVC AddressSanitizer is not ThreadSanitizer, HWASan, MTE, RSS stability or an exhaustive leak proof.",
+    "The first explicit-CXX-flags configuration emitted C4530 and was never run or counted as qualified.",
+    "C++ default unwind/Windows flags were restored; RelWithDebInfo incremental link flags explicitly end in NO.",
+    "No intentional sanitizer fault was injected, and no Android/ADB or performance sampling was run."
+  ]
+}

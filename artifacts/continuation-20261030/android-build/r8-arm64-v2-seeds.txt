@@ -1,0 +1,54 @@
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend
+io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: int completed
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: long peakBacking
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: java.util.concurrent.atomic.AtomicBoolean closing
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: long deadline
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: int completionStatus
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long[] completedSnapshot
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: int checks
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: java.lang.Object completion
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: android.os.Bundle arguments
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long registration
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: boolean completed
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: PressureR8Instrumentation()
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: long bounded(java.lang.String,long,long,long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void lambda$cycle$0(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,java.util.concurrent.atomic.AtomicReference)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: boolean access$100(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: int nativeNotify(long,int)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe holdRetiringLeaseForDiagnostics(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: java.lang.String logicalUnavailableReason(long[],int)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void onStart()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: NativePressureBackend(long,long,long,long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: long[] available(io.github.jichuo1.meguviz.memory.android.NativePressureBackend)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: int nativeBind(long,io.github.jichuo1.meguviz.memory.android.NativePressureBackend,long[])
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void onNativeClosed(int)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void lambda$cycle$1(io.github.jichuo1.meguviz.memory.android.NativePressureBackend$LeaseProbe,java.util.concurrent.atomic.AtomicReference)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: int nativeBeginClose(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: int notifyPressure(int)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: org.json.JSONObject observation()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void beginClose()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void access$200(long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void cycle(int)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long[] snapshot()
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void beforeDeadline()
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void check(boolean,java.lang.String)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: boolean nativeExists(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long nativeHoldProbe(long,long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void nativePollCompletion(long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void lambda$framework$2(android.os.ParcelFileDescriptor,java.util.concurrent.atomic.AtomicReference,java.util.concurrent.atomic.AtomicReference)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void nativeReleaseProbe(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void bind()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: void close()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: boolean awaitClosed(long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void onCreate(android.os.Bundle)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long nativeCreate(long,long,long,long,io.github.jichuo1.meguviz.memory.android.NativePressureBackend,long[])
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: io.github.jichuo1.meguviz.memory.android.NativePressureBackend createArena(long,long,long,long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: io.github.jichuo1.meguviz.memory.android.NativePressureBackend fromNativeRegistration(long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: org.json.JSONObject framework()
+io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker: R8ConsumerMarker()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: long[] nativeSnapshot(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: NativePressureBackend(long)
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend: boolean nativeReadProbe(long)
+io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation: void pressure(io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter,int)

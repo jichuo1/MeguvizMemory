@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "state": "PASS_COUNTEREXAMPLES_AND_CANDIDATE",
+  "scope": "HOST_FAKE_JNI_ACTUAL_CALLBACK_REENTRY_AND_REAL_PRESSURE_CONTROLLER",
+  "production_source_sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416",
+  "files": [
+    {
+      "path": "pressure_jni.original.cpp",
+      "sha256": "2cbaca21755a33d6cfe7297cd88c50d1cda6fb69cc3a40c784fe7e52bb87c66b"
+    },
+    {
+      "path": "pressure_jni.candidate.cpp",
+      "sha256": "776da292e58e276187d87b4843e7c67648790d4bdcb7be0d5e1c63897edf1f2a"
+    },
+    {
+      "path": "lock-boundary-candidate.patch",
+      "sha256": "8a65f4b014fa0dbc53e672b8fbbb05b9e6fcd78b8b741ec6cc7f6a74faec8618"
+    },
+    {
+      "path": "fake_jni_test.cpp",
+      "sha256": "a2eafe8df5ef426af17d26273fb9d1bd21f56fe4a87c9bb81616846f14039f97"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "5a452bdfed179d6f8947fbbbc57e0c497ee63d8e96e26d618bdd29065e03dc3c"
+    },
+    {
+      "path": "run_tests.py",
+      "sha256": "ae3828c5e05ce02306db955a83c4e8bd593389ed3e2745d9a1cad7fcad7658e8"
+    }
+  ],
+  "binaries": [
+    {
+      "name": "jni_lock_old.exe",
+      "sha256": "5bb540fd9df7eef26d89861597dcb91f72ab40a59ec788be162e1dd23d521984"
+    },
+    {
+      "name": "jni_lock_new.exe",
+      "sha256": "4850a401a7fca45398f08642bfef234d228298e4e7478a2917fa569469b3dc35"
+    }
+  ],
+  "runtime": {
+    "name": "mgmem.dll",
+    "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+  },
+  "runs": [
+    {
+      "implementation": "old",
+      "case": "callback-reentry",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"callback-reentry\",\"pass\":false,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":false,\"snapshot_reentered\":false,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "callback-reentry",
+        "pass": false,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": false,
+        "snapshot_reentered": false,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "single-publisher",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"single-publisher\",\"pass\":false,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":false,\"snapshot_reentered\":false,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "single-publisher",
+        "pass": false,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": false,
+        "snapshot_reentered": false,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "attach-retry",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"attach-retry\",\"pass\":false,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":false,\"snapshot_reentered\":false,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "attach-retry",
+        "pass": false,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": false,
+        "snapshot_reentered": false,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "java-exception-retry",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"java-exception-retry\",\"pass\":false,\"callbacks\":2,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":false,\"snapshot_reentered\":false,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "java-exception-retry",
+        "pass": false,
+        "callbacks": 2,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": false,
+        "snapshot_reentered": false,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "error-quarantine",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"error-quarantine\",\"pass\":false,\"callbacks\":2,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":false,\"snapshot_reentered\":false,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "error-quarantine",
+        "pass": false,
+        "callbacks": 2,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": false,
+        "snapshot_reentered": false,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "foreign-release",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"foreign-release\",\"pass\":false,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "foreign-release",
+        "pass": false,
+        "callbacks": 0,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "old",
+      "case": "foreign-release-bind",
+      "exit_code": null,
+      "stdout": "",
+      "stderr": "",
+      "timed_out": true,
+      "phase": "FOREIGN_RELEASE_ENTER_nativeBind\n",
+      "native": null
+    },
+    {
+      "implementation": "old",
+      "case": "foreign-release-snapshot",
+      "exit_code": 1,
+      "stdout": "{\"case\":\"foreign-release-snapshot\",\"pass\":false,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": "FOREIGN_RELEASE_ENTER_nativeSnapshot\nFOREIGN_RELEASE_RETURNED\n",
+      "native": {
+        "case": "foreign-release-snapshot",
+        "pass": false,
+        "callbacks": 0,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "callback-reentry",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"callback-reentry\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "callback-reentry",
+        "pass": true,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "single-publisher",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"single-publisher\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "single-publisher",
+        "pass": true,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "attach-retry",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"attach-retry\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "attach-retry",
+        "pass": true,
+        "callbacks": 1,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "java-exception-retry",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"java-exception-retry\",\"pass\":true,\"callbacks\":2,\"global_ref_deletes\":2,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "java-exception-retry",
+        "pass": true,
+        "callbacks": 2,
+        "global_ref_deletes": 2,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "error-quarantine",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"error-quarantine\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "error-quarantine",
+        "pass": true,
+        "callbacks": 1,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "foreign-release",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"foreign-release\",\"pass\":true,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":true}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": null,
+      "native": {
+        "case": "foreign-release",
+        "pass": true,
+        "callbacks": 0,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": false,
+        "foreign_release_outside_Bridge": true
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "foreign-release-bind",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"foreign-release-bind\",\"pass\":true,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":true,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": "FOREIGN_RELEASE_ENTER_nativeBind\nFOREIGN_RELEASE_RETURNED\n",
+      "native": {
+        "case": "foreign-release-bind",
+        "pass": true,
+        "callbacks": 0,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": true,
+        "foreign_release_outside_Bridge": false
+      }
+    },
+    {
+      "implementation": "new",
+      "case": "foreign-release-snapshot",
+      "exit_code": 0,
+      "stdout": "{\"case\":\"foreign-release-snapshot\",\"pass\":true,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":true,\"foreign_release_outside_Bridge\":false}\n",
+      "stderr": "",
+      "timed_out": false,
+      "phase": "FOREIGN_RELEASE_ENTER_nativeSnapshot\nFOREIGN_RELEASE_RETURNED\n",
+      "native": {
+        "case": "foreign-release-snapshot",
+        "pass": true,
+        "callbacks": 0,
+        "global_ref_deletes": 0,
+        "JNI_operations_outside_Bridge": true,
+        "snapshot_reentered": true,
+        "foreign_actual_JNI_reentry": true,
+        "foreign_release_outside_Bridge": false
+      }
+    }
+  ],
+  "production_modified": false,
+  "Android_executed": false,
+  "limits": [
+    "Fake JNI function tables execute the actual JNI composition C++ and real host pressure worker; no real JVM/ART or Android runtime.",
+    "Both source copies receive the same host-JDK AttachCurrentThread void** signature compatibility edit only.",
+    "Constructed callback/release reentry demonstrates a lock boundary defect, not the unproven cause of the real Android hang.",
+    "Error-quarantine deliberately retains registration and fake pins, not a resource-zero claim."
+  ]
+}

@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "scope": "BOUNDED_MIXED_STABILITY_NOT_PERFORMANCE",
+  "started_at_utc": "2026-10-30T11:59:43.458456+00:00",
+  "state": "BLOCKED",
+  "all_passed": false,
+  "device_serial_sha256": "9e132452d06a8247b18b572b7381f807d317e2983d1eb8f41e7026d8d0e56bbc",
+  "device_directory": "/data/local/tmp/meguvizmemory-arm64-20261030T115943Z-e72795630083",
+  "device_directory_created": false,
+  "shared_device_lock_acquired": false,
+  "admission_rule": "Original owner release plus observational process gates; no future-exclusion guarantee.",
+  "commands": [
+    {
+      "record_id": 1,
+      "name": "before-processes",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "ps",
+        "-A",
+        "-o",
+        "PID,NAME,ARGS"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:788de6de060c20d278fa571a4fff39b8d42559ed4e274f011f804598dead35f7\n{\n  \"scope\": \"All ps rows parsed in memory; only matching diagnostic/test rows are public.\",\n  \"process_rows_parsed\": 317,\n  \"busy_processes\": [],\n  \"explicitly_idle_processes_observed\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.21899999999732245,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "788de6de060c20d278fa571a4fff39b8d42559ed4e274f011f804598dead35f7",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "001-before-processes.stdout.txt",
+      "stderr_file": "001-before-processes.stderr.txt",
+      "selected_inventory": {
+        "scope": "All ps rows parsed in memory; only matching diagnostic/test rows are public.",
+        "process_rows_parsed": 317,
+        "busy_processes": [],
+        "explicitly_idle_processes_observed": []
+      }
+    },
+    {
+      "record_id": 2,
+      "name": "before-instrumentation",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "dumpsys",
+        "activity"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "private_inventory_sha256:88a4db43a0250eeb5ead569a2587d9293c1da75e5be7544083bceca99bf9e220\n{\n  \"scope\": \"Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.\",\n  \"instrumentation_sections\": [],\n  \"observation\": \"NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP\",\n  \"active_instrumentation\": [],\n  \"blocked_instrumentation\": []\n}\n",
+      "stderr": "private_stderr_sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\n",
+      "diagnostic_runner_elapsed_seconds": 0.3129999999982829,
+      "capture_policy": "RAW_IN_MEMORY_ONLY_FILTERED_PUBLIC_OUTPUT",
+      "raw_stdout_sha256": "88a4db43a0250eeb5ead569a2587d9293c1da75e5be7544083bceca99bf9e220",
+      "raw_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_file": "002-before-instrumentation.stdout.txt",
+      "stderr_file": "002-before-instrumentation.stderr.txt",
+      "selected_inventory": {
+        "scope": "Successful dumpsys activity; only mActiveInstrumentation/ActiveInstrumentation sections retained.",
+        "instrumentation_sections": [],
+        "observation": "NO_INSTRUMENTATION_MARKERS_IN_SUCCESSFUL_ACTIVITY_DUMP",
+        "active_instrumentation": [],
+        "blocked_instrumentation": []
+      }
+    },
+    {
+      "record_id": 3,
+      "name": "boot-before",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "cat",
+        "/proc/sys/kernel/random/boot_id"
+      ],
+      "timeout_seconds": 20,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sha256:fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.15600000000267755,
+      "stdout_value_sha256": "fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f",
+      "stdout_value_is_boot_uuid": true,
+      "stdout_file": "003-boot-before.stdout.txt",
+      "stderr_file": "003-boot-before.stderr.txt"
+    },
+    {
+      "record_id": 4,
+      "name": "api",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.build.version.sdk"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "34\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.3129999999982829,
+      "stdout_file": "004-api.stdout.txt",
+      "stderr_file": "004-api.stderr.txt"
+    },
+    {
+      "record_id": 5,
+      "name": "abi",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.cpu.abi"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "x86_64\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.23500000000058208,
+      "stdout_file": "005-abi.stdout.txt",
+      "stderr_file": "005-abi.stderr.txt"
+    },
+    {
+      "record_id": 6,
+      "name": "page",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getconf",
+        "PAGESIZE"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "4096\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.31300000000192085,
+      "stdout_file": "006-page.stdout.txt",
+      "stderr_file": "006-page.stderr.txt"
+    },
+    {
+      "record_id": 7,
+      "name": "model",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "getprop",
+        "ro.product.model"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 0,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "sdk_gphone64_x86_64\r\n",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.4219999999986612,
+      "stdout_file": "007-model.stdout.txt",
+      "stderr_file": "007-model.stderr.txt"
+    },
+    {
+      "record_id": 8,
+      "name": "existing-package",
+      "command": [
+        "<adb>",
+        "-s",
+        "<redacted-device-serial>",
+        "shell",
+        "pm",
+        "path",
+        "io.github.jichuo1.meguviz.memory.pressureprobe.r8"
+      ],
+      "timeout_seconds": 30,
+      "exit_code": 1,
+      "timed_out": false,
+      "launch_error": null,
+      "stdout": "",
+      "stderr": "",
+      "diagnostic_runner_elapsed_seconds": 0.31199999999807915,
+      "stdout_file": "008-existing-package.stdout.txt",
+      "stderr_file": "008-existing-package.stderr.txt"
+    }
+  ],
+  "binary_manifest": [],
+  "tests": {},
+  "qualification": {
+    "arm64_functional": "NOT_RUN",
+    "product_performance": "NOT_STARTED",
+    "actual_16kb_loader": "UNAVAILABLE_UNTIL_OBSERVED",
+    "mte": "UNAVAILABLE_NO_PROCESS_MODE_OR_CONTROLLED_FAULT_TEST",
+    "pfn_pmu_energy": "UNAVAILABLE"
+  },
+  "cleanup": "Dedicated device directory is retained; no automatic deletion or process termination.",
+  "source_sha256": "7449836adc43b01b83d962e1ef5a84749dd316f04137ca8fabcc7ae3f289d7f5",
+  "mode": "smoke",
+  "results": {},
+  "raw_commands": "commands/ retained locally; hashes and checked summaries public",
+  "before_occupancy": {
+    "checked_at_utc": "2026-10-30T11:59:44.184726+00:00",
+    "busy_processes": [],
+    "explicitly_idle_processes_observed": [],
+    "active_instrumentation": [],
+    "blocked_instrumentation": [],
+    "instrumentation_scope": "Only mActiveInstrumentation/ActiveInstrumentation in a successful activity dump; no shared lock guarantee.",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "boot_id_sha256": "fb4c2e6e0e542cd9124fdf4cac6578f54607ddf019ec05c0c205a088c31bd42f",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "model": "sdk_gphone64_x86_64"
+  },
+  "APK": {
+    "sha256": "02bf5ac458cf1de7a6d3a59067b4f3b28070e6faf1ef8e69224a68f1c788a356",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "build_receipt_sha256": "66757041c1afeb391696222e1018add3f985a00df4166cfbd59dc3659f430612"
+  },
+  "reason": "existing-package",
+  "finished_at_utc": "2026-10-30T11:59:47.799050+00:00"
+}

@@ -1,0 +1,426 @@
+package io.github.jichuo1.meguviz.memory.android;
+
+import android.app.Application;
+import android.app.Instrumentation;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ParcelFileDescriptor;
+import android.util.AtomicFile;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+/** Bounded real AAR/R8 consumer. This never exhausts device RAM or forces GC. */
+public final class PressureR8Instrumentation extends Instrumentation {
+    private Bundle arguments;
+    private volatile int checks, completed;
+    private long deadline, peakBacking;
+    private long started;
+    private volatile boolean unsafeCleanup, finished;
+    private boolean injectMainRunningTimeout;
+    private volatile String currentPhase = "created";
+    private volatile String boundaryOutcome = "NO_TIMEOUT";
+    private String runId;
+    private AtomicFile progressFile, resultFile;
+    private final Object progressLock = new Object();
+    private String lastWrittenPhase;
+    private int lastWrittenIteration = -1;
+    private static final class UnknownWork extends Error {
+        UnknownWork(String reason) { super(reason); }
+    }
+    private void writeAtomic(AtomicFile target, JSONObject value) throws Exception {
+        byte[] bytes = (value.toString() + "\n").getBytes("UTF-8");
+        if (bytes.length > 131072) throw new IllegalStateException("bounded diagnostic JSON");
+        FileOutputStream stream = null;
+        try {
+            stream = target.startWrite(); stream.write(bytes); target.finishWrite(stream);
+        } catch (Throwable error) {
+            if (stream != null) target.failWrite(stream);
+            throw error;
+        }
+    }
+    private JSONObject state(String status, String reason) throws Exception {
+        JSONObject value = new JSONObject();
+        value.put("schema_version", 1); value.put("suite", "android-pressure-r8-stability-v1");
+        value.put("diagnostic_revision", 3); value.put("run_id", runId);
+        value.put("status", status); value.put("phase", currentPhase);
+        value.put("iteration", completed); value.put("checks", checks);
+        value.put("elapsed_ms", (System.nanoTime() - started) / 1000000L);
+        value.put("cleanup_safe", !unsafeCleanup);
+        value.put("unsafe_cleanup", unsafeCleanup);
+        value.put("inject_main_running_timeout", injectMainRunningTimeout);
+        value.put("boundary_outcome", boundaryOutcome);
+        value.put("reason", reason == null ? JSONObject.NULL : reason);
+        return value;
+    }
+    private void phase(String name) {
+        currentPhase = name;
+        synchronized (progressLock) {
+            if (name.equals(lastWrittenPhase) && completed == lastWrittenIteration) return;
+            try { writeAtomic(progressFile, state("RUNNING", null)); }
+            catch (Exception error) { throw new AssertionError("own cache progress unavailable", error); }
+            lastWrittenPhase = name; lastWrittenIteration = completed;
+        }
+    }
+    /** Unknown concurrently executing work must never race ordinary finally
+     * cleanup. Persist evidence, then isolate only this diagnostic process. */
+    private synchronized void failStop(String reason) {
+        unsafeCleanup = true;
+        boundaryOutcome = "UNKNOWN_RUNNING_WORK";
+        try {
+            synchronized (progressLock) {
+                JSONObject value = state("UNKNOWN", reason);
+                value.put("exit_scope", "OWN_DIAGNOSTIC_PROCESS_FAIL_STOP_NO_CONCURRENT_FREE");
+                value.put("native_resource_state", "UNKNOWN_NOT_FORCED_FREE");
+                writeAtomic(progressFile, value); writeAtomic(resultFile, value);
+            }
+        } catch (Exception ignored) { /* Last atomic progress remains available. */ }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        throw new UnknownWork(reason); // Do not enter ordinary cleanup if kill returns.
+    }
+    private void startDeadlineWatchdog() {
+        phase("watchdog.start");
+        Thread watcher = new Thread(() -> {
+            while (!finished) {
+                long remaining = deadline - System.nanoTime();
+                if (remaining <= 0) {
+                    if (!finished) failStop("OVERALL_WALL_CAP_UNKNOWN_ACTIVE_BOUNDARY");
+                    return;
+                }
+                try { Thread.sleep(Math.min(250L, Math.max(1L, remaining / 1000000L))); }
+                catch (InterruptedException ignored) { return; }
+            }
+        }, "memory-r8-wall-watchdog");
+        watcher.setDaemon(true); watcher.start();
+    }
+    private boolean option(String name) {
+        String value = arguments.getString(name);
+        if (value == null || "false".equals(value)) return false;
+        if ("true".equals(value)) return true;
+        throw new IllegalArgumentException(name + " requires true/false");
+    }
+    private void check(boolean value, String reason) {
+        ++checks;
+        if (!value) throw new AssertionError(reason);
+    }
+    @Override public void onCreate(Bundle args) {
+        super.onCreate(args); arguments = args == null ? new Bundle() : args; start();
+    }
+    private long bounded(String name, long fallback, long minimum, long maximum) {
+        String text = arguments.getString(name);
+        long value = text == null ? fallback : Long.parseLong(text);
+        if (value < minimum || value > maximum) throw new IllegalArgumentException(name);
+        return value;
+    }
+    private void beforeDeadline() {
+        if (System.nanoTime() >= deadline) {
+            boundaryOutcome = "WALL_REACHED_AT_SAFE_CHECKPOINT";
+            throw new AssertionError("bounded run deadline");
+        }
+    }
+    private long[] available(NativePressureBackend backend) throws InterruptedException {
+        phase("native.snapshot");
+        long until = Math.min(deadline, System.nanoTime() + 3_000_000_000L);
+        do {
+            long[] values = backend.snapshot();
+            if (values != null) return values;
+            Thread.sleep(2);
+        } while (System.nanoTime() < until);
+        throw new AssertionError("snapshot unavailable");
+    }
+    private void pressure(MemoryPressureAdapter adapter, int level) throws InterruptedException {
+        phase("native.pressure." + level);
+        long until = Math.min(deadline, System.nanoTime() + 3_000_000_000L);
+        int status;
+        do {
+            status = level == MemoryPressureAdapter.NORMAL ? adapter.restoreBudget() : adapter.requestPressure(level);
+            if (status == 0) return;
+            if (status != 6) throw new AssertionError("pressure status " + status);
+            Thread.sleep(2);
+        } while (System.nanoTime() < until);
+        throw new AssertionError("pressure admission busy");
+    }
+    private JSONObject observation() throws Exception {
+        phase("observation.capture");
+        ProcessMemoryObservation value = ProcessMemoryObservation.capture();
+        check(value.rssKb >= 0 || value.rssUnavailableReason != null, "RSS missing reason");
+        check(value.pssKb >= 0 || value.androidMemoryUnavailableReason != null, "PSS missing reason");
+        JSONObject sample = new JSONObject();
+        sample.put("elapsed_realtime_nanos", value.elapsedRealtimeNanos);
+        sample.put("rss_kb", value.rssKb >= 0 ? value.rssKb : JSONObject.NULL);
+        sample.put("pss_kb", value.pssKb >= 0 ? value.pssKb : JSONObject.NULL);
+        sample.put("private_dirty_kb", value.privateDirtyKb >= 0 ? value.privateDirtyKb : JSONObject.NULL);
+        sample.put("rss_unavailable_reason", value.rssUnavailableReason == null ? JSONObject.NULL : value.rssUnavailableReason);
+        sample.put("android_memory_unavailable_reason", value.androidMemoryUnavailableReason == null ? JSONObject.NULL : value.androidMemoryUnavailableReason);
+        return sample;
+    }
+    private void cycle(int index) throws Exception {
+        beforeDeadline();
+        phase("cycle.create-arena");
+        NativePressureBackend backend = NativePressureBackend.createArena(4096, 2048, 0, 256);
+        MemoryPressureAdapter adapter = null;
+        NativePressureBackend.LeaseProbe lease = null;
+        try {
+            phase("cycle.register-callback");
+            adapter = new MemoryPressureAdapter(getTargetContext(), backend);
+            long size = 256L * (1 + index % 6);
+            phase("cycle.hold-probe"); lease = backend.holdRetiringLeaseForDiagnostics(size);
+            long[] initial = available(backend);
+            check(initial.length == 16 && initial[3] == size && initial[6] == size, "single retiring backing");
+            peakBacking = Math.max(peakBacking, initial[3]);
+            pressure(adapter, MemoryPressureAdapter.MODERATE);
+            check(available(backend)[2] == 2048, "moderate soft budget");
+            pressure(adapter, MemoryPressureAdapter.CRITICAL);
+            long[] pressured = available(backend);
+            long until = Math.min(deadline, System.nanoTime() + 3_000_000_000L);
+            while (pressured[12] == 0 && System.nanoTime() < until) {
+                Thread.sleep(2); pressured = available(backend);
+            }
+            check(pressured[2] == 0 && pressured[3] == size && pressured[6] == size && pressured[8] == size, "pressure keeps admitted region");
+            check(pressured[12] > 0, "worker defers BUSY while lease retained");
+            boolean denied = false;
+            phase("cycle.probe-budget-denial");
+            try (NativePressureBackend.LeaseProbe unexpected = backend.holdRetiringLeaseForDiagnostics(256)) {
+                check(!unexpected.readable(), "unexpected admission");
+            } catch (IllegalStateException expected) { denied = true; }
+            check(denied, "zero budget rejects new admission");
+            phase("cycle.read-probe"); check(lease.readable(), "pressure preserves readable lease");
+            pressure(adapter, MemoryPressureAdapter.NORMAL);
+            check(available(backend)[2] == 4096, "explicit restore");
+
+            final MemoryPressureAdapter closing = adapter;
+            AtomicReference<Throwable> mainError = new AtomicReference<>();
+            AtomicInteger mainState = new AtomicInteger(0); // pending/running/done/cancelled
+            CountDownLatch mainDone = new CountDownLatch(1);
+            Handler main = new Handler(Looper.getMainLooper());
+            Runnable task = () -> {
+                if (!mainState.compareAndSet(0, 1)) { mainDone.countDown(); return; }
+                try {
+                    if (injectMainRunningTimeout && index == 0) {
+                        // Diagnostic-only expected failure: no other task can
+                        // open this latch. The parent must persist UNKNOWN and
+                        // kill this own process without freeing these objects.
+                        phase("main.injected-running-latch");
+                        new CountDownLatch(1).await();
+                        throw new AssertionError("injected latch unexpectedly released");
+                    }
+                    phase("main.close"); closing.close();
+                    phase("main.poll");
+                    if (closing.awaitClosed(0)) throw new AssertionError("main poll forced live lease");
+                    boolean rejected = false;
+                    try { closing.awaitClosed(1); } catch (IllegalStateException expected) { rejected = true; }
+                    if (!rejected) throw new AssertionError("main positive wait allowed");
+                } catch (Throwable error) { mainError.set(error); }
+                finally { mainState.set(2); mainDone.countDown(); }
+            };
+            phase("main.post");
+            if (!main.post(task)) { mainState.set(3); throw new AssertionError("main post refused before start"); }
+            if (!mainDone.await(3000, TimeUnit.MILLISECONDS)) {
+                if (mainState.compareAndSet(0, 3)) {
+                    boundaryOutcome = "MAIN_TASK_CANCELLED_BEFORE_START";
+                    main.removeCallbacks(task);
+                    phase("main.timeout-cancelled-before-start");
+                    throw new AssertionError("main post deadline; cancelled before execution");
+                }
+                if (mainState.get() != 2) failStop("MAIN_TASK_RUNNING_TIMEOUT");
+            }
+            phase("cycle.main-returned");
+            check(mainError.get() == null, "main close/poll and positive-wait guard");
+            phase("cycle.read-after-close");
+            check(adapter.isClosed() && lease.readable(), "parent close preserves lease");
+            phase("cycle.await-held-lease");
+            check(!adapter.awaitClosed(1), "worker timeout never forces reclaim");
+            check(adapter.requestPressure(MemoryPressureAdapter.NORMAL) == 7, "closed callback admission rejected");
+            final NativePressureBackend.LeaseProbe finishing = lease;
+            AtomicReference<Throwable> releaseError = new AtomicReference<>();
+            Thread release = new Thread(() -> {
+                try {
+                    if (!finishing.readable()) throw new AssertionError("async final read");
+                    finishing.close();
+                } catch (Throwable error) { releaseError.set(error); }
+            }, "memory-r8-last-lease");
+            phase("cycle.start-last-release"); release.start();
+            phase("cycle.join-last-release"); release.join(5000);
+            if (release.isAlive()) failStop("LAST_RELEASE_TASK_RUNNING_TIMEOUT");
+            check(!release.isAlive() && releaseError.get() == null, "async last lease completes");
+            lease = null;
+            phase("cycle.await-native-close");
+            check(adapter.awaitClosed(5000), "native completion callback retained by R8");
+            phase("cycle.final-snapshot");
+            long[] end = backend.snapshot();
+            check(end != null && end[0] == 2 && end[1] == 2 && end[3] == 0 && end[4] == 0 && end[5] == 0 && end[6] == 0 && end[15] == 1, "owned domain/controller closed and zero");
+            phase("cycle.idempotent-close"); adapter.close();
+            check(adapter.awaitClosed(0), "idempotent close complete");
+            ++completed;
+        } finally {
+            if (!unsafeCleanup) {
+                phase("cycle.finally-cleanup");
+                if (lease != null) lease.close();
+                if (adapter != null) { adapter.close(); adapter.awaitClosed(5000); }
+                else { backend.close(); backend.awaitClosed(5000); }
+            }
+        }
+    }
+    private String observeAms(String process) throws Exception {
+        AtomicReference<String> output = new AtomicReference<>(), failure = new AtomicReference<>();
+        Thread command = new Thread(() -> {
+            try {
+                phase("ams.get-ui-automation");
+                android.app.UiAutomation automation = getUiAutomation();
+                phase("ams.execute-shell");
+                ParcelFileDescriptor descriptor = automation.executeShellCommand("am send-trim-memory " + process + " BACKGROUND");
+                phase("ams.read-command");
+                try (InputStream input = new ParcelFileDescriptor.AutoCloseInputStream(descriptor);
+                     ByteArrayOutputStream bytes = new ByteArrayOutputStream()) {
+                    byte[] buffer = new byte[512]; int count;
+                    while ((count = input.read(buffer)) != -1) {
+                        if (bytes.size() + count > 8192) throw new IllegalStateException("bounded shell output");
+                        bytes.write(buffer, 0, count);
+                    }
+                    output.set(bytes.toString("UTF-8"));
+                }
+            } catch (Throwable error) { failure.set(error.getClass().getSimpleName()); }
+        }, "memory-r8-ams-command");
+        phase("ams.start-worker"); command.start(); command.join(3000);
+        if (command.isAlive()) failStop("AMS_ENTRY_OR_COMMAND_RUNNING_TIMEOUT");
+        phase("ams.worker-returned");
+        if (failure.get() != null) return "COMMAND_UNAVAILABLE_" + failure.get();
+        String text = output.get() == null ? "" : output.get();
+        return text.contains("Error") || text.contains("Unknown") || text.contains("Exception") ? "AMS_REJECTED" : "COMMAND_ACCEPTED";
+    }
+    private JSONObject framework(boolean observeAms) throws Exception {
+        phase("framework.create-arena");
+        NativePressureBackend backend = NativePressureBackend.createArena(4096, 2048, 0, 256);
+        MemoryPressureAdapter adapter = null;
+        try {
+            phase("framework.register-callback");
+            adapter = new MemoryPressureAdapter(getTargetContext(), backend);
+            Application application = (Application)getTargetContext().getApplicationContext();
+            long ignored = adapter.ignoredLifecycleEvents();
+            phase("framework.synthetic-ui-hidden"); application.onTrimMemory(20);
+            check(adapter.ignoredLifecycleEvents() == ignored + 1, "UI_HIDDEN remains lifecycle only");
+            long forwarded = adapter.forwardedEvents();
+            phase("framework.synthetic-background"); application.onTrimMemory(40);
+            check(adapter.forwardedEvents() > forwarded && available(backend)[2] == 2048, "registered BACKGROUND callback synthetic dispatch");
+            pressure(adapter, MemoryPressureAdapter.NORMAL);
+            JSONObject result = new JSONObject();
+            result.put("application_dispatch", "PASS_SYNTHETIC_BACKGROUND_AND_UI_HIDDEN");
+            result.put("legacy_automatic_delivery", Build.VERSION.SDK_INT >= 34 ? "NOT_EXPECTED_SINCE_API34_PER_ANDROID_CONTRACT" : "NOT_OBSERVED_BY_THIS_TEST");
+            result.put("onLowMemory_automatic_delivery", Build.VERSION.SDK_INT >= 34 ? "NEVER_CALLED_SINCE_API34_PER_ANDROID_CONTRACT" : "NOT_OBSERVED_BY_THIS_TEST");
+            result.put("observe_ams", observeAms);
+            if (!observeAms) result.put("ams_background_injection", "NOT_REQUESTED_SEPARATE_SMOKE_EVIDENCE");
+            else {
+                String process = getTargetContext().getPackageName();
+                if (!process.matches("[A-Za-z0-9_.]+")) throw new AssertionError("diagnostic package");
+                long before = adapter.forwardedEvents();
+                String outcome = observeAms(process);
+                if ("COMMAND_ACCEPTED".equals(outcome)) {
+                    long until = Math.min(deadline, System.nanoTime() + 3_000_000_000L);
+                    while (adapter.forwardedEvents() == before && System.nanoTime() < until) Thread.sleep(5);
+                    outcome = adapter.forwardedEvents() > before ? "DELIVERED" : "COMMAND_ACCEPTED_NO_CALLBACK_OBSERVED";
+                    if (adapter.forwardedEvents() > before) check(available(backend)[2] == 2048, "injected callback applies budget");
+                }
+                result.put("ams_background_injection", outcome);
+            }
+            result.put("automatic_low_ram_tested", false);
+            result.put("injection_scope", "OWN_DIAGNOSTIC_PACKAGE_ONLY");
+            return result;
+        } finally {
+            if (!unsafeCleanup) {
+                phase("framework.close");
+                if (adapter != null) { adapter.close(); check(adapter.awaitClosed(5000), "framework test clean close"); }
+                else { backend.close(); check(backend.awaitClosed(5000), "framework setup cleanup"); }
+            }
+        }
+    }
+    @Override public void onStart() {
+        Bundle results = new Bundle();
+        started = System.nanoTime(); runId = Long.toHexString(started);
+        try {
+            File cache = getTargetContext().getCacheDir();
+            progressFile = new AtomicFile(new File(cache, "mgmem-r8-progress.json"));
+            resultFile = new AtomicFile(new File(cache, "mgmem-r8-result.json"));
+            phase("arguments.validate");
+            int iterations = (int)bounded("iterations", 100, 1, 100000);
+            long minimum = bounded("min_duration_ms", 0, 0, 1800000);
+            long maximum = bounded("max_duration_ms", 180000, 1000, 3600000);
+            int cadence = (int)bounded("sample_every", 100, 1, 100000);
+            boolean observeAms = option("observe_ams");
+            injectMainRunningTimeout = option("inject_main_running_timeout");
+            if (minimum >= maximum) throw new IllegalArgumentException("duration bounds");
+            deadline = started + maximum * 1000000L;
+            startDeadlineWatchdog();
+            check(Looper.myLooper() != Looper.getMainLooper(), "instrumentation worker required");
+            String marker = new R8ConsumerMarker().getClass().getName();
+            // R8 may rewrite a class-name string literal together with a class
+            // reference. The external validator compares this reported name
+            // with the exact mapping from this APK's build receipt instead.
+            check(marker != null && !marker.isEmpty(), "R8 runtime marker available");
+            JSONObject callback = framework(observeAms);
+            JSONArray observations = new JSONArray(); observations.put(observation());
+            while (completed < iterations || (System.nanoTime() - started) / 1000000L < minimum) {
+                if (completed >= 100000) {
+                    boundaryOutcome = "CYCLE_CAP_REACHED_AT_SAFE_CHECKPOINT";
+                    throw new AssertionError("cycle cap");
+                }
+                cycle(completed);
+                if (completed % cadence == 0 && observations.length() < 256) observations.put(observation());
+            }
+            observations.put(observation());
+            beforeDeadline();
+            JSONObject report = new JSONObject();
+            report.put("suite", "android-pressure-r8-stability-v1"); report.put("status", "PASS");
+            report.put("checks", checks); report.put("iterations_requested", iterations); report.put("iterations_completed", completed);
+            report.put("minimum_duration_ms", minimum); report.put("maximum_duration_ms", maximum);
+            report.put("actual_duration_ms", (System.nanoTime() - started) / 1000000L);
+            report.put("api", Build.VERSION.SDK_INT); report.put("r8_marker_runtime_name", marker);
+            report.put("diagnostic_revision", 3); report.put("run_id", runId);
+            report.put("inject_main_running_timeout", injectMainRunningTimeout);
+            report.put("phase", "complete"); report.put("exit_scope", "NORMAL_INSTRUMENTATION_COMPLETION");
+            report.put("progress_file", "cache/mgmem-r8-progress.json");
+            report.put("unknown_work_policy", "PERSIST_UNKNOWN_AND_FAIL_STOP_OWN_PROCESS_NO_CONCURRENT_FREE");
+            report.put("framework", callback); report.put("own_process_observations", observations);
+            report.put("observation_scope", "WHOLE_OWN_PROCESS_NOT_DOMAIN_ATTRIBUTION_NOT_ATOMIC_NOT_SAVINGS");
+            report.put("peak_requested_backing_bytes_per_domain", peakBacking); report.put("final_backing_bytes_each_domain", 0);
+            report.put("stability_scope", "BOUNDED_CREATE_PRESSURE_RESTORE_MAIN_CLOSE_ASYNC_LAST_RELEASE_CYCLES");
+            report.put("indefinite_leak_freedom_proven", false); report.put("actual_low_memory_event", false);
+            report.put("performance_qualified", false); report.put("BIL_integrated", false);
+            report.put("energy_joules", JSONObject.NULL); report.put("energy_unavailable_reason", "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD");
+            synchronized (progressLock) {
+                currentPhase = "complete";
+                writeAtomic(progressFile, state("PASS", null)); writeAtomic(resultFile, report);
+            }
+            finished = true;
+            results.putString("report_json", report.toString()); finish(0, results);
+        } catch (Throwable error) {
+            if (unsafeCleanup) failStop("UNKNOWN_WORK_NO_NORMAL_FINALLY_CLEANUP");
+            JSONObject report;
+            try {
+                report = state("FAIL", error.getClass().getSimpleName());
+                report.put("iterations_completed", completed);
+                report.put("exit_scope", "NORMAL_FAILURE_AFTER_SAFE_CLEANUP");
+                synchronized (progressLock) {
+                    if (progressFile != null) writeAtomic(progressFile, report);
+                    if (resultFile != null) writeAtomic(resultFile, report);
+                }
+            } catch (Exception unavailable) { report = new JSONObject(); }
+            finished = true;
+            results.putString("report_json", report.toString());
+            results.putString("failure", error.toString()); finish(1, results);
+        }
+    }
+}
+
+// A deliberately retained, renameable consumer witness. It does not keep the
+// adapter package, so production adapter shrink/optimization remains enabled.
+final class R8ConsumerMarker { R8ConsumerMarker() {} }
+final class R8UnusedMarker { static String neverCalled() { return "removed-by-real-r8"; } }

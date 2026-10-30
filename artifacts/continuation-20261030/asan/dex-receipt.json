@@ -1,0 +1,1324 @@
+{
+  "schema_version": 1,
+  "state": "PASS_HOST_FUNCTIONAL_AND_BOUNDED_STABILITY",
+  "device_executed": false,
+  "performance_qualification": "NOT_MEASURED",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+  "input": {
+    "bytes": 10540184,
+    "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+    "publication": "HASH_ONLY"
+  },
+  "binary": {
+    "name": "mgmem_dex_import_consumer.exe",
+    "sha256": "a60ec02929907a5a68fae871a11c97654be5e9f206e1ac5043f5380add773820"
+  },
+  "installed_runtime": {
+    "name": "mgmem.dll",
+    "sha256": "173d63d72f982a134af84da4498fe8a45707be5d64435fab94614323647fb05e"
+  },
+  "source_identity": [
+    {
+      "path": "consumers/dex/import_consumer.cpp",
+      "sha256": "cc37b84a230646158ec7919b2aa16b034bce1aa2ef920107a55db991e94d23b9"
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "sha256": "ee6eb8513b81ab72251fe168ba8ca2c7b37ac20e5df2d36bb62f8bbc47b85ba1"
+    },
+    {
+      "path": "tools/verify_dex_import.py",
+      "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+    }
+  ],
+  "source_lock_sha256": "128624d18f0f359706bdc8f54fb155b9a71ee47f97343c2c6ca70a0eb739daa7",
+  "frozen_SDK_files": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "ea6f523b12b1d5c6da868332edcb5957dba544c280fcb1ec4119a8e5f7ec7173"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "b5948dc567cf7a4be846c49aa93c71768d10239fc8bf7e08e6a1a593f040bb77"
+    },
+    {
+      "path": "CMakePresets.json",
+      "sha256": "73f89b73b14fb167168803db7459373a0e8ab8f6be68dcb063292d7f6d0169a5"
+    },
+    {
+      "path": "DexMeguviz_Engineering_Plan.md",
+      "sha256": "a1b585748f170f699d5f7eaaa27bfbe220234c4f0999281befa3267828b5e809"
+    },
+    {
+      "path": "PROJECT_STATUS.json",
+      "sha256": "d2b5e774df60cf9959012123562192f17b58fe91a956faf91ddd8ef541feeb79"
+    },
+    {
+      "path": "README.md",
+      "sha256": "9494e44d87f508bd6eb0a528873b43331708c599378b34bd72776269b63c0b74"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES",
+      "sha256": "858cd5f15c5567248409c437742e31070b44806053e7d969ebbaa163033cfc84"
+    },
+    {
+      "path": "backlog.json",
+      "sha256": "9122fb993674e280ba1b85dc877ace3ad73491fa0587d37dc0e3117a3a0e8390"
+    },
+    {
+      "path": "cli/diff/dexdiff.py",
+      "sha256": "3729987e838f345b77b24899456465fb8c7dc058363bca613099629c6d4c9e17"
+    },
+    {
+      "path": "cli/json.hpp",
+      "sha256": "4eeeb84c8f08e2d0a8bc2df1f6595fb105609feceb2894ea1164adfce76230f6"
+    },
+    {
+      "path": "cli/main.cpp",
+      "sha256": "179c6c1c7f4169b4a83da154ddea656c63d462662b26cff2fa27f45cba0addb4"
+    },
+    {
+      "path": "cmake/dependencies.cmake",
+      "sha256": "4c037abb5d9dc898f8e7db6244ee94a8f26e948148f0135b7e53015419b1a73b"
+    },
+    {
+      "path": "cmake/fuzz.cmake",
+      "sha256": "8274f8e94aa2cac1881ead76af25cb308bf53c96a0eb6609d32754bee073f34d"
+    },
+    {
+      "path": "dex-handoff-2026-10-28.md",
+      "sha256": "3566885863b8f8b071d1fed0e860b121d5a892489015ec932d0e015c49062d8d"
+    },
+    {
+      "path": "include/dexmeguviz/dexmeguviz.h",
+      "sha256": "c0ef3f65ba0900f5c4e9ab6159a107b3d7cf80f49b73697acc7f006a58abda7f"
+    },
+    {
+      "path": "src/analysis/cfg/cfg.cpp",
+      "sha256": "b302ed86ee9bff78bc53327228447c9bd122b5abc64f04c1f1bd9ce1885b04d2"
+    },
+    {
+      "path": "src/analysis/cfg/cfg.hpp",
+      "sha256": "469c41bd8898f8dc53028e925fa220c999ac35dcb902a123cbe7e4d8a193f5a9"
+    },
+    {
+      "path": "src/analysis/dataflow/dataflow.cpp",
+      "sha256": "4fc36ff1ad3833acf22d02063e149966c61298f9e294b638de2e24c8f661ba6d"
+    },
+    {
+      "path": "src/analysis/dataflow/dataflow.hpp",
+      "sha256": "dc28f40fb35d0f557bf2b4eb1feb4dfdd8f5f65f5cd3d74a5ec4d4bd7276bab2"
+    },
+    {
+      "path": "src/c_api/api.cpp",
+      "sha256": "d682c8c0bdb8803b9ebadb5af7de79af4fa782a3ff47fd69d08e6b99d4ada25c"
+    },
+    {
+      "path": "src/c_api/job.cpp",
+      "sha256": "277264c547013167c910ecc649623ed269ba534165426b62313ba1bb5ec8f824"
+    },
+    {
+      "path": "src/c_api/query_execution.cpp",
+      "sha256": "63fe44315eaf3337545373c94f21270a0a6bf40ce6ea276ea085b0d68e317f6a"
+    },
+    {
+      "path": "src/c_api/runtime.hpp",
+      "sha256": "5c65028a4c4e9ac1133235e8609f321d76006b6f8b9dfc7f1a3b03e828d95a1d"
+    },
+    {
+      "path": "src/c_api/source_input.cpp",
+      "sha256": "8a97781b36a3b622878606fbf150063e48874ee56ea11a0bcb53413343a9e822"
+    },
+    {
+      "path": "src/execution/budget/account.hpp",
+      "sha256": "b1394d6bb9e36b70c25584324920fd3f512b101b30e39085ed0ce9773c76a7ec"
+    },
+    {
+      "path": "src/execution/reference/entity.hpp",
+      "sha256": "9f4b5066d559452cab98719f7b2d5b835b28909ecc8d58fab33b38963f92cedb"
+    },
+    {
+      "path": "src/execution/reference/evaluate.cpp",
+      "sha256": "3ae71f8e19274e93e0b217bde28abe517cab4d288b2216f8d49f49567201d82f"
+    },
+    {
+      "path": "src/execution/reference/evaluate.hpp",
+      "sha256": "cb79b4b6b4cb887ac0ee44400fefe30a9accf4b700a452a15b4564e7d6f02d18"
+    },
+    {
+      "path": "src/execution/reference/hierarchy.hpp",
+      "sha256": "6c301d84f934ddea31450e160299a786f85b8be6ecfa0c1ed01f9adf4f9679a7"
+    },
+    {
+      "path": "src/execution/reference/inherited_fields.hpp",
+      "sha256": "43a8a4780f737109ef51059eecf93acae4d79efedb00243929b99d72a70c91a4"
+    },
+    {
+      "path": "src/execution/reference/interface_fields.hpp",
+      "sha256": "39c405dcc239cda6a7f24d34a69ea239fd38d2a01c8ee4d8ce831d080d03b33e"
+    },
+    {
+      "path": "src/execution/reference/interface_fields_v11.hpp",
+      "sha256": "dca735fe5db9fc38bc08085954354983471819ea08ad75d573828bdfffa73ad0"
+    },
+    {
+      "path": "src/execution/reference/relational.inc",
+      "sha256": "c888bd41705cbd7a312eba7baa849d5f4396b13fbf2dc2076a61af4914952a27"
+    },
+    {
+      "path": "src/facts/README.md",
+      "sha256": "2cad883de8a8253343962f9342642f8b71279b739492c6b0e0ea227be1423f14"
+    },
+    {
+      "path": "src/facts/method_facts.cpp",
+      "sha256": "e312d51be88046b07e3a84259b54cce9e1bfaf0ac17c27144d0ab125c796bc8b"
+    },
+    {
+      "path": "src/facts/method_facts.hpp",
+      "sha256": "eeacc977f908f97368cd9d98312ecd2bfe8b1c8bcae503bdf7c572bb20e76a6d"
+    },
+    {
+      "path": "src/facts/symbols.hpp",
+      "sha256": "8bb9797a1854fdafc65c13f3d268fe9e186522dd0f63a5300bc3437849a39cdd"
+    },
+    {
+      "path": "src/facts/use_relations/use_scan.cpp",
+      "sha256": "b5df32c5fe1eae33e12f5092c250240c450d1582f5a2dab7d882e4a252232227"
+    },
+    {
+      "path": "src/facts/use_relations/use_scan.hpp",
+      "sha256": "50cc2addbe671da538d06272c96a08e4f2767708f446af4db2604cb1b3437f61"
+    },
+    {
+      "path": "src/format/checked_leb128.hpp",
+      "sha256": "d1130c3c888fa6850d2fcf2ba4576f9503011c2baf81151b81d09da954cdab20"
+    },
+    {
+      "path": "src/format/debug_positions.cpp",
+      "sha256": "cb1986766012b6cbbf34d01dd783d85fb2b24558d324f7a592b6acff1f9c87fa"
+    },
+    {
+      "path": "src/format/debug_positions.hpp",
+      "sha256": "e0494bc3b7d57d1541e636e90b2dfef844efa37aaebf742d77f67f5e07937103"
+    },
+    {
+      "path": "src/format/instructions/README.md",
+      "sha256": "88180151670a8eeeb2a770400b27277ad5c7c16f6f0797ad774044cfbba14ace"
+    },
+    {
+      "path": "src/format/instructions/decoder.cpp",
+      "sha256": "ed24e5cd4a796377afa099038e503e66b01bcd6e51937391afec52680bfb7de0"
+    },
+    {
+      "path": "src/format/instructions/decoder.hpp",
+      "sha256": "c3c101a9585cbc8ca598603897a1ea007b8cb286d7fb20a1e88cc002624c475a"
+    },
+    {
+      "path": "src/format/reader.cpp",
+      "sha256": "40b7e4edeefa74b512ff69032b1af45763dddd7a443266f85ebd54cb10cf177e"
+    },
+    {
+      "path": "src/format/reader.hpp",
+      "sha256": "d1a943ab76ceb6f142d5aded737faf7b9d2642989a8d729e9400a761cb8cfaba"
+    },
+    {
+      "path": "src/query/compile.cpp",
+      "sha256": "a9b96f87d3a2e412b48cbd204589f0035dfae79bd0df54d6e773f4bf5a1c29a0"
+    },
+    {
+      "path": "src/query/ir.hpp",
+      "sha256": "42d33c8b11b20141251958b440e24b233684a846d25114301c3b2bd2fe98f0c0"
+    },
+    {
+      "path": "src/query/json.hpp",
+      "sha256": "1c06fd2b1dd99e122925a6a29b4066d18ef9a48026158892e3e2dbedfc2338df"
+    },
+    {
+      "path": "src/query/numeric_match.hpp",
+      "sha256": "7ed6af0856287db1e8e510fd0725d53e322818806e7435aea72e0547e9441c7e"
+    },
+    {
+      "path": "src/query/reflection_flags.hpp",
+      "sha256": "d72cf53572ed3d2880172c872e65d16e0f5e7f280af90941ff066e2e04e0ea7b"
+    },
+    {
+      "path": "src/source/archive/archive.cpp",
+      "sha256": "c3937c2c322bc2b00d724a8c558975648b25181801d42be43e54dfbeae343343"
+    },
+    {
+      "path": "src/source/archive/archive.hpp",
+      "sha256": "58202bc68cc87ca796dd716af03abc99486276c1c3713642e4743d6c66933a59"
+    },
+    {
+      "path": "src/source/sha1.hpp",
+      "sha256": "c1a0fdc9f9cafaf3b40df80bbdc6a9415d76b1a1b3aba59acbb3aa83dd0fd0d5"
+    },
+    {
+      "path": "src/source/sha256.hpp",
+      "sha256": "00680f200e5b9a5077dc662c6281ab400492a004126ca9d0d12215837848d37c"
+    },
+    {
+      "path": "third_party/miniz/LICENSE",
+      "sha256": "0115478d567121238cf6cc1c0c361926cf07a49d9e4c9e66da97fac6a01646b3"
+    },
+    {
+      "path": "third_party/miniz/miniz.c",
+      "sha256": "e2c1aeb66eef9191d8c3feb164db2def2335a61d039bf04ed849f6b042433b30"
+    },
+    {
+      "path": "third_party/miniz/miniz.h",
+      "sha256": "b53b62ed122e559b8f679e3cb787a0b0035fe87a58f909da0e44931678f4e85f"
+    },
+    {
+      "path": "third_party/miniz/upstream-lock.json",
+      "sha256": "c79b1b1d582434401f8c58c67ba2ec4693526e3fe2282da5d1389e928ab3332a"
+    },
+    {
+      "path": "third_party/sqlite/UPSTREAM-NOTICE.txt",
+      "sha256": "eeb865eb9ee7eec90f9dc3d5536f33ba74528e97c8ba021bee61a6ee135463d5"
+    },
+    {
+      "path": "third_party/sqlite/sqlite3.c",
+      "sha256": "0c657666d819f261cc4007526ad57e1669de9949df7a8ea847aa284a2bf0ee52"
+    },
+    {
+      "path": "third_party/sqlite/sqlite3.h",
+      "sha256": "d6c84557261893439b341d2e6c35187ae3ea24fbfd843ad94616f72d89242b8c"
+    },
+    {
+      "path": "third_party/sqlite/sqlite3ext.h",
+      "sha256": "48963abfefb41ac329ef9d706acb5eadba952a99a748285c9ded6b5e0942721b"
+    },
+    {
+      "path": "third_party/sqlite/upstream-lock.json",
+      "sha256": "ff242decb438cd916cd9a7f141e9c89639f95f0f64b461f898101e3610e7a908"
+    }
+  ],
+  "functional_cases": 12,
+  "stability_minimum_cycles_per_variant": 4,
+  "stability_minimum_duration_seconds_per_variant": 0,
+  "stability_completed_owner_tasks": 8,
+  "wall_duration_seconds": 56.26600000000326,
+  "runs": [
+    {
+      "phase": "functional",
+      "variant": "direct",
+      "case": "normal",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "direct",
+        "case": "normal",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2760,
+        "actual_elapsed_ms": 2760,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "direct",
+      "case": "cross-thread",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "direct",
+        "case": "cross-thread",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2360,
+        "actual_elapsed_ms": 2360,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "direct",
+      "case": "corrupt",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "direct",
+        "case": "corrupt",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 204,
+        "actual_elapsed_ms": 204,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": null,
+            "method_count": 0,
+            "result_checksum": 0,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 1000,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "direct",
+      "case": "borrow-budget",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "direct",
+        "case": "borrow-budget",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 17,
+        "actual_elapsed_ms": 17,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": null,
+            "method_count": 0,
+            "result_checksum": 0,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 920,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 0,
+            "SDK_releases_including_caller": 1,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "normal",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "normal",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2611,
+        "actual_elapsed_ms": 2611,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "cross-thread",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "cross-thread",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2737,
+        "actual_elapsed_ms": 2737,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "soft-budget",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "soft-budget",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2405,
+        "actual_elapsed_ms": 2405,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "duplicate",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "duplicate",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2414,
+        "actual_elapsed_ms": 2414,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "import-budget",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "import-budget",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2491,
+        "actual_elapsed_ms": 2491,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "foreign-cookie",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "foreign-cookie",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 2520,
+        "actual_elapsed_ms": 2520,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "corrupt",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "corrupt",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 241,
+        "actual_elapsed_ms": 241,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": null,
+            "method_count": 0,
+            "result_checksum": 0,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 1000,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "functional",
+      "variant": "import",
+      "case": "borrow-budget",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "borrow-budget",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 16,
+        "actual_elapsed_ms": 16,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": null,
+            "method_count": 0,
+            "result_checksum": 0,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 920,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 0,
+            "SDK_releases_including_caller": 1,
+            "last_release_on_worker": false,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "bounded_stability",
+      "variant": "direct",
+      "case": "cross-thread",
+      "cycles": 4,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "direct",
+        "case": "cross-thread",
+        "cycles_completed": 4,
+        "cycles_requested_minimum": 4,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 13322,
+        "actual_elapsed_ms": 13322,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 0,
+            "imported_backing_subset_bytes": 0,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 0,
+            "origin_releases_including_caller": 1,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": null,
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "bounded_stability",
+      "variant": "import",
+      "case": "cross-thread",
+      "cycles": 4,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "cross-thread",
+        "cycles_completed": 4,
+        "cycles_requested_minimum": 4,
+        "minimum_duration_ms": 0,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 16091,
+        "actual_elapsed_ms": 16091,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          },
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    },
+    {
+      "phase": "minimum_duration_gate",
+      "variant": "import",
+      "case": "cross-thread",
+      "cycles": 1,
+      "native": {
+        "schema_version": 1,
+        "workload": "dex_external_import_complete_query",
+        "success": true,
+        "state": "PASS",
+        "variant": "import",
+        "case": "cross-thread",
+        "cycles_completed": 1,
+        "cycles_requested_minimum": 1,
+        "minimum_duration_ms": 1000,
+        "new_cycle_admission_wall_ms": 1200000,
+        "cycle_cap": 65536,
+        "run_duration_ms": 3628,
+        "actual_elapsed_ms": 3628,
+        "stop_reason": "MINIMUM_CYCLES_AND_DURATION_MET",
+        "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+        "iterations": [
+          {
+            "input_bytes": 10540184,
+            "source_capacity_bytes": 10540184,
+            "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+            "method_count": 54147,
+            "result_checksum": 12701547145945416225,
+            "memory_backing_peak_bytes": 10540184,
+            "imported_backing_subset_bytes": 10540184,
+            "source_plus_input_unique_capacity_bytes": 10540184,
+            "extra_input_backing_bytes": 0,
+            "copy_bytes": 0,
+            "provider_published_count": 0,
+            "parser_peak_owned_bytes": 82133915,
+            "origin_retains": 1,
+            "origin_releases_including_caller": 2,
+            "SDK_retains": 1,
+            "SDK_releases_including_caller": 2,
+            "last_release_on_worker": true,
+            "source_freed": true,
+            "final_resources": "ZERO",
+            "memory_domain": "CLOSED_ZERO",
+            "memory_metadata_bytes": null,
+            "rss_pss": null,
+            "energy": null
+          }
+        ],
+        "scope": "independent_DexMeguviz_not_BIL",
+        "performance_qualification": "NOT_MEASURED"
+      }
+    }
+  ],
+  "wall_stop_gate": {
+    "schema_version": 1,
+    "workload": "dex_external_import_complete_query",
+    "success": false,
+    "state": "INCOMPLETE",
+    "variant": "import",
+    "case": "cross-thread",
+    "cycles_completed": 0,
+    "cycles_requested_minimum": 65536,
+    "minimum_duration_ms": 0,
+    "new_cycle_admission_wall_ms": 1,
+    "cycle_cap": 65536,
+    "run_duration_ms": 3,
+    "actual_elapsed_ms": 3,
+    "stop_reason": "WALL_BEFORE_REQUIRED_WORK",
+    "timing_use": "FUNCTIONAL_STABILITY_ONLY_NOT_PERFORMANCE",
+    "iterations": [],
+    "scope": "independent_DexMeguviz_not_BIL",
+    "performance_qualification": "NOT_MEASURED"
+  },
+  "invalid_options_rejected": [
+    {
+      "option": [
+        "--cycles",
+        "0"
+      ],
+      "native": {
+        "schema_version": 1,
+        "success": false,
+        "failure_reason": "cycles_out_of_bounds"
+      }
+    },
+    {
+      "option": [
+        "--cycles",
+        "65537"
+      ],
+      "native": {
+        "schema_version": 1,
+        "success": false,
+        "failure_reason": "cycles_out_of_bounds"
+      }
+    },
+    {
+      "option": [
+        "--case",
+        "unknown"
+      ],
+      "native": {
+        "schema_version": 1,
+        "success": false,
+        "failure_reason": "invalid_case"
+      }
+    },
+    {
+      "option": [
+        "--min-duration-ms",
+        "900001"
+      ],
+      "native": {
+        "schema_version": 1,
+        "success": false,
+        "failure_reason": "min_duration_out_of_bounds_or_duplicate"
+      }
+    },
+    {
+      "option": [
+        "--wall-ms",
+        "1200001"
+      ],
+      "native": {
+        "schema_version": 1,
+        "success": false,
+        "failure_reason": "wall_out_of_bounds_or_duplicate"
+      }
+    }
+  ],
+  "resource_result": {
+    "both_variants_copy_bytes": 0,
+    "both_variants_extra_input_backing_bytes": 0,
+    "imported_charge_is_source_capacity_subset": true,
+    "attribution": "BORROW_REMOVES_COPY_IN_BOTH_MEMORY_ADDS_ACCOUNTING_AND_LIFETIME_NO_NEW_SAVING_CLAIM",
+    "not_measured": [
+      "speedup",
+      "RSS/PSS savings",
+      "energy",
+      "TLB",
+      "24h stability"
+    ]
+  }
+}

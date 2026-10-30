@@ -1,0 +1,10 @@
+{
+  "scope": "PRIVATE_ENGINEERING_REVISION_CORE_0_2_0_ABI1_1_JNI_CLOSEFIX1_NOT_FORMAL_RELEASE",
+  "original_build_aar_sha256": "700101f52e09759d1e64c1932359b9b06d6a30339b350bdf61eb8ebbf2a53c36",
+  "notice_augmented_aar": {
+    "path": "build/continuation-pressure-closefix-package/MeguvizMemory-Android-Pressure-0.2.0-closefix1.aar",
+    "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+  },
+  "runtime_and_Java_bytes": "IDENTICAL_TO_NEW_BUILD_NOTICE_ONLY_ASSEMBLY",
+  "native_cpp_sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+}

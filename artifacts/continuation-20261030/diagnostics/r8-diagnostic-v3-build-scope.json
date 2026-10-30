@@ -1,0 +1,18 @@
+{
+  "scope": "DIAGNOSTIC_HARNESS_ONLY_REBUILD_NOT_RUNTIME_EVIDENCE",
+  "diagnostic_revision": 3,
+  "source_snapshot": {
+    "path": "artifacts/continuation-20261030/diagnostics/r8-instrumentation-v3-guard.java.txt",
+    "bytes": 25233,
+    "sha256": "3f80abfeec7ea366e6ef4077f5c5f77e388d5cc99e8788ec784127eb7457f88f"
+  },
+  "production_JNI_and_Backend": "UNCHANGED_FROM_FIRST_STABILITY_PLAN",
+  "default_observe_ams": false,
+  "progress_file": "cache/mgmem-r8-progress.json",
+  "result_file": "cache/mgmem-r8-result.json",
+  "main_dispatch_limit_ms": 3000,
+  "ams_entire_worker_limit_ms": 3000,
+  "unknown_policy": "WRITE_UNKNOWN_SKIP_ALL_NORMAL_FINALLY_CLEANUP_AND_KILL_OWN_PROCESS",
+  "guard": "inject_main_running_timeout=true; expected UNKNOWN not CLOSED_ZERO",
+  "runtime_validation": "NOT_EXECUTED_BY_THIS_AGENT"
+}

@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "state": "FROZEN_BEFORE_FINAL_STABILITY",
+  "frozen_at_utc": "2026-10-30T12:53:23.936433+00:00",
+  "scope": "NEW_ANDROID_ONLY_CLOSEFIX_ROUND_NOT_CONTINUATION_OF_PRIOR_SAMPLES",
+  "minimum_seconds_per_workload": 900,
+  "maximum_new_work_seconds": 1200,
+  "outer_command_timeout_seconds": 1260,
+  "profiles": [
+    "API33 arm64 R8; own cache phase reporting; bounded main; AMS not requested",
+    "API34 x86_64 R8 same diagnostic revision3 and closefix1 native library"
+  ],
+  "prior_results": "Host and arm64 native DEX/image 900 seconds retained, not repeated. First arm64 Android timeout remains INCOMPLETE; no causal attribution without stack.",
+  "changes": "Proven foreign-release reentry/VM-under-Bridge-lock defects fixed and separately host-tested; cannot identify the old physical hang root cause. Diagnostic-only phase cache, bounded main/watchdog and own-process isolation; AMS kept in independent earlier smoke.",
+  "limits": "Repeated create/close only, not 24h or indefinite leak freedom. No performance/energy/RSS benefit qualification.",
+  "device_admission": "Fresh observational idle gates and expiring user authorization; no shared lock.",
+  "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+  "files": [
+    {
+      "path": "adapters/android/CMakeLists.txt",
+      "bytes": 1080,
+      "sha256": "737592038defd00286bafaef70f31a962d49be3dbed864d4d1bc40fa0e5b3869"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java",
+      "bytes": 4904,
+      "sha256": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "bytes": 6119,
+      "sha256": "e9b0f45d3f64a9a022a5375a9cc4b3437c47f3e24258f6d387246996b47210b5"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java",
+      "bytes": 2651,
+      "sha256": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "bytes": 9329,
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "bytes": 19336,
+      "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest-r8.xml",
+      "bytes": 542,
+      "sha256": "6f03a34d3480798d4873a12a801ee5335729e86eee0309e10b8e07d54c9f5fd1"
+    },
+    {
+      "path": "adapters/android/sample/PressureR8Instrumentation.java",
+      "bytes": 25233,
+      "sha256": "3f80abfeec7ea366e6ef4077f5c5f77e388d5cc99e8788ec784127eb7457f88f"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/pressure-closefix-build.json",
+      "bytes": 6194,
+      "sha256": "796eff67808721929a9f9ce9d2c6d34c8eb745aa22df79affc9a8ecbbdeec771"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/pressure-closefix-notice.json",
+      "bytes": 597,
+      "sha256": "dbbfc0996043b211e747ecad01dce52799f11e0dd389ceeabb2dbf8087afec1f"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-arm64-closefix-build.json",
+      "bytes": 8007,
+      "sha256": "8c9949b34f05b49676976052459beffcd0226ce111204945d399f7ebb46ed780"
+    },
+    {
+      "path": "artifacts/continuation-20261030/android-build/r8-x86_64-closefix-build.json",
+      "bytes": 8373,
+      "sha256": "76750e81074785bdb3f140a9e52c5bd9c6b16ae89e3983df827e9f5cb52039f2"
+    },
+    {
+      "path": "build/continuation-pressure-closefix-package/MeguvizMemory-Android-Pressure-0.2.0-closefix1.aar",
+      "bytes": 660379,
+      "sha256": "b06c8c744b10ec891c2fe9a98079d2686de4cf3655555418c11bfdff4e18e46a"
+    },
+    {
+      "path": "build/continuation-pressure-jni-arm64-closefix/libmgmem_pressure_jni.so",
+      "bytes": 573168,
+      "sha256": "53f8d4609666a285b24fe36d9b886dcb396b6e58a3c7281adde850f55a3a4a71"
+    },
+    {
+      "path": "build/continuation-pressure-jni-x86_64/libmgmem_pressure_jni.so",
+      "bytes": 554304,
+      "sha256": "f27a12b1b509bbb8b0dc57da01fce564847f53e2a0066c6cc99f7ee690c10c62"
+    },
+    {
+      "path": "build/continuation-r8-arm64-closefix/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2339374,
+      "sha256": "34509dfe6a1ec1ce3e8cfd64109653f1f6d7d5bb7f669462f3aad26212e11679"
+    },
+    {
+      "path": "build/continuation-r8-x86_64-closefix/MeguvizMemory-Android-Pressure-0.2.0-x86_64.aar",
+      "bytes": 656566,
+      "sha256": "945909b290a85d7c4d02896bb80f94321e72c8be2e734cb029838de1a2330d29"
+    },
+    {
+      "path": "build/continuation-r8-x86_64-closefix/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 2290216,
+      "sha256": "59ba6484139c924d0962dc3bc00d3a9cccd62b1db350036ef74ea777311da3c1"
+    },
+    {
+      "path": "include/mgmem/android_pressure_jni.h",
+      "bytes": 961,
+      "sha256": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "bytes": 9521,
+      "sha256": "a1beec7680705e79e73a05250428c9c1c157e7788bc3619f917607f015e24638"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "bytes": 3799,
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "install/continuation-x86_64/lib/libmgmem.so",
+      "bytes": 1692040,
+      "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+    },
+    {
+      "path": "install/continuation-x86_64/lib/libmgmem_pressure.a",
+      "bytes": 247144,
+      "sha256": "df1d3b3831056fc7bf59f4309d641946b13b4535fd54cac95d94f359e51b93ad"
+    },
+    {
+      "path": "install/features-arm64/lib/libmgmem.so",
+      "bytes": 1722920,
+      "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+    },
+    {
+      "path": "install/features-arm64/lib/libmgmem_pressure.a",
+      "bytes": 252504,
+      "sha256": "ac6f5d20c7621bb055f725c055d8d927e763b929abfd63e02f811d5c2f6c8966"
+    },
+    {
+      "path": "tools/build_pressure_android.py",
+      "bytes": 8007,
+      "sha256": "30873b954d85060942bfc62fc8771727ddc47cab5195db3eb799d156d3d9cf7d"
+    },
+    {
+      "path": "tools/build_pressure_r8.py",
+      "bytes": 13395,
+      "sha256": "250e20920091a68ce965406af37864da82412d10c27d437369f75fbaf02714e9"
+    },
+    {
+      "path": "tools/run_arm64_validation.py",
+      "bytes": 23760,
+      "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+    },
+    {
+      "path": "tools/run_continuation_device.py",
+      "bytes": 20694,
+      "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+    },
+    {
+      "path": "tools/validate_arm64_consumers_v2.py",
+      "bytes": 34541,
+      "sha256": "68a196ddc23e15f534fb2a9b101484c1e655ae8b2ffe41d85a82c99e6b3e59a5"
+    },
+    {
+      "path": "tools/verify_dex_import.py",
+      "bytes": 10581,
+      "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+    }
+  ],
+  "functional_receipts": [
+    {
+      "path": "artifacts/continuation-20261030/device-arm64-closefix-smoke/receipt.json",
+      "bytes": 22698,
+      "sha256": "9b9d0f1a71fef062bcc50378a2df1b657ce8e67a5aa08db33de062ad6782b3a5"
+    },
+    {
+      "path": "artifacts/continuation-20261030/device-api34-closefix-smoke/receipt.json",
+      "bytes": 22747,
+      "sha256": "ddb9e7d6c98afd8a7daf1aa6cc109bf0b97201efbfb15c1d265bd7cbebc04e13"
+    }
+  ]
+}

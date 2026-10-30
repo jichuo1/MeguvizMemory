@@ -43,6 +43,7 @@ struct Bridge {
     std::atomic<bool> closing{false};
     std::atomic<bool> ready{false};
     bool done = false;
+    bool publishing = false, completion_published = false;
     mgmem_status close_status = MGMEM_BUSY;
     mgmem_pressure_snapshot_v1 final_snapshot{};
     JavaVM *vm=nullptr;
@@ -88,32 +89,57 @@ void snapshot_values(const std::shared_ptr<Bridge> &state,const mgmem_pressure_s
         number(observed.deferred_busy),number(observed.last_status),state->owned?1:0,state->done?1:0};
     std::copy(std::begin(result),std::end(result),values);
 }
+jint attach_current_thread(JavaVM *vm,JNIEnv **env) noexcept {
+#if defined(__ANDROID__)
+    return vm->AttachCurrentThread(env,nullptr);
+#else
+    return vm->AttachCurrentThread(reinterpret_cast<void **>(env),nullptr);
+#endif
+}
 void publish_closed(u64 id,const std::shared_ptr<Bridge> &state,JNIEnv *supplied=nullptr) noexcept {
-    std::unique_lock<std::mutex> state_lock(state->mutex,std::defer_lock);
-    if(supplied) {if(!state_lock.try_lock())return;} else state_lock.lock();
-    if(!state->done)return;
-    bool attached=false,published=state->listener==nullptr;JNIEnv *env=supplied;
-    if(state->vm && state->listener) {
+    JavaVM *vm=nullptr;jobject listener=nullptr;jlongArray buffer=nullptr;jmethodID method=nullptr;
+    mgmem_status status=MGMEM_BUSY;jlong values[16]{};
+    {
+        std::unique_lock<std::mutex> lock(state->mutex,std::defer_lock);
+        if(supplied) {if(!lock.try_lock())return;} else lock.lock();
+        if(!state->done || state->publishing || state->completion_published)return;
+        state->publishing=true;
+        vm=state->vm;listener=state->listener;buffer=state->final_buffer;method=state->completion_method;
+        status=state->close_status;snapshot_values(state,state->final_snapshot,values);
+    }
+    // A single publisher owns these global pins until commit. No JNI operation
+    // or Java callback executes while holding the Bridge mutex.
+    bool attached=false,published=listener==nullptr,deleted=false;JNIEnv *env=supplied;
+    if(vm && listener) {
         if(!env) {
-            const auto status=state->vm->GetEnv(reinterpret_cast<void **>(&env),JNI_VERSION_1_6);
-            if(status==JNI_EDETACHED && state->vm->AttachCurrentThread(&env,nullptr)==JNI_OK)attached=true;
-        }
-        if(env) {
-            jlong values[16];snapshot_values(state,state->final_snapshot,values);
-            env->SetLongArrayRegion(state->final_buffer,0,16,values);
-            if(!env->ExceptionCheck())env->CallVoidMethod(state->listener,state->completion_method,static_cast<jint>(state->close_status));
-            published=!env->ExceptionCheck();
-            if(!published)env->ExceptionClear();
-            if(published && state->close_status==MGMEM_OK) {
-                env->DeleteGlobalRef(state->listener);env->DeleteGlobalRef(state->final_buffer);
-                state->listener=nullptr;state->final_buffer=nullptr;
+            JNIEnv *candidate=nullptr;
+            const auto found=vm->GetEnv(reinterpret_cast<void **>(&candidate),JNI_VERSION_1_6);
+            if(found==JNI_OK)env=candidate;
+            else if(found==JNI_EDETACHED) {
+                candidate=nullptr;
+                if(attach_current_thread(vm,&candidate)==JNI_OK) {env=candidate;attached=true;}
             }
         }
-        if(attached)state->vm->DetachCurrentThread();
+        if(env) {
+            env->SetLongArrayRegion(buffer,0,16,values);
+            if(!env->ExceptionCheck())env->CallVoidMethod(listener,method,static_cast<jint>(status));
+            published=!env->ExceptionCheck();
+            if(!published)env->ExceptionClear();
+            if(published && status==MGMEM_OK) {
+                env->DeleteGlobalRef(listener);env->DeleteGlobalRef(buffer);deleted=true;
+            }
+        }
+        if(attached)vm->DetachCurrentThread();
     }
-    // Poisoned cleanup is retained and reported, never retried or forcibly
-    // destroyed. Successful close removes all registration metadata and JNI pins.
-    if(published && state->close_status==MGMEM_OK) {std::lock_guard<std::mutex> lock(registry_mutex);bridges.erase(id);}
+    {
+        std::lock_guard<std::mutex> lock(state->mutex);
+        if(deleted) {state->listener=nullptr;state->final_buffer=nullptr;}
+        state->completion_published=published;state->publishing=false;
+        state->changed.notify_all();
+    }
+    // Failed attachment/Java delivery keeps all pins and releases the claim for
+    // retry. A reported cleanup error is quarantined, never republished/freed.
+    if(published && status==MGMEM_OK) {std::lock_guard<std::mutex> lock(registry_mutex);bridges.erase(id);}
 }
 void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
     mgmem_pressure_controller *control=nullptr;
@@ -124,10 +150,16 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
         mgmem_pressure_snapshot_v1 last{};
         const auto observed=mgmem_pressure_snapshot_v1_get(control,&last,sizeof(last));
         if (observed==MGMEM_OK && last.state==MGMEM_CLOSED) {
-            std::lock_guard<std::mutex> lock(state->mutex);
-            state->final_snapshot=last;
+            {
+                std::lock_guard<std::mutex> lock(state->mutex);
+                state->final_snapshot=last;state->control=nullptr;
+            }
+            // Detach under the lock after all prior Bridge API calls returned;
+            // destroy joins then invokes the foreign owner's release outside it.
             const auto destroyed=mgmem_pressure_destroy_v1(control);
-            state->control=nullptr;
+            if(destroyed!=MGMEM_OK && destroyed!=MGMEM_PROVIDER_ERROR) {
+                std::lock_guard<std::mutex> lock(state->mutex);state->control=control;
+            }
             if (result==MGMEM_OK) result=destroyed;
         }
     }
@@ -143,10 +175,17 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
         }
         if (result==MGMEM_OK) result=mgmem_domain_drain_v1(domain,0);
         if (result==MGMEM_OK) {
-            std::lock_guard<std::mutex> lock(state->mutex);
-            result=mgmem_domain_snapshot_v1(domain,&state->final_snapshot.domain,sizeof(state->final_snapshot.domain));
-            if (result==MGMEM_OK) result=mgmem_domain_destroy_v1(domain);
-            if (result==MGMEM_OK) {state->owned->domain=nullptr;state->final_snapshot.over_budget_bytes=0;}
+            {
+                std::lock_guard<std::mutex> lock(state->mutex);
+                result=mgmem_domain_snapshot_v1(domain,&state->final_snapshot.domain,sizeof(state->final_snapshot.domain));
+                if(result==MGMEM_OK)state->owned->domain=nullptr;
+            }
+            if (result==MGMEM_OK) {
+                result=mgmem_domain_destroy_v1(domain);
+                std::lock_guard<std::mutex> lock(state->mutex);
+                if(result==MGMEM_OK || result==MGMEM_PROVIDER_ERROR)state->final_snapshot.over_budget_bytes=0;
+                else state->owned->domain=domain; // Non-consuming failure remains quarantined.
+            }
         }
     }
     {
@@ -224,20 +263,27 @@ extern "C" JNIEXPORT jboolean JNICALL JNI_NAME(nativeExists)(JNIEnv *,jclass,jlo
 extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeBind)(JNIEnv *env,jclass,jlong token,jobject listener,jlongArray buffer) {
     auto state=token>0?bridge(token):nullptr;
     if(!state || !listener || !buffer || env->GetArrayLength(buffer)!=16)return MGMEM_INVALID_ARGUMENT;
-    std::unique_lock<std::mutex> lock(state->mutex);
-    if(state->closing.load() || state->listener)return MGMEM_BUSY;
+    {
+        std::lock_guard<std::mutex> lock(state->mutex);
+        if(state->closing.load() || state->listener || state->done)return MGMEM_BUSY;
+    }
     jobject listener_ref=env->NewGlobalRef(listener);
     jlongArray buffer_ref=static_cast<jlongArray>(env->NewGlobalRef(buffer));
     jclass type=env->GetObjectClass(listener);
     auto method=type?env->GetMethodID(type,"onNativeClosed","(I)V"):nullptr;
-    if(!listener_ref || !buffer_ref || !method || env->GetJavaVM(&state->vm)!=JNI_OK) {
-        if(listener_ref)env->DeleteGlobalRef(listener_ref);if(buffer_ref)env->DeleteGlobalRef(buffer_ref);
-        // External native caller still owns this known registration and can
-        // retry binding or explicitly unregister it. Never synchronously reap.
-        return MGMEM_OUT_OF_MEMORY;
+    JavaVM *vm=nullptr;mgmem_status result=MGMEM_OUT_OF_MEMORY;
+    if(listener_ref && buffer_ref && method && env->GetJavaVM(&vm)==JNI_OK) {
+        std::lock_guard<std::mutex> lock(state->mutex);
+        if(state->closing.load() || state->listener || state->done)result=MGMEM_BUSY;
+        else {
+            state->vm=vm;state->listener=listener_ref;state->final_buffer=buffer_ref;state->completion_method=method;
+            result=MGMEM_OK;
+        }
     }
-    state->listener=listener_ref;state->final_buffer=buffer_ref;state->completion_method=method;
-    return MGMEM_OK;
+    if(result!=MGMEM_OK) {
+        if(listener_ref)env->DeleteGlobalRef(listener_ref);if(buffer_ref)env->DeleteGlobalRef(buffer_ref);
+    }
+    return result;
 }
 extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeNotify)(JNIEnv *,jclass,jlong token,jint pressure) {
     auto state=token>0?bridge(token):nullptr;
@@ -250,18 +296,21 @@ extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeNotify)(JNIEnv *,jclass,jlong t
 extern "C" JNIEXPORT jlongArray JNICALL JNI_NAME(nativeSnapshot)(JNIEnv *env,jclass,jlong token) {
     auto state=token>0?bridge(token):nullptr;
     if (!state) return nullptr;
-    std::unique_lock<std::mutex> lock(state->mutex,std::try_to_lock);
-    if (!lock.owns_lock()) return nullptr;
-    mgmem_pressure_snapshot_v1 observed=state->final_snapshot;
-    if (state->control && mgmem_pressure_snapshot_v1_get(state->control,&observed,sizeof(observed))!=MGMEM_OK) return nullptr;
-    if (state->owned && state->owned->domain && !state->done) {
-        if(mgmem_domain_snapshot_v1(state->owned->domain,&observed.domain,sizeof(observed.domain))!=MGMEM_OK)return nullptr;
-        const auto &d=observed.domain;
-        if(d.backing_bytes>std::numeric_limits<u64>::max()-d.reserved_bytes)return nullptr;
-        const u64 charged=d.backing_bytes+d.reserved_bytes;
-        observed.over_budget_bytes=charged>d.budget_bytes?charged-d.budget_bytes:0;
+    jlong values[16];
+    {
+        std::unique_lock<std::mutex> lock(state->mutex,std::try_to_lock);
+        if (!lock.owns_lock()) return nullptr;
+        mgmem_pressure_snapshot_v1 observed=state->final_snapshot;
+        if (!state->done && state->control && mgmem_pressure_snapshot_v1_get(state->control,&observed,sizeof(observed))!=MGMEM_OK) return nullptr;
+        if (state->owned && state->owned->domain && !state->done) {
+            if(mgmem_domain_snapshot_v1(state->owned->domain,&observed.domain,sizeof(observed.domain))!=MGMEM_OK)return nullptr;
+            const auto &d=observed.domain;
+            if(d.backing_bytes>std::numeric_limits<u64>::max()-d.reserved_bytes)return nullptr;
+            const u64 charged=d.backing_bytes+d.reserved_bytes;
+            observed.over_budget_bytes=charged>d.budget_bytes?charged-d.budget_bytes:0;
+        }
+        snapshot_values(state,observed,values);
     }
-    jlong values[16];snapshot_values(state,observed,values);
     auto result=env->NewLongArray(16);if(result)env->SetLongArrayRegion(result,0,16,values);return result;
 }
 extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeBeginClose)(JNIEnv *,jclass,jlong token) {return token>0?schedule_close(token):MGMEM_IS_CLOSED;}
@@ -272,21 +321,25 @@ extern "C" JNIEXPORT jlong JNICALL JNI_NAME(nativeHoldProbe)(JNIEnv *env,jclass,
     try {
         auto state=token>0?bridge(token):nullptr;
         if (!state || bytes<=0 || bytes>64*1024*1024) {fail(env,"invalid probe");return 0;}
+        const char *failure=nullptr;
+        const auto admit=[&]() -> jlong {
         std::lock_guard<std::mutex> lock(state->mutex);
-        if (!state->owned || state->closing.load()) {fail(env,"owned domain required");return 0;}
+        if (!state->owned || state->closing.load()) {failure="owned domain required";return 0;}
         auto item=std::make_shared<Probe>(state->owned);
         mgmem_handle_v1 owner{};
         auto status=mgmem_allocate_v1(item->holder->domain,bytes,64,&owner);
-        if (status!=MGMEM_OK) {fail(env,"probe allocation refused");return 0;}
+        if (status!=MGMEM_OK) {failure="probe allocation refused";return 0;}
         mgmem_borrow_v1 writer{};
         status=mgmem_borrow_acquire_v1(item->holder->domain,owner,0,bytes,MGMEM_WRITE,&writer);
         if(status==MGMEM_OK) {std::memset(writer.data,0x5a,static_cast<size_t>(bytes));status=mgmem_borrow_release_v1(item->holder->domain,writer.lease);}
         if(status==MGMEM_OK)status=mgmem_borrow_acquire_v1(item->holder->domain,owner,0,bytes,MGMEM_READ,&item->view);
         const auto release=mgmem_release_v1(item->holder->domain,owner);
-        if(status!=MGMEM_OK || release!=MGMEM_OK) {fail(env,"probe admission failed");return 0;}
+        if(status!=MGMEM_OK || release!=MGMEM_OK) {failure="probe admission failed";return 0;}
         std::lock_guard<std::mutex> registry_lock(registry_mutex);
-        if(next_probe==max_id) {fail(env,"probe IDs exhausted");return 0;}
+        if(next_probe==max_id) {failure="probe IDs exhausted";return 0;}
         const u64 id=next_probe++;probes.emplace(id,item);return static_cast<jlong>(id);
+        };
+        const auto id=admit();if(failure)fail(env,failure);return id;
     } catch (...) {fail(env,"probe creation failed");return 0;}
 }
 extern "C" JNIEXPORT jboolean JNICALL JNI_NAME(nativeReadProbe)(JNIEnv *,jclass,jlong token) {

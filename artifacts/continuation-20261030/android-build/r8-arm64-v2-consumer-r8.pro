@@ -1,0 +1,4 @@
+-keep class io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation { *; }
+-keep,allowobfuscation class io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker { *; }
+-printusage usage.txt
+-printseeds seeds.txt

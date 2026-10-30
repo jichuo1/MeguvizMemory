@@ -12,4 +12,4 @@
 
 功能、性能、机制与发布分别过门：功能 PASS 仅证明既定用例；宿主资源模型不替代 RSS；设备性能需要新制品和冻结协议；BIL 需要产品路径与回归；16 KB、MTE/HWASan、能量和最终产品依赖闭包独立记录。
 
-新版统计以预排采集窗口为主单位。草案4 pilot窗口、12 formal窗口（每窗口一个session/8块）尚未执行；缺失记录保留为 INCOMPLETE，趋势/实际精度/外层独立性不支持时为 INCONCLUSIVE。不能把连续采集切成多个名字取得资格，不能追加 pilot 直到有利。见 [冻结清单](PROTOCOL_FREEZE_CHECKLIST.md)。
+新版统计以预排采集窗口为主单位。后续冻结版本已完成4个pilot窗口；DEX formal只完成4/12窗口后因环境停止，图像因pilot精度不足未进入formal，见[最终结果](DEVICE_V2_RESULTS.md)。缺失记录保留为INCOMPLETE，趋势/实际精度/外层独立性不支持时为INCONCLUSIVE。不能把连续采集切成多个名字取得资格，不能追加pilot直到有利；旧轮已结束，新问题必须冻结独立协议。见[冻结清单](PROTOCOL_FREEZE_CHECKLIST.md)。

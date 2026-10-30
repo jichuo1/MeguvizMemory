@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "state": "INTERRUPTED_BY_ENGINEERING_PROFILE_CHANGE",
+  "planned_cycles_per_provider": 500,
+  "planned_hold_ms": 10,
+  "wall_limit_ms_per_provider": 180000,
+  "completed_receipt": false,
+  "qualification": "NONE",
+  "reason": "Root requested minimum-active-duration 15-minute profile and sole parent execution; prior fixed-cycle attempt stopped without treating partial output as success"
+}

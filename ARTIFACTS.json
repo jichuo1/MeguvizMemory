@@ -380,5 +380,13 @@
     "manifest": "artifacts/features-20261030/ARTIFACTS.json",
     "scope": "PACKED_IMPORT_PRESSURE_FUNCTIONAL_ENGINEERING_PREVIEW"
   },
-  "legacy_fields_scope": "version/compiled_source_commit/packages below identify the original 0.1 SDK only; current_feature_delivery identifies the new 0.2 SDK"
+  "legacy_fields_scope": "version/compiled_source_commit/packages below identify the original 0.1 SDK only; current_feature_delivery identifies the new 0.2 SDK",
+  "current_consumer_validation_delivery": {
+    "version": "0.2.0",
+    "native_abi": "1.1",
+    "pressure_adapter_revision": "closefix1_engineering",
+    "qualification": "NATIVE_900_SECONDS_HOST18_ASAN18_AND_ANDROID_R8_SMOKE;ANDROID_LONG_NOT_QUALIFIED",
+    "manifest": "artifacts/continuation-20261030/ARTIFACTS.json",
+    "source_lock": "artifacts/continuation-20261030/SOURCE_LOCK.json"
+  }
 }

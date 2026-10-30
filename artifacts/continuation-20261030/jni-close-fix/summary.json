@@ -1,0 +1,361 @@
+{
+  "schema_version": 1,
+  "state": "PASS",
+  "scope": "JNI_CLOSE_LOCK_BOUNDARY_HOST_FUNCTIONAL_AND_ASAN",
+  "production_source": {
+    "path": "adapters/android/native/pressure_jni.cpp",
+    "bytes": 19336,
+    "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+  },
+  "source_identity": [
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "bytes": 19336,
+      "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "bytes": 9329,
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "src/mgmem.cpp",
+      "bytes": 37264,
+      "sha256": "f3ac54de95caf855f2ddb6f8f4965b2c3a2bddac876e026d70a4def4f9cc91b4"
+    },
+    {
+      "path": "tests/jni_lock_tests.cpp",
+      "bytes": 10665,
+      "sha256": "99f09b88447e703b2597169db39993297211023154633766bbcb167409e08ec6"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 9846,
+      "sha256": "984d94c5ec0a2b8b7412c329506d391ed2f56e23b3182378fe40a66116e44645"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "bytes": 9521,
+      "sha256": "a1beec7680705e79e73a05250428c9c1c157e7788bc3619f917607f015e24638"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "bytes": 3799,
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "include/mgmem/android_pressure_jni.h",
+      "bytes": 961,
+      "sha256": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54"
+    }
+  ],
+  "counterexample_as_captured": {
+    "path": "artifacts/continuation-20261030/jni-close-fix/counterexample-as-captured.json",
+    "bytes": 13977,
+    "sha256": "3f06d39deb286e476ff4799afed4f7234d14c0aa9b14213315d69db189f5bb0a"
+  },
+  "original_comparison": {
+    "old_cases": 8,
+    "candidate_cases": 8,
+    "old_nativeBind_reentry": "BOUNDED_3_SECOND_PROCESS_TIMEOUT_ENTER_WITHOUT_RETURN",
+    "candidate_verdict": "PASS_8_OF_8",
+    "uses_actual_composition_CPP": true,
+    "VM": "JDK_HEADERS_FAKE_FUNCTION_TABLES",
+    "pressure_worker": "REAL_HOST_CONTROLLER",
+    "pre_fix_worktree_origin_sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416",
+    "isolated_original_text_copy": {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.original.cpp",
+      "bytes": 17463,
+      "sha256": "2cbaca21755a33d6cfe7297cd88c50d1cda6fb69cc3a40c784fe7e52bb87c66b"
+    },
+    "origin_exact_bytes_from_immutable_commit": {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.pre-fix-origin.raw.txt",
+      "bytes": 17161,
+      "sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416",
+      "git_commit": "ad3a0181fab98f2ba34666295c7744c679cabff1"
+    },
+    "isolated_original_text_equals_origin_after_EOL_normalization": true,
+    "compiled_old_source": {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.host-old.cpp",
+      "bytes": 17490,
+      "sha256": "6a1d54086f77ffb32dc5c5761264ae98264a3290ab7e31135c5202d43d925309"
+    },
+    "compiled_candidate_source": {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.host-new.cpp",
+      "bytes": 19585,
+      "sha256": "776da292e58e276187d87b4843e7c67648790d4bdcb7be0d5e1c63897edf1f2a"
+    },
+    "host_signature_transform": "Old copy only changes Android C++ AttachCurrentThread JNIEnv** call to host JDK void**; candidate uses its portable conditional helper directly.",
+    "candidate_normalized_text_equals_final_production": true,
+    "historical_local_CMake_not_published": "Contains local JDK directory; exact hash remains in as-captured receipt.",
+    "portable_recipe_is_not_the_historical_executed_bytes": {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/counterexample-CMake.portable-recipe.txt",
+      "bytes": 743,
+      "sha256": "51484d7783c14f2ed1b39782960697da534df31405ad2d89d74f168a2e373737"
+    }
+  },
+  "profiles": [
+    {
+      "profile": "host",
+      "state": "PASS",
+      "CTest_count": 18,
+      "configuration": "Release",
+      "MGMEM_BUILD_JNI_HOST_TESTS": "ON",
+      "MGMEM_SANITIZE": "OFF",
+      "CXX_base_flags": "/DWIN32 /D_WINDOWS /EHsc",
+      "JNI_test_address_sanitized": false,
+      "JNI_headers_only_no_JVM_link": true,
+      "JNI_test_imported_DLLs": [
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "mgmem.dll"
+      ],
+      "CMake_cache_sha256": "cb13e7e04f27e3472d93e24da404fa220dadb08429f3daf6cbe26f0c75c03cc3",
+      "build_graph_sha256": "def5ef987298721d6b40534faaaa314064a27d6b4b6750637b6931aa9250c0b1",
+      "ctest_log": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/host-ctest.log",
+        "bytes": 2261,
+        "sha256": "b7cb847998bd90e91a9e62d5311235a1224c3fcfb7a7ab52a90b7dc26113e88d"
+      },
+      "test_details": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/host-test-details.log",
+        "bytes": 15112,
+        "sha256": "f2c6457fcff0030b247deb9e7d1b8696a8f1721acfef49b631aca4e72c9ce9f5"
+      },
+      "ctest_result": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/host-ctest-result.json",
+        "bytes": 263,
+        "sha256": "142d09fc67d54e1de47371bf64ea147edcf62191e0fc2d33df0682b3de134a19"
+      },
+      "binaries": [
+        {
+          "path": "build/continuation-jni-core-host/mgmem.dll",
+          "bytes": 39936,
+          "sha256": "c982b5898397212f67ff1ab3950bb4e26438f73415a87a23cd90f3f20f0f98ed"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_pressure.lib",
+          "bytes": 256740,
+          "sha256": "613a525b72fc915cabe1162c40e4ef5daf9eb14618b7ec38e2a705c1039ee271"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_jni_lock_tests.exe",
+          "bytes": 56832,
+          "sha256": "4fb1214072182cec668356ca78eb287ee7e38c16f11f7be89154763d7058c257"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_core_tests.exe",
+          "bytes": 63488,
+          "sha256": "0766f221c440739c75e46b286031964f358f4261e77b210e0b8485c0dbc214b2"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_import_tests.exe",
+          "bytes": 51712,
+          "sha256": "a1915e4bcd437c813d9deb3b9402fc21b1067b727871c3a69e519067a1b1a5ee"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_pressure_tests.exe",
+          "bytes": 37376,
+          "sha256": "26e586f7559861e56d3d50a3ff83d4e7092b92157fc5b100114c5072dd00d283"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_abi10_consumer.exe",
+          "bytes": 11776,
+          "sha256": "bead3114263655b4377a22f0bf76eee858cd5d72addace9310c243edd91cb17d"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_runtime_tests.exe",
+          "bytes": 13312,
+          "sha256": "6d792eb0f8ee139f8aad5279eba3abd4a2a90b87558d88683ab0088c04ffa35b"
+        },
+        {
+          "path": "build/continuation-jni-core-host/mgmem_other_runtime.dll",
+          "bytes": 39424,
+          "sha256": "35562d4ed096426e161adc97ab60aabda1aa586e1f06a52852d250a0190c609a"
+        }
+      ]
+    },
+    {
+      "profile": "asan",
+      "state": "PASS",
+      "CTest_count": 18,
+      "configuration": "RelWithDebInfo",
+      "MGMEM_BUILD_JNI_HOST_TESTS": "ON",
+      "MGMEM_SANITIZE": "ON",
+      "CXX_base_flags": "/DWIN32 /D_WINDOWS /EHsc",
+      "JNI_test_address_sanitized": true,
+      "JNI_headers_only_no_JVM_link": true,
+      "JNI_test_imported_DLLs": [
+        "KERNEL32.dll",
+        "MSVCP140.dll",
+        "VCRUNTIME140.dll",
+        "VCRUNTIME140_1.dll",
+        "api-ms-win-crt-heap-l1-1-0.dll",
+        "api-ms-win-crt-locale-l1-1-0.dll",
+        "api-ms-win-crt-math-l1-1-0.dll",
+        "api-ms-win-crt-runtime-l1-1-0.dll",
+        "api-ms-win-crt-stdio-l1-1-0.dll",
+        "api-ms-win-crt-string-l1-1-0.dll",
+        "clang_rt.asan_dynamic-x86_64.dll",
+        "mgmem.dll"
+      ],
+      "CMake_cache_sha256": "209c9403bf766d367a13a5cba341a7847b05479cfbe1d613b181c8ad62734ee1",
+      "build_graph_sha256": "ef3e74b98143bc755d50fc6ff14c78523ef5a588392d19235ca241f97e841a43",
+      "ctest_log": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/asan-ctest.log",
+        "bytes": 2261,
+        "sha256": "625c87ee4a1f78a42e2494bae7aa9381b84371628ac1491f10bb64dda0c8ec6f"
+      },
+      "test_details": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/asan-test-details.log",
+        "bytes": 15112,
+        "sha256": "2c1af56de7763ae159f04eef7c7eab24939194d7bbce3a9d4c7dbafcb21c24ae"
+      },
+      "ctest_result": {
+        "path": "artifacts/continuation-20261030/jni-close-fix/asan-ctest-result.json",
+        "bytes": 263,
+        "sha256": "7f113b67ab4d75feb019f68be8f3356f9b7efba83dc62df1d3787e06cb5f7876"
+      },
+      "binaries": [
+        {
+          "path": "build/continuation-jni-core-asan/mgmem.dll",
+          "bytes": 175616,
+          "sha256": "a2e8a990734048d33a8b14d5ebe4bd43411fea538d6a3a2a70edaec1a7293502"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_pressure.lib",
+          "bytes": 661444,
+          "sha256": "dcaaa427bd176bafafcc74a1f313948771c5262ca8f003b859adc10abae5f63e"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_jni_lock_tests.exe",
+          "bytes": 235520,
+          "sha256": "853f025d8b2d6c3e230ca4b70dc08b30828b82afb50e820ed6ca193ec6adc794"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_core_tests.exe",
+          "bytes": 186880,
+          "sha256": "6dbd0be99c30ac13bfab3348dfd9e4d982a012ccce71314a2e03568665170a7d"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_import_tests.exe",
+          "bytes": 156672,
+          "sha256": "42c2179cee946a57672374b0bf58931e6a1edfec5b807eea23cea6c007efb868"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_pressure_tests.exe",
+          "bytes": 137728,
+          "sha256": "2a68d3be202614890a1eba798921bdacb9e304bdd1da3f9f216afc53b6f26267"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_abi10_consumer.exe",
+          "bytes": 42496,
+          "sha256": "e646e196dd4f1ca9e35492f2ff8a49e1db2d0073e71cb8ac5fe2cff45433f5da"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_runtime_tests.exe",
+          "bytes": 43008,
+          "sha256": "e67d816f4ec939688afd32772dca67e75cb265022d48f4beeacb2fbd551837df"
+        },
+        {
+          "path": "build/continuation-jni-core-asan/mgmem_other_runtime.dll",
+          "bytes": 175616,
+          "sha256": "00c8562473dc562d50a645942c3193704cecaeb56aea8266e15b08f3d8f18099"
+        }
+      ]
+    }
+  ],
+  "snapshots": [
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/counterexample-CMake.portable-recipe.txt",
+      "bytes": 743,
+      "sha256": "51484d7783c14f2ed1b39782960697da534df31405ad2d89d74f168a2e373737"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/fake_jni_test.cpp",
+      "bytes": 10745,
+      "sha256": "a2eafe8df5ef426af17d26273fb9d1bd21f56fe4a87c9bb81616846f14039f97"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/jni_lock_tests.final.cpp",
+      "bytes": 10665,
+      "sha256": "99f09b88447e703b2597169db39993297211023154633766bbcb167409e08ec6"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/lock-boundary-candidate.patch",
+      "bytes": 13601,
+      "sha256": "8a65f4b014fa0dbc53e672b8fbbb05b9e6fcd78b8b741ec6cc7f6a74faec8618"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/phase-new-foreign-release-bind.txt",
+      "bytes": 60,
+      "sha256": "ea51d8a0689c57c314e99c704777d5cbfda7af5cf6ad7d9fe8c26146a026c88f"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/phase-new-foreign-release-snapshot.txt",
+      "bytes": 64,
+      "sha256": "7fbda0d3f1f655a7e372c1167c12766db6a28485e3f7aed8a4dc7b3103f3b9fc"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/phase-old-foreign-release-bind.txt",
+      "bytes": 34,
+      "sha256": "0fd130e80efa64febe563bc9fb748bb002bc1e6fdefa1d3c118ad941c3abe97e"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/phase-old-foreign-release-snapshot.txt",
+      "bytes": 64,
+      "sha256": "7fbda0d3f1f655a7e372c1167c12766db6a28485e3f7aed8a4dc7b3103f3b9fc"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.candidate.cpp",
+      "bytes": 19585,
+      "sha256": "776da292e58e276187d87b4843e7c67648790d4bdcb7be0d5e1c63897edf1f2a"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.final.cpp",
+      "bytes": 19336,
+      "sha256": "fc439c597f3d8b6c45ddacfdd135c52332ee8261a2816151a2ea7603c7a5c96c"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.host-new.cpp",
+      "bytes": 19585,
+      "sha256": "776da292e58e276187d87b4843e7c67648790d4bdcb7be0d5e1c63897edf1f2a"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.host-old.cpp",
+      "bytes": 17490,
+      "sha256": "6a1d54086f77ffb32dc5c5761264ae98264a3290ab7e31135c5202d43d925309"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.original.cpp",
+      "bytes": 17463,
+      "sha256": "2cbaca21755a33d6cfe7297cd88c50d1cda6fb69cc3a40c784fe7e52bb87c66b"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/pressure_jni.pre-fix-origin.raw.txt",
+      "bytes": 17161,
+      "sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416"
+    },
+    {
+      "path": "artifacts/continuation-20261030/jni-close-fix/snapshots/run_tests.py",
+      "bytes": 3474,
+      "sha256": "ae3828c5e05ce02306db955a83c4e8bd593389ed3e2745d9a1cad7fcad7658e8"
+    }
+  ],
+  "limitations": [
+    "This establishes constructed callback/foreign-release reentry defects and lock-free publication boundaries, not the cause of the historical physical Android hang.",
+    "Fake JNI uses real JNI C++ declarations/function tables but does not start a JVM or ART.",
+    "Production regressions compile the final production CPP directly; historical counterexamples compile explicitly identified isolated source copies.",
+    "Error-quarantine intentionally keeps registration/pins and is not a resource-zero result.",
+    "Attach/Java delivery failure preserves pins for a later retry; normal successful reaping still publishes automatically without Java polling.",
+    "No Android/device testing, long-running profile, TSAN or HWASan/MTE qualification is established by these host tests."
+  ]
+}

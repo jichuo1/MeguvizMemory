@@ -1,0 +1,22 @@
+{
+  "state": "PASS",
+  "previous_public_commit": "ad3a0181fab98f2ba34666295c7744c679cabff1",
+  "previous_file_sha256": {
+    "TASKS.json": "96981b1de70185f5220e6ac5114b971d242ce3991465d36403cb48eb4560aee5",
+    "CAPABILITY_MATRIX.json": "76d0cc868a9db0aa7638850198eac8b3f785644b5bc2e7dadc27f2ee537a9e7b",
+    "STATE.md": "4d3def9193f06e39137e2af5987da762c9bc527110bf807cc17d2ca64f13989c",
+    "README.md": "8295ab502056c77d081672238a7b6e9a073205f333c6478191ee499ff21f11bc"
+  },
+  "original_MM_dependency_arrays": "ALL_24_UNCHANGED",
+  "historical_raw_receipts": "NOT_MODIFIED",
+  "resolved": [
+    "live collector implemented and executed",
+    "four source strategies ran on real arm64",
+    "v2 experiment terminal, not still piloting",
+    "own RSS/PSS observation available, benefit not qualified",
+    "family contract audited, missing injection identified",
+    "pressure JNI implemented, general ByteBuffer JNI unselected",
+    "new features scope 0.2 vs historical 0.1 ABIs"
+  ],
+  "new_continuation_results": "PENDING_NOT_INFERRED_FROM_OLD_TESTS"
+}

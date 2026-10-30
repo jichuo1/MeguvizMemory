@@ -1,0 +1,16 @@
+io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend:
+    public abstract long[] snapshot()
+io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter:
+    public static final int CRITICAL
+    public static final int MODERATE
+    public static final int NORMAL
+    public long[] logicalSnapshot()
+io.github.jichuo1.meguviz.memory.android.R8UnusedMarker
+io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter$Backend
+io.github.jichuo1.meguviz.memory.android.MemoryPressureAdapter:
+    public static long forwardedEvents()
+    public static long ignoredLifecycleEvents()
+    public static boolean isClosed()
+    public static int restoreBudget()
+io.github.jichuo1.meguviz.memory.android.NativePressureBackend$1
+io.github.jichuo1.meguviz.memory.android.ProcessMemoryObservation

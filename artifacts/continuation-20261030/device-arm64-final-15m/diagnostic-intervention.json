@@ -1,0 +1,7 @@
+{
+  "state": "DIAGNOSTIC_INTERVENTION_NOT_CLEAN_ANDROID_STABILITY_PASS",
+  "reason": "Own R8 process remains idle after minimum duration and has not returned; request own ART thread dump",
+  "scope": "Android child only; completed native DEX/image results retained separately",
+  "at_utc": "2026-10-30T12:26:52.0090333Z",
+  "method_source": "https://source.android.com/docs/core/runtime/gc-debug"
+}

@@ -1,0 +1,35 @@
+{
+  "scope": "Exact executed orchestration/harness source for first frozen window; native consumers unchanged",
+  "aliases": [
+    {
+      "original_path": "tools/run_continuation_device.py",
+      "executed_sha256": "cf33076626432e56f44961052a703f2e55807a62f4c0a7a30f9d70a1b4c3be2f",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/run_continuation_device.py.txt"
+    },
+    {
+      "original_path": "adapters/android/sample/PressureR8Instrumentation.java",
+      "executed_sha256": "81a2c41091abfc0b62744586484433dfa07c2414008b67f9a9006528413a905a",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/PressureR8Instrumentation.java.txt"
+    },
+    {
+      "original_path": "tools/build_pressure_r8.py",
+      "executed_sha256": "250e20920091a68ce965406af37864da82412d10c27d437369f75fbaf02714e9",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/build_pressure_r8.py.txt"
+    },
+    {
+      "original_path": "tools/run_host_stability.py",
+      "executed_sha256": "1b453f0b540f56074c6648a7acde3cbc8d97d8b95a0116f30202ec2c9830df87",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/run_host_stability.py.txt"
+    },
+    {
+      "original_path": "adapters/android/native/pressure_jni.cpp",
+      "executed_sha256": "093470fcf3ca383721fa87f32a4a0f00356f3fc6027df8bae2ec36a540501416",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/pressure_jni.cpp.txt"
+    },
+    {
+      "original_path": "CMakeLists.txt",
+      "executed_sha256": "8df658444ee0b0d762f7057571e62750bd8593f562d248350d31fc62f84b2f03",
+      "exact_archived_source": "artifacts/continuation-20261030/frozen-first-stability/CMakeLists.txt.txt"
+    }
+  ]
+}

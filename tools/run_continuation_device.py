@@ -1,0 +1,251 @@
+"""Bounded mixed functional/stability capture after a fresh idle-device gate.
+
+No performance inference, global memory exhaustion, uninstall, app-data clearing,
+unrelated process termination or device-policy change. A transport timeout leaves
+remote process state UNKNOWN and prevents an idle/completed claim.
+"""
+from __future__ import annotations
+import argparse
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+import time
+import zipfile
+from run_arm64_validation import Runner, Blocked, Failed, digest, parse_last_json, utc_now
+from validate_arm64_consumers_v2 import current_release
+from verify_dex_import import INPUT_HASH, INPUT_BYTES, METHODS, CHECKSUM
+
+ROOT=Path(__file__).resolve().parents[1]
+PACKAGE='io.github.jichuo1.meguviz.memory.pressureprobe.r8'
+COMPONENT=PACKAGE+'/io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation'
+
+def stability_plan(minimum,wall,path=None):
+    path=path or ROOT/'artifacts/continuation-20261030/stability-plan.json'
+    value=json.loads(path.read_text(encoding='utf-8'))
+    require(value['state']=='FROZEN_BEFORE_FINAL_STABILITY' and value['minimum_seconds_per_workload']==minimum and value['maximum_new_work_seconds']==wall,'stability_plan_parameters')
+    for item in value['files']:
+        source=(ROOT/item['path']).resolve()
+        require(source.is_relative_to(ROOT) and digest(source)==item['sha256'],'stability_plan_input_drift_'+item['path'])
+    return digest(path)
+
+def require(value,reason):
+    if not value:raise Failed(reason)
+
+def native_checks(kind,value,minimum):
+    require(value.get('success') is True,kind+'_not_complete')
+    if kind=='dex':
+        require(value.get('actual_elapsed_ms',-1)>=minimum*1000,'dex_minimum_duration')
+        require(value.get('state')=='PASS' and value.get('cycles_completed',0)>=1,'dex_state')
+        rows=value.get('iterations',[]);require(len(rows)==value['cycles_completed'],'dex_iteration_count')
+        for row in rows:
+            require(row['input_bytes']==INPUT_BYTES and row['source_sha256']==INPUT_HASH and row['method_count']==METHODS and row['result_checksum']==CHECKSUM,'dex_complete_work')
+            require(row['source_plus_input_unique_capacity_bytes']==row['source_capacity_bytes'] and row['extra_input_backing_bytes']==row['copy_bytes']==row['provider_published_count']==0,'dex_unique_capacity')
+            require(row['memory_backing_peak_bytes']==row['imported_backing_subset_bytes']==row['source_capacity_bytes'],'dex_import_charge')
+            require(row['origin_releases_including_caller']==row['origin_retains']+1 and row['SDK_releases_including_caller']==row['SDK_retains']+1,'dex_callback_balance')
+            require(row['source_freed'] is True and row['final_resources']=='ZERO' and row['memory_domain']=='CLOSED_ZERO' and row['last_release_on_worker'] is True,'dex_final_lifetime')
+        return {'state':'PASS','cycles_completed':len(rows),'actual_elapsed_ms':value['actual_elapsed_ms'],'method_count_per_task':METHODS,'checksum_per_task':CHECKSUM,'source_plus_input_unique_capacity_bytes':rows[0]['source_capacity_bytes'],'copy_bytes':0,'extra_input_backing_bytes':0,'all_final_domains':'CLOSED_ZERO','performance':'NOT_MEASURED'}
+    # Full image output is independently compared by the native consumer with
+    # Python-generated oracle files; the exact public fixtures are hash-locked.
+    require(value.get('consumer')=='image_pressure_stability_v1','image_suite')
+    cycles=value.get('cycles_completed',0);frames=cycles*4
+    require(cycles>=4 and value['frames_completed']==frames and value['normal_cycles_closed_zero']==cycles,'image_final_resources')
+    require(value['zero_budget_denials']==value['explicit_restore_admissions']==frames and value['held_close_timeouts']==2*cycles,'image_budget_and_close')
+    require(value['deferred_busy_total']>=frames and value['quiet_trim_successes_total']>=3*cycles,'image_worker_deferral_and_trim')
+    require(value['checksum']==7336452*cycles and value['gray_conversions']==57829*cycles,'image_complete_checksum_and_work')
+    require(value['active_loop_duration_ns']>=minimum*1000000000,'image_minimum_duration')
+    require(value['rss_pss_bytes'] is None and value['energy'] is None and value['performance_qualification']=='NOT_STARTED','image_qualification_scope')
+    return value
+
+def android_checks(stdout,minimum,api,expected_marker):
+    found=re.findall(r'(?m)^INSTRUMENTATION_RESULT: report_json=(\{.*\})\r?$',stdout)
+    require(len(found)==1,'one_instrumentation_report_required')
+    value=json.loads(found[0]);require(value.get('status')=='PASS' and value.get('suite')=='android-pressure-r8-stability-v1','android_report_failed')
+    require(value['actual_duration_ms']>=minimum*1000 and value['iterations_completed']>=3 and value['api']==api,'android_duration_identity')
+    require(value['final_backing_bytes_each_domain']==0 and value['indefinite_leak_freedom_proven'] is False and value['performance_qualified'] is False,'android_qualification_scope')
+    require(value['r8_marker_runtime_name']==expected_marker and expected_marker!='io.github.jichuo1.meguviz.memory.android.R8ConsumerMarker','r8_not_renamed_as_built')
+    require(value['framework']['automatic_low_ram_tested'] is False,'unexpected_global_low_memory_test')
+    require(re.search(r'(?m)^INSTRUMENTATION_CODE: 0\s*$',stdout) is not None,'instrumentation_not_finished_OK')
+    return value
+
+class Continuation(Runner):
+    def __init__(self,args):
+        super().__init__(args,args.out_dir)
+        self.output.mkdir(parents=True,exist_ok=False);(self.output/'commands').mkdir()
+        self.receipt.update(scope='BOUNDED_MIXED_STABILITY_NOT_PERFORMANCE',source_sha256=digest(Path(__file__)),mode=args.mode,results={},raw_commands='commands/ retained locally; hashes and checked summaries public')
+        self.admission_hash=digest(args.admission);self.journal_lock=None
+    def redact(self,value):
+        value=super().redact(value)
+        if isinstance(value,str):
+            return value.replace(str(ROOT),'<workspace>').replace(ROOT.as_posix(),'<workspace>').replace(str(self.args.adb),'<adb>')
+        return value
+    def save(self):
+        # Exact command streams live in an ignored subdirectory, never copied
+        # into the public receipt. The saved receipt has fsync+atomic replacement.
+        public=self.redact(self.receipt)
+        path=self.output/'receipt.pending.json'
+        with path.open('wb') as stream:
+            stream.write((json.dumps(public,ensure_ascii=False,indent=2)+'\n').encode());stream.flush();os.fsync(stream.fileno())
+        os.replace(path,self.output/'receipt.json')
+    def gate(self):
+        current_release(self.args.admission,self.args.serial)
+        require(digest(self.args.admission)==self.admission_hash,'admission_changed')
+    def command(self,*args,**kwargs):
+        self.gate();return super().command(*args,**kwargs)
+    def checked(self,name,args,timeout=30,private=False):
+        row=self.command(name,args,timeout=timeout,capture_private_inventory=private);self.require_command(row,name);return row
+    def host(self,args):
+        self.gate();done=subprocess.run([str(x) for x in args],capture_output=True,timeout=60)
+        require(done.returncode==0,'host_APK_identity_tool');return done.stdout.decode('utf-8','replace')
+    def certificate(self,path):
+        text=self.host([self.args.java_home/'bin/java.exe','-jar',self.args.sdk/'build-tools/37.0.0/lib/apksigner.jar','verify','--print-certs',path])
+        values=re.findall(r'certificate SHA-256 digest:\s*([0-9a-fA-F]{64})',text)
+        require(len(values)==1,'APK_one_signer_required');return values[0].lower()
+    def stage(self):
+        self.gate();self.occupancy('before',{})
+        if self.args.mode=='soak':self.receipt['stability_plan_sha256']=stability_plan(self.args.min_seconds,self.args.wall_seconds,self.args.plan)
+        self.receipt['android_only']=self.args.android_only
+        boot=self.command('boot-before',['shell','cat','/proc/sys/kernel/random/boot_id'],hash_stdout=True)
+        self.require_command(boot,'boot_before');require(boot['stdout_value_is_boot_uuid'],'boot_identity')
+        self.boot=boot['stdout_value_sha256'];self.receipt['boot_id_sha256']=self.boot
+        self.api=int(self.checked('api',['shell','getprop','ro.build.version.sdk'])['stdout'].strip())
+        abi=self.checked('abi',['shell','getprop','ro.product.cpu.abi'])['stdout'].strip()
+        require(abi==self.args.abi,'device_abi_mismatch')
+        page=int(self.checked('page',['shell','getconf','PAGESIZE'])['stdout'].strip())
+        self.receipt['device']={'api':self.api,'abi':abi,'page_bytes':page,'model':self.checked('model',['shell','getprop','ro.product.model'])['stdout'].strip()}
+        require((self.args.abi!='x86_64' or self.api>=34),'API34_plus_required_for_emulator')
+        built=json.loads(self.args.r8_receipt.read_text(encoding='utf-8'))
+        require(built.get('status')=='PASS' and built['abi']==abi and built['package_name']==PACKAGE,'R8_build_receipt')
+        self.expected_marker=built['r8_evidence']['marker_after']
+        for entry in built['artifacts']:
+            path=ROOT/entry['path'];require(path.resolve().is_relative_to(ROOT) and digest(path)==entry['sha256'],'R8_artifact_drift')
+        for entry in built['sources']+[built['input_aar'],built['base_aar']]+built.get('native_overrides',[]):
+            path=ROOT/entry['path'];require(path.resolve().is_relative_to(ROOT) and digest(path)==entry['sha256'],'R8_source_or_AAR_drift')
+        self.apk=next(ROOT/e['path'] for e in built['artifacts'] if e['path'].endswith('.apk'))
+        certificate=self.certificate(self.apk);require(certificate==built['certificate_sha256'],'APK_certificate_mismatch')
+        badging=self.host([self.args.sdk/'build-tools/37.0.0/aapt2.exe','dump','badging',self.apk])
+        require(re.findall(r"(?m)^package: name='([^']+)'",badging)==[PACKAGE],'APK_package_mismatch')
+        self.receipt['APK']={'sha256':digest(self.apk),'certificate_sha256':certificate,'package':PACKAGE,'build_receipt_sha256':digest(self.args.r8_receipt)}
+        existing=self.command('existing-package',['shell','pm','path',PACKAGE])
+        require(not existing['timed_out'] and not existing['launch_error'] and
+                (existing['exit_code']==0 or (existing['exit_code']==1 and not existing['stdout'].strip() and not existing['stderr'].strip())),
+                'existing_package_query_failed')
+        path=existing['stdout']
+        if path.strip():
+            paths=re.findall(r'(?m)^package:(/data/app/[A-Za-z0-9_./=+~-]+\.apk)\r?$',path)
+            require(len(paths)==1,'unexpected_existing_package_paths')
+            cached=ROOT/'build'/('continuation-installed-'+self.args.abi+'-'+self.args.mode+'.apk')
+            self.checked('pull-existing-APK',['pull',paths[0],str(cached)])
+            require(self.certificate(cached)==certificate,'existing_package_different_certificate')
+        installed=self.checked('install-own-APK',['install','-r',str(self.apk)],120)
+        require('Success' in installed['stdout'],'install_did_not_succeed')
+        self.assets={}
+        if self.args.abi=='arm64-v8a' and not self.args.android_only:
+            require(self.args.dex_exe and self.args.image_exe,'native_inputs_required')
+            source=ROOT/'artifacts/local/perf-inputs/bilibili-9.17.0-classes.dex';require(digest(source)==INPUT_HASH,'real_DEX_drift')
+            self.assets={'libmgmem.so':ROOT/'install/features-arm64/lib/libmgmem.so','mgmem_dex_import_consumer':self.args.dex_exe,'mgmem_image_pressure_stability':self.args.image_exe,'input.dex':source}
+            for index in range(4):
+                for prefix,suffix in [('input','ppm'),('oracle','pgm')]:
+                    name=f'{prefix}-{index}.{suffix}';self.assets[name]=ROOT/'artifacts/continuation-20261030/image-host'/name
+            fixtures=json.loads((ROOT/'artifacts/continuation-20261030/image-host-final/receipt.json').read_text())['fixtures']
+            for index,item in enumerate(fixtures):
+                require(digest(self.assets[f'input-{index}.ppm'])==item['input_sha256'] and digest(self.assets[f'oracle-{index}.pgm'])==item['oracle_sha256'],'image_fixture_drift')
+            for name,path in self.assets.items():
+                require(path.is_file(),'missing_native_asset_'+name)
+                if name in ('libmgmem.so','mgmem_dex_import_consumer','mgmem_image_pressure_stability'):
+                    from run_arm64_validation import verify_arm64_elf
+                    verify_arm64_elf(path)
+            self.checked('create-owned-directory',['shell','mkdir',self.remote])
+            self.receipt['device_directory_created']=True
+            for name,path in self.assets.items():
+                self.checked('push-'+name,['push',str(path),self.remote+'/'+name])
+                value=self.checked('hash-'+name,['shell','sha256sum',self.remote+'/'+name])['stdout'].split()[0]
+                require(value==digest(path),'staged_hash_'+name)
+                self.receipt['binary_manifest'].append({'name':name,'bytes':path.stat().st_size,'sha256':value})
+            self.checked('native-executable-mode',['shell','chmod','700',self.remote+'/mgmem_dex_import_consumer',self.remote+'/mgmem_image_pressure_stability'])
+        with zipfile.ZipFile(self.apk) as archive:
+            native=archive.read('lib/'+abi+'/libmgmem.so')
+            local=ROOT/('install/features-arm64' if abi=='arm64-v8a' else 'install/continuation-x86_64')/'lib/libmgmem.so'
+            require(hashlib.sha256(native).hexdigest()==digest(local),'APK_shared_core_not_selected_install')
+        self.occupancy('immediately-before-work',{});self.save()
+    def work(self):
+        minimum=self.args.min_seconds if self.args.mode=='soak' else 0
+        wall=self.args.wall_seconds if self.args.mode=='soak' else 90
+        instrument=['shell','am','instrument','-w','-r','-e','iterations','1000' if minimum else '3','-e','min_duration_ms',str(minimum*1000),'-e','max_duration_ms',str(wall*1000),'-e','sample_every','200' if minimum else '1','-e','observe_ams','false',COMPONENT]
+        jobs={'android':instrument}
+        if self.assets:
+            jobs['dex']=['shell','env','LD_LIBRARY_PATH='+self.remote,self.remote+'/mgmem_dex_import_consumer',self.remote+'/input.dex','--variant','import','--case','cross-thread','--cycles','4','--min-duration-ms',str(minimum*1000),'--wall-ms',str(wall*1000)]
+            image=['shell','env','LD_LIBRARY_PATH='+self.remote,self.remote+'/mgmem_image_pressure_stability','--provider','arena','--cycles','4','--hold-ms','0','--min-duration-ms',str(minimum*1000),'--wall-ms',str(wall*1000),'--out-dir',self.remote]
+            for index in range(4):image+=['--input',self.remote+f'/input-{index}.ppm','--oracle',self.remote+f'/oracle-{index}.pgm']
+            jobs['image']=image
+        self.receipt['state']='RUNNING';self.receipt['mixed_workloads']=list(jobs);self.receipt['minimum_duration_seconds_per_workload']=minimum
+        self.receipt['performance']='NOT_MEASURED_CONCURRENT_STABILITY_ONLY';self.save()
+        def execute(name,args):
+            self.gate();started=time.monotonic();command=[str(self.args.adb),'-s',self.args.serial,*args]
+            row={'name':name,'command':self.redact(command),'started_at_utc':utc_now(),'timeout_seconds':wall+60}
+            try:
+                result=subprocess.run(command,capture_output=True,timeout=wall+60);row.update(exit_code=result.returncode,timed_out=False)
+                stdout,stderr=result.stdout,result.stderr
+            except subprocess.TimeoutExpired as error:
+                stdout,stderr=error.stdout or b'',error.stderr or b'';row.update(exit_code=None,timed_out=True,remote_process_state='UNKNOWN_DO_NOT_ASSUME_STOPPED')
+            row['elapsed_seconds']=time.monotonic()-started
+            for label,data in [('stdout',stdout),('stderr',stderr)]:
+                target=self.output/'commands'/(name+'.'+label+'.txt');target.write_bytes(self.redact(data.decode('utf-8','replace')).encode())
+                row[label+'_sha256']=digest(target)
+            return name,row,stdout.decode('utf-8','replace'),stderr.decode('utf-8','replace')
+        errors=[]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            futures=[pool.submit(execute,name,args) for name,args in jobs.items()]
+            for future in as_completed(futures):
+                name,row,stdout,stderr=future.result();self.counter+=1;row['record_id']=self.counter
+                self.receipt['commands'].append(row)
+                try:
+                    require(row['exit_code']==0 and not row['timed_out'],name+'_command_failure_or_unknown')
+                    require(not stderr.strip(),name+'_stderr')
+                    self.receipt['results'][name]=android_checks(stdout,minimum,self.api,self.expected_marker) if name=='android' else native_checks(name,parse_last_json(stdout),minimum)
+                except Exception as error:
+                    self.receipt['results'][name]={'state':'FAIL_OR_INCOMPLETE','reason':str(error)};errors.append(str(error))
+                self.save();print(json.dumps({'workload':name,'result':self.receipt['results'][name].get('state',self.receipt['results'][name].get('status'))}),flush=True)
+        require(not errors,';'.join(errors))
+    def run(self):
+        try:
+            self.stage();self.work()
+            boot=self.command('boot-after',['shell','cat','/proc/sys/kernel/random/boot_id'],hash_stdout=True)
+            self.require_command(boot,'boot_after');require(boot['stdout_value_sha256']==self.boot,'boot_changed')
+            self.occupancy('after',{})
+            if self.assets:
+                for index in range(4):
+                    output=ROOT/'build'/('continuation-device-output-'+self.args.mode+f'-{index}.pgm')
+                    self.checked(f'pull-image-output-{index}',['pull',self.remote+f'/frame-{index}.pgm',str(output)])
+                    require(digest(output)==digest(self.assets[f'oracle-{index}.pgm']),'device_image_output_oracle_mismatch')
+            for name,path in self.assets.items():
+                require(self.checked('final-hash-'+name,['shell','sha256sum',self.remote+'/'+name])['stdout'].split()[0]==digest(path),'final_staged_drift')
+            self.receipt['qualification'].update(arm64_functional='PASS' if self.args.abi=='arm64-v8a' else 'NOT_APPLICABLE_X86_64',API34_plus='PASS' if self.api>=34 else 'NOT_APPLICABLE_API33',bounded_stability='PASS_15_MINUTES' if self.args.mode=='soak' else 'NOT_RUN_SMOKE_ONLY')
+            self.receipt.update(state='PASS',all_passed=True,finished_at_utc=utc_now(),queued_work=False)
+        except Exception as error:
+            self.receipt.update(state='BLOCKED' if isinstance(error,Blocked) else 'FAIL_OR_INCOMPLETE',reason=str(error),finished_at_utc=utc_now())
+        self.save();print(json.dumps({'state':self.receipt['state'],'receipt':self.output.relative_to(ROOT).as_posix()}),flush=True)
+        return 0 if self.receipt['all_passed'] else 2
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--adb',type=Path,required=True);parser.add_argument('--serial',required=True)
+    parser.add_argument('--admission',type=Path,required=True);parser.add_argument('--out-dir',type=Path,required=True)
+    parser.add_argument('--abi',choices=['arm64-v8a','x86_64'],required=True)
+    parser.add_argument('--sdk',type=Path,required=True);parser.add_argument('--java-home',type=Path,required=True)
+    parser.add_argument('--r8-receipt',type=Path,required=True)
+    parser.add_argument('--dex-exe',type=Path);parser.add_argument('--image-exe',type=Path)
+    parser.add_argument('--android-only',action='store_true',help='New independent Android-only run; never repeat or upgrade prior native results')
+    parser.add_argument('--plan',type=Path,default=ROOT/'artifacts/continuation-20261030/stability-plan.json')
+    parser.add_argument('--mode',choices=['smoke','soak'],default='smoke')
+    parser.add_argument('--min-seconds',type=int,default=900);parser.add_argument('--wall-seconds',type=int,default=1200)
+    args=parser.parse_args();args.out_dir=args.out_dir.resolve()
+    if not args.out_dir.is_relative_to(ROOT/'artifacts/continuation-20261030') or args.out_dir.exists():parser.error('new continuation artifact directory required')
+    if not 0<=args.min_seconds<=900 or not args.min_seconds<args.wall_seconds<=1200:parser.error('invalid duration bounds')
+    raise SystemExit(Continuation(args).run())
+
+if __name__=='__main__':main()

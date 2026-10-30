@@ -9,7 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Configure
-        run: cmake -S . -B build/core -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install/host
+        run: cmake -S . -B build/core -DCMAKE_BUILD_TYPE=Release -DMGMEM_BUILD_JNI_HOST_TESTS=ON -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/install/host
       - name: Build
         run: cmake --build build/core --config Release --parallel 2
       - name: Core safety verification
@@ -30,6 +30,8 @@ jobs:
         run: python tools/verify_packed_reader.py --java-only --build-dir build/packed-java-ci --receipt artifacts/ci-packed/receipt.json
       - name: Android pressure Java lifecycle contracts
         run: python tools/verify_android_pressure.py --out-dir build/pressure-java-ci --receipt artifacts/ci-pressure/receipt.json
+      - name: Continuation capture validation regressions (offline real fixtures)
+        run: python tools/test_continuation_validation.py
       - name: Install
         run: cmake --install build/core --config Release
       - name: Configure installed consumer
@@ -59,6 +61,13 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: python tools/verify_image_perf_v2.py --exe build/image/Release/mgmem_image_perf.exe --runtime-dir install/host/bin --out-dir build/image-perf-v2-fixtures --receipt artifacts/ci-image-v2/perf-functional.json
+      - name: Verify image pressure, budget and async close (Linux)
+        if: runner.os == 'Linux'
+        run: LD_LIBRARY_PATH=$PWD/install/host/lib python3 tools/verify_image_pressure.py --image-exe build/image/mgmem_image_pressure_stability --out-dir build/image-pressure-fixtures --receipt artifacts/ci-image-pressure/receipt.json --cycles 4
+      - name: Verify image pressure, budget and async close (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: python tools/verify_image_pressure.py --image-exe build/image/Release/mgmem_image_pressure_stability.exe --runtime-dir install/host/bin --out-dir build/image-pressure-fixtures --receipt artifacts/ci-image-pressure/receipt.json --cycles 4
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: core-installed-${{ matrix.os }}
@@ -69,5 +78,6 @@ jobs:
             artifacts/ci-research
             artifacts/ci-packed
             artifacts/ci-pressure
+            artifacts/ci-image-pressure
             build/core/Testing/Temporary/LastTest.log
             build/capture-journal-ci/regression-receipt.json

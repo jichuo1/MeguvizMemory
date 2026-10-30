@@ -1,0 +1,357 @@
+#include <mgmem/pressure.h>
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <cstring>
+#include <fstream>
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <stdexcept>
+#include <string>
+#include <thread>
+#include <vector>
+
+namespace {
+using u64 = uint64_t;
+using Clock = std::chrono::steady_clock;
+constexpr u64 budget = 64ull * 1024 * 1024;
+void require(bool yes, const char *message) { if (!yes) throw std::runtime_error(message); }
+void check(mgmem_status status) {
+    if (status != MGMEM_OK) throw std::runtime_error("Memory status " + std::to_string(status));
+}
+u64 number(const std::string &value) {
+    require(!value.empty(), "empty number");
+    u64 result = 0;
+    for (char c : value) {
+        require(c >= '0' && c <= '9', "invalid number");
+        const auto digit = static_cast<unsigned>(c - '0');
+        require(result <= (UINT64_MAX - digit) / 10, "number overflow");
+        result = result * 10 + digit;
+    }
+    return result;
+}
+std::string token(std::istream &input) {
+    std::string result;
+    char c = 0;
+    while (input.get(c)) {
+        if (c == '#') { std::string comment; std::getline(input, comment); continue; }
+        if (c != ' ' && c != '\t' && c != '\r' && c != '\n') { result += c; break; }
+    }
+    while (input.get(c)) {
+        if (c == ' ' || c == '\t' || c == '\r' || c == '\n') {
+            if (c == '\r' && input.peek() == '\n') input.get();
+            break;
+        }
+        require(result.size() < 32, "oversized PPM token");
+        result += c;
+    }
+    require(!result.empty(), "truncated PPM header");
+    return result;
+}
+std::string quoted(const std::string &value) {
+    std::string result = "\"";
+    for (unsigned char c : value) {
+        if (c == '\\' || c == '"') { result += '\\'; result += static_cast<char>(c); }
+        else result += c >= 32 && c < 127 ? static_cast<char>(c) : '?';
+    }
+    return result + '"';
+}
+struct Image {
+    u64 width = 0, height = 0;
+    std::vector<uint8_t> rgb;
+    std::vector<uint8_t> expected;
+};
+Image read_image(const char *path) {
+    std::ifstream input(path, std::ios::binary);
+    require(input.is_open() && token(input) == "P6", "expected P6 PPM input");
+    Image image;
+    image.width = number(token(input)); image.height = number(token(input));
+    require(image.width > 0 && image.width <= 4096 && image.height > 0 && image.height <= 4096,
+            "image dimensions exceed bounded workspace");
+    require(number(token(input)) == 255, "expected 8-bit RGB input");
+    const u64 pixels = image.width * image.height;
+    require(pixels <= 8 * 1024 * 1024, "image exceeds bounded workspace");
+    image.rgb.resize(static_cast<size_t>(3 * pixels));
+    input.read(reinterpret_cast<char *>(image.rgb.data()), static_cast<std::streamsize>(image.rgb.size()));
+    require(static_cast<size_t>(input.gcount()) == image.rgb.size() && input.peek() == EOF,
+            "truncated input or trailing bytes");
+    return image;
+}
+void read_oracle(Image &image, const char *path) {
+    require(image.expected.empty(), "duplicate oracle");
+    std::ifstream input(path, std::ios::binary);
+    require(input.is_open() && token(input) == "P5", "expected scalar P5 oracle");
+    require(number(token(input)) == image.width && number(token(input)) == image.height &&
+            number(token(input)) == 255, "oracle dimensions differ");
+    image.expected.resize(static_cast<size_t>(image.width * image.height));
+    input.read(reinterpret_cast<char *>(image.expected.data()), static_cast<std::streamsize>(image.expected.size()));
+    require(static_cast<size_t>(input.gcount()) == image.expected.size() && input.peek() == EOF,
+            "truncated oracle or trailing bytes");
+}
+
+// This is the same ordinary three-row layout as paired.cpp. Its savings belong
+// to the consumer, not to pressure, the domain API, or a Memory speedup.
+u64 process(const Image &image, const uint8_t *rgb, uint8_t *ring, uint8_t *output, u64 &converted) {
+    const u64 w = image.width, h = image.height, rows = std::min<u64>(h, 3);
+    u64 next = 0, checksum = 0;
+    for (u64 y = 0; y < h; ++y) {
+        while (next <= std::min(h - 1, y + 1)) {
+            for (u64 x = 0; x < w; ++x) {
+                const u64 i = 3 * (next * w + x);
+                ring[(next % rows) * w + x] = static_cast<uint8_t>(
+                    (77u * rgb[i] + 150u * rgb[i+1] + 29u * rgb[i+2]) >> 8);
+                ++converted;
+            }
+            ++next;
+        }
+        for (u64 x = 0; x < w; ++x) {
+            unsigned sum = 0;
+            for (int dy = -1; dy <= 1; ++dy) {
+                const u64 yy = dy < 0 ? (y ? y - 1 : 0) : dy > 0 ? std::min(h - 1, y + 1) : y;
+                for (int dx = -1; dx <= 1; ++dx) {
+                    const u64 xx = dx < 0 ? (x ? x - 1 : 0) : dx > 0 ? std::min(w - 1, x + 1) : x;
+                    sum += ring[(yy % rows) * w + xx];
+                }
+            }
+            output[y*w+x] = static_cast<uint8_t>(sum / 9);
+            checksum += output[y*w+x];
+        }
+    }
+    return checksum;
+}
+struct Session {
+    mgmem_domain *domain = nullptr;
+    mgmem_pressure_controller *pressure = nullptr;
+    std::array<mgmem_handle_v1, 3> owners{};
+    std::array<mgmem_borrow_v1, 3> leases{};
+    std::atomic<unsigned> retained{0}, released{0};
+    mgmem_snapshot_v1 final{};
+    bool closed = false;
+    static void retain(void *context) { ++static_cast<Session *>(context)->retained; }
+    static void release(void *context) { ++static_cast<Session *>(context)->released; }
+    ~Session() {
+        if (domain) { try { finish(); } catch (...) { /* Failure is reported by main; never force-free. */ } }
+    }
+    void open(uint32_t mode) {
+        mgmem_domain_options_v1 options{sizeof(options), 1, 1, 0, mode, 0, budget, 65536, nullptr};
+        check(mgmem_domain_create_v1(&options, &domain));
+        mgmem_domain_lifetime_v1 life{sizeof(life), 1, this, retain, release};
+        mgmem_pressure_options_v1 policy{sizeof(policy), 1, budget, budget/2, 0, 1, 0};
+        check(mgmem_pressure_create_v1(domain, &life, &policy, &pressure));
+        require(retained == 1 && released == 0, "controller owner pin missing");
+    }
+    mgmem_pressure_snapshot_v1 snapshot() {
+        mgmem_pressure_snapshot_v1 result{};
+        check(mgmem_pressure_snapshot_v1_get(pressure, &result, sizeof(result)));
+        return result;
+    }
+    void release_owners() {
+        for (auto &owner : owners) if (owner.id) { check(mgmem_release_v1(domain, owner)); owner = {}; }
+    }
+    void release_leases() {
+        for (auto &lease : leases) if (lease.lease.id) {
+            check(mgmem_borrow_release_v1(domain, lease.lease)); lease = {};
+        }
+    }
+    void stop_pressure(u64 timeout_ms) {
+        if (!pressure) return;
+        check(mgmem_pressure_begin_close_v1(pressure));
+        require(mgmem_pressure_notify_v1(pressure, 0) == MGMEM_IS_CLOSED, "controller accepted event after close");
+        check(mgmem_pressure_drain_v1(pressure, timeout_ms));
+        check(mgmem_pressure_destroy_v1(pressure)); pressure = nullptr;
+        require(retained == 1 && released == 1, "controller owner release mismatch");
+    }
+    void finish() {
+        stop_pressure(3000);
+        release_leases(); release_owners();
+        check(mgmem_domain_begin_close_v1(domain));
+        check(mgmem_domain_collect_v1(domain));
+        check(mgmem_domain_drain_v1(domain, 0));
+        check(mgmem_domain_snapshot_v1(domain, &final, sizeof(final)));
+        require(final.state == MGMEM_CLOSED && final.backing_bytes == 0 && final.reserved_bytes == 0 &&
+                final.live_bytes == 0 && final.retiring_bytes == 0 && final.retained_bytes == 0 &&
+                final.active_allocations == 0 && final.active_leases == 0, "domain did not close to zero");
+        check(mgmem_domain_destroy_v1(domain)); domain = nullptr; closed = true;
+    }
+};
+struct Totals {
+    u64 cycles = 0, frames = 0, checksum = 0, gray = 0, denials = 0, restores = 0;
+    u64 busy = 0, trims = 0, close_timeouts = 0, peak = 0, provider_allocations = 0;
+    u64 source_capacity = 0, payload_peak = 0;
+};
+template<class Predicate> void eventually(Predicate predicate, Clock::time_point deadline) {
+    while (!predicate()) {
+        require(Clock::now() < deadline, "wait exceeded bounded deadline");
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+}
+
+void frame(Session &session, const Image &image, size_t index, const std::string &output_dir,
+           bool final_frame, u64 hold_ms, u64 wait_ms, Clock::time_point wall_deadline, Totals &totals) {
+    auto local_deadline = [&] { return std::min(wall_deadline, Clock::now() + std::chrono::milliseconds(wait_ms)); };
+    const u64 pixels = image.width * image.height;
+    const std::array<u64,3> sizes{3*pixels, std::min<u64>(image.height,3)*image.width, pixels};
+    totals.payload_peak = std::max(totals.payload_peak, sizes[0]+sizes[1]+sizes[2]);
+    for (size_t i=0; i<3; ++i) {
+        check(mgmem_allocate_v1(session.domain, sizes[i], 64, &session.owners[i]));
+        check(mgmem_borrow_acquire_v1(session.domain, session.owners[i], 0, sizes[i], MGMEM_WRITE, &session.leases[i]));
+    }
+    const auto before = session.snapshot();
+    totals.peak = std::max(totals.peak, before.domain.peak_backing_bytes);
+    check(mgmem_pressure_notify_v1(session.pressure, MGMEM_PRESSURE_CRITICAL));
+    eventually([&] { return session.snapshot().deferred_busy > before.deferred_busy; }, local_deadline());
+    const auto held = session.snapshot();
+    require(held.domain.budget_bytes == 0 && held.over_budget_bytes == held.domain.backing_bytes &&
+            held.domain.active_leases == 3 && held.domain.active_allocations == 3, "pressure revoked admitted workspace");
+    mgmem_handle_v1 denied{};
+    require(mgmem_allocate_v1(session.domain, 1, 1, &denied) == MGMEM_OUT_OF_BUDGET && denied.id == 0,
+            "zero budget admitted new allocation");
+    ++totals.denials;
+    check(mgmem_pressure_notify_v1(session.pressure, MGMEM_PRESSURE_NORMAL));
+    require(session.snapshot().domain.budget_bytes == budget, "explicit restore did not restore budget");
+    mgmem_handle_v1 marker{};
+    check(mgmem_allocate_v1(session.domain, 16, 8, &marker));
+    check(mgmem_release_v1(session.domain, marker)); ++totals.restores;
+
+    std::promise<bool> gate;
+    auto admitted = gate.get_future();
+    std::packaged_task<std::array<u64,2>()> work([&] {
+        try {
+            if (!admitted.get()) throw std::runtime_error("parent cancelled admitted image worker");
+            std::this_thread::sleep_for(std::chrono::milliseconds(hold_ms));
+            std::memcpy(session.leases[0].data, image.rgb.data(), image.rgb.size());
+            u64 converted = 0;
+            const u64 checksum = process(image, static_cast<const uint8_t *>(session.leases[0].data),
+                static_cast<uint8_t *>(session.leases[1].data), static_cast<uint8_t *>(session.leases[2].data), converted);
+            require(converted == pixels, "gray conversion count mismatch");
+            require(std::memcmp(session.leases[2].data, image.expected.data(), image.expected.size()) == 0,
+                    "frame differs from independent scalar oracle");
+            // Every frame is compared with the independently generated scalar
+            // oracle; final files permit a second byte check by the host verifier.
+            // Filenames intentionally carry no source path or device identity.
+            std::ofstream output(output_dir + "/frame-" + std::to_string(index) + ".pgm", std::ios::binary);
+            require(output.is_open(), "cannot open output file");
+            output << "P5\n" << image.width << ' ' << image.height << "\n255\n";
+            output.write(static_cast<const char *>(session.leases[2].data), static_cast<std::streamsize>(pixels));
+            output.close(); require(output.good(), "output write failed");
+            session.release_leases();
+            return std::array<u64,2>{checksum,converted};
+        } catch (...) { session.release_leases(); throw; }
+    });
+    auto result = work.get_future();
+    std::thread worker(std::move(work));
+    try {
+        session.release_owners();
+        if (final_frame) {
+            // Stop and join the pressure worker before closing its foreign domain.
+            // No raw destroy overlaps the worker's final C call or lease release.
+            const auto observed = session.snapshot();
+            totals.busy += observed.deferred_busy;
+            totals.trims += observed.trim_successes;
+            session.stop_pressure(wait_ms);
+            check(mgmem_domain_begin_close_v1(session.domain));
+            require(mgmem_domain_collect_v1(session.domain) == MGMEM_BUSY, "collect reclaimed held image");
+            require(mgmem_domain_drain_v1(session.domain, 0) == MGMEM_TIMEOUT &&
+                    mgmem_domain_drain_v1(session.domain, 5) == MGMEM_TIMEOUT, "held image close failed to time out");
+            totals.close_timeouts += 2;
+            mgmem_snapshot_v1 retiring{};
+            check(mgmem_domain_snapshot_v1(session.domain, &retiring, sizeof(retiring)));
+            require(retiring.active_leases == 3 && retiring.retiring_bytes == sizes[0]+sizes[1]+sizes[2] &&
+                    retiring.backing_bytes != 0, "close discarded retiring workspace");
+            mgmem_handle_v1 after_close{};
+            require(mgmem_allocate_v1(session.domain, 1, 1, &after_close) == MGMEM_IS_CLOSED,
+                    "domain accepted allocation after close");
+        }
+        gate.set_value(true);
+    } catch (...) {
+        const auto error = std::current_exception();
+        try { gate.set_value(false); } catch (...) {}
+        worker.join();
+        std::rethrow_exception(error);
+    }
+    worker.join();
+    const auto completed = result.get();
+    totals.checksum += completed[0]; totals.gray += completed[1]; ++totals.frames;
+    require(Clock::now() < wall_deadline, "run exceeded wall budget");
+    if (!final_frame) {
+        eventually([&] {
+            const auto observed = session.snapshot();
+            return observed.domain.backing_bytes == 0 && observed.trim_successes > before.trim_successes;
+        }, local_deadline());
+        const auto quiet = session.snapshot();
+        require(quiet.trim_successes > before.trim_successes && quiet.domain.retiring_bytes == 0 &&
+                quiet.domain.active_allocations == 0 && quiet.domain.active_leases == 0,
+                "deferred trim did not finish after worker lease release");
+    }
+}
+} // namespace
+
+int main(int argc, char **argv) {
+    const auto start = Clock::now();
+    std::string failure, mode = "arena", output_dir;
+    u64 cycles = 10, hold_ms = 0, wait_ms = 3000, wall_ms = 300000;
+    Totals totals;
+    try {
+        std::vector<Image> images;
+        for (int i=1; i<argc; ++i) {
+            const std::string argument = argv[i];
+            if (argument == "--input") {
+                require(i+1 < argc && images.size() < 8, "missing input or too many images");
+                images.push_back(read_image(argv[++i]));
+            } else if (argument == "--oracle") {
+                require(i+1 < argc && !images.empty(), "--oracle requires preceding input");
+                read_oracle(images.back(), argv[++i]);
+            } else {
+                require(i+1 < argc, "missing option value");
+                const std::string value = argv[++i];
+                if (argument == "--provider") mode = value;
+                else if (argument == "--out-dir") output_dir = value;
+                else if (argument == "--cycles") cycles = number(value);
+                else if (argument == "--hold-ms") hold_ms = number(value);
+                else if (argument == "--wait-ms") wait_ms = number(value);
+                else if (argument == "--wall-ms") wall_ms = number(value);
+                else throw std::runtime_error("unknown option");
+            }
+        }
+        require(mode == "arena" || mode == "system", "invalid provider");
+        require(!output_dir.empty() && !images.empty(), "--input and existing --out-dir required");
+        require(cycles > 0 && cycles <= 100000 && hold_ms <= 1000 && wait_ms >= 10 && wait_ms <= 60000 &&
+                wall_ms >= 100 && wall_ms <= 3600000, "options outside bounded profile");
+        for (const auto &image : images) {
+            require(!image.expected.empty(), "each input requires independent --oracle");
+            totals.source_capacity += image.rgb.capacity();
+        }
+        const auto deadline = start + std::chrono::milliseconds(wall_ms);
+        for (u64 cycle=0; cycle<cycles; ++cycle) {
+            require(Clock::now() < deadline, "run exceeded wall budget before next cycle");
+            Session session;
+            session.open(mode == "arena" ? MGMEM_ARENA : MGMEM_SYSTEM);
+            for (size_t i=0; i<images.size(); ++i)
+                frame(session, images[i], i, output_dir, i+1 == images.size(), hold_ms, wait_ms, deadline, totals);
+            session.finish();
+            totals.provider_allocations += session.final.provider_allocation_count;
+            ++totals.cycles;
+        }
+    } catch (const std::exception &error) { failure = error.what(); }
+    const auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(Clock::now()-start).count();
+    const bool success = failure.empty();
+    std::cout << "{\"schema_version\":1,\"consumer\":\"image_pressure_stability_v1\",\"success\":"
+              << (success ? "true" : "false") << ",\"provider\":" << quoted(mode)
+              << ",\"cycles_planned\":" << cycles << ",\"cycles_completed\":" << totals.cycles
+              << ",\"frames_completed\":" << totals.frames << ",\"checksum\":" << totals.checksum
+              << ",\"gray_conversions\":" << totals.gray << ",\"zero_budget_denials\":" << totals.denials
+              << ",\"explicit_restore_admissions\":" << totals.restores << ",\"deferred_busy_total\":" << totals.busy
+              << ",\"quiet_trim_successes_total\":" << totals.trims << ",\"held_close_timeouts\":" << totals.close_timeouts
+              << ",\"peak_unique_managed_backing_bytes\":" << totals.peak
+              << ",\"provider_allocation_count\":" << totals.provider_allocations
+              << ",\"external_source_capacity_bytes\":" << totals.source_capacity
+              << ",\"logical_workspace_payload_peak_bytes\":" << totals.payload_peak
+              << ",\"normal_cycles_closed_zero\":" << totals.cycles
+              << ",\"diagnostic_duration_ns\":" << duration << ",\"hold_ms\":" << hold_ms
+              << ",\"wall_limit_ms\":" << wall_ms << ",\"rss_pss_bytes\":null,\"energy\":null"
+              << ",\"performance_qualification\":\"NOT_STARTED\",\"error\":" << quoted(failure) << "}\n";
+    return success ? 0 : 1;
+}

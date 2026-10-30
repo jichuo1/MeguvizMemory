@@ -1,0 +1,20 @@
+{
+  "state": "PASS_OBSERVATIONAL_PHONE_IDLE",
+  "checked_at_utc": "2026-10-30T13:48:31.025706+00:00",
+  "phone_matching_test_count": 0,
+  "inventories": [
+    {
+      "inventory": "ps",
+      "sha256": "ede265fb534227b10a06f7658fb30ff74754e1117e6710a9cf94b7d3b3115f82"
+    },
+    {
+      "inventory": "dumpsys",
+      "sha256": "73ec67c8bf791afdf1692fbed14fc370d26ce0684d9a5cfb20a9de0e82edcb56"
+    }
+  ],
+  "emulators_currently_listed": false,
+  "emulator_stop_cause": "UNKNOWN_NOT_ATTRIBUTED",
+  "emulator_kill_command_sent_by_closeout": false,
+  "shared_device_lock": "NOT_ACQUIRED_OBSERVATIONAL_ONLY",
+  "own_phone_APK_and_data": "RETAINED_NO_CLEAR_OR_UNINSTALL"
+}

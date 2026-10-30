@@ -1,0 +1,27 @@
+{
+  "state": "INCOMPLETE_USER_REQUESTED_FAST_CLOSEOUT",
+  "at_utc": "2026-10-30T12:59:48.009910+00:00",
+  "scope": "Only current own diagnostic APK; no normal-domain-close claim",
+  "last_own_progress": {
+    "schema_version": 1,
+    "suite": "android-pressure-r8-stability-v1",
+    "diagnostic_revision": 3,
+    "run_id": "35534507eef",
+    "status": "RUNNING",
+    "phase": "cycle.read-probe",
+    "iteration": 5176,
+    "checks": 77702,
+    "elapsed_ms": 373143,
+    "cleanup_safe": true,
+    "unsafe_cleanup": false,
+    "inject_main_running_timeout": false,
+    "boundary_outcome": "NO_TIMEOUT",
+    "reason": null
+  },
+  "last_progress_sha256": "4607381ec13c574f93e9e84c24695c0908a32fee2adb953de55633d40945424c",
+  "minimum_900_seconds_met": false,
+  "normal_domain_close_qualified": false,
+  "known_issue": "New closefix window was progressing; stopped before minimum duration at user request",
+  "no_other_app_or_test_stopped": true,
+  "own_process_absent_after_stop": true
+}

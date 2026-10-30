@@ -1,0 +1,8 @@
+{
+  "profile": "host",
+  "state": "PASS",
+  "exit_code": 0,
+  "tests_passed": 18,
+  "log_sha256": "b7cb847998bd90e91a9e62d5311235a1224c3fcfb7a7ab52a90b7dc26113e88d",
+  "details_sha256": "f2c6457fcff0030b247deb9e7d1b8696a8f1721acfef49b631aca4e72c9ce9f5"
+}

@@ -1,0 +1,14 @@
+{
+  "scope": "OWN_UNKNOWN_ANDROID_CHILD_STOPPED_AFTER_1260S_TRANSPORT_TIMEOUT_NOT_NORMAL_DOMAIN_CLOSE",
+  "at_utc": "2026-10-30T12:33:53.798014+00:00",
+  "no_app_data_cleared": true,
+  "no_other_package_or_test_stopped": true,
+  "own_JDWP_forward_removed": true,
+  "original_runner_source": {
+    "path": "artifacts\\continuation-20261030\\frozen-first-stability\\run_continuation_device.py.txt",
+    "sha256": "cf33076626432e56f44961052a703f2e55807a62f4c0a7a30f9d70a1b4c3be2f"
+  },
+  "root_backtrace": "UNAVAILABLE_DEBUGGERD_REQUIRES_ROOT",
+  "exact_hang_root_cause": "UNDETERMINED_NO_THREAD_STACK",
+  "completed_native_results": "DEX_AND_IMAGE_RETAINED_SEPARATELY"
+}

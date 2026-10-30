@@ -10,12 +10,12 @@
 cmake -S . -B build/host -DCMAKE_BUILD_TYPE=Release
 cmake --build build/host --config Release
 ctest --test-dir build/host -C Release --output-on-failure
-cmake --install build/host --config Release --prefix D:/MeguvizMemory/install/host
+cmake --install build/host --config Release --prefix "$PWD/install/host"
 
-cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=D:/MeguvizMemory/install/host
+cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release "-DCMAKE_PREFIX_PATH=$PWD/install/host"
 cmake --build build/image --config Release
 
-cmake -S consumers/dex -B build/dex -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=D:/MeguvizMemory/install/host -DDEXMEGUVIZ_SOURCE_DIR=D:/DexMeguviz
+cmake -S consumers/dex -B build/dex -DCMAKE_BUILD_TYPE=Release "-DCMAKE_PREFIX_PATH=$PWD/install/host" "-DDEXMEGUVIZ_SOURCE_DIR=$PWD/build/locked-inputs/DexMeguviz"
 cmake --build build/dex --config Release --target mgmem_dex_consumer
 ```
 
@@ -44,7 +44,7 @@ Dex 工程没有有效 Git HEAD，存在其他会话的开发材料。使用它�
 
 容量增长使用“申请新 backing → 保持必要旧访问 → 迁移/初始化 → 发布新 owner → 旧 lease 完成后释放”的显式过程。预算涵盖旧新 backing 共存和 pending reservation。OOM/预算拒绝不能丢弃仍有用的旧 owner，也不能偷偷减少工作量。Memory 默认不清零，输入初始化是消费者责任，必须计入与基线一致的工作量和阶段。
 
-快照的 `backing_bytes` 是唯一 provider 请求容量，包含 live/retiring/retained；三者是其子项，不能再次与 backing 相加。预算不包括 allocator/核心元数据、RSS/PSS 或外部 GPU/驱动容量。其他库观察同一 backing 时记录借用关系，不能重复计为第二份 CPU 所有权。
+快照的 `backing_bytes` 是唯一managed请求容量，0.2起同时包含owned与imported backing。live/retiring/retained和新import snapshot均为相应子项，不能再次与backing相加。预算不包括allocator/核心元数据、RSS/PSS或外部GPU/驱动容量。其他库观察同一backing时记录借用关系，不能重复计为第二份CPU所有权。
 
 ## Provider 合同
 
@@ -70,9 +70,9 @@ allocate 必须失败原子：成功返回指定容量和对齐的未初始化�
 
 ## JNI 与家族组合边界
 
-本版未选择 JNI/Rust bridge，也没有让 Java 任意持有 native DirectByteBuffer 的接口。generation 检查不能使已逃逸的 Java ByteBuffer 在底层释放后安全。后续桥应采用 opaque 批量操作、显式存活的 owner/lease 或复制结果；在 Java/JNI 异步任务接受前取得真实保活关系，并逐条验证取消、结果逃逸和关闭。
+0.2已交付Android压力适配JNI、opaque注册及不逃逸的诊断lease，见[Android合同](ANDROID_PRESSURE.md)。通用Java ByteBuffer借用/批量API和Rust bridge仍未选择，也没有让Java任意持有native DirectByteBuffer的接口。generation检查不能使已逃逸的Java ByteBuffer在底层释放后安全。后续桥需在Java/JNI异步任务接受前取得真实保活关系，并逐条验证取消、结果逃逸和关闭。
 
-Compute/Media 的真实源码和安装 SDK 已在 `D:/MeguvizPack` 找到，详见 [消费者审计](audit/consumers.md)。Compute 管理资源、content lease、submit 和 GPU retirement；Media 管理帧、时间线和背压。本版没有新增它们的 CPU provider 注入接口，也没有验证它们调用 Memory。CPU 内存可回收状态不能用 GPU 已提交、逻辑帧释放或仅持有 AHB 对象代替。
+Compute/Media的真实源码和安装SDK已在相邻MeguvizPack工作区找到，详见[消费者审计](audit/consumers.md)及[当前合同核实](FAMILY_MEMORY_CONTRACTS.md)。Compute管理资源、content lease、submit和GPU retirement；Media管理帧、时间线和背压。本版没有新增它们的CPU provider注入接口，也没有验证它们调用Memory。CPU内存可回收状态不能用GPU已提交、逻辑帧释放或仅持有AHB对象代替。
 
 官方 Compute/Media/RIFE 组合有最终单 DSO、单 Compute/ncnn/STL 闭包合同。未来链接 Memory 静态 PIC core 时，必须重新核对最终链接图、导出表、依赖闭包、实际加载模块和 origin-owner：一个最终组合只拥有一份 Memory core，不附带第二套 GPU pool/ncnn/runtime。独立 Memory JNI DSO 不能与该组合重复实现后混用句柄。双独立 runtime 拒绝交叉 handle 的宿主测试是防误用证据，不能替代这项最终产物资格。
 
@@ -80,7 +80,7 @@ Compute/Media 的真实源码和安装 SDK 已在 `D:/MeguvizPack` 找到，详�
 
 ## 禁用与回退
 
-默认选择 System/dense。arena 是显式生命周期策略；placement、page hint、slab、JNI 和 GPU 桥均未选择。新设备、固件变化、预算不合格或策略回归时，之后的新 domain 使用相同适用预算的 System provider，必要时由消费者回退现有合格实现并记录原因。
+默认选择System/dense。arena是显式生命周期策略；placement、page hint、slab、通用ByteBuffer借用和GPU桥均未选择，Android压力JNI独立可用。新设备、固件变化、预算不合格或策略回归时，之后的新domain使用相同适用预算的System provider，必要时由消费者回退现有合格实现并记录原因。
 
 已经创建的 domain 继续使用其原始 provider 完成并清理，不能把旧指针交给新 provider、在线搬移稳定地址、取消寿命检查或通过无界申请掩盖预算拒绝。旧 domain 尚未 collect/destroy 时同时建立替代 domain，需要把两者共存峰值纳入消费者总预算。当前没有经资格验证的特殊 TLB 策略，不能依据芯片营销名称启用它。
 
