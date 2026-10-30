@@ -1,0 +1,67 @@
+{
+  "scope": "SENSOR_AND_CADENCE_CONTRACT_PREFLIGHT_NOT_PILOT",
+  "native_tasks": 0,
+  "readings": {
+    "pre": {
+      "complete": true,
+      "valid": true,
+      "gate_reasons": [],
+      "clock_domain": "DEVICE_BOOTTIME_PROC_UPTIME_NS",
+      "clock_resolution_ns": 10000000,
+      "battery_deci_c": 288,
+      "battery_sensor_is_CPU_temperature": false,
+      "battery_source": "dumpsys_battery",
+      "thermal_status": 0,
+      "thermal_observed_monotonic_ns": 869630000000,
+      "device_end_monotonic_ns": 869670000000,
+      "scaling_cur_freq_khz": 556800,
+      "frequency_observation": "AVAILABLE",
+      "background_cpu_busy": 0.4225352112676056,
+      "selected_cpu": 2,
+      "first_cpu_ticks": [
+        11539,
+        17414,
+        12434,
+        39186,
+        290,
+        3011,
+        1071,
+        4668
+      ],
+      "second_cpu_ticks": [
+        11540,
+        17415,
+        12437,
+        39227,
+        290,
+        3012,
+        1071,
+        4692
+      ],
+      "busy_begin_monotonic_ns": 869075000000,
+      "busy_end_monotonic_ns": 869545000000,
+      "first_stat_before_monotonic_ns": 869060000000,
+      "first_stat_after_monotonic_ns": 869090000000,
+      "second_stat_before_monotonic_ns": 869530000000,
+      "second_stat_after_monotonic_ns": 869560000000,
+      "busy_observation_lower_bound_ns": 440000000,
+      "busy_observation_upper_bound_ns": 500000000,
+      "busy_timestamp_meaning": "CPU-read midpoint estimate with explicit device-clock brackets, not a host timestamp"
+    },
+    "post": {
+      "complete": true,
+      "valid": true,
+      "gate_reasons": [],
+      "clock_domain": "DEVICE_BOOTTIME_PROC_UPTIME_NS",
+      "clock_resolution_ns": 10000000,
+      "battery_deci_c": 288,
+      "battery_sensor_is_CPU_temperature": false,
+      "battery_source": "dumpsys_battery",
+      "thermal_status": 0,
+      "thermal_observed_monotonic_ns": 869850000000,
+      "device_end_monotonic_ns": 869870000000,
+      "scaling_cur_freq_khz": 556800,
+      "frequency_observation": "AVAILABLE"
+    }
+  }
+}

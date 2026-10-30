@@ -29,3 +29,5 @@ Dex 最终验证采用 `build/locked-inputs/DexMeguviz` 冻结输入、`build/de
 后续研究先固定强普通基线，再冻结新制品、采集窗口、cadence、预算、时限和外层推断条件，补齐 live collector 后才开展新设备实验。旧轮次唯一一次工程重试已经结束，不追加或混池。当前没有已验证的池化/placement 净收益；BIL 还需真实调用热点、寿命与桥接成本证据。16 KB/MTE、RSS/能量各自仍需验证。Compute/Media 已有真实 SDK，CPU scratch import/owner 合同尚未确认，不能把 content lease 当 allocator 注入。JNI/Rust/slab/TLB placement 均没有当前必要消费者，保持未选择。
 
 BIL main 核查为 `00572940c354fbec7b6f311d4ecd6f02e66ea7c5`；现有 scratch `e630ad56` 和 holder 打包 `061360f5` 不计为 Memory 增量。外部工作树和并行会话保留，没有把本批函数测试当其设备或发布验收。
+
+2026-10-30 v2设备阶段：新设备2210132C/API33/arm64/4KB的core3与196消费者功能用例实际通过；真实采集器已实现，四组协议采前冻结，当前pilot按预排运行，尚无正式性能结论。见 [v2设备实验](docs/DEVICE_V2_20261030.md)。

@@ -1,0 +1,61 @@
+{
+  "schema_version": 2,
+  "scope": "READ_ONLY_NEW_DEVICE_OCCUPANCY_AND_PROFILE",
+  "checked_at_utc": "2026-10-30T08:16:41.997227+00:00",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "result": "PASS_OBSERVATIONAL_ONLY",
+  "inventories": {
+    "processes": {
+      "exit_code": 0,
+      "stdout_bytes": 59054,
+      "stdout_sha256": "ae4b8ace87e943ff633dc25c73af96446848e9de60ab3313df58e72f5b0b4c36",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "parsed_rows": 946,
+      "matching_tests": [],
+      "system_service_note": "android.hardware.atrace@1.0-service is a system HAL, not a running atrace client"
+    },
+    "instrumentation": {
+      "exit_code": 0,
+      "stdout_bytes": 541347,
+      "stdout_sha256": "4eee591f46048bc96b97fba1f43146e9c9f86391afa16b6f8184645b876d0d06",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "active_markers": []
+    },
+    "model": {
+      "exit_code": 0,
+      "stdout_bytes": 10,
+      "stdout_sha256": "a28e87ee24a958a61bfa993a364545ff4c6e4031cb2ae39d20f6a59715f00a65",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "value": "2210132C"
+    },
+    "api": {
+      "exit_code": 0,
+      "stdout_bytes": 4,
+      "stdout_sha256": "42817c432a683116970d4048f2ddf476ff8dfca7a5d178bfa3a56679862e36aa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "value": "33"
+    },
+    "abi": {
+      "exit_code": 0,
+      "stdout_bytes": 31,
+      "stdout_sha256": "cdd88508602b58eab46d0bb2fccbb3df401788d20b81c650391a9dbd3c8c1e10",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "value": "arm64-v8a,armeabi-v7a,armeabi"
+    },
+    "page_bytes": {
+      "exit_code": 0,
+      "stdout_bytes": 6,
+      "stdout_sha256": "30f236f92d107cedc1eab7b3d6dafa316df3657ac88e59ece8df2944b6c995ca",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "value": "4096"
+    },
+    "boot": {
+      "exit_code": 0,
+      "stdout_bytes": 38,
+      "stdout_sha256": "cc6b632b564e2e67b0981882008d0bf6373f81cdbdfef90cc77aecd60753b714",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb"
+    }
+  },
+  "native_started": false
+}

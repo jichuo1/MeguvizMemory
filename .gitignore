@@ -5,6 +5,12 @@
 # Exact command streams are retained locally and published as command-logs.zip.
 /artifacts/arm64-20261030/paired/commands/
 /artifacts/arm64-20261030/paired-retry1/commands/
+# Admission authorizations and exact duplicate command sidecars stay local.
+/artifacts/device-v2-20261030/admission-*.json
+/artifacts/device-v2-20261030/new-device-functional/commands/
+/artifacts/device-v2-20261030/capture-*/commands/
+/artifacts/device-v2-20261030/capture-*/receipt.json
+/artifacts/device-v2-20261030/capture-*/receipt.json.pending
 /research/
 # Private preparatory indexes; publish reviewed summaries from docs/ instead.
 /docs/research/

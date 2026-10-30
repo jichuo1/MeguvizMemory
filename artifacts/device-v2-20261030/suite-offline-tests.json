@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "scope": "SYNTHETIC_OFFLINE_TESTS_NO_DEVICE_OR_PRODUCT_EXECUTION",
+  "status": "PASS",
+  "test_count": 40,
+  "test_names": [
+    "test_actual_busy_bounds_required",
+    "test_all_four_attributions_and_reverse_gain_interval",
+    "test_clock_domains_cannot_be_silently_mixed",
+    "test_closed_false_not_zero",
+    "test_diagnostic_rejected",
+    "test_duplicate_row_incomplete",
+    "test_family_first_alternates",
+    "test_formal_requires_identity_bound_feasible_pilot",
+    "test_formal_trend_is_explicit",
+    "test_fractional_device_ns_rejected",
+    "test_global_family_interleaving_is_not_hidden_by_filtering",
+    "test_impossible_battery_rejected",
+    "test_late_actual_window_start_incomplete",
+    "test_missing_environment_not_zero",
+    "test_missing_row_incomplete",
+    "test_multiplicity_coefficient_larger_than_unadjusted",
+    "test_native_variant_rejected",
+    "test_physical_order_incomplete",
+    "test_pilot_not_pooled_and_feasible",
+    "test_pilot_variance_stops_family_only",
+    "test_pilot_wrong_plan_is_not_eligible",
+    "test_plan_deterministic_and_frozen",
+    "test_plan_has_512_unique_tasks",
+    "test_plan_mirrored_and_each_variant_twice",
+    "test_precision_stop_cannot_admit_formal",
+    "test_preserved_pre_gate_failure_is_incomplete_not_exception",
+    "test_protocol_does_not_allow_inference_upgrade",
+    "test_protocol_rejects_unfilled_template",
+    "test_resource_adapter_not_fabricated",
+    "test_resource_budget_enforced",
+    "test_resource_denominator_zero_is_unavailable",
+    "test_secondary_other_baseline_is_separate",
+    "test_stdout_binding_rejected",
+    "test_t_cdf_symmetry",
+    "test_t_quantile_matches_exact_cauchy",
+    "test_t_quantile_matches_existing_df11_reference",
+    "test_valid_formal_remains_inconclusive",
+    "test_window_before_schedule_incomplete",
+    "test_window_spacing_gate",
+    "test_wrong_output_stops_entire_suite"
+  ],
+  "failures": 0,
+  "errors": 0,
+  "device_operations": 0,
+  "performance_qualified": false,
+  "sources": [
+    {
+      "path": "tools/paired_suite_v2.py",
+      "sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
+    },
+    {
+      "path": "tools/test_paired_suite_v2.py",
+      "sha256": "371e44356582fc9a87aceccd633153ae892f813afccf1ee71acf330c0c77315c"
+    },
+    {
+      "path": "tools/paired_analysis_v2.py",
+      "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee"
+    }
+  ],
+  "synthetic_plan_canonical_sha256": "2962f2264210a6ccaf6165c177692d59a641bad35a86707de84450ccf7638800",
+  "synthetic_plan_tasks": 512,
+  "bonferroni_t_df11_four_contrasts": 2.980872430052642,
+  "secondary_exploratory_t_df11": 2.2009851600916335,
+  "qualification": "Synthetic correctness of protocol/analysis only; no device measurement or independent-window claim."
+}

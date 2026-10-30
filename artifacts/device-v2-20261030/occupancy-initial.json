@@ -1,0 +1,42 @@
+{
+  "scope": "READ_ONLY_OCCUPANCY_NOT_DEVICE_TEST_OR_EXCLUSIVE_LEASE",
+  "checked_at_utc": "2026-10-30T08:04:40.669621+00:00",
+  "device_serial_sha256": "5579a8acd744122d3c611cdd981053250cb9d87432bee2fe9c176bf6e96b7382",
+  "inventories": {
+    "processes": {
+      "exit_code": 0,
+      "stdout_sha256": "e4bce2c1e146714d2580da3c3a1decda60fdd0943bd47f4f1aa8a19c210a2317",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 69428,
+      "parsed_rows": 1015,
+      "matching_tests": [
+        {
+          "pid": 22189,
+          "state": "S",
+          "name": "io.github.jichuo1.meguviz.gpudiagnostic",
+          "args": "io.github.jichuo1.meguviz.gpudiagnostic"
+        }
+      ],
+      "inventory_valid": true
+    },
+    "instrumentation": {
+      "exit_code": 0,
+      "stdout_sha256": "a869e161b0aa8ee09b86a99f6197f2faccc657dc3fd7ebdf81a3956effed19aa",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 842656,
+      "active_markers": [
+        "Instrumentation #0: ActiveInstrumentation{a4c4f7b {io.github.jichuo1.meguviz.gpudiagnostic.testv2/androidx.test.runner.AndroidJUnitRunner} 1 procs}"
+      ],
+      "inventory_valid": true
+    },
+    "boot": {
+      "exit_code": 0,
+      "stdout_sha256": "97f9c58fab66c141d3ae028028c1201b526f23f36e058eefc40229d49c3db978",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 38,
+      "boot_id_sha256": "b7a76efcea39263996369f09e672fe4a21e824b7e69a596d569266e9b6636c9d"
+    }
+  },
+  "owner_release": "PENDING_FRESH_CONFIRMATION",
+  "native_started": false
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": 2,
+  "scope": "IMAGE_PERF_ARM64_CROSS_BUILD_ONLY",
+  "status": "PASS",
+  "device_executed": false,
+  "performance_qualified": false,
+  "ndk": "30.0.16248370",
+  "api": 27,
+  "cpp_runtime": "c++_static",
+  "binary": {
+    "path": "build/image-perf-v2-arm64/mgmem_image_perf",
+    "bytes": 3504400,
+    "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90"
+  },
+  "sources": [
+    {
+      "path": "consumers/image/perf.cpp",
+      "bytes": 18629,
+      "sha256": "900ffdbcdcc758574dd52f6f0b5a4ed2024432a760aee3ea222a512a5777b1df"
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "bytes": 1193,
+      "sha256": "75be0147444e35ac6357f3a1c22515532d4b740988a4ac79e47c1feb080a5552"
+    },
+    {
+      "path": "tools/verify_image_perf_v2.py",
+      "bytes": 8463,
+      "sha256": "a441a3eab9713c32e382e47e1cd40aef2394978fb79deb0d63687b0bee6001b9"
+    }
+  ],
+  "memory_installed_runtime": {
+    "path": "install/android-arm64-v8a/lib/libmgmem.so",
+    "bytes": 1665960,
+    "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+  },
+  "input": {
+    "path": "build/image-perf-v2-checks/1920x1080.ppm",
+    "bytes": 6220817,
+    "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb"
+  },
+  "elf_machine": "AArch64",
+  "load_segments": [
+    "LOAD           0x000000 0x0000000000000000 0x0000000000000000 0x048340 0x048340 R E 0x4000",
+    "LOAD           0x048340 0x000000000004c340 0x000000000004c340 0x002808 0x002cc0 RW  0x4000",
+    "LOAD           0x04ab48 0x0000000000052b48 0x0000000000052b48 0x0000b8 0x002048 RW  0x4000"
+  ],
+  "needed": [
+    "[libmgmem.so]",
+    "[libm.so]",
+    "[libdl.so]",
+    "[libc.so]"
+  ],
+  "qualification_limits": [
+    "16KB ELF alignment is not actual loader evidence",
+    "No MTE/HWASan, RSS/PSS, energy or hardware translation claim",
+    "No device deployment or sampling performed by this writer"
+  ]
+}

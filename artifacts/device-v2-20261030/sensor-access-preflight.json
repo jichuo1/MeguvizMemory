@@ -1,0 +1,22 @@
+{
+  "scope": "READ_ONLY_SENSOR_ACCESS_NOT_PERFORMANCE_SAMPLES",
+  "sysfs_battery_temp": "PERMISSION_DENIED",
+  "observed": {
+    "battery": {
+      "exit_code": 0,
+      "stdout_sha256": "bad99e8c7556bd92e660c5810b6ccee2381199c410d4a334f87b4e181d9f7b50",
+      "matches": [
+        "291"
+      ],
+      "stderr": ""
+    },
+    "thermal": {
+      "exit_code": 0,
+      "stdout_sha256": "fbec0ba57a9766aa2c759f40303f801999ed49dece385c02ff5f39ac44fdbb39",
+      "matches": [
+        "0"
+      ],
+      "stderr": ""
+    }
+  }
+}

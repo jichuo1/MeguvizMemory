@@ -108,5 +108,15 @@
     "mechanism": "NO_NEW_PMU_PFN_OR_TRANSLATION_EVIDENCE",
     "ordinary_consumer_resource_savings": "VERIFIED_LOGICAL_CAPACITY_NOT_MEMORY_SPEEDUP",
     "evidence": "docs/RESEARCH_EVIDENCE_20261030.md"
+  },
+  "live_v2_new_device": {
+    "model": "2210132C",
+    "api": 33,
+    "abi": "arm64-v8a",
+    "base_page_bytes": 4096,
+    "core_safety": "PASS_FRESH_3_TESTS",
+    "consumers": "PASS_196_CASES",
+    "new_performance": "PENDING_FROZEN_PILOT_AND_FORMAL",
+    "evidence": "docs/DEVICE_V2_20261030.md"
   }
 }

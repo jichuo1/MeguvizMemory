@@ -1033,5 +1033,27 @@
     "device": "NOT_USED_THIS_BATCH",
     "BIL": "UNCHANGED_NOT_INTEGRATED",
     "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE"
+  },
+  "live_v2_20261030": {
+    "state": "PILOT_FROZEN_AND_SCHEDULED_NO_FORMAL_RESULT_YET",
+    "device": {
+      "model": "2210132C",
+      "api": 33,
+      "abi": "arm64-v8a",
+      "page_bytes": 4096
+    },
+    "core_safety": "PASS_3_NEW_DEVICE_TESTS_11_GROUPS_145033_CHECKS",
+    "consumer_functional": {
+      "dex": 32,
+      "image_workspace": 156,
+      "image_perf": 8
+    },
+    "collector": "IMPLEMENTED_FAKE_ADB_20_TESTS_PASS",
+    "suite_analysis": "IMPLEMENTED_OFFLINE_40_TESTS_PASS",
+    "device_functional_runner": "IMPLEMENTED_OFFLINE_13_TESTS_PASS",
+    "protocol": "artifacts/device-v2-20261030/frozen-suite/protocol.json",
+    "plan": "artifacts/device-v2-20261030/frozen-suite/plan.json",
+    "new_performance": "PENDING_PREDECLARED_PILOT_AND_FORMAL",
+    "BIL": "UNCHANGED_NO_INTEGRATION"
   }
 }

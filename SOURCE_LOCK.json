@@ -3,7 +3,7 @@
   "scope": "SCOPED_SOURCE_TREE_LOCK",
   "roots": {
     "MeguvizMemory": {
-      "head": "764bfee5143b938e0e1b7f6329df56e9bbe3888c",
+      "head": "5ac9b4f2d2863f0e886148a2d831002fd403a3b2",
       "dirty": true,
       "state": "READ_ONLY_LOCAL_CHECK"
     },
@@ -14,8 +14,8 @@
     }
   },
   "external_parser_source": "LOCKED",
-  "source_set_sha256": "a74880f7cc170fa8f3a955322b346c2f5d276088935d2e86f50caadd36c6098a",
-  "file_count": 138,
+  "source_set_sha256": "d1ffd1847165a40b8879fbcfb5f80f1380f7645df90fba22255229c932fbde29",
+  "file_count": 150,
   "files": [
     {
       "root": "DexMeguviz",
@@ -416,14 +416,14 @@
     {
       "root": "MeguvizMemory",
       "path": ".github/workflows/core.yml",
-      "bytes": 3069,
-      "sha256": "7d795a263d0707c7f8485ed72db464deb51c0dddf3d507258c4c8ddccf6fbf82"
+      "bytes": 3959,
+      "sha256": "56a98ca9ed2b33bc2790bdb30b33570ec053f33946efa64599e988a40c431314"
     },
     {
       "root": "MeguvizMemory",
       "path": ".gitignore",
-      "bytes": 371,
-      "sha256": "37c2c5f4998609baaea2418952df01f598cdbdef548849c781b52806377e29a7"
+      "bytes": 720,
+      "sha256": "ea2bc0eca9447f95e99ebc4ac9fbfa8680a773af0356fd5ac5a88a1cc7578220"
     },
     {
       "root": "MeguvizMemory",
@@ -434,8 +434,8 @@
     {
       "root": "MeguvizMemory",
       "path": "CAPABILITY_MATRIX.json",
-      "bytes": 3913,
-      "sha256": "572a43802f3857bed14ca0cd923c13c317a81606d7a8f417032ac99fba36a97a"
+      "bytes": 4216,
+      "sha256": "c282b68d0fc554166630094caf7b01b5bdc235110102b31201d09eb4ba564947"
     },
     {
       "root": "MeguvizMemory",
@@ -452,14 +452,14 @@
     {
       "root": "MeguvizMemory",
       "path": "STATE.md",
-      "bytes": 4956,
-      "sha256": "9b52dc427d6104341d84a56352e72ffa6bd4b9f5caf36047173e2b579e35d847"
+      "bytes": 5230,
+      "sha256": "5f43ba22517a5e172df2dfc97fe1f93ff16179af671860d902a533f6231b0f2d"
     },
     {
       "root": "MeguvizMemory",
       "path": "TASKS.json",
-      "bytes": 43065,
-      "sha256": "21994f122eab448964bd8023d820f08c9a39ab95514959b70ef4a094597a916b"
+      "bytes": 43877,
+      "sha256": "4e2af4bbe7b592789d69635f90d42c81932e1a60380287de1c2bdb55ee7f49b2"
     },
     {
       "root": "MeguvizMemory",
@@ -472,6 +472,12 @@
       "path": "bench/dex_borrow_v2.json",
       "bytes": 4915,
       "sha256": "ce294e5884a622b48c00deae6890ef3f636c12e4319b25ea6a69db9e1b852d54"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "bench/image_perf_v2.json",
+      "bytes": 3617,
+      "sha256": "cc96072796c42858d1450df22a38a6563d55de4f140f8bca441fcd2ebb5d36a9"
     },
     {
       "root": "MeguvizMemory",
@@ -554,8 +560,8 @@
     {
       "root": "MeguvizMemory",
       "path": "consumers/image/CMakeLists.txt",
-      "bytes": 853,
-      "sha256": "0f930fff347a5b141a11bf1ff9e36f67c4887dc95b3590fa51ede61878d7b9b3"
+      "bytes": 1193,
+      "sha256": "75be0147444e35ac6357f3a1c22515532d4b740988a4ac79e47c1feb080a5552"
     },
     {
       "root": "MeguvizMemory",
@@ -568,6 +574,12 @@
       "path": "consumers/image/paired.cpp",
       "bytes": 18129,
       "sha256": "b5d62b2ef7275ba6a7ecdf8ee8b889e89fc4a033a1bbd00d924fe09473b77b9b"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "consumers/image/perf.cpp",
+      "bytes": 18629,
+      "sha256": "900ffdbcdcc758574dd52f6f0b5a4ed2024432a760aee3ea222a512a5777b1df"
     },
     {
       "root": "MeguvizMemory",
@@ -616,6 +628,12 @@
       "path": "docs/CANDIDATE_EXIT_GATES.md",
       "bytes": 2102,
       "sha256": "4bd94170b0ff1e95e5e272d34d8fe494203da3aa9d6a7fd38baa11f56e38800c"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "docs/DEVICE_V2_20261030.md",
+      "bytes": 3679,
+      "sha256": "c6ca970d7d0b4f2a710dad8c91645f454846eadf9e2e06aea9d4cf58cc070ddd"
     },
     {
       "root": "MeguvizMemory",
@@ -751,6 +769,18 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/device_capture_v2.py",
+      "bytes": 37812,
+      "sha256": "cd0d3b17d9bb3799fd8fa3d4f9eee1a5e1e2a2c592c3de519965d6a6512f4298"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/freeze_device_suite_v2.py",
+      "bytes": 8872,
+      "sha256": "1166f5a7962ab74f9dfcced7e4cd8cfa245ebaa470a982f9696156ae5d34b770"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/host-build.cmd",
       "bytes": 442,
       "sha256": "4b8a019b87401147759e8ffe99326876f8963d6681ae16655fd3a318a8ca9946"
@@ -766,6 +796,12 @@
       "path": "tools/paired_analysis_v2.py",
       "bytes": 24413,
       "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/paired_suite_v2.py",
+      "bytes": 37230,
+      "sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
     },
     {
       "root": "MeguvizMemory",
@@ -790,6 +826,12 @@
       "path": "tools/run_arm64_validation.py",
       "bytes": 23760,
       "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/run_device_suite_v2.py",
+      "bytes": 2571,
+      "sha256": "600062b7d305fd66d5e8ec502c5c62b6b26110425fba414901e2ae4c689c0530"
     },
     {
       "root": "MeguvizMemory",
@@ -823,9 +865,33 @@
     },
     {
       "root": "MeguvizMemory",
+      "path": "tools/test_device_capture_v2.py",
+      "bytes": 22115,
+      "sha256": "53a6bad3d46ef23ec9680d9cd35f7808589b72485832cabf47c9cea07f276936"
+    },
+    {
+      "root": "MeguvizMemory",
       "path": "tools/test_paired_analysis_v2.py",
       "bytes": 16025,
       "sha256": "487d54e1045c1ea2fc00e2b3c0efd0a20bde0a4db276b8e0ad1abba9f65f252a"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/test_paired_suite_v2.py",
+      "bytes": 17765,
+      "sha256": "371e44356582fc9a87aceccd633153ae892f813afccf1ee71acf330c0c77315c"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/test_validate_arm64_consumers_v2.py",
+      "bytes": 7862,
+      "sha256": "4282c2644425d6917387218f9381b6158e79bb8f615c1f4118b4de298883f534"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/validate_arm64_consumers_v2.py",
+      "bytes": 34541,
+      "sha256": "68a196ddc23e15f534fb2a9b101484c1e655ae8b2ffe41d85a82c99e6b3e59a5"
     },
     {
       "root": "MeguvizMemory",
@@ -838,6 +904,12 @@
       "path": "tools/verify_dex_borrow_v2.py",
       "bytes": 9005,
       "sha256": "3a27348a660f8491a24f566d184332fb6795cd5e5db0e7f5ef449a697a290355"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/verify_image_perf_v2.py",
+      "bytes": 8463,
+      "sha256": "a441a3eab9713c32e382e47e1cd40aef2394978fb79deb0d63687b0bee6001b9"
     },
     {
       "root": "MeguvizMemory",

@@ -1,0 +1,11 @@
+{
+  "schema_version": 2,
+  "scope": "FAKE_ADB_ONLY_NO_DEVICE_OR_PRODUCT_MEASUREMENTS",
+  "status": "PASS",
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "actual_device_operations": 0,
+  "collector_sha256": "cd0d3b17d9bb3799fd8fa3d4f9eee1a5e1e2a2c592c3de519965d6a6512f4298",
+  "test_sha256": "53a6bad3d46ef23ec9680d9cd35f7808589b72485832cabf47c9cea07f276936"
+}

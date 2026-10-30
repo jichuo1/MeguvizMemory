@@ -1,0 +1,151 @@
+{
+  "schema_version": 2,
+  "state": "FUNCTIONAL_STAGED_AND_PASSED",
+  "device_directory": "/data/local/tmp/meguvizmemory-paired-20261030T081739Z-f10dd9ea1d0d",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "profile": {
+    "model": "2210132C",
+    "api": 33,
+    "abi_list": "arm64-v8a,armeabi-v7a,armeabi",
+    "kernel": "5.15.78-android13-8-00005-gb741ddfc2192-ab10346399",
+    "page_bytes": 4096,
+    "allowed_cpu_list": "0-7",
+    "requested_cpu": 2,
+    "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb"
+  },
+  "artifacts": [
+    {
+      "name": "libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+      "device_sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    {
+      "name": "mgmem_dex_paired_v2",
+      "bytes": 15069328,
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+      "device_sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497"
+    },
+    {
+      "name": "mgmem_dex_paired_v2_diagnostic",
+      "bytes": 15082968,
+      "sha256": "cf6968e23ff0a04eed869909a86f0ad9d7619a9cd7f4843de31a8deac870bc2d",
+      "device_sha256": "cf6968e23ff0a04eed869909a86f0ad9d7619a9cd7f4843de31a8deac870bc2d"
+    },
+    {
+      "name": "mgmem_image_paired",
+      "bytes": 3440464,
+      "sha256": "bec4e946349b9e3ed317aab9f7f36609fcbb3aeccdc86e4270c51aaf46b61bd0",
+      "device_sha256": "bec4e946349b9e3ed317aab9f7f36609fcbb3aeccdc86e4270c51aaf46b61bd0"
+    },
+    {
+      "name": "mgmem_image_perf",
+      "bytes": 3504400,
+      "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90",
+      "device_sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90"
+    },
+    {
+      "name": "mgmem_core_tests",
+      "bytes": 509816,
+      "sha256": "3c069fefed51fddc36077f4a51655092080b2078b72d05529431428ed8ccff4a",
+      "device_sha256": "3c069fefed51fddc36077f4a51655092080b2078b72d05529431428ed8ccff4a"
+    },
+    {
+      "name": "mgmem_c_consumer",
+      "bytes": 13400,
+      "sha256": "91e28ba320bd3df5c9929c68752c8648f5a36939fd25fdc79c82d2ebf52c0704",
+      "device_sha256": "91e28ba320bd3df5c9929c68752c8648f5a36939fd25fdc79c82d2ebf52c0704"
+    },
+    {
+      "name": "mgmem_cpp_consumer",
+      "bytes": 194712,
+      "sha256": "52e21437ce336cc6c6e1c2ade9e4b67f0cf0856f6793929709f4f6a35b00f12b",
+      "device_sha256": "52e21437ce336cc6c6e1c2ade9e4b67f0cf0856f6793929709f4f6a35b00f12b"
+    },
+    {
+      "name": "input.dex",
+      "bytes": 10540184,
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+      "device_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0"
+    },
+    {
+      "name": "image-1x1.ppm",
+      "bytes": 14,
+      "sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715",
+      "device_sha256": "d44a9ecc0ef1f66ffad99177abb69721e47fc06ac23059e752ec5a06b0143715"
+    },
+    {
+      "name": "image-1x2.ppm",
+      "bytes": 17,
+      "sha256": "1a54e13b1a5e3399a455f5739d22100cef66f7efe85916ed38fcbae2382bdce2",
+      "device_sha256": "1a54e13b1a5e3399a455f5739d22100cef66f7efe85916ed38fcbae2382bdce2"
+    },
+    {
+      "name": "image-1x7.ppm",
+      "bytes": 32,
+      "sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4",
+      "device_sha256": "d92dbec32e05e2a01f61dee6b670add8b50e8f64104ee171ad2313ba559087d4"
+    },
+    {
+      "name": "image-2x1.ppm",
+      "bytes": 17,
+      "sha256": "a32768d795baf9431715edf137da3197ae08558d68a5aa88820bde01491523f2",
+      "device_sha256": "a32768d795baf9431715edf137da3197ae08558d68a5aa88820bde01491523f2"
+    },
+    {
+      "name": "image-2x2.ppm",
+      "bytes": 23,
+      "sha256": "a7fd5d5f36b1b19e4b0d935ba6fa6cb0d6adaf94e153271e0e6848e797fe196c",
+      "device_sha256": "a7fd5d5f36b1b19e4b0d935ba6fa6cb0d6adaf94e153271e0e6848e797fe196c"
+    },
+    {
+      "name": "image-2x7.ppm",
+      "bytes": 53,
+      "sha256": "2eb5ce9c37bbe1dca647ea6088d9b25a54d1ee38b1e71be458ad0b8ec32e85e3",
+      "device_sha256": "2eb5ce9c37bbe1dca647ea6088d9b25a54d1ee38b1e71be458ad0b8ec32e85e3"
+    },
+    {
+      "name": "image-7x1.ppm",
+      "bytes": 32,
+      "sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca",
+      "device_sha256": "ebc7271f162a122477d85531a071998d4c13ec1853a0e9dcfe1a20a8d19e6eca"
+    },
+    {
+      "name": "image-7x2.ppm",
+      "bytes": 53,
+      "sha256": "0641eac34907b1d7c794b8d58d2efc6ec994926c8eae126737f48f4ef36da43c",
+      "device_sha256": "0641eac34907b1d7c794b8d58d2efc6ec994926c8eae126737f48f4ef36da43c"
+    },
+    {
+      "name": "image-17x13.ppm",
+      "bytes": 676,
+      "sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc",
+      "device_sha256": "d8ef420d42dfc06566118969d37b15013ccfef61a730b55d2b30d563f137c1bc"
+    },
+    {
+      "name": "image-320x180.ppm",
+      "bytes": 172815,
+      "sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201",
+      "device_sha256": "858ab70f075f4b09097f03021c918bcfb42ff259d7fee7999372763e4e613201"
+    },
+    {
+      "name": "image-1920x1080.ppm",
+      "bytes": 6220817,
+      "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+      "device_sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb"
+    },
+    {
+      "name": "image-truncated.ppm",
+      "bytes": 12,
+      "sha256": "255ae630ee3ca26ee0ddf232f5227276a8c45994b1cfa4efee05b2f3da2eec87",
+      "device_sha256": "255ae630ee3ca26ee0ddf232f5227276a8c45994b1cfa4efee05b2f3da2eec87"
+    },
+    {
+      "name": "image-overflow.ppm",
+      "bytes": 30,
+      "sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437",
+      "device_sha256": "b4388e31b27acb129ef19992632aefb569d20762665900134247e274b6642437"
+    }
+  ],
+  "reuse_rule": "Performance capture independently stages and hashes its own directory; this is functional provenance only."
+}

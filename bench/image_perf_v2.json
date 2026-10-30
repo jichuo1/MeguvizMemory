@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "workload": "image_workspace_complete_owner_v2",
+  "state": "HOST_FUNCTIONAL_QUALIFIED_DEVICE_PROTOCOL_REQUIRES_FREEZE",
+  "target": "mgmem_image_perf",
+  "source": "consumers/image/perf.cpp",
+  "input": {
+    "fixture_generator": "tools/verify_image_workspace_v2.py:rgb_fixture",
+    "format": "P6 RGB8",
+    "width": 1920,
+    "height": 1080,
+    "input_bytes": 6220817,
+    "source_sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+    "synthetic_input_scope": "Deterministic public image workload, not a BIL product trace"
+  },
+  "completion": {
+    "frames": 3,
+    "completed_frames": 3,
+    "gray_conversions": 6220800,
+    "result_checksum": 788817141,
+    "output_hash_fnv64": 17359518428462228935,
+    "oracle_pgm_sha256": "473f468e8ef0b3843052516a1742de36ba5dd460284fe9c0636b697d6fe991cb"
+  },
+  "variants": {
+    "I-DF": {"provider": "direct", "layout": "full", "owned_backing_model": 10368000},
+    "I-DR": {"provider": "direct", "layout": "ring", "owned_backing_model": 8300160},
+    "I-SR": {"provider": "system", "layout": "ring", "owned_backing_model": 8300160},
+    "I-AR": {"provider": "arena", "layout": "ring", "owned_backing_model": 8359936}
+  },
+  "attribution": [
+    "I-DR/I-DF is ordinary layout improvement",
+    "I-SR/I-DR is Memory interface increment at fixed ring layout",
+    "I-AR/I-SR is arena increment at fixed ring layout",
+    "I-AR/I-DR is net Memory strategy versus persistent ordinary System ring",
+    "Direct ratios use corresponding same-block tasks; do not add gains across contrasts"
+  ],
+  "storage": {
+    "input_policy": "One immutable preloaded complete PPM vector common to all variants; each frame copies RGB payload into the same persistent RGB workspace",
+    "workspace": "Three persistent allocations per full batch, 64-byte requested alignment, min(H,3) gray rows for ring",
+    "memory_budget_bytes": 67108864,
+    "arena_chunk_bytes": 65536,
+    "steady_state_provider_allocations": "Measured pre-cleanup count minus post-workspace-creation count; expected zero for all variants",
+    "unknowns": ["arena_used_bytes", "input_backing_padding_bytes", "memory_metadata_bytes", "rss_pss_bytes", "energy"]
+  },
+  "timing": {
+    "excluded": ["process start", "loader", "file preload", "PPM parse", "source SHA256", "CPU metadata outside start/end"],
+    "included": ["workspace creation", "per-frame lease acquisition when applicable", "worker launch/join", "full RGB copy", "integer gray and clamped 3x3 blur", "complete per-frame output sum and FNV digest", "lease return", "workspace close and resource checks", "common source final release"],
+    "formal": "Only full total start/end clocks; no phase clocks, close probes, output file or output capture",
+    "functional_capture": "--verify-output marks diagnostic=true, copies final output during task, writes PGM after total. Never pool with formal",
+    "fixed_ordinary_baseline_limit": "Persistent direct System already has zero steady-state provider calls; source-to-RGB copy is a controlled contract, not a claim of the fastest conceivable image API"
+  },
+  "functional_qualification": {
+    "runner": "tools/verify_image_perf_v2.py",
+    "host_cases": 162,
+    "receipt": "artifacts/device-v2-20261030/image-host-functional.json",
+    "coverage": "12 dimensions x 6 provider/layout pairs x capture+formal, plus 18 worker/input/output failure cases",
+    "scope": "No elapsed performance inference"
+  },
+  "device_execution": "NOT_EXECUTED_BY_HARNESS_AUTHOR",
+  "performance_qualified": false,
+  "BIL_integration": "NOT_SELECTED_BY_THIS_CONTRACT"
+}
