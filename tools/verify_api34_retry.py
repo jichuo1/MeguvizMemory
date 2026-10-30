@@ -24,7 +24,7 @@ COMPONENT=PACKAGE+'/io.github.jichuo1.meguviz.memory.android.PressureR8Instrumen
 ADB=Path.home()/'AppData/Local/Android/Sdk/platform-tools/adb.exe'
 SDK=Path.home()/'AppData/Local/Android/Sdk'
 JAVA=Path('C:/Program Files/Microsoft/jdk-17.0.20.101-hotspot/bin/java.exe')
-SERIAL='emulator-5582'
+SERIAL=os.environ.get('MGMEM_API34_SERIAL','')
 BASE=ROOT/'artifacts/android-close-investigation-20261030'
 PRIVATE=ROOT/'build/android-close-api34-avd/private-validation'
 BUILD=BASE/'retry-r8-x86_64-build.json'
@@ -127,6 +127,8 @@ def main():
     parser.add_argument('--resume-prior-guard',action='store_true',help='Continue after the saved first guard using the same unchanged own APK/cache')
     parser.add_argument('--resume-label',default='resume2',help='New scoped label; prior attempts are not overwritten')
     options=parser.parse_args()
+    if not re.fullmatch(r'emulator-[0-9]{4,5}',SERIAL):
+        parser.error('Set MGMEM_API34_SERIAL to the explicitly owned emulator')
     require(re.fullmatch(r'resume[0-9]+',options.resume_label),'invalid_resume_label')
     prior_private=PRIVATE
     if options.resume_prior_guard:PRIVATE=ROOT/'build/android-close-api34-avd'/('private-validation-'+options.resume_label)

@@ -22,6 +22,8 @@
 /artifacts/continuation-20261030/host-stability*/commands/
 /artifacts/continuation-20261030/image-host*/system/stdout.json
 /artifacts/continuation-20261030/image-host*/arena/stdout.json
+/artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-v1.txt
+/artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-resume-v2.txt
 /research/
 # Private preparatory indexes; publish reviewed summaries from docs/ instead.
 /docs/research/

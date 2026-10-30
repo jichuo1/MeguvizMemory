@@ -1,0 +1,32 @@
+{
+  "state": "PASS_OWN_AVD_STOP_CONFIRMED",
+  "scope": "OWN_REUSED_AVD_POSTFLIGHT_ONLY",
+  "source_receipt_sha256": "e1b84b08c70f411f21c56ddb24b4b30f371081a687a25ed71dda4c71a7e75b27",
+  "postflight_script_sha256": "0c13ffc4bb5575885ebc956e488e4102c472e5a716566337955d35ba2aa3015b",
+  "other_device_or_process_stopped": false,
+  "ADB_restarted": false,
+  "app_data_cleared_or_uninstalled": false,
+  "shared_device_lock": false,
+  "initial_idle_gate": {
+    "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+    "process_rows": 321,
+    "matching_tests": 0,
+    "active_instrumentation": 0,
+    "process_inventory_sha256": "cf78238c365264e3bc7cb4982c43ef6622aaf6e7acbc02b15fc7d70e59013346",
+    "activity_inventory_sha256": "3fe3f606f95e7c05c6d4cf1a7c1cc1b2fb1b3ff397856b06e5e72f871c7575cf",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "installed_APK_sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2",
+  "boot_identity": "UNCHANGED",
+  "own_debug_app": "ALREADY_EXITED_NO_FORCE_STOP",
+  "final_idle_gate": {
+    "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+    "process_rows": 321,
+    "matching_tests": 0,
+    "active_instrumentation": 0,
+    "process_inventory_sha256": "a4ccc96d5402207cf3185b3c1d6559bce68e08e94f39e1b8310513b29496f428",
+    "activity_inventory_sha256": "758b9947b0464165a0828fda47a56b763a7b0d21ed122e4b36578d31924cf722",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  },
+  "finished_at_utc": "2026-10-30T14:39:36.166000+00:00"
+}

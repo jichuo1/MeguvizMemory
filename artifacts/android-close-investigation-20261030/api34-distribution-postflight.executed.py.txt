@@ -1,0 +1,50 @@
+"""Read back the own AVD and stop it only after fresh identity/idle gates."""
+from pathlib import Path
+import json,re,subprocess,sys,time
+root=Path(__file__).resolve().parents[2];sys.path.insert(0,str(root/'tools'))
+import verify_api34_retry as common
+base=root/'artifacts/android-close-investigation-20261030';source=base/'api34-distribution-smoke/receipt.json'
+target=base/'api34-distribution-postflight.json';private=root/'build/android-close-api34-avd/private-distribution-final'
+if target.exists() or not private.is_dir():raise RuntimeError('fresh_postflight_required')
+common.PRIVATE=private;receipt=json.loads(source.read_text(encoding='utf-8'));assert receipt['state']=='PASS_SCOPED_API34_FINAL_SANITIZED_R8_FUNCTIONAL'
+result={'state':'PREPARING','scope':'OWN_REUSED_AVD_POSTFLIGHT_ONLY','source_receipt_sha256':common.filehash(source),
+        'postflight_script_sha256':common.filehash(Path(__file__)),'other_device_or_process_stopped':False,
+        'ADB_restarted':False,'app_data_cleared_or_uninstalled':False,'shared_device_lock':False}
+def owned_host():
+ pid=(root/'build/android-close-api34-avd/pid-distribution.txt').read_text().strip();common.require(pid.isdigit(),'own_pid_invalid')
+ script=("$p=Get-CimInstance Win32_Process -Filter 'ProcessId="+pid+"'; if($p -and $p.Name -eq 'emulator.exe' "
+         "-and $p.CommandLine -match '-avd MemoryRetryApi34' -and $p.CommandLine -match '-port 5582'){'MATCH'}else{'NO_MATCH'}")
+ p=subprocess.run(['powershell.exe','-NoProfile','-Command',script],capture_output=True,text=True,timeout=15)
+ common.require(p.returncode==0 and p.stdout.strip()=='MATCH','own_host_process_identity_unknown')
+def avd():
+ _,name=common.command('postflight-avd-'+str(time.monotonic_ns()),['emu','avd','name']);common.require(name.splitlines()[0].strip()=='MemoryRetryApi34','own_AVD_identity_changed')
+try:
+ owned_host();avd();result['initial_idle_gate']=common.occupancy('distribution-postflight-before')
+ _,boot=common.command('postflight-boot',['shell','cat','/proc/sys/kernel/random/boot_id'])
+ common.require(common.sha(boot.strip().encode())==receipt['device']['boot_sha256'],'device_boot_changed')
+ _,path=common.command('postflight-own-package',['shell','pm','path',common.PACKAGE]);matches=re.findall(r'(?m)^package:(/data/app/[A-Za-z0-9_./=+~-]+\.apk)\r?$',path)
+ common.require(len(matches)==1,'own_installed_APK_path_ambiguous');apk=private/'postflight-installed-own.apk'
+ common.command('postflight-pull-own-package',['pull',matches[0],str(apk)])
+ common.require(common.filehash(apk)==receipt['APK']['apk_sha256'],'postflight_installed_APK_drift')
+ result['installed_APK_sha256']=common.filehash(apk);result['boot_identity']='UNCHANGED'
+ _,pids=common.command('postflight-own-pid',['shell','pidof',common.PACKAGE],required=False);tokens=pids.split()
+ if tokens:
+  common.require(len(tokens)==1 and tokens[0].isdigit(),'own_debug_app_pid_ambiguous')
+  _,cmd=common.command('postflight-own-cmdline',['shell','run-as',common.PACKAGE,'cat','/proc/'+tokens[0]+'/cmdline'])
+  common.require(cmd.split('\x00')[0]==common.PACKAGE,'own_debug_app_identity_changed')
+  common.command('postflight-stop-own-debug-app',['shell','am','force-stop',common.PACKAGE])
+  result['own_debug_app']='STOPPED_OWN_PACKAGE_ONLY_NO_CLEAR'
+ else:result['own_debug_app']='ALREADY_EXITED_NO_FORCE_STOP'
+ result['final_idle_gate']=common.occupancy('distribution-postflight-final');owned_host();avd()
+ common.command('stop-own-named-AVD',['emu','kill'])
+ deadline=time.monotonic()+8
+ while time.monotonic()<deadline:
+  row,state=common.command('postflight-emulator-state-'+str(time.monotonic_ns()),['get-state'],timeout=3,required=False)
+  if row['exit_code']!=0 or state.strip() not in ('device','offline'):break
+  time.sleep(.5)
+ else:raise RuntimeError('own_emulator_shutdown_unconfirmed')
+ result.update(state='PASS_OWN_AVD_STOP_CONFIRMED',finished_at_utc=common.utc())
+except Exception as error:
+ result.update(state='BLOCKED_OR_UNKNOWN_NO_FURTHER_STOP',reason=str(error),finished_at_utc=common.utc())
+common.save(target,result);print(json.dumps({'state':result['state'],'reason':result.get('reason'),'own_debug_app':result.get('own_debug_app')}))
+raise SystemExit(0 if result['state']=='PASS_OWN_AVD_STOP_CONFIRMED' else 2)

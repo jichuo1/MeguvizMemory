@@ -1,3 +1,4 @@
+# REDACTED REVIEW COPY; NOT THE EXECUTED BYTES. Original SHA is in source-redaction.json.
 """Bounded R8 retryfix2 guard and lifecycle smoke on a newly owned API34 AVD.
 
 Never restarts adb, clears app data or mutates another device/app. Transport
@@ -5,7 +6,6 @@ timeout or a foreign instrumentation is UNKNOWN/BLOCKED, with no force-stop.
 Raw device inventories and instrumentation streams remain in ignored build/.
 """
 from __future__ import annotations
-import argparse
 import hashlib
 import json
 import os
@@ -24,7 +24,7 @@ COMPONENT=PACKAGE+'/io.github.jichuo1.meguviz.memory.android.PressureR8Instrumen
 ADB=Path.home()/'AppData/Local/Android/Sdk/platform-tools/adb.exe'
 SDK=Path.home()/'AppData/Local/Android/Sdk'
 JAVA=Path('C:/Program Files/Microsoft/jdk-17.0.20.101-hotspot/bin/java.exe')
-SERIAL='emulator-5582'
+SERIAL='<DEVICE_SERIAL>'
 BASE=ROOT/'artifacts/android-close-investigation-20261030'
 PRIVATE=ROOT/'build/android-close-api34-avd/private-validation'
 BUILD=BASE/'retry-r8-x86_64-build.json'
@@ -122,15 +122,8 @@ def cgroup_sample(pid):
         return {'at_utc':utc(),'state':'UNAVAILABLE','reason':'OWN_PID_CGROUP_OR_FREEZER_NOT_READABLE','scope':'OWN_PID_ONLY'}
 
 def main():
-    global PRIVATE
-    parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--resume-prior-guard',action='store_true',help='Continue after the saved first guard using the same unchanged own APK/cache')
-    args=parser.parse_args()
-    prior_private=PRIVATE
-    if args.resume_prior_guard:PRIVATE=ROOT/'build/android-close-api34-avd/private-validation-resume'
     require(not PRIVATE.exists(),'private_validation_directory_must_be_new');PRIVATE.mkdir(parents=True)
-    guardpath=BASE/('api34-retry-guard-final' if args.resume_prior_guard else 'api34-retry-guard')/'receipt.json'
-    normalpath=BASE/('api34-retry-smoke-final' if args.resume_prior_guard else 'api34-retry-smoke')/'receipt.json'
+    guardpath=BASE/'api34-retry-guard/receipt.json';normalpath=BASE/'api34-retry-smoke/receipt.json'
     require(not guardpath.exists() and not normalpath.exists(),'receipt_directory_must_be_new')
     receipt={'state':'PREPARING','started_at_utc':utc(),'scope':'ISOLATED_OWN_API34_EMULATOR_FUNCTIONAL_ONLY',
              'source_sha256':filehash(Path(__file__)),'device_serial_sha256':sha(SERIAL.encode()),'gates':[],
@@ -153,40 +146,22 @@ def main():
         receipt['device']={'api':34,'abi':'x86_64','page_bytes':int(metadata['pages']),'boot_sha256':sha(metadata['boot'].encode())}
         built,apk,receipt['APK']=build_identity()
         row,path=command('own-package-before',['shell','pm','path',PACKAGE],required=False)
-        if args.resume_prior_guard:
-            paths=re.findall(r'(?m)^package:(/data/app/[A-Za-z0-9_./=+~-]+\.apk)\r?$',path)
-            require(row['exit_code']==0 and len(paths)==1,'expected_one_previously_installed_own_APK')
-            pulled=PRIVATE/'installed-own.apk';command('pull-own-package',['pull',paths[0],str(pulled)])
-            require(filehash(pulled)==filehash(apk),'installed_own_APK_changed')
-            previous=BASE/'api34-retry-overview.json'
-            previous_value=json.loads(previous.read_text(encoding='utf-8'))
-            old_source=BASE/'api34-retry-guard/executed-runner-v1.txt'
-            require(previous_value.get('reason')=='guard_falsely_finished_as_success' and
-                    filehash(old_source)==previous_value['source_sha256'],'prior_guard_provenance_missing')
-            old_output=prior_private/'guard-instrumentation.stdout';stdout=old_output.read_text(encoding='utf-8')
-            row={'exit_code':None,'timed_out':False,'stdout_sha256':filehash(old_output)}
-            receipt['resume_provenance']={'first_controller_receipt_sha256':filehash(previous),
-                'exact_first_controller_source_sha256':filehash(old_source),
-                'first_guard_stdout_sha256':filehash(old_output),'guard_repeated':False}
-        else:
-            require(row['exit_code']==1 and not path.strip(),'package_must_not_preexist_on_new_AVD')
-            row,installed=command('install-own-package',['install',str(apk)],timeout=120)
-            require('Success' in installed,'own_APK_not_installed')
-            # Fresh AVD + first install: reject stale guard state instead of clearing it.
-            require(read_cache('mgmem-r8-stall.json') is None,'unexpected_preexisting_stall_cache')
-            receipt['gates'].append(occupancy('before-guard'))
-            row,stdout=command('guard-instrumentation',['shell','am','instrument','-w','-r','-e','iterations','3',
-                '-e','inject_progress_lock_timeout','true','-e','stall_timeout_ms','3000','-e','capture_stack_on_halt','true',
-                '-e','max_duration_ms','15000','-e','observe_ams','false',COMPONENT],timeout=30,required=False)
-            require(not row['timed_out'],'guard_transport_unknown_no_kill')
+        require(row['exit_code']==1 and not path.strip(),'package_must_not_preexist_on_new_AVD')
+        row,installed=command('install-own-package',['install',str(apk)],timeout=120)
+        require('Success' in installed,'own_APK_not_installed')
+        # Fresh AVD + first install: reject stale guard state instead of clearing it.
+        require(read_cache('mgmem-r8-stall.json') is None,'unexpected_preexisting_stall_cache')
+        receipt['gates'].append(occupancy('before-guard'))
+        row,stdout=command('guard-instrumentation',['shell','am','instrument','-w','-r','-e','iterations','3',
+            '-e','inject_progress_lock_timeout','true','-e','stall_timeout_ms','3000','-e','capture_stack_on_halt','true',
+            '-e','max_duration_ms','15000','-e','observe_ams','false',COMPONENT],timeout=30,required=False)
+        require(not row['timed_out'],'guard_transport_unknown_no_kill')
         stall=read_cache('mgmem-r8-stall.json');require(isinstance(stall,dict),'guard_stall_cache_missing')
         require(stall.get('diagnostic_revision')==4 and stall.get('status')=='UNKNOWN' and stall.get('unsafe_cleanup') is True,'guard_unknown_state')
         require(stall.get('phase')=='diagnostic.inject-progress-lock.blocked' and stall.get('reason')=='STALL_PHASE_TIMEOUT','guard_wrong_boundary')
         require(stall.get('boundary_outcome')=='UNKNOWN_RUNNING_WORK' and stall.get('native_resource_state')=='UNKNOWN_NOT_FORCED_FREE','guard_false_zero')
         progress=read_cache('mgmem-r8-progress.json');require(progress and progress.get('run_id')==stall.get('run_id'),'guard_run_identity_mismatch')
-        # Android may print CODE:0 even when the process crashes. A shortMsg
-        # crash and an UNKNOWN cache, without a PASS report, define this guard.
-        require('shortMsg=Process crashed.' in stdout and not re.search(r'(?m)^INSTRUMENTATION_RESULT: report_json=.*"status"\s*:\s*"PASS"',stdout),'guard_not_expected_process_isolation')
+        require(not re.search(r'(?m)^INSTRUMENTATION_CODE: 0\s*$',stdout),'guard_falsely_finished_as_success')
         row_pid,pidtext=command('guard-own-pid-after',['shell','pidof',PACKAGE],required=False)
         require(not pidtext.strip(),'guard_expected_own_process_to_exit')
         threads=stall.get('threads',[])
@@ -196,7 +171,6 @@ def main():
                'native_resource_state':stall['native_resource_state'],'stack_status':stall.get('stack_status','UNAVAILABLE'),
                'observed_thread_count':stall.get('observed_threads'),'stack_thread_names':[t.get('name') for t in threads if t.get('name') in ('main','Instrumentation','memory-r8-progress-lock-holder','memory-r8-wall-watchdog')],
                'instrumentation_exit_code':row['exit_code'],'stdout_sha256':row['stdout_sha256'],'device':receipt['device'],'APK':receipt['APK'],
-               'initial_controller_correction':'CODE_0_CAN_ACCOMPANY_PROCESS_CRASH; VALIDATED_OWN_RUN_ID_AND_UNKNOWN_CACHE',
                'no_forced_free':True,'performance':'NOT_MEASURED'}
         (PRIVATE/'guard-stall.json').write_text(json.dumps(stall,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         receipt['gates'].append(occupancy('before-normal'));save(guardpath,guard)
@@ -240,11 +214,11 @@ def main():
         normal['postflight_gate']=occupancy('after-normal');save(normalpath,normal)
         receipt['state']='PASS';receipt['guard_receipt_sha256']=filehash(guardpath);receipt['normal_receipt_sha256']=filehash(normalpath)
     except Exception as error:
-        receipt.update(state='BLOCKED_OR_FAILED',reason=str(error),finished_at_utc=utc());save(BASE/('api34-retry-overview-final.json' if args.resume_prior_guard else 'api34-retry-overview.json'),receipt)
+        receipt.update(state='BLOCKED_OR_FAILED',reason=str(error),finished_at_utc=utc());save(BASE/'api34-retry-overview.json',receipt)
         if guard['state']=='NOT_RUN':save(guardpath,{'state':'BLOCKED_OR_NOT_RUN','reason':str(error)})
         if normal['state']=='NOT_RUN':save(normalpath,{'state':'BLOCKED_OR_NOT_RUN','reason':str(error)})
         print(json.dumps({'state':receipt['state'],'reason':str(error)}),flush=True);raise
-    receipt['finished_at_utc']=utc();save(BASE/('api34-retry-overview-final.json' if args.resume_prior_guard else 'api34-retry-overview.json'),receipt)
+    receipt['finished_at_utc']=utc();save(BASE/'api34-retry-overview.json',receipt)
     print(json.dumps({'state':'PASS','guard':guard['state'],'normal_iterations':normal['instrumentation_report']['iterations_completed'],
                       'cgroup_samples':[s['state'] for s in normal['cgroup_samples']]}),flush=True)
 

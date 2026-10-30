@@ -1,0 +1,27 @@
+{
+  "scope": "RETAIN_EXACT_LOCAL_BYTES_REDACT_PUBLIC_REVIEW_COPIES",
+  "files": [
+    {
+      "historical_name": "tools/verify_api34_retry.py",
+      "executed_sha256": "59ef070322c3e3dc45dafc0ee94540972532cdb186e78af840092634162b7993",
+      "exact_original": "LOCAL_IGNORED_ONLY",
+      "current_tool": "SERIAL_INPUT_NOW_EXPLICIT"
+    },
+    {
+      "historical_name": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-v1.txt",
+      "executed_sha256": "4a8e77b8d8443c5f1afc8e5dd5782ddab573da58e566b08d398f43100da9fe53",
+      "public_review_copy": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-v1.sanitized.txt",
+      "review_copy_sha256": "d0daa6e79d958e8eb43d01b8a6e822929b5e160cacf61421b90c18b801f641f6",
+      "exact_original": "LOCAL_IGNORED_ONLY",
+      "review_copy_executed": false
+    },
+    {
+      "historical_name": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-resume-v2.txt",
+      "executed_sha256": "1eb3b2438269ac26ad9961316e3baf208d536f69609d416df3f7f63d1b5d570f",
+      "public_review_copy": "artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-resume-v2.sanitized.txt",
+      "review_copy_sha256": "4d3c64a9169eea36a0dcb02974c200424fb515a9e02b1285d48715070697bb05",
+      "exact_original": "LOCAL_IGNORED_ONLY",
+      "review_copy_executed": false
+    }
+  ]
+}

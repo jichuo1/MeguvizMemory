@@ -6,11 +6,11 @@
 
 ## 明确的未完结证据
 
-`D:/MeguvizPack/coordination/verification/gpu-inflight-gate-1793256395431998300/DEVICE-RUN.md:5`（文件修改时间 2026-10-30 09:51:46）明确记载：`gpu_gate_v2_1793324951` 启动后 ADB 中断；重连后原测试进程仍存在，cgroup 冻结，因此该轮未完成，不能重启或记为通过。这是另一会话的实际设备任务，不能因为没有持续主机 ADB 进程就当作它已经结束。
+`MEGUVIZ_PACK_WORKSPACE/coordination/verification/gpu-inflight-gate-1793256395431998300/DEVICE-RUN.md:5`（文件修改时间 2026-10-30 09:51:46）明确记载：`gpu_gate_v2_1793324951` 启动后 ADB 中断；重连后原测试进程仍存在，cgroup 冻结，因此该轮未完成，不能重启或记为通过。这是另一会话的实际设备任务，不能因为没有持续主机 ADB 进程就当作它已经结束。
 
 对应本地收据目录：
 
-`D:/MeguvizPack/coordination/validation/gpu-inflight-gpu_gate_v2_1793324951/reconnect-inspection-1793325100/`
+`MEGUVIZ_PACK_WORKSPACE/coordination/validation/gpu-inflight-gpu_gate_v2_1793324951/reconnect-inspection-1793325100/`
 
 - `device-summary.json:4–5`：run_id 为上述轮次，state 为 `RUNNING`。
 - `pid.txt:1`：最后观测的原进程 PID 为 `21672`。

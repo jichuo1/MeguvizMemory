@@ -6,7 +6,7 @@
 
 ## 当前来源
 
-- BIL main：`00572940c354fbec7b6f311d4ecd6f02e66ea7c5`，通过 `git -c safe.directory=D:/Bilibili_Innocent_Lab -C D:/Bilibili_Innocent_Lab rev-parse HEAD` 读取。
+- BIL main：`00572940c354fbec7b6f311d4ecd6f02e66ea7c5`，通过 `git -c safe.directory=BIL_WORKSPACE -C BIL_WORKSPACE rev-parse HEAD` 读取。
 - `Bilibili_Innocent_Lab/app/src/main/cpp/player_interpolation/frame_engine.cpp` SHA256：`8dce89c83b52ba734723846879326005b2d43de6f648610759a11ded51124a87`。
 - 已读 Memory `consumers/image/main.cpp` 全文、`consumers/dex/main.cpp` 的真实 source/query/lease 入口，以及 BIL 的 frame engine、scratch、capability、packed 调用线索。
 - 外部项目仍有并行会话；最终实验应使用固定快照与实际制品 hash。本审计的 current-source 读数不能自动覆盖之后的变化。
@@ -37,7 +37,7 @@
 
 ### 更接近 BIL 输入来源的备选
 
-- APK：`D:/Bilibili_Innocent_Lab/Bilibili_Innocent_Lab/哔哩哔哩_9.17.0(9170100).apk`。
+- APK：`BIL_WORKSPACE/Bilibili_Innocent_Lab/哔哩哔哩_9.17.0(9170100).apk`。
 - APK 243,687,778 B；SHA256 `f0f880e841d017db335b3919e6d4792961f2e08aa9993da661b626d52cfcb955`。
 - 图像 member：`assets/composeResources/srcs.app.theseus.theseus.ogv.generated.resources/drawable-xxhdpi/theseus_ogv_video_card_go.png`。
 - 原始 1254×1254，690,905 B；member SHA256 `6f82f11a6cfbb909b2e6440dab26dff39db839b6c08fdc0a3900eb77f3a42b8a`。

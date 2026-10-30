@@ -1,0 +1,184 @@
+{
+  "state": "PASS_SCOPED_API34_FINAL_SANITIZED_R8_FUNCTIONAL",
+  "scope": "OWN_REUSED_API34_AVD_FINAL_SANITIZED_R8_SHORT_FUNCTIONAL",
+  "started_at_utc": "2026-10-30T14:38:33.798437+00:00",
+  "runner_sha256": "366c1b4769ef175f10340df5666428f9cd0a5181234708b690b7c635d30679f2",
+  "helper_sha256": "59ef070322c3e3dc45dafc0ee94540972532cdb186e78af840092634162b7993",
+  "device_serial_sha256": "d966c9c5e93ec89df8ebb92d4d37167633af6e2520ee5830b12d1db56d5fa8f3",
+  "gates": [
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 318,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "6f691567983ce78801082632c41ba23f87d0dc848cff4c316319fae78914b665",
+      "activity_inventory_sha256": "fa577e5fbb94eb944f1d8ff7dd771e29a8ea2a6e952373b96c82a08208722415",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 321,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "0ca910febf0343c8d46cc17db88a5388b3ba74ae9af1f7596aa1c8457f54bcff",
+      "activity_inventory_sha256": "d5e1fc3b9e3598b452fb367ff6fdd816843ae6338081e46a94f17872e74490dc",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 320,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "3a8d974af317c23f859929a88c84ee9b5a953b7059216563a5dee7797684b419",
+      "activity_inventory_sha256": "7688a22066e1a29eeb60605cb983c0994c6b00ad5f2d5c604996a86ea02052de",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    }
+  ],
+  "guard": "NOT_REPEATED_PREVIOUS_INDEPENDENT_EVIDENCE",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "shared_device_lock": false,
+  "raw_logs": "IGNORED_BUILD_ONLY",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "boot_sha256": "d4945b4a3cb1a753213e001db112668a8126ab2f593119e40a6686dc8ed5c98b"
+  },
+  "APK": {
+    "apk_sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2",
+    "build_receipt_sha256": "1d4d84166958d13a5d1f32110a3b882265157e749f1f9d9da63b2cd1d6c1f7e0",
+    "native_build_receipt_sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "native_overrides": [
+      {
+        "kind": "jni",
+        "path": "build/android-close-shareable/delivery-v2/jni-final-x86/x86_64/libmgmem_pressure_jni.so",
+        "sha256": "81c1f3f8e015c64159998dee9729591a8f4c03c85f2446088e83a6763142ae0f"
+      },
+      {
+        "kind": "core",
+        "path": "build/android-close-shareable/delivery-v2/sdk/android-x86_64/lib/libmgmem.so",
+        "sha256": "8866dffbcaf4a1be82e8a4491cfd031d0b533b787e07588312796ce732395c8a"
+      }
+    ],
+    "r8_marker_after": "io.github.jichuo1.meguviz.memory.android.a"
+  },
+  "prior_own_APK": {
+    "sha256": "dbf221fc722e0a9673f5633402dc487e93ac7af7b62a64d3a8810113b8628f30",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "data_cleared": false
+  },
+  "own_APK_update": "SAME_CERTIFICATE_UPDATE_NO_DATA_CLEAR",
+  "instrumentation_report": {
+    "suite": "android-pressure-r8-stability-v1",
+    "status": "PASS",
+    "checks": 495,
+    "iterations_requested": 20,
+    "iterations_completed": 32,
+    "minimum_duration_ms": 8000,
+    "maximum_duration_ms": 60000,
+    "actual_duration_ms": 8138,
+    "api": 34,
+    "r8_marker_runtime_name": "io.github.jichuo1.meguviz.memory.android.a",
+    "diagnostic_revision": 4,
+    "inject_main_running_timeout": false,
+    "inject_progress_lock_timeout": false,
+    "stall_timeout_ms": 10000,
+    "foreground_requested": false,
+    "foreground_prestarted": false,
+    "foreground_resumed": false,
+    "foreground_finished": false,
+    "foreground_resume_checks": 0,
+    "foreground_pause_count_before_finish": 0,
+    "foreground_preexisting_pause_count": 0,
+    "foreground_finish_policy": "OWN_MAIN_FINISH_THEN_OBSERVED_ONSTOP_OR_ONDESTROY",
+    "fire_and_forget_state": "PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL",
+    "logical_unavailable_reason_checks": "PASS",
+    "fire_and_forget_elapsed_ms": 42,
+    "fire_and_forget_polls": 4,
+    "fire_and_forget_scope": "CALLER_ONLY_CLOSE_AND_NATIVE_EXISTS_NO_AWAIT_SNAPSHOT_OR_NATIVE_POLL",
+    "phase": "complete",
+    "exit_scope": "NORMAL_INSTRUMENTATION_COMPLETION",
+    "progress_file": "cache/mgmem-r8-progress.json",
+    "unknown_work_policy": "PERSIST_UNKNOWN_AND_FAIL_STOP_OWN_PROCESS_NO_CONCURRENT_FREE",
+    "framework": {
+      "application_dispatch": "PASS_SYNTHETIC_BACKGROUND_AND_UI_HIDDEN",
+      "legacy_automatic_delivery": "NOT_EXPECTED_SINCE_API34_PER_ANDROID_CONTRACT",
+      "onLowMemory_automatic_delivery": "NEVER_CALLED_SINCE_API34_PER_ANDROID_CONTRACT",
+      "observe_ams": false,
+      "ams_background_injection": "NOT_REQUESTED_SEPARATE_SMOKE_EVIDENCE",
+      "automatic_low_ram_tested": false,
+      "injection_scope": "OWN_DIAGNOSTIC_PACKAGE_ONLY"
+    },
+    "own_process_observations": [
+      {
+        "elapsed_realtime_nanos": 52677013578,
+        "rss_kb": 76472,
+        "pss_kb": 13751,
+        "private_dirty_kb": 8784,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 57009518770,
+        "rss_kb": 83536,
+        "pss_kb": 18452,
+        "private_dirty_kb": 13380,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 60492689439,
+        "rss_kb": 86600,
+        "pss_kb": 21161,
+        "private_dirty_kb": 16096,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      }
+    ],
+    "observation_scope": "WHOLE_OWN_PROCESS_NOT_DOMAIN_ATTRIBUTION_NOT_ATOMIC_NOT_SAVINGS",
+    "peak_requested_backing_bytes_per_domain": 1536,
+    "final_backing_bytes_each_domain": 0,
+    "stability_scope": "BOUNDED_CREATE_PRESSURE_RESTORE_MAIN_CLOSE_ASYNC_LAST_RELEASE_CYCLES",
+    "indefinite_leak_freedom_proven": false,
+    "actual_low_memory_event": false,
+    "performance_qualified": false,
+    "BIL_integrated": false,
+    "energy_joules": null,
+    "energy_unavailable_reason": "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD"
+  },
+  "own_run_id_sha256": "5a630a50dc1427a66f3e37c8865c3242d5ad655eeff9ecf45aad94518f45f475",
+  "previous_run_id_distinct": true,
+  "cgroup_samples": [
+    {
+      "at_utc": "2026-10-30T14:38:43.866306+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    },
+    {
+      "at_utc": "2026-10-30T14:38:46.569914+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    },
+    {
+      "at_utc": "2026-10-30T14:38:49.983423+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    }
+  ],
+  "cgroup_scope": "OWN_PID_DISCRETE_SAMPLES_NOT_CONTINUOUS",
+  "instrumentation_stdout_sha256": "b2bde1514b68b3e04eca3c0e45a35ab9347364c551f2db41dc83ef00a3de3725",
+  "instrumentation_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "finished_at_utc": "2026-10-30T14:38:51.538155+00:00"
+}

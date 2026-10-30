@@ -1,24 +1,24 @@
 # 真实消费者审计（2026-10-30，Asia/Shanghai）
 
-结论：BIL 已包含 P1-07 准备 scratch 和 P2-05 帧账本计数优化，不能将其重新记为 MeguvizMemory 收益；packed reader 尚未进入所检查的 main 源码。真实 DexMeguviz 已有带寿命回调的 borrowed source C ABI，适合作为不改动现有项目的独立消费者接入口。后续定位确认 Compute/Media 的真实源码和安装 SDK 位于 `D:\MeguvizPack`；初次顶层路径未发现不能解释为 SDK 缺失。Memory 的家族桥本轮尚未实现或验证，不能用已有 SDK/研究计划宣称真实集成。
+结论：BIL 已包含 P1-07 准备 scratch 和 P2-05 帧账本计数优化，不能将其重新记为 MeguvizMemory 收益；packed reader 尚未进入所检查的 main 源码。真实 DexMeguviz 已有带寿命回调的 borrowed source C ABI，适合作为不改动现有项目的独立消费者接入口。后续定位确认 Compute/Media 的真实源码和安装 SDK 位于 `MEGUVIZ_PACK_WORKSPACE`；初次顶层路径未发现不能解释为 SDK 缺失。Memory 的家族桥本轮尚未实现或验证，不能用已有 SDK/研究计划宣称真实集成。
 
 ## 读取范围与操作边界
 
 读取了 research/2026-10-28/PROJECT_SOURCE_MANIFEST.json、ENGINEERING_PLAN.md 的模块、消费者和量化章节，以及以下真实仓库的工作协议、当前代码和构建文件。只读访问外部仓库；审计阶段新增本报告，后续 Memory 内消费者实现和统一构建由独立回执记录。审计没有运行其他仓库的构建、安装、设备命令、全局 Git 配置、checkout、reset、stash、发布或网络变更。
 
-跨用户 Git ownership 检查最初拒绝读取；后续使用精确的单次参数 `git -c safe.directory=D:/Bilibili_Innocent_Lab -C D:\Bilibili_Innocent_Lab ...`，其他仓库同理。没有修改全局 safe.directory。Git 提示当前用户不能读取 Administrator 的全局 ignore 文件，因此 status 的忽略口径可能与用户交互终端不同；跟踪文件修改仍可见。
+跨用户 Git ownership 检查最初拒绝读取；后续使用精确的单次参数 `git -c safe.directory=BIL_WORKSPACE -C BIL_WORKSPACE ...`，其他仓库同理。没有修改全局 safe.directory。Git 提示当前用户不能读取 Administrator 的全局 ignore 文件，因此 status 的忽略口径可能与用户交互终端不同；跟踪文件修改仍可见。
 
 ## 当前来源锁
 
 | 仓库 | 当前分支/提交 | 工作区观察 | 当前证据边界 |
 |---|---|---|---|
-| D:\Bilibili_Innocent_Lab | main / 00572940c354fbec7b6f311d4ecd6f02e66ea7c5 | docs/follow-feed-integration.md 已修改；.ai-memory/、.claude/、runtime/ 未跟踪 | 已读当前源码；未重新执行 Gradle、宿主或设备验证 |
-| D:\DexMeguviz | main / unborn，无有效 HEAD | 实现源码、测试和工程资料均未提交 | 公共头和实现真实存在；不能用 commit 锁定，接入前需源码清单/hash |
+| BIL_WORKSPACE | main / 00572940c354fbec7b6f311d4ecd6f02e66ea7c5 | docs/follow-feed-integration.md 已修改；.ai-memory/、.claude/、runtime/ 未跟踪 | 已读当前源码；未重新执行 Gradle、宿主或设备验证 |
+| DEX_WORKSPACE | main / unborn，无有效 HEAD | 实现源码、测试和工程资料均未提交 | 公共头和实现真实存在；不能用 commit 锁定，接入前需源码清单/hash |
 | D:\MeguvisDexDash | codex/m2-facts-20261028 / 7bb63898e610bf8436e62aa072f43fed7453d14c | 本轮 `status --short` 无输出 | 现有 Rust CLI；未读出 Memory allocator 注入合同，不优先引入语言桥 |
 | D:\MeguvizAndroid | main / 18c61debbab804d4ac22e1d578d68957c5ca2205 | 大量状态、回执、集成和制品目录 dirty/untracked | 源码与本地发布记录存在；新 Memory 接入和本次安装状态未核 |
 | D:\LumenCoacervationEngine | main / 0eab3d6aeda19d0a810b89350d35038acbeb6ae7 | .ai-memory/、.codebuddy/ 未跟踪 | 与研究 7e473d6473dfa938518deddb4306ad8f6969ac64 不同；未接管其视觉存储 |
-| D:\MeguvizPack\MeguvizCompute | main / 7581256f1b35b9875b168717e8765a127e30890f | CMake、公开头、core runtime、STATUS、依赖锁等大量 dirty | 已读真实 C ABI/CMake 和本地安装 SDK；本次 Memory 桥未实现 |
-| D:\MeguvizPack\MeguvizMedia | main / 4ebbfcd4b56a67e2ea14a6f30d614fe68ab1c765 | CMake、公开头、core、JNI、RIFE adapter、STATUS 等大量 dirty | 已读真实 frame/effect/lease 接口与 ARM64 安装 SDK；不能把旧制品视为当前 dirty 源码构建 |
+| MEGUVIZ_PACK_WORKSPACE\MeguvizCompute | main / 7581256f1b35b9875b168717e8765a127e30890f | CMake、公开头、core runtime、STATUS、依赖锁等大量 dirty | 已读真实 C ABI/CMake 和本地安装 SDK；本次 Memory 桥未实现 |
+| MEGUVIZ_PACK_WORKSPACE\MeguvizMedia | main / 4ebbfcd4b56a67e2ea14a6f30d614fe68ab1c765 | CMake、公开头、core、JNI、RIFE adapter、STATUS 等大量 dirty | 已读真实 frame/effect/lease 接口与 ARM64 安装 SDK；不能把旧制品视为当前 dirty 源码构建 |
 
 研究包的 BIL 基线是 74d78e19095baa006b1315001190241952f1b84a。该提交当前仍出现在 MeguvizAndroid 的 BIL baseline worktree；原始 BIL main 已明显前进。`git worktree list --porcelain` 也显示多个 Claude 性能、Codex Android/Ref 集成及历史验证 worktree。本轮全部保留，没有假定其未提交变化已经验收。
 
@@ -63,7 +63,7 @@ MeguvizAndroid `docs/release/PRODUCTION_READINESS.md:56–60` 记录 1.0.0 GitHu
 
 现成接口直接可用：
 
-- `D:\DexMeguviz\include\dexmeguviz\dexmeguviz.h:107–116`：dmg_buffer_lease 含 struct_size、abi_version、context、retain、release、immutable、reserved；回调要求 noexcept、thread-safe，并保持字节不可变。
+- `DEX_WORKSPACE\include\dexmeguviz\dexmeguviz.h:107–116`：dmg_buffer_lease 含 struct_size、abi_version、context、retain、release、immutable、reserved；回调要求 noexcept、thread-safe，并保持字节不可变。
 - 同头 `:371–374`：dmg_snapshot_open_copy_in 与 dmg_snapshot_open_borrowed 是不同存储合同；` :404–416` 有 snapshot/result retain/release 和借用视图寿命。
 - `src/c_api/source_input.cpp:115–120`：检查有效参数/预算后，在 prepare/发布 snapshot 前 retain；失败路径由源对象释放借用。
 - `tests/native/source_lifetime_tests.cpp:121–156`：现有测试覆盖调用方先释放、result 跨 snapshot 保活、最后 result 释放归零、损坏输入和 digest mismatch 的 retain/release 配对、immutable=0 与预算拒绝。这些是已读测试内容，不是本轮执行结果。
@@ -89,7 +89,7 @@ MeguvizAndroid `docs/release/PRODUCTION_READINESS.md:56–60` 记录 1.0.0 GitHu
 
 ## 后续纠正：MeguvizPack 中的真实 Compute/Media
 
-定位后只读核查了 `D:\MeguvizPack\MeguvizCompute` 与 `D:\MeguvizPack\MeguvizMedia`，两者各自是 Git 仓库，MeguvizPack 外层不是仓库。初次只探测 `D:\MeguvizCompute`/`D:\MeguvizMedia` 的范围不完整；这两个路径不存在并不构成外部制品缺失阻塞。已知另一会话在推进这些项目和 GPU 设备工作，本轮没有改动、重建、安装或争用其设备。
+定位后只读核查了 `MEGUVIZ_PACK_WORKSPACE\MeguvizCompute` 与 `MEGUVIZ_PACK_WORKSPACE\MeguvizMedia`，两者各自是 Git 仓库，MeguvizPack 外层不是仓库。初次只探测 `COMPUTE_WORKSPACE`/`MEDIA_WORKSPACE` 的范围不完整；这两个路径不存在并不构成外部制品缺失阻塞。已知另一会话在推进这些项目和 GPU 设备工作，本轮没有改动、重建、安装或争用其设备。
 
 实际公共接口：
 
@@ -105,7 +105,7 @@ MeguvizAndroid `docs/release/PRODUCTION_READINESS.md:56–60` 记录 1.0.0 GitHu
 - Compute `CMakeLists.txt:151–187` 建立静态 PIC core、`MeguvizCompute::core`，按选项导出私有 ncnn SDK，并有实际 install/export。
 - Media `CMakeLists.txt:11–23,58–63` 优先从安装包 find_package Compute，导出 `MeguvizMedia::core`；既有 composition 可提供单一 Compute/ncnn 闭包。
 - Media `distribution/android/CMakeLists.txt:8–52` 的官方 composition 明确使用单一最终 `meguviz_media_rife_ncnn` DSO、静态 STL，并整合 Compute/RIFE/Media；该代码仍有本地 dirty 变更，本轮只读，不代表重建资格。
-- `D:\MeguvizPack\MeguvizMedia\artifacts\M6\identity-sdk\android-arm64-v8a\install` 真实存在 Config、Targets、公开头以及 `libmeguviz_compute_core.a`（3,580,680 B）、`libmeguviz_media_core.a`（703,824 B）、`libmeguviz_media_android.a`（495,654 B）。对应 armv7 Config 也存在。
+- `MEGUVIZ_PACK_WORKSPACE\MeguvizMedia\artifacts\M6\identity-sdk\android-arm64-v8a\install` 真实存在 Config、Targets、公开头以及 `libmeguviz_compute_core.a`（3,580,680 B）、`libmeguviz_media_core.a`（703,824 B）、`libmeguviz_media_android.a`（495,654 B）。对应 armv7 Config 也存在。
 - 所读 ARM64 identity-sdk 的 MeguvizComputeConfig 中 ncnn 条件为 OFF，私有 fingerprint 为空；MeguvizMediaConfig 的 RIFE 条件为 OFF。因此它是实际 CPU/reference identity profile，不能充当完整 ncnn/RIFE GPU SDK 资格。
 - Compute STATUS 当前 profile 为 bil-rife-ncnn-android、IN_PROGRESS/INCONCLUSIVE；Media STATUS 为 BLOCKED、bil_qualified=false、gpu_qualified=false。它们保留旧构建和设备记录，也指出当前候选需重建/设备验收；本报告不把这些记录合并成当前全部通过。
 

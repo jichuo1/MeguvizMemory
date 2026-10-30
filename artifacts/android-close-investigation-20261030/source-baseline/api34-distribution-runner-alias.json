@@ -1,0 +1,6 @@
+{
+  "original_path": "tools/verify_api34_distribution.py",
+  "snapshot": "artifacts/android-close-investigation-20261030/source-baseline/verify_api34_distribution-executed.py.txt",
+  "sha256": "366c1b4769ef175f10340df5666428f9cd0a5181234708b690b7c635d30679f2",
+  "method": "Removed one known post-run validation line and verified exact executed SHA"
+}
