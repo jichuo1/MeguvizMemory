@@ -134,7 +134,7 @@ def main():
         "bundle": {"path": bundle.relative_to(ROOT).as_posix(), "sha256_sidecar": bundle.name + ".sha256", "hash_location": "SIDECAR_AVOIDS_SELF_REFERENCE"}}
     manifest = BASE / "ARTIFACTS.json"
     manifest.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n")
-    tracked = subprocess.check_output(["git", "-c", "safe.directory=D:/MeguvizMemory", "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT).decode().split("\0")
+    tracked = subprocess.check_output(["git", "-c", "safe.directory=" + ROOT.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z"], cwd=ROOT).decode().split("\0")
     entries = {}
     for name in sorted(set(tracked)):
         if not name or not safe_public(name) or name.startswith(("research/", "docs/research/", "build/", "install/", "dist/")): continue

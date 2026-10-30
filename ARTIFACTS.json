@@ -388,5 +388,13 @@
     "qualification": "NATIVE_900_SECONDS_HOST18_ASAN18_AND_ANDROID_R8_SMOKE;ANDROID_LONG_NOT_QUALIFIED",
     "manifest": "artifacts/continuation-20261030/ARTIFACTS.json",
     "source_lock": "artifacts/continuation-20261030/SOURCE_LOCK.json"
+  },
+  "current_android_close_resolution": {
+    "version": "0.2.0",
+    "native_abi": "1.1",
+    "status": "FINAL_SHAREABLE_SMOKE_PASS_LONG_RUNNING",
+    "prior_test_binary": "15_MINUTE_PASS_SOURCE_20863_NOT_TRANSFERRED",
+    "current_distribution": "SANITIZED_SOURCE_7C845_SEPARATE_DEVICE_VALIDATION",
+    "results": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md"
   }
 }

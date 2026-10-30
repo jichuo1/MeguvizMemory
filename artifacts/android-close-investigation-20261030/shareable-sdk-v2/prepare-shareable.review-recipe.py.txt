@@ -1,0 +1,150 @@
+"""Copy SDK/AAR into an isolated directory and strip debug paths, never source inputs."""
+from __future__ import annotations
+from pathlib import Path
+import hashlib,json,os,re,shutil,struct,subprocess,zipfile
+
+ROOT=Path(__file__).resolve().parents[2]
+OUT=ROOT/'build/android-close-shareable'
+DEST=OUT/'delivery-v2'
+EVIDENCE=ROOT/'artifacts/android-close-investigation-20261030/shareable-sdk-v2'
+LLVM=Path.home()/'AppData/Local/Android/Sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/windows-x86_64/bin'
+STRIP=LLVM/'llvm-strip.exe'; READELF=LLVM/'llvm-readelf.exe';NM=LLVM/'llvm-nm.exe'
+MARKERS=[s.lower().encode() for p in (str(Path.home()),str(ROOT)) for s in (p.replace(chr(92),'/'),p.replace('/',chr(92)))]
+def digest(b):return hashlib.sha256(b).hexdigest()
+def fh(p):return digest(p.read_bytes())
+def ident(p):return {'path':p.relative_to(ROOT).as_posix(),'bytes':p.stat().st_size,'sha256':fh(p)}
+def require(value,reason):
+    if not value:raise RuntimeError(reason)
+def scan(data,name):
+    lower=data.lower()
+    require(not any(m in lower or m.decode().encode('utf-16le') in lower for m in MARKERS),'sensitive_path_remaining:'+name)
+def run(args):
+    result=subprocess.run([str(v) for v in args],capture_output=True,timeout=30)
+    if result.returncode:raise RuntimeError('binary_tool_failed:'+Path(args[0]).name)
+    return result.stdout
+def elf_contract(data):
+    require(data[:6]==b'\x7fELF\x02\x01','ELF64_LE_required')
+    machine=struct.unpack_from('<H',data,18)[0]
+    phoff=struct.unpack_from('<Q',data,32)[0];entsize,number=struct.unpack_from('<HH',data,54)
+    require(entsize==56 and number<256,'unexpected_program_headers')
+    headers=[];segments=[]
+    for i in range(number):
+        fields=struct.unpack_from('<IIQQQQQQ',data,phoff+i*entsize)
+        if fields[0]!=1:continue
+        kind,flags,off,va,pa,filesz,memsz,align=fields
+        require(off+filesz<=len(data),'ELF_segment_bounds')
+        content=bytearray(data[off:off+filesz])
+        # Section-table offsets/counts live in ELF header, itself inside first
+        # PT_LOAD. Ignore exactly e_shoff and e_shentsize/e_shnum/e_shstrndx.
+        for begin,end in ((40,48),(58,64)):
+            for pos in range(max(begin,off),min(end,off+filesz)):content[pos-off]=0
+        headers.append([flags,off,va,pa,filesz,memsz,align]);segments.append(digest(content))
+    require(headers,'ELF_no_PT_LOAD')
+    return {'machine':machine,'load_headers':headers,'load_sha256_with_section_header_fields_masked':segments}
+def symbols(p,dynamic):
+    cmd=[READELF,'--dyn-syms','--wide',p] if dynamic else [NM,'--defined-only','--extern-only','--format=posix',p]
+    out=run(cmd).decode('utf-8','replace').splitlines()
+    lines=sorted(line.strip() for line in out if line.strip() and not line.startswith(('File:','Archive:')) and not line.rstrip().endswith(':'))
+    return digest('\n'.join(lines).encode())
+def coff_payloads(p):
+    readobj=LLVM/'llvm-readobj.exe'
+    text=run([readobj,'--sections','--section-data',p]).decode('utf-8','replace')
+    blocks=re.findall(r'(?ms)^  Section \{\n(.*?)^  \}',text);rows=[]
+    for block in blocks:
+        match=re.search(r'(?m)^    Name: (\S+)',block);require(match is not None,'COFF_section_name')
+        name=match.group(1)
+        if name.startswith('.debug'):continue
+        size=int(re.search(r'(?m)^    RawDataSize: (\d+)',block).group(1))
+        data=re.search(r'(?ms)^    SectionData \(\n(.*?)^    \)',block)
+        if data:
+            pieces=[''.join(re.findall(r'\b[0-9A-F]{2,8}\b',line.split('|')[0].split(':',1)[1]))
+                    for line in data.group(1).splitlines() if ':' in line]
+            payload=bytes.fromhex(''.join(pieces));require(len(payload)==size,'COFF_section_size')
+        else:payload=b''
+        rows.append([name,size,digest(payload)])
+    require(rows,'COFF_no_sections');return rows
+def native(source,target,kind):
+    before=source.read_bytes();after=target.read_bytes();result={'source':ident(source),'candidate':ident(target),'format':kind,'same_bytes':before==after}
+    if kind=='ELF':
+        left,right=elf_contract(before),elf_contract(after);require(left==right,'ELF_PT_LOAD_mismatch:'+source.name)
+        a,b=symbols(source,True),symbols(target,True);require(a==b,'ELF_dynamic_symbols_mismatch:'+source.name)
+        result.update(ELF_PT_LOAD=left,dynamic_symbols_sha256=a,contract='PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL')
+    elif kind=='ARCHIVE':
+        a,b=symbols(source,False),symbols(target,False);require(a==b,'archive_defined_export_symbols_mismatch:'+source.name)
+        result.update(defined_external_symbols_sha256=a,contract='DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE')
+        if source.suffix.lower()=='.lib' and source.name.lower()!='mgmem.lib':
+            x,y=coff_payloads(source),coff_payloads(target);require(x==y,'COFF_nondebug_section_payload_mismatch')
+            result.update(coff_non_debug_section_count=len(x),coff_non_debug_payloads_sha256=digest(json.dumps(x,separators=(',',':')).encode()),contract='COFF_NONDEBUG_SECTION_BYTES_AND_DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE')
+    else:
+        # PE export and code sections are checked by an actual linked Windows
+        # pressure consumer; untouched PE images are exact byte equality.
+        require(before==after,'PE_image_changed_needs_explicit_loaded_section_review:'+source.name)
+        result['contract']='PE_IMAGE_IDENTICAL_BYTES'
+    scan(after,target.name);return result
+def copy_sdk(label,source):
+    target=DEST/'sdk'/label;require(not target.exists(),'target_exists')
+    shutil.copytree(source,target);records=[]
+    for p in sorted(target.rglob('*')):
+        if not p.is_file():continue
+        original=source/p.relative_to(target);data=p.read_bytes();scan(data,p.name) if not (data[:4]==b'\x7fELF' or data[:2]==b'MZ' or data.startswith(b'!<arch>\n')) else None
+        kind='ELF' if data[:4]==b'\x7fELF' else 'PE' if data[:2]==b'MZ' else 'ARCHIVE' if data.startswith(b'!<arch>\n') else None
+        if kind:
+            if p.name.lower()=='mgmem.lib':
+                # LLVM does not support this COFF import-library format; it has
+                # no private markers and must stay byte-for-byte unchanged.
+                scan(data,p.name)
+            elif kind=='PE':
+                # LLVM --strip-debug changed .text in an isolated trial despite
+                # no private paths; keep original PE exactly and refuse that output.
+                scan(data,p.name)
+            else:run([STRIP,'--strip-debug',p])
+            records.append(native(original,p,kind))
+        else:require(p.read_bytes()==original.read_bytes(),'non_binary_copy_drift')
+    return target,records
+def copy_jni(abi,source):
+    target=DEST/'jni'/abi/'libmgmem_pressure_jni.so';target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(source,target)
+    run([STRIP,'--strip-debug',target]);return target,native(source,target,'ELF')
+def archive_sdk(prefix,target):
+    with zipfile.ZipFile(target,'x',zipfile.ZIP_DEFLATED) as z:
+        for p in sorted(prefix.rglob('*')):
+            if p.is_file():z.write(p,p.relative_to(prefix).as_posix())
+    with zipfile.ZipFile(target) as z:
+        require(z.testzip() is None,'SDK_ZIP_corrupt')
+        for name in z.namelist():require(z.read(name)==(prefix/name).read_bytes(),'SDK_ZIP_mismatch')
+def aar(source,target,abi,core,jni):
+    with zipfile.ZipFile(source) as old,zipfile.ZipFile(target,'x',zipfile.ZIP_DEFLATED) as new:
+        require(old.testzip() is None,'source_AAR_corrupt')
+        for entry in old.infolist():
+            name=entry.filename;data=old.read(name)
+            if name==f'jni/{abi}/libmgmem.so':data=core.read_bytes()
+            elif name==f'jni/{abi}/libmgmem_pressure_jni.so':data=jni.read_bytes()
+            else:scan(data,name)
+            if name.endswith('.jar'):
+                import io
+                with zipfile.ZipFile(io.BytesIO(data)) as nested:
+                    for child in nested.namelist():scan(nested.read(child),name+':'+child)
+            new.writestr(entry,data)
+    with zipfile.ZipFile(source) as old,zipfile.ZipFile(target) as new:
+        require(new.testzip() is None and set(old.namelist())==set(new.namelist()),'AAR_zip_closure')
+        for name in old.namelist():
+            if name.startswith('jni/'+abi+'/'):continue
+            require(old.read(name)==new.read(name),'AAR_non_JNI_member_drift:'+name)
+        require(any('NOTICE' in n.upper() for n in new.namelist()),'AAR_notice_missing')
+def main():
+    require(not DEST.exists() and not EVIDENCE.exists(),'fresh_output_required');DEST.mkdir();EVIDENCE.mkdir(parents=True)
+    result={'state':'RUNNING','scope':'SANITIZED_SDK_CANDIDATES_NOT_EXECUTED','tool':{'name':'NDK llvm-strip --strip-debug','sha256':fh(STRIP)},'sources_unchanged':False,'profiles':{},'JNI_AAR':'NOT_SELECTED_AWAIT_NEW_JNI_FIX','limitations':['Changed ELF e_shoff/e_shentsize/e_shnum/e_shstrndx header fields are explicitly masked; all other PT_LOAD bytes must match.','No transformed binary is identified as the byte-for-byte artifact used in previous device runs.','Windows PE inputs had no sensitive markers and are kept byte-identical after isolated llvm-strip changed .text; COFF import library is byte-identical because LLVM did not support its format.','No new device, long-stability, R8 or performance qualification.','No private key, APK/DEX input or raw machine path is published.']}
+    sources=[('android-arm64-v8a',ROOT/'install/features-arm64'),('android-x86_64',ROOT/'install/continuation-x86_64'),('windows-x64',ROOT/'install/features-host')]
+    originals={p:fh(p) for _,base in sources for p in base.rglob('*') if p.is_file()}
+    try:
+        built={}
+        for label,source in sources:
+            prefix,entries=copy_sdk(label,source);archive=DEST/('MeguvizMemory-0.2.0-'+label+'-strip-debug.zip');archive_sdk(prefix,archive)
+            built[label]=prefix;result['profiles'][label]={'binary_transformations':entries,'sdk_zip':ident(archive)}
+        require(all(fh(p)==v for p,v in originals.items()),'original_input_changed')
+        result['sources_unchanged']=True;result['state']='PASS_TRANSFORM_AND_BINARY_CONTRACTS_NEEDS_REAL_CONSUMER_RUNTIME'
+    except Exception as e:
+        result.update(state='BLOCKED_OR_FAILED',reason=str(e),sources_unchanged=all(fh(p)==v for p,v in originals.items()))
+    (EVIDENCE/'manifest.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+    print(json.dumps({'state':result['state'],'reason':result.get('reason'),'profiles':list(result['profiles']),'JNI_AAR':result['JNI_AAR']}))
+    raise SystemExit(0 if result['state'].startswith('PASS') else 1)
+if __name__=='__main__':main()

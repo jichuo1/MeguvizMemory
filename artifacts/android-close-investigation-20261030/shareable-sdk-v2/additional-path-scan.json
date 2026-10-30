@@ -1,0 +1,17 @@
+{
+  "state": "PASS",
+  "scope": "ALL_CANDIDATE_SDK_FILES_AND_ARCHIVE_MEMBERS",
+  "checked_file_and_zip_member_instances": 70,
+  "checks": [
+    "USER_PROFILE_NAME_ASCII_CASEFOLD",
+    "USER_PROFILE_NAME_UTF16LE_CASEFOLD",
+    "ABSOLUTE_USER_DIRECTORY_PREFIX",
+    "ABSOLUTE_WORKSPACE_DIRECTORY_PREFIX"
+  ],
+  "matches": 0,
+  "SDK_manifest_sha256": "fc386af062643815155f1730b80f1f8546a9c906eb5b74291f74117dea919763",
+  "limitations": [
+    "This scan applies to current candidate SDKs, not future JNI/AAR or rebuilt APK.",
+    "Android candidates still need runtime verification; no long-run byte identity is claimed."
+  ]
+}

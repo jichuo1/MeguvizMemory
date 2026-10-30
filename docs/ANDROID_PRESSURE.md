@@ -38,7 +38,9 @@ VM长期不可用时该注册保留global refs，已有reaper可无限期低频�
 
 JNI构建只链接安装后的shared `libmgmem.so`，pressure helper为PIC静态组件并入JNI；拒绝把静态Memory SDK嵌入为第二个runtime。AAR包含窄JNI类keep规则，尚不构成BIL/R8产品资格。
 
-Java logical snapshot数组索引依次为：controller state、domain state、budget、backing、reservation、live、retiring、retained、over-budget、events、trim attempts、trim successes、BUSY deferrals、last status、owned-domain scope(1/0)、cleanup completed。外部close后的domain值为归还owner前最后缓存，不能作为其后实时状态。null表示BUSY/不可得，超出Java signed long的unsigned计数表示-1并通过logicalUnavailableReason说明，不记为0。
+Java logical snapshot数组索引依次为：controller state、domain state、budget、backing、reservation、live、retiring、retained、over-budget、events、trim attempts、trim successes、BUSY deferrals、last status、owned-domain scope(1/0)、cleanup completed。外部close后的domain值为归还owner前最后缓存，不能作为其后实时状态。null表示BUSY/不可得，超出Java signed long的unsigned计数表示-1并通过logicalUnavailableReason说明，不记为0。关闭时最终快照不可获取或控制器状态异常，观察字段0–12均为-1，已知错误状态、owned标记和done保留；logicalUnavailableReason此时明确返回 `NATIVE_SNAPSHOT_UNAVAILABLE_AFTER_CLEANUP_ERROR`，不会误称计数溢出或伪装为零。控制器和owner保留隔离，禁止因观察失败继续销毁或伪报成功。
+
+创建和绑定时逐次检查 JNI 返回值与 pending exception。出现异常后只清理已建立的global refs，不继续调用异常状态下不允许的JNI操作，并将原异常交回Java；这些失败发生在native资源接收前，外部注册仍由其调用者持有。[JNI异常规则](https://developer.android.com/ndk/guides/jni-tips#exceptions)
 
 ## 驻留观测
 

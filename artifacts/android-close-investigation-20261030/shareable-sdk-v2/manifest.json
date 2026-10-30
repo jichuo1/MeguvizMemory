@@ -1,0 +1,323 @@
+{
+  "state": "PASS_SDK_PATH_SCAN_WINDOWS_CONSUMER_ANDROID_RUNTIME_NOT_STARTED",
+  "scope": "SANITIZED_SDK_CANDIDATES_NOT_EXECUTED",
+  "tool": {
+    "name": "NDK llvm-strip --strip-debug",
+    "sha256": "218dbc5dfed2ae740e46c84f039ed7f35973a0ce8832ae2f348a2cfe70af345b"
+  },
+  "sources_unchanged": true,
+  "profiles": {
+    "android-arm64-v8a": {
+      "binary_transformations": [
+        {
+          "source": {
+            "path": "install/features-arm64/bin/mgmem_tlb_owned",
+            "bytes": 3297448,
+            "sha256": "9ba7dba9be7ad4a4c30cf47728415ea7f6d81de07c7646293193a4c9873b2195"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/android-arm64-v8a/bin/mgmem_tlb_owned",
+            "bytes": 402968,
+            "sha256": "1e17846a2aa6f27d1eaffb1eade4b899de2b445c96538ba18b1f3777fdb9aa63"
+          },
+          "format": "ELF",
+          "same_bytes": false,
+          "ELF_PT_LOAD": {
+            "machine": 183,
+            "load_headers": [
+              [
+                5,
+                0,
+                0,
+                0,
+                266752,
+                266752,
+                16384
+              ],
+              [
+                6,
+                266752,
+                283136,
+                283136,
+                9112,
+                11776,
+                16384
+              ],
+              [
+                6,
+                275864,
+                308632,
+                308632,
+                184,
+                8264,
+                16384
+              ]
+            ],
+            "load_sha256_with_section_header_fields_masked": [
+              "72553835854c2e95a4fdfd0c311e08e0511c3ec78fa25ebfb655894b061da719",
+              "499d1d8e04f7dc37beea17f80aa705b15115811180530f05cd3c70f47afea6b6",
+              "e004bc7005b4dd35866185a1764fa1e6ca1817e6c2ce6928cfc8b87578f7f639"
+            ]
+          },
+          "dynamic_symbols_sha256": "9c898cf5f9050e10d6c2357c4989b84937200287dde8f94eb1f8075b9317d599",
+          "contract": "PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL"
+        },
+        {
+          "source": {
+            "path": "install/features-arm64/lib/libmgmem.so",
+            "bytes": 1722920,
+            "sha256": "f65da8f2621f71c0f0708aa41f2aac0ec7d1367c02eca6c7ca81db7283dcfb8c"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/android-arm64-v8a/lib/libmgmem.so",
+            "bytes": 332208,
+            "sha256": "327e06e5b7206a2074e8d3f6f7cbe72998d948baadec55565f4c4f49e71f6b22"
+          },
+          "format": "ELF",
+          "same_bytes": false,
+          "ELF_PT_LOAD": {
+            "machine": 183,
+            "load_headers": [
+              [
+                5,
+                0,
+                0,
+                0,
+                220592,
+                220592,
+                16384
+              ],
+              [
+                6,
+                220592,
+                236976,
+                236976,
+                7424,
+                8784,
+                16384
+              ],
+              [
+                6,
+                228016,
+                260784,
+                260784,
+                392,
+                4656,
+                16384
+              ]
+            ],
+            "load_sha256_with_section_header_fields_masked": [
+              "a219fbc7fdcf580db73d0be7a5ad9e4f3a8a8ddfcf4e8710567546a016164cd2",
+              "7a3f62881ce2ae8ea2edd5e54ca34f94dd5639bbedd59af55be1e08302b573dd",
+              "7a604d7ccd63432f67be3ff5f63b9f20e176b9b18e2d6b38d808f06e734ebbc4"
+            ]
+          },
+          "dynamic_symbols_sha256": "4dcb237cab638afeb866d06c53bcb858f550ceeac99daad2125331f9434388a2",
+          "contract": "PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL"
+        },
+        {
+          "source": {
+            "path": "install/features-arm64/lib/libmgmem_pressure.a",
+            "bytes": 252504,
+            "sha256": "ac6f5d20c7621bb055f725c055d8d927e763b929abfd63e02f811d5c2f6c8966"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/android-arm64-v8a/lib/libmgmem_pressure.a",
+            "bytes": 27704,
+            "sha256": "aec6882699b034bb43b1e15c8e45312c5f117935950320af6c6f2b8e130feb36"
+          },
+          "format": "ARCHIVE",
+          "same_bytes": false,
+          "defined_external_symbols_sha256": "b1c4fef936c90f72104e8d4ee284f86e320538b49accd45f758384c5ecc65cad",
+          "contract": "DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE"
+        }
+      ],
+      "sdk_zip": {
+        "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-arm64-v8a-strip-debug.zip",
+        "bytes": 247534,
+        "sha256": "9abeee3b75a660390612d6c7dcea12eb9975f9a398e736709bfc5c1598eb69ce"
+      }
+    },
+    "android-x86_64": {
+      "binary_transformations": [
+        {
+          "source": {
+            "path": "install/continuation-x86_64/lib/libmgmem.so",
+            "bytes": 1692040,
+            "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/android-x86_64/lib/libmgmem.so",
+            "bytes": 290688,
+            "sha256": "8866dffbcaf4a1be82e8a4491cfd031d0b533b787e07588312796ce732395c8a"
+          },
+          "format": "ELF",
+          "same_bytes": false,
+          "ELF_PT_LOAD": {
+            "machine": 62,
+            "load_headers": [
+              [
+                5,
+                0,
+                0,
+                0,
+                207808,
+                207808,
+                16384
+              ],
+              [
+                6,
+                207808,
+                224192,
+                224192,
+                7288,
+                9280,
+                16384
+              ],
+              [
+                6,
+                215104,
+                247872,
+                247872,
+                400,
+                4640,
+                16384
+              ]
+            ],
+            "load_sha256_with_section_header_fields_masked": [
+              "2c2b754ff37a5238684f1c8e053cbab5d9019efc06cc772de46fce0da4a18499",
+              "ba432a03f14fbfea19c66db78d8f53daa311f78d7c1be946bbb1dd648ba2fef0",
+              "efe2364c4c2ecbbda6e4f088e4f07180996f78b39d71d3302bc6868fb4b350b0"
+            ]
+          },
+          "dynamic_symbols_sha256": "4df5047354619650c58c951c57aeceedbb4fe97a969d16f3651fa5577917dfd9",
+          "contract": "PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL"
+        },
+        {
+          "source": {
+            "path": "install/continuation-x86_64/lib/libmgmem_pressure.a",
+            "bytes": 247144,
+            "sha256": "df1d3b3831056fc7bf59f4309d641946b13b4535fd54cac95d94f359e51b93ad"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/android-x86_64/lib/libmgmem_pressure.a",
+            "bytes": 25880,
+            "sha256": "42fb59273169a47dd92b6be89923bed6c3c1485cae799993305aa38594023b70"
+          },
+          "format": "ARCHIVE",
+          "same_bytes": false,
+          "defined_external_symbols_sha256": "b8b6e0b8d4a5c9e370e15d3b226760c71fbb63d2caeaecdb1181def9a9ba540b",
+          "contract": "DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE"
+        }
+      ],
+      "sdk_zip": {
+        "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-android-x86_64-strip-debug.zip",
+        "bytes": 125240,
+        "sha256": "f28dae05b9992ccf0ec95b14829b52a91fcbc6ca4fb678fa2873c990f57f3533"
+      }
+    },
+    "windows-x64": {
+      "binary_transformations": [
+        {
+          "source": {
+            "path": "install/features-host/bin/mgmem.dll",
+            "bytes": 39936,
+            "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/windows-x64/bin/mgmem.dll",
+            "bytes": 39936,
+            "sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746"
+          },
+          "format": "PE",
+          "same_bytes": true,
+          "contract": "PE_IMAGE_IDENTICAL_BYTES"
+        },
+        {
+          "source": {
+            "path": "install/features-host/bin/mgmem_tlb_owned.exe",
+            "bytes": 29696,
+            "sha256": "825a5ceefc9f8123eb2947627453a017055e95e8155a6c422d5e19eba5b5d4c4"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/windows-x64/bin/mgmem_tlb_owned.exe",
+            "bytes": 29696,
+            "sha256": "825a5ceefc9f8123eb2947627453a017055e95e8155a6c422d5e19eba5b5d4c4"
+          },
+          "format": "PE",
+          "same_bytes": true,
+          "contract": "PE_IMAGE_IDENTICAL_BYTES"
+        },
+        {
+          "source": {
+            "path": "install/features-host/lib/mgmem.lib",
+            "bytes": 6228,
+            "sha256": "07ba009d0f053002afacb36799b09b3df0a4890bd7710d61dd2d571a09dec09b"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/windows-x64/lib/mgmem.lib",
+            "bytes": 6228,
+            "sha256": "07ba009d0f053002afacb36799b09b3df0a4890bd7710d61dd2d571a09dec09b"
+          },
+          "format": "ARCHIVE",
+          "same_bytes": true,
+          "defined_external_symbols_sha256": "cfbbce80802ea2da7ceb2622e67cfeed1e26de28cd8d2e2f54759b3319686390",
+          "contract": "DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE"
+        },
+        {
+          "source": {
+            "path": "install/features-host/lib/mgmem_pressure.lib",
+            "bytes": 256724,
+            "sha256": "88793f80172ba23901042911f810bed1a323bedec66a1e7597fb78652c09ff11"
+          },
+          "candidate": {
+            "path": "build/android-close-shareable/delivery-v2/sdk/windows-x64/lib/mgmem_pressure.lib",
+            "bytes": 245792,
+            "sha256": "79b0186efc51fe672b559ac96da7bafa43d07ad9c88b9e24ec5e984e09529394"
+          },
+          "format": "ARCHIVE",
+          "same_bytes": false,
+          "defined_external_symbols_sha256": "2d9b4abf96d7f4ac236235182bc1b718f597a2cb73c5682b8865cd406e9a78ca",
+          "contract": "COFF_NONDEBUG_SECTION_BYTES_AND_DEFINED_EXTERNAL_SYMBOLS_EQUAL; LINK_CONSUMER_VALIDATION_SEPARATE",
+          "coff_non_debug_section_count": 696,
+          "coff_non_debug_payloads_sha256": "08535555d84b2a30b9569f07afdb44b1b91615dd81b0bda55909e78a4aeda3e8"
+        }
+      ],
+      "sdk_zip": {
+        "path": "build/android-close-shareable/delivery-v2/MeguvizMemory-0.2.0-windows-x64-strip-debug.zip",
+        "bytes": 93068,
+        "sha256": "b0156697431e5baa3e2b35dae5b4f0aa008ff39bacba822b5a9ccabdbf57e237"
+      }
+    }
+  },
+  "JNI_AAR": "NOT_SELECTED_AWAIT_NEW_JNI_FIX",
+  "limitations": [
+    "Changed ELF e_shoff/e_shentsize/e_shnum/e_shstrndx header fields are explicitly masked; all other PT_LOAD bytes must match.",
+    "No transformed binary is identified as the byte-for-byte artifact used in previous device runs.",
+    "Windows PE inputs had no sensitive markers and are kept byte-identical after isolated llvm-strip changed .text; COFF import library is byte-identical because LLVM did not support its format.",
+    "No new device, long-stability, R8 or performance qualification.",
+    "No private key, APK/DEX input or raw machine path is published."
+  ],
+  "windows_consumer": {
+    "receipt": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/host-consumer.json",
+    "sha256": "d94671bd8b71f511407a6e031a45f5f410e80059d7a1b064fcc8e97c174830a9",
+    "providers": 2,
+    "cycles_each": 4,
+    "frames_each": 16,
+    "installed_only": true,
+    "dynamic_runtime_sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746",
+    "consumer_sha256": "d933402c695157cc7cc8f4917a1b01a8f7725e47e3713c7d777462d08a480aef"
+  },
+  "windows_PE_rejected_strip_trial": {
+    "original_sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746",
+    "trial_sha256": "6a1546bcae090b9f33fcb969d5493a63bcdae8aeccf11e86e94a800f7f9a51b6",
+    "reason": "LLVM_STRIP_DEBUG_ALTERED_TEXT_SECTION; NOT_SHIPPED",
+    "candidate_PE": "ORIGINAL_IDENTICAL_NO_PRIVATE_PATH_MARKERS"
+  },
+  "review_recipe": {
+    "path": "artifacts/android-close-investigation-20261030/shareable-sdk-v2/prepare-shareable.review-recipe.py.txt",
+    "sha256": "04434a7153e589f204737e31cf4bad0d8a0f5d07d00ed32b952a2958c6c8ca6c",
+    "executed_script_sha256": "c700ecb8feb29ac6b18c130fa9c29a0c897d074250e17e138e68e5a4982207e5",
+    "relationship": "REVIEW_RECIPE_REPLACES_ONLY_MACHINE_PATH_LITERAL_MARKERS_WITH_RUNTIME_HOME_AND_WORKSPACE; RECIPE_NOT_EXECUTED"
+  }
+}

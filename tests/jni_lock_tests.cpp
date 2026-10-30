@@ -1,24 +1,46 @@
 #include <cstdarg>
+#include <array>
+#include <atomic>
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <mgmem/pressure.h>
+// A narrow test-only seam. The worker/controller and Memory remain real;
+// only the JNI reaper's observation can be made to fail or report bad data.
+namespace {
+std::atomic<int> injected_snapshot_mode{0};
+mgmem_status test_pressure_snapshot(mgmem_pressure_controller *control,mgmem_pressure_snapshot_v1 *out,uint32_t size) {
+    const auto status=mgmem_pressure_snapshot_v1_get(control,out,size);
+    if(status!=MGMEM_OK)return status;
+    const auto mode=injected_snapshot_mode.load();
+    if(mode==1)return MGMEM_PROVIDER_ERROR;
+    if(mode==2)out->state=MGMEM_OPEN;
+    if(mode==3)out->domain.struct_size=0;
+    return MGMEM_OK;
+}
+}
+#define mgmem_pressure_snapshot_v1_get test_pressure_snapshot
 // Compile the real production composition with JDK JNI headers. Function tables
 // below emulate only VM operations; the pressure worker and Memory are real.
 #include "../adapters/android/native/pressure_jni.cpp"
+#undef mgmem_pressure_snapshot_v1_get
 
 namespace test {
 struct Fixture {
     std::shared_ptr<Bridge> state;
     u64 id=100;
     std::atomic<unsigned> calls{0},global_deletes{0},attach_calls{0},detach_calls{0};
+    std::atomic<unsigned> forbidden_pending_calls{0},global_attempts{0},global_created{0};
+    std::atomic<int> fail_binding_step{-1},callback_status{-1};
     std::atomic<bool> jni_unlocked{true},snapshot_reentered{true},foreign_unlocked{false};
     std::atomic<bool> detached{false},attach_fails{false},throw_once{false};
     std::atomic<bool> block_callback{false},entered{false},resume{false};
     std::mutex gate;std::condition_variable changed;
     std::atomic<unsigned> lifetime_retains{0},lifetime_releases{0};
+    std::mutex values_mutex;std::array<jlong,16> values{};
     bool foreign_bind=false,foreign_snapshot=false;
     std::atomic<bool> foreign_actual_reentry{false};
 };
@@ -32,6 +54,10 @@ void operation() {
     if(active->state->mutex.try_lock())active->state->mutex.unlock();
     else active->jni_unlocked=false;
 }
+bool forbidden_pending() {
+    if(!pending_exception)return false;
+    ++active->forbidden_pending_calls;return true;
+}
 jint JNICALL get_env(JavaVM *,void **out,jint) {
     operation();*out=nullptr;
     if(active->detached)return JNI_EDETACHED;
@@ -43,18 +69,42 @@ jint JNICALL attach(JavaVM *,void **out,void *) {
     *out=&env;return JNI_OK;
 }
 jint JNICALL detach(JavaVM *) {operation();++active->detach_calls;return JNI_OK;}
-jsize JNICALL length(JNIEnv *,jarray) {operation();return 16;}
-jobject JNICALL new_global(JNIEnv *,jobject obj) {operation();return obj;}
+jsize JNICALL length(JNIEnv *,jarray) {
+    if(forbidden_pending())return 0;
+    operation();if(active->fail_binding_step==0){pending_exception=true;return 0;}return 16;
+}
+jobject JNICALL new_global(JNIEnv *,jobject obj) {
+    if(forbidden_pending())return nullptr;
+    operation();const auto step=++active->global_attempts;
+    if(active->fail_binding_step==static_cast<int>(step)){pending_exception=true;return nullptr;}
+    ++active->global_created;return obj;
+}
 void JNICALL delete_global(JNIEnv *,jobject) {operation();++active->global_deletes;}
-jclass JNICALL object_class(JNIEnv *,jobject) {operation();return reinterpret_cast<jclass>(4);}
-jmethodID JNICALL method(JNIEnv *,jclass,const char *,const char *) {operation();return reinterpret_cast<jmethodID>(3);}
-jint JNICALL java_vm(JNIEnv *,JavaVM **out) {operation();*out=&vm;return JNI_OK;}
-jlongArray JNICALL new_array(JNIEnv *,jsize) {operation();return reinterpret_cast<jlongArray>(5);}
-void JNICALL set_array(JNIEnv *,jlongArray,jsize,jsize,const jlong *) {operation();}
+jclass JNICALL object_class(JNIEnv *,jobject) {
+    if(forbidden_pending())return nullptr;
+    operation();if(active->fail_binding_step==3){pending_exception=true;return nullptr;}return reinterpret_cast<jclass>(4);
+}
+jmethodID JNICALL method(JNIEnv *,jclass,const char *,const char *) {
+    if(forbidden_pending())return nullptr;
+    operation();if(active->fail_binding_step==4){pending_exception=true;return nullptr;}return reinterpret_cast<jmethodID>(3);
+}
+jint JNICALL java_vm(JNIEnv *,JavaVM **out) {
+    if(forbidden_pending()){*out=nullptr;return JNI_ERR;}
+    operation();if(active->fail_binding_step==5){pending_exception=true;*out=nullptr;return JNI_ERR;}
+    *out=&vm;return JNI_OK;
+}
+jclass JNICALL find_class(JNIEnv *,const char *) {if(forbidden_pending())return nullptr;operation();return reinterpret_cast<jclass>(4);}
+jint JNICALL throw_new(JNIEnv *,jclass,const char *) {if(forbidden_pending())return JNI_ERR;operation();pending_exception=true;return JNI_OK;}
+jlongArray JNICALL new_array(JNIEnv *,jsize) {if(forbidden_pending())return nullptr;operation();return reinterpret_cast<jlongArray>(5);}
+void JNICALL set_array(JNIEnv *,jlongArray,jsize,jsize size,const jlong *values) {
+    if(forbidden_pending())return;
+    operation();if(size==16){std::lock_guard<std::mutex> lock(active->values_mutex);std::copy(values,values+16,active->values.begin());}
+}
 jboolean JNICALL exception_check(JNIEnv *) {operation();return pending_exception?JNI_TRUE:JNI_FALSE;}
 void JNICALL exception_clear(JNIEnv *) {operation();pending_exception=false;}
-void JNICALL call(JNIEnv *,jobject,jmethodID,va_list) {
-    operation();++active->calls;
+void JNICALL call(JNIEnv *,jobject,jmethodID,va_list args) {
+    if(forbidden_pending())return;
+    operation();++active->calls;active->callback_status=va_arg(args,jint);
     const auto result=JNI_NAME(nativeSnapshot)(&env,nullptr,static_cast<jlong>(active->id));
     if(!result)active->snapshot_reentered=false;
     // Exercise a nested completion poll while this publisher still owns pins.
@@ -72,11 +122,13 @@ void initialize() {
     env_functions.GetObjectClass=&object_class;env_functions.GetMethodID=&method;env_functions.GetJavaVM=&java_vm;
     env_functions.NewLongArray=&new_array;env_functions.SetLongArrayRegion=&set_array;
     env_functions.ExceptionCheck=&exception_check;env_functions.ExceptionClear=&exception_clear;
+    env_functions.FindClass=&find_class;env_functions.ThrowNew=&throw_new;
     env_functions.CallVoidMethodV=&call;
 }
 void make_done(Fixture &f,mgmem_status status=MGMEM_OK) {
     f.state=std::make_shared<Bridge>();f.state->ready=true;f.state->closing=true;f.state->done=true;
     f.state->close_status=status;f.state->final_snapshot.state=MGMEM_CLOSED;f.state->final_snapshot.domain.state=MGMEM_CLOSED;
+    f.state->final_snapshot_available=true;
     f.state->vm=&vm;f.state->listener=reinterpret_cast<jobject>(1);
     f.state->final_buffer=reinterpret_cast<jlongArray>(2);f.state->completion_method=reinterpret_cast<jmethodID>(3);
     std::lock_guard<std::mutex> lock(registry_mutex);bridges.emplace(f.id,f.state);
@@ -114,6 +166,110 @@ template <typename Predicate> bool bounded_wait(Predicate predicate,int millisec
     do {if(predicate())return true;std::this_thread::sleep_for(std::chrono::milliseconds(2));}
     while(std::chrono::steady_clock::now()<end);
     return predicate();
+}
+bool binding_exception_matrix() {
+    for(int bind=0;bind!=2;++bind)for(int step=0;step!=6;++step) {
+        Fixture f;active=&f;pending_exception=false;f.fail_binding_step=step;f.id=900+bind*10+step;
+        if(bind) {
+            f.state=std::make_shared<Bridge>();f.state->ready=true;
+            std::lock_guard<std::mutex> lock(registry_mutex);bridges.emplace(f.id,f.state);
+        }
+        size_t before;
+        {std::lock_guard<std::mutex> lock(registry_mutex);before=bridges.size();}
+        const auto result=bind ? static_cast<jlong>(JNI_NAME(nativeBind)(&env,nullptr,static_cast<jlong>(f.id),
+                                reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2)))
+                               : JNI_NAME(nativeCreate)(&env,nullptr,4096,2048,0,256,
+                                reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2));
+        size_t after;
+        {std::lock_guard<std::mutex> lock(registry_mutex);after=bridges.size();}
+        const bool status=bind ? result==(step==0?MGMEM_INVALID_ARGUMENT:MGMEM_OUT_OF_MEMORY) : result==0;
+        const bool preserved=pending_exception && f.forbidden_pending_calls==0 &&
+            f.global_deletes==f.global_created && before==after;
+        bool unbound=true;
+        if(bind) {
+            {std::lock_guard<std::mutex> lock(f.state->mutex);
+                unbound=!f.state->listener && !f.state->final_buffer && !f.state->vm;}
+            // The real external registration remains retryable after Java
+            // handles the preserved exception; this does not create a domain.
+            pending_exception=false;f.fail_binding_step=-1;f.global_attempts=0;
+            const auto retry=JNI_NAME(nativeBind)(&env,nullptr,static_cast<jlong>(f.id),
+                    reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2));
+            unbound=unbound && retry==MGMEM_OK && f.state->listener && f.state->final_buffer && f.state->vm;
+            env.DeleteGlobalRef(f.state->listener);env.DeleteGlobalRef(f.state->final_buffer);
+            f.state->listener=nullptr;f.state->final_buffer=nullptr;
+            {std::lock_guard<std::mutex> lock(registry_mutex);bridges.erase(f.id);}
+            unbound=unbound && f.global_created==f.global_deletes;
+        }
+        if(!status || !preserved || !unbound) {
+            std::cerr<<"binding exception case failed bind="<<bind<<" step="<<step
+                     <<" result="<<result<<" forbidden="<<f.forbidden_pending_calls
+                     <<" created="<<f.global_created<<" deleted="<<f.global_deletes<<"\n";
+            return false;
+        }
+    }
+    pending_exception=false;active=nullptr;return true;
+}
+bool snapshot_error_case(Fixture &f,bool owned,int mode) {
+    active=&f;pending_exception=false;
+    mgmem_domain *domain=nullptr;
+    if(owned) {
+        const auto id=JNI_NAME(nativeCreate)(&env,nullptr,4096,2048,0,256,
+                            reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2));
+        if(id<=0)return false;
+        f.id=static_cast<u64>(id);f.state=bridge(f.id);
+        if(!f.state || !f.state->owned)return false;
+        domain=f.state->owned->domain;
+    } else {
+        mgmem_domain_options_v1 options{sizeof(options),1,1,0,MGMEM_SYSTEM,0,4096,0,nullptr};
+        if(mgmem_domain_create_v1(&options,&domain)!=MGMEM_OK)return false;
+        mgmem_domain_lifetime_v1 life{sizeof(life),1,&f,&lifetime_retain,&lifetime_release};
+        mgmem_pressure_options_v1 policy{sizeof(policy),1,4096,2048,0,1,0};
+        if(mgmem_android_pressure_register_v1(domain,&life,&policy,&f.id)!=MGMEM_OK)return false;
+        f.state=bridge(f.id);
+        if(JNI_NAME(nativeBind)(&env,nullptr,static_cast<jlong>(f.id),
+            reinterpret_cast<jobject>(1),reinterpret_cast<jlongArray>(2))!=MGMEM_OK)return false;
+    }
+    f.state->closing.store(true);injected_snapshot_mode=mode;
+    std::atomic<bool> finished{false};
+    std::thread reaper([state=f.state,id=f.id,&finished]{reap(id,state);finished=true;});
+    if(!bounded_wait([&]{return finished.load();},3000)) {
+        std::cout<<"{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"REAPER_STILL_ACTIVE\"}\n"<<std::flush;
+        std::_Exit(3);
+    }
+    reaper.join();injected_snapshot_mode=0;
+    mgmem_pressure_controller *controller=nullptr;
+    bool quarantined=false;
+    {std::lock_guard<std::mutex> lock(f.state->mutex);
+        controller=f.state->control;
+        quarantined=f.state->done && f.state->close_status==MGMEM_PROVIDER_ERROR &&
+                    !f.state->final_snapshot_available && controller &&
+                    (!owned || (f.state->owned && f.state->owned->domain==domain));
+    }
+    mgmem_snapshot_v1 domain_snapshot{};
+    quarantined=quarantined && exists(f.id) && f.calls==1 && f.callback_status==MGMEM_PROVIDER_ERROR &&
+        f.global_deletes==0 && (owned || (f.lifetime_retains==1 && f.lifetime_releases==0)) &&
+        mgmem_domain_snapshot_v1(domain,&domain_snapshot,sizeof(domain_snapshot))==MGMEM_OK && domain_snapshot.state==MGMEM_OPEN;
+    {std::lock_guard<std::mutex> lock(f.values_mutex);
+        for(size_t i=0;i<13;++i)quarantined=quarantined && f.values[i]==-1;
+        quarantined=quarantined && f.values[13]==MGMEM_PROVIDER_ERROR && f.values[14]==(owned?1:0) && f.values[15]==1;
+    }
+    if(!quarantined) {
+        // The old implementation might already have destroyed this domain;
+        // never touch uncertain resources while recording a counterexample.
+        std::cout<<"{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}\n"<<std::flush;
+        std::_Exit(4);
+    }
+    // This is a controlled test-only observation fault: after reaper joined we
+    // know controller is closed and can explicitly clean the fixture. No such
+    // inference is made for production's real unavailable/error condition.
+    {std::lock_guard<std::mutex> lock(f.state->mutex);f.state->control=nullptr;}
+    bool clean=mgmem_pressure_destroy_v1(controller)==MGMEM_OK;
+    clean=clean && (owned || f.lifetime_releases==1);
+    if(owned){std::lock_guard<std::mutex> lock(f.state->mutex);f.state->owned->domain=nullptr;}
+    clean=clean && mgmem_domain_begin_close_v1(domain)==MGMEM_OK && mgmem_domain_collect_v1(domain)==MGMEM_OK &&
+        mgmem_domain_drain_v1(domain,0)==MGMEM_OK && mgmem_domain_destroy_v1(domain)==MGMEM_OK;
+    {std::lock_guard<std::mutex> lock(registry_mutex);bridges.erase(f.id);}
+    return clean;
 }
 bool auto_retry_case(Fixture &f,const std::string &test_case) {
     const bool error=test_case=="auto-error-quarantine";
@@ -194,7 +350,15 @@ int main(int argc,char **argv) {
     if(argc!=2)return 2;
     initialize();Fixture f;active=&f;const std::string test_case=argv[1];
     bool pass=false;
-    if(test_case=="auto-attach-recovery" || test_case=="auto-java-recovery" ||
+    if(test_case=="binding-exception-matrix") {
+        pass=binding_exception_matrix();active=&f;
+    } else if(test_case=="snapshot-error-external" || test_case=="snapshot-error-owned" ||
+              test_case=="snapshot-state-external" || test_case=="snapshot-state-owned" ||
+              test_case=="snapshot-header-external" || test_case=="snapshot-header-owned") {
+        const bool owned=test_case.find("-owned")!=std::string::npos;
+        const int mode=test_case.find("snapshot-error-")==0?1:test_case.find("snapshot-state-")==0?2:3;
+        pass=snapshot_error_case(f,owned,mode);
+    } else if(test_case=="auto-attach-recovery" || test_case=="auto-java-recovery" ||
        test_case=="auto-concurrent-poll" || test_case=="auto-error-quarantine") {
         pass=auto_retry_case(f,test_case);
     } else if(test_case=="foreign-release" || test_case=="foreign-release-bind" || test_case=="foreign-release-snapshot") {

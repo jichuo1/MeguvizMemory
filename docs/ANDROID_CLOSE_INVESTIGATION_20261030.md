@@ -1,6 +1,6 @@
 # API33 关闭停滞调查与自动通知修复
 
-2026-10-30，本轮仍在执行15分钟真机验证；本文件不提前宣布长稳通过。BIL保持未接入。
+2026-10-30。首个修复版已完成15分钟真机验证；新增JNI错误分支已完成宿主回归及最终脱敏安装版真机短测，最终制品独立长轮正在执行。BIL保持未接入。
 
 ## 本机复现与冻结证据
 
@@ -24,4 +24,12 @@ Activity仅属于诊断APK，调用方需持有系统DUMP权限，该权限可�
 
 ## 当前长稳与边界
 
-修复版在API33前台进行独立15分钟功能长轮，[冻结计划](../artifacts/android-close-investigation-20261030/retry-long-plan.json)与[回执](../artifacts/android-close-investigation-20261030/retry-long/receipt.json)区分本轮和旧实验。仅观察自身PID的cgroup.freeze/events，采样为0不等于连续证明未冻结；发现1、采样间隔超过10秒、前台暂停、功能/关闭错误或超时即不合格。没有系统OOM、性能配对、能源或RSS节省声明。
+源SHA `20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd` 的首个修复版在API33前台完成15,048周期/901.086秒、225,879检查；343次采样无冻结、最大间隔4.219秒，窗口正常结束、domain backing归零。见[冻结计划](../artifacts/android-close-investigation-20261030/retry-long-plan.json)与[回执](../artifacts/android-close-investigation-20261030/retry-long/receipt.json)。随后发现的JNI错误分支及去debug路径的安装制品不同于此轮二进制，不继承逐字节资格。仅观察自身PID的cgroup.freeze/events，采样为0不等于连续证明未冻结；发现1、采样间隔超过10秒、前台暂停、功能/关闭错误或超时即不合格。没有系统OOM、性能配对、能源或RSS节省声明。
+
+API34独立模拟器的同版R8短测完成78周期/8.031秒，调用者不poll的注册移除和每域最终backing=0通过；受控progressLock故障注入的16个Java线程栈只证明隔离工具，不是API33根因。见[短测](../artifacts/android-close-investigation-20261030/api34-retry-smoke-resume2/receipt.json)和[受控栈摘要](../artifacts/android-close-investigation-20261030/api34-retry-guard-resume2/stack-summary.json)。
+
+## JNI 错误分支与最终制品
+
+随后以 fake JNI 和真实 Host pressure/core 构造七组旧失败/新通过反例：创建/绑定期间12种 pending JNI 异常必须立即停止不允许的后续JNI调用、仅释放已创建引用并保留原异常；reaper压力快照报错、状态不符或域快照头无效，均隔离controller/owner并发布错误，不销毁domain或误报成功。自有与外部域分别覆盖。未知快照列0–12输出-1，错误/owned/done仍可识别；Java能区分未知快照与无符号溢出。异常fixture只在已确认隔离且reaper退出后受控清理，不能把违约/未知路径称正常归零。Host Release/ASan各29项通过，[故障注入证据](../artifacts/android-close-investigation-20261030/jni-errors-host/summary.json)。
+
+调试信息中的本机路径由独立复制品去除：Android ELF逐项核对PT_LOAD（仅屏蔽ELF section table元数据）及动态符号，Windows PE/导入库原字节保留、静态库非debug section和relocation核对并通过独立消费者。原先在真机运行的文件未被覆盖或修改。最终AAR/API1.1与新JNI/Java由独立构建收据绑定；[发行版短测](../artifacts/android-close-investigation-20261030/distribution-smoke/receipt.json)在API33完成88周期/6.030秒，调用者不poll的自动收尾、未知原因区分和最终域归零通过。新的[发行版长稳计划](../artifacts/android-close-investigation-20261030/distribution-long-plan.json)和[回执](../artifacts/android-close-investigation-20261030/distribution-long/receipt.json)运行中；旧APK长稳不转授新APK。

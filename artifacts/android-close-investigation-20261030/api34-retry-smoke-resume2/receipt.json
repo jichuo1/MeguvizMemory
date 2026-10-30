@@ -1,0 +1,165 @@
+{
+  "state": "PASS_SCOPED_API34_EMULATOR_FUNCTIONAL",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "boot_sha256": "de25896834b1f25aae676badc8a99ab034d1578c8561ec6d4b22a13b6283ce70"
+  },
+  "APK": {
+    "apk_sha256": "dbf221fc722e0a9673f5633402dc487e93ac7af7b62a64d3a8810113b8628f30",
+    "build_receipt_sha256": "91e8c6945015a31afc496a0bcdcb01cb4f6505f6363821cb7ae071db65144bf0",
+    "native_build_receipt_sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "native_overrides": [
+      {
+        "kind": "jni",
+        "path": "build/android-close-retry-jni-x86_64/libmgmem_pressure_jni.so",
+        "sha256": "26b80388507defeb3cb6f2110df146ae68c42604a198ea669792d5635e9f3f95"
+      },
+      {
+        "kind": "core",
+        "path": "install/continuation-x86_64/lib/libmgmem.so",
+        "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+      }
+    ],
+    "r8_marker_after": "io.github.jichuo1.meguviz.memory.android.a"
+  },
+  "instrumentation_report": {
+    "suite": "android-pressure-r8-stability-v1",
+    "status": "PASS",
+    "checks": 1185,
+    "iterations_requested": 20,
+    "iterations_completed": 78,
+    "minimum_duration_ms": 8000,
+    "maximum_duration_ms": 60000,
+    "actual_duration_ms": 8031,
+    "api": 34,
+    "r8_marker_runtime_name": "io.github.jichuo1.meguviz.memory.android.a",
+    "diagnostic_revision": 4,
+    "inject_main_running_timeout": false,
+    "inject_progress_lock_timeout": false,
+    "stall_timeout_ms": 10000,
+    "foreground_requested": false,
+    "foreground_prestarted": false,
+    "foreground_resumed": false,
+    "foreground_finished": false,
+    "foreground_resume_checks": 0,
+    "foreground_pause_count_before_finish": 0,
+    "foreground_preexisting_pause_count": 0,
+    "foreground_finish_policy": "OWN_MAIN_FINISH_THEN_OBSERVED_ONSTOP_OR_ONDESTROY",
+    "fire_and_forget_state": "PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL",
+    "fire_and_forget_elapsed_ms": 12,
+    "fire_and_forget_polls": 1,
+    "fire_and_forget_scope": "CALLER_ONLY_CLOSE_AND_NATIVE_EXISTS_NO_AWAIT_SNAPSHOT_OR_NATIVE_POLL",
+    "phase": "complete",
+    "exit_scope": "NORMAL_INSTRUMENTATION_COMPLETION",
+    "progress_file": "cache/mgmem-r8-progress.json",
+    "unknown_work_policy": "PERSIST_UNKNOWN_AND_FAIL_STOP_OWN_PROCESS_NO_CONCURRENT_FREE",
+    "framework": {
+      "application_dispatch": "PASS_SYNTHETIC_BACKGROUND_AND_UI_HIDDEN",
+      "legacy_automatic_delivery": "NOT_EXPECTED_SINCE_API34_PER_ANDROID_CONTRACT",
+      "onLowMemory_automatic_delivery": "NEVER_CALLED_SINCE_API34_PER_ANDROID_CONTRACT",
+      "observe_ams": false,
+      "ams_background_injection": "NOT_REQUESTED_SEPARATE_SMOKE_EVIDENCE",
+      "automatic_low_ram_tested": false,
+      "injection_scope": "OWN_DIAGNOSTIC_PACKAGE_ONLY"
+    },
+    "own_process_observations": [
+      {
+        "elapsed_realtime_nanos": 182055426032,
+        "rss_kb": 73476,
+        "pss_kb": 13187,
+        "private_dirty_kb": 8804,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 184495352369,
+        "rss_kb": 82020,
+        "pss_kb": 17913,
+        "private_dirty_kb": 13404,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 186854224590,
+        "rss_kb": 86816,
+        "pss_kb": 22475,
+        "private_dirty_kb": 17948,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 188625895393,
+        "rss_kb": 91308,
+        "pss_kb": 27017,
+        "private_dirty_kb": 22496,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      },
+      {
+        "elapsed_realtime_nanos": 190008781774,
+        "rss_kb": 95460,
+        "pss_kb": 31104,
+        "private_dirty_kb": 26580,
+        "rss_unavailable_reason": null,
+        "android_memory_unavailable_reason": null
+      }
+    ],
+    "observation_scope": "WHOLE_OWN_PROCESS_NOT_DOMAIN_ATTRIBUTION_NOT_ATOMIC_NOT_SAVINGS",
+    "peak_requested_backing_bytes_per_domain": 1536,
+    "final_backing_bytes_each_domain": 0,
+    "stability_scope": "BOUNDED_CREATE_PRESSURE_RESTORE_MAIN_CLOSE_ASYNC_LAST_RELEASE_CYCLES",
+    "indefinite_leak_freedom_proven": false,
+    "actual_low_memory_event": false,
+    "performance_qualified": false,
+    "BIL_integrated": false,
+    "energy_joules": null,
+    "energy_unavailable_reason": "NO_QUALIFIED_SAME_WORK_ENERGY_METHOD"
+  },
+  "own_run_id_sha256": "46df296207a7c8c9e9f80962d9e3de566b9ebe8334cdc6958587fe551f01f7b5",
+  "guard_run_id_differs": true,
+  "cgroup_samples": [
+    {
+      "at_utc": "2026-10-30T14:22:07.067994+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    },
+    {
+      "at_utc": "2026-10-30T14:22:09.796219+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    },
+    {
+      "at_utc": "2026-10-30T14:22:12.287557+00:00",
+      "state": "OBSERVED",
+      "cgroup_freeze": 0,
+      "cgroup_events_frozen": 0,
+      "scope": "OWN_PID_ONLY_NOT_CONTINUOUS",
+      "freeze_controller_modified": false
+    }
+  ],
+  "cgroup_scope": "OBSERVATIONAL_SAMPLES_NOT_CONTINUOUS_PROOF",
+  "instrumentation_stdout_sha256": "f4c3edc9e9ee30e2d95da1a835b30f75b51d5bcc1b31b0d441bc461e2cf5b35d",
+  "native_vm_retry_failure_injection": "HOST_FAKE_VM_ONLY_NOT_THIS_DEVICE",
+  "BIL": "NOT_INTEGRATED",
+  "performance": "NOT_MEASURED",
+  "energy": "UNAVAILABLE",
+  "postflight_gate": {
+    "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+    "process_rows": 323,
+    "matching_tests": 0,
+    "active_instrumentation": 0,
+    "process_inventory_sha256": "ed04dc835a33add1856d407f837a69b1da7dc192f3d4f42877570308262b081a",
+    "activity_inventory_sha256": "b27e16a68f37a210764e492b3800886281254c8af136275fbf3739503f0dec4c",
+    "result": "PASS_OBSERVATIONAL_ONLY"
+  }
+}

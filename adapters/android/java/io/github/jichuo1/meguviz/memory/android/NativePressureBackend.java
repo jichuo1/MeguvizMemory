@@ -50,7 +50,13 @@ public final class NativePressureBackend implements MemoryPressureAdapter.Backen
     public static String logicalUnavailableReason(long[] values,int index) {
         if (values==null) return "NATIVE_OBSERVATION_BUSY_OR_UNAVAILABLE";
         if (index<0 || index>=values.length) throw new IllegalArgumentException("unknown logical column");
-        return values[index]<0?"UNSIGNED_NATIVE_COUNTER_EXCEEDS_JAVA_LONG":null;
+        if (values[index]>=0) return null;
+        // Controller/domain states are bounded integers, so both -1 with a
+        // completed error uniquely mark an unavailable final snapshot rather
+        // than an individual unsigned counter exceeding Java's range.
+        if (values.length>=16 && values[0]==-1 && values[1]==-1 && values[15]==1 && values[13]!=0)
+            return "NATIVE_SNAPSHOT_UNAVAILABLE_AFTER_CLEANUP_ERROR";
+        return "UNSIGNED_NATIVE_COUNTER_EXCEEDS_JAVA_LONG";
     }
     @Override public void beginClose() {
         if (closing.compareAndSet(false,true)) {

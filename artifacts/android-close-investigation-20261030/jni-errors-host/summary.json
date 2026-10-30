@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_HOST_INJECTED_FAILURES",
+  "scope": "REAL_HOST_PRESSURE_AND_CORE_WITH_FAKE_JNI_AND_TEST_ONLY_SNAPSHOT_FAULT_SEAM",
+  "old_production_source": {
+    "path": "artifacts/android-close-investigation-20261030/source-pre-jni-errors/pressure_jni.cpp.txt",
+    "bytes": 20024,
+    "sha256": "20863c7d646b46f0d7f526aa5e064f877c530f0869ae20f484b54daa690ba3bd"
+  },
+  "current_source_identity": [
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "bytes": 21545,
+      "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "bytes": 6535,
+      "sha256": "324ce30512f07f5dd1f291828d8189ddc6bd4264d4b38f0bcb7a0cc71766cd79"
+    },
+    {
+      "path": "tests/jni_lock_tests.cpp",
+      "bytes": 26096,
+      "sha256": "f59e056ffc2adc9e5e46501b1a15530664c296407814e29f9a4000c32249a547"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "bytes": 10090,
+      "sha256": "7b60b189cafc229a91fb4a25ba4621f79e91a938e4195863c082d85223fd284c"
+    },
+    {
+      "path": "docs/ANDROID_PRESSURE.md",
+      "bytes": 9011,
+      "sha256": "57a2021f8ffd8f0c293721ca10e4cc6e84eaf25a24166fd98313f6ed8ac81aa1"
+    }
+  ],
+  "baseline_test_harness": {
+    "sha256": "a7abdf8a134bd8b24efb5d844bafa8bc9c9a4e5b148da8bd1a23e0c165e45267",
+    "transform": "Test-only include points to exact old source; unavailable-field references removed because old Bridge lacks it; extra counterexample reporter. Production old source unchanged."
+  },
+  "before_binary": {
+    "path": "build/jni-errors-counterexample/old_jni_counterexample.exe",
+    "bytes": 80384,
+    "sha256": "0d814f999bb50b49f809fb2cd8610499229f7952844075d4812c548687bfe495"
+  },
+  "after_binary": {
+    "path": "build/jni-errors-host/mgmem_jni_lock_tests.exe",
+    "bytes": 80896,
+    "sha256": "3ce3fbc2aa9326205a7f4a1a70c4db30c28062bfbc200453bc4c3bca5bc98c29"
+  },
+  "counterexamples": [
+    {
+      "case": "binding-exception-matrix",
+      "before": {
+        "exit_code": 1,
+        "stdout": "{\"case\":\"binding-exception-matrix\",\"pass\":false,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}",
+        "stderr": "binding exception case failed bind=0 step=0 result=0 forbidden=1 created=0 deleted=0"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"binding-exception-matrix\",\"pass\":true,\"callbacks\":0,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-error-external",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=1 java_snapshot_first=0 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-error-external\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":true}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-error-owned",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=1 java_snapshot_first=0 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-error-owned\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-state-external",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=1 java_snapshot_first=0 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-state-external\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":true}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-state-owned",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=1 java_snapshot_first=0 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-state-owned\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-header-external",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=0 java_snapshot_first=2 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-header-external\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":true}",
+        "stderr": ""
+      }
+    },
+    {
+      "case": "snapshot-header-owned",
+      "before": {
+        "exit_code": 4,
+        "stdout": "{\"case\":\"snapshot-error\",\"pass\":false,\"state\":\"UNSAFE_OR_FALSE_SUCCESS\"}",
+        "stderr": "counterexample_close_status=0 controller_retained=0 java_snapshot_first=2 global_deletes=2"
+      },
+      "after": {
+        "exit_code": 0,
+        "stdout": "{\"case\":\"snapshot-header-owned\",\"pass\":true,\"callbacks\":1,\"global_ref_deletes\":0,\"JNI_operations_outside_Bridge\":true,\"snapshot_reentered\":true,\"foreign_actual_JNI_reentry\":false,\"foreign_release_outside_Bridge\":false}",
+        "stderr": ""
+      }
+    }
+  ],
+  "profiles": [
+    {
+      "profile": "host",
+      "tests_passed": 29,
+      "original_log_sha256": "267e9c753abe4ec89341890829bc7958312a52af5cc8f86a1e3b2c9b88599f4d",
+      "sanitized_log": {
+        "path": "artifacts/android-close-investigation-20261030/jni-errors-host/host-ctest-sanitized.log",
+        "bytes": 24230,
+        "sha256": "fc2b21a18153d3130c77a6788ec7902cfca7dc1979dc0d57ef177f4523c31f44"
+      },
+      "ASan": false,
+      "test_binary": {
+        "path": "build/jni-errors-host/mgmem_jni_lock_tests.exe",
+        "bytes": 80896,
+        "sha256": "3ce3fbc2aa9326205a7f4a1a70c4db30c28062bfbc200453bc4c3bca5bc98c29"
+      },
+      "core_binary": {
+        "path": "build/jni-errors-host/mgmem.dll",
+        "bytes": 39936,
+        "sha256": "9b6d7a9cdd5b52d8968eefb93d5e39d7f8089b8e7daacca19cbddd368f730160"
+      }
+    },
+    {
+      "profile": "asan",
+      "tests_passed": 29,
+      "original_log_sha256": "6844c00c75fb381a89dcdb9e472a33303cd32061b88684ca5663a5e41e267c6a",
+      "sanitized_log": {
+        "path": "artifacts/android-close-investigation-20261030/jni-errors-host/asan-ctest-sanitized.log",
+        "bytes": 24230,
+        "sha256": "9f52982d0bd9a3be2febb97b1a38e2b0c263a1d7d902e02760dce62a19948693"
+      },
+      "ASan": true,
+      "test_binary": {
+        "path": "build/jni-errors-asan/mgmem_jni_lock_tests.exe",
+        "bytes": 514560,
+        "sha256": "4aa1386b501327cda8ab5ac910dc7060b5c45d43c268c508054c268127ca65d1"
+      },
+      "core_binary": {
+        "path": "build/jni-errors-asan/mgmem.dll",
+        "bytes": 175616,
+        "sha256": "9270d5d40dad49c3f9a0161fffcf834e2c8be64493cc819b3bc2d1a7b80b7f7c"
+      }
+    }
+  ],
+  "binding_matrix": "12 CREATE/BIND x six JNI pending-exception injection points, preserving exceptions and balancing acquired refs",
+  "snapshot_matrix": "Three fake observation faults x owned/external real pressure controllers; no success/destroy/release; unknown fields -1 and error/owned/done retained; controlled fixture teardown after verified quarantine",
+  "java_reason_runtime": "PENDING_SEPARATE_REAL_ANDROID_PRODUCTION_METHOD_ASSERTIONS",
+  "physical_device": "NOT_EXECUTED_IN_THIS_HOST_TEST",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_MODIFIED"
+}

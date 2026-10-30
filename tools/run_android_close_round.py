@@ -186,6 +186,7 @@ def main():
             if a.foreground and report.get('foreground_finished') is not True:raise RuntimeError('foreground_not_cleanly_finished')
             if a.foreground and report.get('foreground_pause_count_before_finish')!=0:raise RuntimeError('foreground_paused_during_work')
             if report.get('fire_and_forget_state')!='PASS_REGISTRATION_REMOVED_WITHOUT_CALLER_POLL':raise RuntimeError('no_poll_cleanup_not_verified')
+            if plan.get('reason_checks_required',False) and report.get('logical_unavailable_reason_checks')!='PASS':raise RuntimeError('logical_unavailable_reasons_not_verified')
             if not receipt['cgroup_samples'] or any(s['mode']!='0' or s['frozen']!='0' for s in receipt['cgroup_samples']):raise RuntimeError('no_valid_freezer_observation')
             if receipt['cgroup_samples'][0]['elapsed_seconds']>10 or (last_sample is not None and time.monotonic()-last_sample>10):raise RuntimeError('freezer_observation_start_or_end_gap')
             reported_pid=report.pop('process_pid',None)
@@ -201,9 +202,20 @@ def main():
         if child is not None and child.poll() is None:
             try:adb('stop-own-on-error',['shell','am','force-stop',PACKAGE]);child.wait(timeout=15)
             except Exception:receipt['remote_process_state']='UNKNOWN'
-        elif prestart_initiated and child is None:
-            try:adb('stop-own-activity-on-error',['shell','am','force-stop',PACKAGE])
-            except Exception:receipt['remote_process_state']='UNKNOWN'
+        elif prestart_initiated:
+            try:
+                remaining=read_own_pid()
+                if remaining and prestart_pid and remaining==prestart_pid:
+                    gate('before-own-error-cleanup')
+                    adb('stop-own-activity-on-error',['shell','am','force-stop',PACKAGE])
+                    receipt['own_activity_error_cleanup']='SAME_OWN_PID_STOPPED_AFTER_OBSERVATIONAL_GATE'
+                elif remaining:
+                    receipt['own_activity_error_cleanup']='SKIPPED_PROCESS_ID_CHANGED'
+                else:
+                    receipt['own_activity_error_cleanup']='OWN_PROCESS_ALREADY_ABSENT'
+            except Exception:
+                receipt['own_activity_error_cleanup']='UNKNOWN_OR_OTHER_TEST_PRESENT_NOT_FORCED'
+                receipt['remote_process_state']='UNKNOWN'
     finally:
         if stream_out and not stream_out.closed:stream_out.close()
         if stream_err and not stream_err.closed:stream_err.close()

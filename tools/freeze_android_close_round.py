@@ -14,6 +14,7 @@ def main():
     p.add_argument('--iterations',type=int,default=1000);p.add_argument('--poll-seconds',type=float,default=2)
     p.add_argument('--stall-seconds',type=int,default=30);p.add_argument('--purpose',choices=['same_apk_background_foreground','retryfix_foreground_smoke','retryfix_foreground_long'],required=True)
     p.add_argument('--foreground-prestart',action='store_true',help='Foreground variant starts protected own Activity then instruments without process restart')
+    p.add_argument('--require-reason-checks',action='store_true',help='Require real Java logical-unavailability reason checks')
     a=p.parse_args();out=a.output.resolve()
     if not out.is_relative_to(ROOT/'artifacts/android-close-investigation-20261030') or out.exists():p.error('fresh scoped plan required')
     if not 0<=a.minimum_ms<a.wall_ms<=1800000 or not 30<=a.outer_seconds<=2100 or not 1<=a.iterations<=100000 or not 1<=a.poll_seconds<=5 or not 10<=a.stall_seconds<=120:p.error('invalid bounds')
@@ -43,6 +44,7 @@ def main():
       'minimum_ms':a.minimum_ms,'wall_ms':a.wall_ms,'outer_seconds':a.outer_seconds,'iterations':a.iterations,
       'poll_seconds':a.poll_seconds,'stall_seconds':a.stall_seconds,'variants':['background','foreground'] if a.purpose=='same_apk_background_foreground' else ['foreground'],
       'foreground_prestart':a.foreground_prestart,
+      'reason_checks_required':a.require_reason_checks,
       'APK_sha256':digest(apk),'native_source_sha256':digest(a.native_source),'native_library_sha256':native['sha256'],
       'cgroup_rule':'Only own PID; observed freeze 1 or frozen 1, or start/inter-sample/end gap over 10 seconds, aborts qualification. Sampling is observational, not continuous proof.',
       'foreground_rule':'Opt-in own Activity; must resume and finish, no global freezer/power policy change. Bootstrap and process-restart behavior are recorded explicitly.',

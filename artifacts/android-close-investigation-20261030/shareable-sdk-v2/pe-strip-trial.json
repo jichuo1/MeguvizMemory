@@ -1,0 +1,14 @@
+{
+  "scope": "WINDOWS_PE_ISOLATED_STRIP_TRIAL_NOT_SHIPPED",
+  "original_sha256": "793de46738056ea08c24ce5043f78ea0ef9f3e95972b569440054fc36de38746",
+  "trial_sha256": "6a1546bcae090b9f33fcb969d5493a63bcdae8aeccf11e86e94a800f7f9a51b6",
+  "changed_sections": [
+    {
+      "name": ".text",
+      "original_sha256": "86b8dbeda7270b211cca3dc7488b19a742a87d96e8bb583d8e6773198435bf04",
+      "isolated_trial_sha256": "ed3d05efc5e7b41844efac72d69647ea1071ca5cffd4078a34ada6a90f4cfcd2"
+    }
+  ],
+  "decision": "PRESERVE_ORIGINAL_IDENTICAL_PE_INPUT_HAS_NO_USER_OR_WORKSPACE_PATH",
+  "trial": "RETAINED_IGNORED_BUILD_NOT_DELETED"
+}

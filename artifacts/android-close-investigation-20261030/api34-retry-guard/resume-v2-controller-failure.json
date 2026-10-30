@@ -1,0 +1,7 @@
+{
+  "state": "BLOCKED_CONTROLLER_PYTHON_VARIABLE_SHADOW",
+  "reason": "An options variable was overwritten by the metadata command loop; no guard or normal instrumentation was started by this resume attempt.",
+  "source_sha256": "1eb3b2438269ac26ad9961316e3baf208d536f69609d416df3f7f63d1b5d570f",
+  "first_guard_unchanged": true,
+  "private_attempt_retained": true
+}

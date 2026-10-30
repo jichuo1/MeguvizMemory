@@ -1,0 +1,132 @@
+{
+  "state": "FROZEN_BEFORE_DEVICE_EXECUTION",
+  "scope": "FUNCTIONAL_DIAGNOSTIC_NOT_PERFORMANCE",
+  "purpose": "retryfix_foreground_smoke",
+  "frozen_at_utc": "2026-10-30T14:36:15.481229+00:00",
+  "build_receipt_sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc",
+  "minimum_ms": 5000,
+  "wall_ms": 60000,
+  "outer_seconds": 90,
+  "iterations": 20,
+  "poll_seconds": 2,
+  "stall_seconds": 30,
+  "variants": [
+    "foreground"
+  ],
+  "foreground_prestart": true,
+  "reason_checks_required": true,
+  "APK_sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677",
+  "native_source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+  "native_library_sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59",
+  "cgroup_rule": "Only own PID; observed freeze 1 or frozen 1, or start/inter-sample/end gap over 10 seconds, aborts qualification. Sampling is observational, not continuous proof.",
+  "foreground_rule": "Opt-in own Activity; must resume and finish, no global freezer/power policy change. Bootstrap and process-restart behavior are recorded explicitly.",
+  "ownership_rule": "Preflight and postflight process/instrumentation observation, no shared lock guarantee.",
+  "resource_rule": "Do not combine domain logical capacity with RSS/PSS or claim performance/net benefit.",
+  "files": [
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "bytes": 21545,
+      "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest-r8.xml",
+      "bytes": 736,
+      "sha256": "ec5f0dd8b60cd57678e246be92d010fc1f418bfe1379ad57c0ed957de5a3fb1a"
+    },
+    {
+      "path": "adapters/android/sample/PressureR8ForegroundActivity.java",
+      "bytes": 2677,
+      "sha256": "da3167df1c27189afe3a61d911b3b768ed06e8c68068ce2cb4fdf0d643d649fd"
+    },
+    {
+      "path": "adapters/android/sample/PressureR8Instrumentation.java",
+      "bytes": 42282,
+      "sha256": "f589cd9a313e4b09d4c1b4dc6931b5568d1ae7a6ba71ca1267d7204caeb70975"
+    },
+    {
+      "path": "artifacts/android-close-investigation-20261030/final-arm64-aar-build.json",
+      "bytes": 6226,
+      "sha256": "0702f22819f0fbd3a221e56adf638a38070808bfd986fdc64e2102b7407b31ad"
+    },
+    {
+      "path": "artifacts/android-close-investigation-20261030/final-r8-arm64-build.json",
+      "bytes": 8380,
+      "sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc"
+    },
+    {
+      "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+      "bytes": 153753,
+      "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/consumer-r8.pro",
+      "bytes": 313,
+      "sha256": "574d085759f7b8d3e9f77446da5613e1670dbdd8f90cbbc1fa8ede808d19d8c7"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/mapping.txt",
+      "bytes": 57137,
+      "sha256": "7095168933c16a87a04443e52adbe1a2f180a3644968486200e18d25e40dd2e7"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+      "bytes": 487982,
+      "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/r8-dex/classes.dex",
+      "bytes": 40068,
+      "sha256": "d755ce04ecdb1f6a3331450fe6551cf0ce687550c491764bea41a08611d17dc6"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/seeds.txt",
+      "bytes": 13271,
+      "sha256": "8c18357a0340dc7928e613804e1d9dc307ca993e22524a3201e2feb13ca27df1"
+    },
+    {
+      "path": "build/android-close-final-r8-arm64/usage.txt",
+      "bytes": 821,
+      "sha256": "47ccfcff06415c6bc5416f850b35979a1a0e4a42d2f03ff26d5c2337ebec96ec"
+    },
+    {
+      "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+      "bytes": 86816,
+      "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+    },
+    {
+      "path": "tools/build_packed_art.py",
+      "bytes": 10564,
+      "sha256": "97779142136e394e9f772df0edc3054b8207a1309f380a0fc8c2367ab7890e4f"
+    },
+    {
+      "path": "tools/build_pressure_r8.py",
+      "bytes": 14969,
+      "sha256": "578ee1a9ae45f06ec050576a6b3544ea5aac12fd81e0a2502a50349d9519dc0d"
+    },
+    {
+      "path": "tools/freeze_android_close_round.py",
+      "bytes": 5462,
+      "sha256": "a117ebd5064637d4e458620a01060aab53269a375a9df8fb73ec0f7a562362c7"
+    },
+    {
+      "path": "tools/run_android_close_round.py",
+      "bytes": 19833,
+      "sha256": "0c9a979468657ac020ee1ea63e01b4c68dea95e265204cc6930a797dcbda1c29"
+    },
+    {
+      "path": "tools/run_arm64_validation.py",
+      "bytes": 23760,
+      "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+    },
+    {
+      "path": "tools/run_continuation_device.py",
+      "bytes": 20694,
+      "sha256": "bc7fddac6d198e221ed513c1bdb9c139d7fc6c9b8b030ab6c0154b49c3139a03"
+    },
+    {
+      "path": "tools/verify_dex_import.py",
+      "bytes": 10581,
+      "sha256": "f84f25249768ee333644c6be2936fc5b3068343e52c54c96db3a6ed2eba66ea0"
+    }
+  ]
+}

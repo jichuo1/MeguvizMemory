@@ -1,0 +1,21 @@
+{
+  "state": "PASS",
+  "scope": "TWO_FINAL_STRIPPED_JNI_ELF_FILES",
+  "files": [
+    {
+      "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+      "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+    },
+    {
+      "path": "build/android-close-shareable/delivery-v2/jni-final-x86/x86_64/libmgmem_pressure_jni.so",
+      "sha256": "81c1f3f8e015c64159998dee9729591a8f4c03c85f2446088e83a6763142ae0f"
+    }
+  ],
+  "checks": [
+    "USER_PROFILE_NAME_ASCII_AND_UTF16LE",
+    "ABSOLUTE_USER_DIRECTORY_PREFIX",
+    "ABSOLUTE_WORKSPACE_DIRECTORY_PREFIX"
+  ],
+  "matches": 0,
+  "device_qualification": "NOT_EXECUTED"
+}

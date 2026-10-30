@@ -1,0 +1,49 @@
+{
+  "state": "PASS_EXPECTED_FAIL_STOP_UNKNOWN",
+  "normal_domain_close_qualified": false,
+  "own_run_id_sha256": "e1133c2e2faa6eb996436590ef6fc052c2cd93eaac08c5e692ad48410f4dab94",
+  "phase": "diagnostic.inject-progress-lock.blocked",
+  "reason": "STALL_PHASE_TIMEOUT",
+  "elapsed_ms": 3353,
+  "unsafe_cleanup": true,
+  "boundary_outcome": "UNKNOWN_RUNNING_WORK",
+  "native_resource_state": "UNKNOWN_NOT_FORCED_FREE",
+  "stack_status": "CAPTURED_JAVA_THREADS_ONLY",
+  "observed_thread_count": 16,
+  "stack_thread_names": [
+    "main",
+    "memory-r8-progress-lock-holder",
+    "memory-r8-wall-watchdog"
+  ],
+  "instrumentation_exit_code": null,
+  "stdout_sha256": "f3ca40e0a3bf20eaf9ab861db129a85ecafc52160588fc2089c7bb0239bc1d94",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "boot_sha256": "de25896834b1f25aae676badc8a99ab034d1578c8561ec6d4b22a13b6283ce70"
+  },
+  "APK": {
+    "apk_sha256": "dbf221fc722e0a9673f5633402dc487e93ac7af7b62a64d3a8810113b8628f30",
+    "build_receipt_sha256": "91e8c6945015a31afc496a0bcdcb01cb4f6505f6363821cb7ae071db65144bf0",
+    "native_build_receipt_sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "native_overrides": [
+      {
+        "kind": "jni",
+        "path": "build/android-close-retry-jni-x86_64/libmgmem_pressure_jni.so",
+        "sha256": "26b80388507defeb3cb6f2110df146ae68c42604a198ea669792d5635e9f3f95"
+      },
+      {
+        "kind": "core",
+        "path": "install/continuation-x86_64/lib/libmgmem.so",
+        "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+      }
+    ],
+    "r8_marker_after": "io.github.jichuo1.meguviz.memory.android.a"
+  },
+  "initial_controller_correction": "CODE_0_CAN_ACCOMPANY_PROCESS_CRASH; VALIDATED_OWN_RUN_ID_AND_UNKNOWN_CACHE",
+  "no_forced_free": true,
+  "performance": "NOT_MEASURED"
+}

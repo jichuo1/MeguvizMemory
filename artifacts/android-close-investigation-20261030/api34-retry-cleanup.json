@@ -1,0 +1,25 @@
+{
+  "state": "PASS_OWN_AVD_STOP_CONFIRMED",
+  "checked_at_utc": "2026-10-30T14:23:22.284776+00:00",
+  "scope": "ONLY_NEW_NAMED_OWN_AVD_AND_OWN_DIAGNOSTIC_PACKAGE",
+  "device_serial_sha256": "d966c9c5e93ec89df8ebb92d4d37167633af6e2520ee5830b12d1db56d5fa8f3",
+  "shared_lock": false,
+  "other_device_or_process_stopped": false,
+  "app_data_cleared_or_uninstalled": false,
+  "first_idle_gate": {
+    "process_rows": 323,
+    "matching_tests": 0,
+    "active_instrumentation": 0,
+    "process_sha256": "b1994b4b9b7da8f137e08b90639b78905cc2e00e013e41b6ed2024ca641caa96",
+    "activity_sha256": "e3e64cd28be41c148fb35af0959244664a4fa9f034e2eb294bde3ec46ab59552"
+  },
+  "own_debug_app_stop": "ALREADY_EXITED_NO_FORCE_STOP",
+  "final_idle_gate": {
+    "process_rows": 323,
+    "matching_tests": 0,
+    "active_instrumentation": 0,
+    "process_sha256": "451a26b5ba96c064af3dce5dc46269859d728b7bbe3fef7a940eb504af70cf48",
+    "activity_sha256": "5a727f013ceaf71b43305689ae22649ed84aadeb757d1ca67b33f54162b7b3ca"
+  },
+  "finished_at_utc": "2026-10-30T14:23:26.543644+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "scope": "INTERIM_COMMIT_CI_NOT_FINAL_DELIVERY_COMMIT",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41070879968",
+  "head_sha": "1fbc7f6479417f2fa73febf7226abb034c5f10bc",
+  "status": "completed",
+  "conclusion": "success",
+  "jobs": [
+    {
+      "name": "verify (ubuntu-latest)",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "name": "verify (windows-latest)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

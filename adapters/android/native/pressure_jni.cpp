@@ -44,6 +44,7 @@ struct Bridge {
     std::atomic<bool> ready{false};
     bool done = false;
     bool publishing = false, completion_published = false;
+    bool final_snapshot_available = false;
     mgmem_status close_status = MGMEM_BUSY;
     mgmem_pressure_snapshot_v1 final_snapshot{};
     JavaVM *vm=nullptr;
@@ -76,12 +77,20 @@ std::shared_ptr<Probe> probe(u64 id) {
     const auto found=probes.find(id);return found==probes.end()?nullptr:found->second;
 }
 void fail(JNIEnv *env,const char *message) {
+    if (env->ExceptionCheck()) return;
     jclass type=env->FindClass("java/lang/IllegalStateException");
-    if (type) env->ThrowNew(type,message);
+    if (type && !env->ExceptionCheck()) env->ThrowNew(type,message);
 }
 void snapshot_values(const std::shared_ptr<Bridge> &state,const mgmem_pressure_snapshot_v1 &observed,jlong *values) {
     const auto &d=observed.domain;
     const auto number=[](u64 n)->jlong{return n<=max_id?static_cast<jlong>(n):-1;};
+    if (state->done && !state->final_snapshot_available) {
+        std::fill(values,values+13,static_cast<jlong>(-1));
+        values[13]=number(state->close_status);
+        values[14]=state->owned?1:0;
+        values[15]=1;
+        return;
+    }
     const jlong result[]={number(observed.state),number(d.state),number(d.budget_bytes),
         number(d.backing_bytes),number(d.reserved_bytes),number(d.live_bytes),
         number(d.retiring_bytes),number(d.retained_bytes),number(observed.over_budget_bytes),
@@ -149,10 +158,14 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
         do {result=mgmem_pressure_drain_v1(control,100);} while (result==MGMEM_TIMEOUT);
         mgmem_pressure_snapshot_v1 last{};
         const auto observed=mgmem_pressure_snapshot_v1_get(control,&last,sizeof(last));
-        if (observed==MGMEM_OK && last.state==MGMEM_CLOSED) {
+        if (observed!=MGMEM_OK) result=observed;
+        else if (last.state!=MGMEM_CLOSED || last.domain.struct_size<sizeof(mgmem_snapshot_v1) ||
+                 last.domain.abi_major!=MGMEM_ABI_MAJOR || last.domain.abi_minor>MGMEM_ABI_MINOR ||
+                 last.domain.state>MGMEM_CLOSED) result=MGMEM_PROVIDER_ERROR;
+        else {
             {
                 std::lock_guard<std::mutex> lock(state->mutex);
-                state->final_snapshot=last;state->control=nullptr;
+                state->final_snapshot=last;state->final_snapshot_available=true;state->control=nullptr;
             }
             // Detach under the lock after all prior Bridge API calls returned;
             // destroy joins then invokes the foreign owner's release outside it.
@@ -179,6 +192,7 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
                 std::lock_guard<std::mutex> lock(state->mutex);
                 result=mgmem_domain_snapshot_v1(domain,&state->final_snapshot.domain,sizeof(state->final_snapshot.domain));
                 if(result==MGMEM_OK)state->owned->domain=nullptr;
+                else state->final_snapshot_available=false;
             }
             if (result==MGMEM_OK) {
                 result=mgmem_domain_destroy_v1(domain);
@@ -239,17 +253,43 @@ extern "C" MGMEM_PRESSURE_API mgmem_status mgmem_android_pressure_unregister_v1(
 }
 
 #define JNI_NAME(method) Java_io_github_jichuo1_meguviz_memory_android_NativePressureBackend_##method
+namespace {
+struct JavaBinding {
+    jobject listener=nullptr;
+    jlongArray buffer=nullptr;
+    jmethodID method=nullptr;
+    JavaVM *vm=nullptr;
+};
+bool prepare_binding(JNIEnv *env,jobject listener,jlongArray buffer,JavaBinding &binding) {
+    binding.listener=env->NewGlobalRef(listener);
+    if (env->ExceptionCheck() || !binding.listener) return false;
+    binding.buffer=static_cast<jlongArray>(env->NewGlobalRef(buffer));
+    if (env->ExceptionCheck() || !binding.buffer) return false;
+    jclass type=env->GetObjectClass(listener);
+    if (env->ExceptionCheck() || !type) return false;
+    binding.method=env->GetMethodID(type,"onNativeClosed","(I)V");
+    if (env->ExceptionCheck() || !binding.method) return false;
+    const auto status=env->GetJavaVM(&binding.vm);
+    return !env->ExceptionCheck() && status==JNI_OK && binding.vm;
+}
+void release_binding(JNIEnv *env,JavaBinding &binding) {
+    // DeleteGlobalRef is permitted even with a pending Java exception.
+    if(binding.listener)env->DeleteGlobalRef(binding.listener);
+    if(binding.buffer)env->DeleteGlobalRef(binding.buffer);
+    binding.listener=nullptr;binding.buffer=nullptr;
+}
+}
 extern "C" JNIEXPORT jlong JNICALL JNI_NAME(nativeCreate)(JNIEnv *env,jclass,jlong normal,jlong moderate,jlong critical,jlong chunk,jobject listener,jlongArray buffer) {
-    jobject listener_ref=nullptr;jlongArray buffer_ref=nullptr;
+    JavaBinding binding;
     try {
         if (normal<=0 || moderate<0 || critical<0 || critical>moderate || moderate>normal || chunk<=0) {fail(env,"invalid budgets");return 0;}
-        if(!listener || !buffer || env->GetArrayLength(buffer)!=16){fail(env,"invalid binding");return 0;}
+        if(!listener || !buffer){fail(env,"invalid binding");return 0;}
+        const auto length=env->GetArrayLength(buffer);
+        if(env->ExceptionCheck())return 0;
+        if(length!=16){fail(env,"invalid binding");return 0;}
         // Java pins and callback metadata are admitted before any native domain
         // or worker. Binding OOM cannot leave an unreachable native owner.
-        listener_ref=env->NewGlobalRef(listener);buffer_ref=static_cast<jlongArray>(env->NewGlobalRef(buffer));
-        jclass type=env->GetObjectClass(listener);auto method=type?env->GetMethodID(type,"onNativeClosed","(I)V"):nullptr;
-        JavaVM *vm=nullptr;
-        if(!listener_ref || !buffer_ref || !method || env->GetJavaVM(&vm)!=JNI_OK)throw std::bad_alloc();
+        if(!prepare_binding(env,listener,buffer,binding))throw std::bad_alloc();
         auto owned=std::make_shared<Holder>();
         mgmem_domain_options_v1 options{sizeof(options),MGMEM_ABI_MAJOR,MGMEM_ABI_MINOR,0,MGMEM_ARENA,0,
             static_cast<u64>(normal),static_cast<u64>(chunk),nullptr};
@@ -263,37 +303,37 @@ extern "C" JNIEXPORT jlong JNICALL JNI_NAME(nativeCreate)(JNIEnv *env,jclass,jlo
         auto state=bridge(id);if(!state)throw std::bad_alloc();
         std::lock_guard<std::mutex> lock(state->mutex);
         if(state->closing.load())throw std::bad_alloc();
-        state->owned=std::move(owned);state->vm=vm;
-        state->listener=listener_ref;state->final_buffer=buffer_ref;state->completion_method=method;
+        state->owned=std::move(owned);state->vm=binding.vm;
+        state->listener=binding.listener;state->final_buffer=binding.buffer;state->completion_method=binding.method;
+        binding.listener=nullptr;binding.buffer=nullptr;
         return static_cast<jlong>(id);
     } catch (...) {
-        if(listener_ref)env->DeleteGlobalRef(listener_ref);if(buffer_ref)env->DeleteGlobalRef(buffer_ref);
+        release_binding(env,binding);
         if(!env->ExceptionCheck())fail(env,"native creation failed");return 0;
     }
 }
 extern "C" JNIEXPORT jboolean JNICALL JNI_NAME(nativeExists)(JNIEnv *,jclass,jlong token) {return token>0 && bridge(token)?JNI_TRUE:JNI_FALSE;}
 extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeBind)(JNIEnv *env,jclass,jlong token,jobject listener,jlongArray buffer) {
     auto state=token>0?bridge(token):nullptr;
-    if(!state || !listener || !buffer || env->GetArrayLength(buffer)!=16)return MGMEM_INVALID_ARGUMENT;
+    if(!state || !listener || !buffer)return MGMEM_INVALID_ARGUMENT;
+    const auto length=env->GetArrayLength(buffer);
+    if(env->ExceptionCheck() || length!=16)return MGMEM_INVALID_ARGUMENT;
     {
         std::lock_guard<std::mutex> lock(state->mutex);
         if(state->closing.load() || state->listener || state->done)return MGMEM_BUSY;
     }
-    jobject listener_ref=env->NewGlobalRef(listener);
-    jlongArray buffer_ref=static_cast<jlongArray>(env->NewGlobalRef(buffer));
-    jclass type=env->GetObjectClass(listener);
-    auto method=type?env->GetMethodID(type,"onNativeClosed","(I)V"):nullptr;
-    JavaVM *vm=nullptr;mgmem_status result=MGMEM_OUT_OF_MEMORY;
-    if(listener_ref && buffer_ref && method && env->GetJavaVM(&vm)==JNI_OK) {
+    JavaBinding binding;mgmem_status result=MGMEM_OUT_OF_MEMORY;
+    if(prepare_binding(env,listener,buffer,binding)) {
         std::lock_guard<std::mutex> lock(state->mutex);
         if(state->closing.load() || state->listener || state->done)result=MGMEM_BUSY;
         else {
-            state->vm=vm;state->listener=listener_ref;state->final_buffer=buffer_ref;state->completion_method=method;
+            state->vm=binding.vm;state->listener=binding.listener;state->final_buffer=binding.buffer;state->completion_method=binding.method;
+            binding.listener=nullptr;binding.buffer=nullptr;
             result=MGMEM_OK;
         }
     }
     if(result!=MGMEM_OK) {
-        if(listener_ref)env->DeleteGlobalRef(listener_ref);if(buffer_ref)env->DeleteGlobalRef(buffer_ref);
+        release_binding(env,binding);
     }
     return result;
 }

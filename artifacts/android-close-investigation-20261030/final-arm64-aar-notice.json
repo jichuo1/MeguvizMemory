@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SANITIZED_AAR_NOTICE_AND_PRIVACY",
+  "native_abi": "1.1",
+  "version": "0.2.0-engineering-final",
+  "base_AAR_sha256": "69ddb6084352289981140027f5b4db2015eebd6e3e6587b89bc8349b2fa170ed",
+  "sanitized_AAR": {
+    "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+    "bytes": 153753,
+    "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+  },
+  "source_jni_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+  "native_derivation": "SEPARATE_LLVM_STRIP_DEBUG_PROOF; NO_RUNTIME_IDENTITY_TRANSFER",
+  "runtime_and_classes": "IDENTICAL_TO_UNAUGMENTED_AAR_NOTICE_ONLY"
+}

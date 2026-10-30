@@ -1,0 +1,12 @@
+{
+  "state": "PASS_COMPILED_DIAGNOSTIC_APK_COMPONENT_SCOPE",
+  "apk_sha256": "a3b118bb51b6dd251faad411b15a0b98ee5a59b80717bf6d7aeadcfb8653198b",
+  "aapt2_sha256": "4b09f89d449cc4498fcf5076a4ad6b28f079e565d2737f7881a674580960c8df",
+  "single_explicit_activity": "io.github.jichuo1.meguviz.memory.android.PressureR8ForegroundActivity",
+  "exported": true,
+  "required_permission": "android.permission.DUMP",
+  "permission_scope": "SIGNATURE_PRIVILEGED_OR_DEVELOPMENT_AUTHORIZED_CALLERS_NOT_ONLY_SHELL",
+  "production_pressure_AAR_contains_diagnostic_activity": false,
+  "ordinary_app_denial_runtime_test": "NOT_RUN",
+  "no_global_setting_changed": true
+}

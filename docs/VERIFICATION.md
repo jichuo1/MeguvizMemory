@@ -23,7 +23,7 @@
 宿主 CMake/build/install 步骤见 README 与 INTEGRATION。当前机器的实际目录为 `build/host-ninja`、`build/host-asan`、`install/host`、`build/dex-locked`、`build/image`。Python 运行既有解释器，没有安装 Python 依赖：
 
 ```powershell
-$env:PATH = 'D:/MeguvizMemory/install/host/bin;' + $env:PATH
+$env:PATH = "$PWD/install/host/bin;" + $env:PATH
 python tools/verify_consumers.py --image-exe build/image/mgmem_image.exe --dex-exe build/dex-locked/mgmem_dex_consumer.exe --dex-fixture build/locked-inputs/DexMeguviz/tests/fixtures/generated/minimal.dex --out-dir artifacts/verification-20261030/consumers
 install/host/bin/mgmem_tlb_owned.exe --matrix
 ```

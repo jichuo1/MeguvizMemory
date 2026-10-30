@@ -1,0 +1,58 @@
+{
+  "state": "BLOCKED_OR_FAILED",
+  "started_at_utc": "2026-10-30T14:20:52.691794+00:00",
+  "scope": "ISOLATED_OWN_API34_EMULATOR_FUNCTIONAL_ONLY",
+  "source_sha256": "4a8e77b8d8443c5f1afc8e5dd5782ddab573da58e566b08d398f43100da9fe53",
+  "device_serial_sha256": "d966c9c5e93ec89df8ebb92d4d37167633af6e2520ee5830b12d1db56d5fa8f3",
+  "gates": [
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 321,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "c81df973a23e6d6bddf912aabcf0990ef2fb96758dffbaf26bbddd44529e8a6d",
+      "activity_inventory_sha256": "a74890ab046e8efee5da3e244ff02d77d0f3f41b7c33ba5eb4e2b77d3e8ef4e4",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 322,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "63d3f722290b707eec699677c077289e6f57be6946df9a5631e9f9b18b277937",
+      "activity_inventory_sha256": "c7416c95a48a7a5495f2a2982c943bda1d2d3f9a1b89b8bccd7357d87eb9734e",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    }
+  ],
+  "shared_device_lock": false,
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "boot_sha256": "de25896834b1f25aae676badc8a99ab034d1578c8561ec6d4b22a13b6283ce70"
+  },
+  "APK": {
+    "apk_sha256": "dbf221fc722e0a9673f5633402dc487e93ac7af7b62a64d3a8810113b8628f30",
+    "build_receipt_sha256": "91e8c6945015a31afc496a0bcdcb01cb4f6505f6363821cb7ae071db65144bf0",
+    "native_build_receipt_sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "native_overrides": [
+      {
+        "kind": "jni",
+        "path": "build/android-close-retry-jni-x86_64/libmgmem_pressure_jni.so",
+        "sha256": "26b80388507defeb3cb6f2110df146ae68c42604a198ea669792d5635e9f3f95"
+      },
+      {
+        "kind": "core",
+        "path": "install/continuation-x86_64/lib/libmgmem.so",
+        "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+      }
+    ],
+    "r8_marker_after": "io.github.jichuo1.meguviz.memory.android.a"
+  },
+  "reason": "guard_falsely_finished_as_success",
+  "finished_at_utc": "2026-10-30T14:21:06.868321+00:00"
+}

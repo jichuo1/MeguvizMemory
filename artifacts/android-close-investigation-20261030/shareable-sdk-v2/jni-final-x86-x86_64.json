@@ -1,0 +1,62 @@
+{
+  "state": "PASS_STRIP_AND_ELF_CONTRACT_DEVICE_NOT_EXECUTED",
+  "ABI": "x86_64",
+  "JNI_source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+  "transformation": {
+    "source": {
+      "path": "build/android-close-final-jni-x86_64-unstripped/libmgmem_pressure_jni.so",
+      "bytes": 456232,
+      "sha256": "d573c9df819fe9d19dbe961b165b6ce5dd957a325337f101e2e7b568f4d040a3"
+    },
+    "candidate": {
+      "path": "build/android-close-shareable/delivery-v2/jni-final-x86/x86_64/libmgmem_pressure_jni.so",
+      "bytes": 76616,
+      "sha256": "81c1f3f8e015c64159998dee9729591a8f4c03c85f2446088e83a6763142ae0f"
+    },
+    "format": "ELF",
+    "same_bytes": false,
+    "ELF_PT_LOAD": {
+      "machine": 62,
+      "load_headers": [
+        [
+          5,
+          0,
+          0,
+          0,
+          54640,
+          54640,
+          16384
+        ],
+        [
+          6,
+          54640,
+          71024,
+          71024,
+          1440,
+          2704,
+          16384
+        ],
+        [
+          6,
+          56080,
+          88848,
+          88848,
+          64,
+          2336,
+          16384
+        ]
+      ],
+      "load_sha256_with_section_header_fields_masked": [
+        "53690554c47741a8895f2cdf9e17ca3845329a8f9b5e39873d3a7741d2ff583e",
+        "f153ad263d3084e82d2d5ed5eba1d5bdd22c9e943a1c9c50f607936cd6e6c16c",
+        "b1c9b330f4a703f35b17f24846b4e498d01127488d584516b65d510a0ccf1713"
+      ]
+    },
+    "dynamic_symbols_sha256": "fee6400dca7c303c8d757fe09a8900f223963b1d243dbc8a52644bdd9dbd0789",
+    "contract": "PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL"
+  },
+  "helper_sha256": "18fc8dc4528ebd0ec095707e64571d1dbd1da724782984cb7c2f9c7f7cf6b47f",
+  "executed_binary_contract_helper_sha256": "c700ecb8feb29ac6b18c130fa9c29a0c897d074250e17e138e68e5a4982207e5",
+  "prior_run_byte_identity": "DISTINCT_IF_SHA_DIFFERS_NEEDS_NEW_ANDROID_VALIDATION",
+  "production_input_unchanged": true
+}

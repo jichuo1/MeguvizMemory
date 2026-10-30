@@ -1,0 +1,30 @@
+{
+  "state": "PASS",
+  "scope": "ANDROID_STATIC_PRESSURE_ARCHIVE_ALLOCATABLE_SECTIONS_AND_NONDEBUG_RELOCATIONS",
+  "LLVM_readobj_sha256": "d24b456477ce343b085006e76692e60cc5297f261a2fcc19eb32cacffc31a2a1",
+  "profiles": {
+    "arm64-v8a": {
+      "original_sha256": "ac6f5d20c7621bb055f725c055d8d927e763b929abfd63e02f811d5c2f6c8966",
+      "candidate_sha256": "aec6882699b034bb43b1e15c8e45312c5f117935950320af6c6f2b8e130feb36",
+      "allocatable_section_count": 38,
+      "allocatable_sections_sha256": "e5199322053be791dd33d0cf394c6787febfe121d3859625cf834ccf676ff239",
+      "relocation_groups": 24,
+      "relocation_count": 211,
+      "non_debug_relocations_sha256": "32f083f79ffeffa62edbfb5208fe0d22969c286b786b37ce6e1e72da89a832e3"
+    },
+    "x86_64": {
+      "original_sha256": "df1d3b3831056fc7bf59f4309d641946b13b4535fd54cac95d94f359e51b93ad",
+      "candidate_sha256": "42fb59273169a47dd92b6be89923bed6c3c1485cae799993305aa38594023b70",
+      "allocatable_section_count": 38,
+      "allocatable_sections_sha256": "aea545e974aba68329830e28154a169a19d572c3024e46854c30d6a69abfc33f",
+      "relocation_groups": 24,
+      "relocation_count": 196,
+      "non_debug_relocations_sha256": "47e11a65dbaaea2ac3bff7feb8e726d6c17bef85b9a8baa42152e841050dbdd9"
+    }
+  },
+  "normalization": "Keep allocated section names, types, flags, sizes, alignment, actual section bytes and order; retain relocation group names, offsets, types, target symbols and addends, ignore section-table numeric indices.",
+  "limitations": [
+    "Android static library has not run with the new consumer; DSO runtime tests remain separate.",
+    "No performance or prior byte-identical artifact claim."
+  ]
+}

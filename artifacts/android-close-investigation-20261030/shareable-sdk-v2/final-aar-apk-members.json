@@ -1,0 +1,43 @@
+{
+  "state": "PASS_AAR_APK_MEMBER_IDENTITY_AND_RECURSIVE_PATH_SCAN",
+  "profiles": {
+    "arm64-v8a": {
+      "AAR": {
+        "path": "build/android-close-final-aar-build/MeguvizMemory-Android-Pressure-0.2.0-final-shareable.aar",
+        "bytes": 153753,
+        "sha256": "3ecbfeeeea2406963d0d8ae4072529bfc269353b078e474158e5cdf3de26dca1"
+      },
+      "APK": {
+        "path": "build/android-close-final-r8-arm64/MeguvizMemory-R8-Stability-Probe.apk",
+        "bytes": 487982,
+        "sha256": "59a39a3789abcc7bbe7988ac69b2f3bf4314668c4e84c5fbf0797578c2b1c677"
+      },
+      "JNI_sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59",
+      "core_sha256": "327e06e5b7206a2074e8d3f6f7cbe72998d948baadec55565f4c4f49e71f6b22",
+      "source_build_receipt_sha256": "68e054dbc8e9dc6b2e6177f5a4fac38e5bef4a306aaddc5839e526c8d705cdcc",
+      "native_library_closure": "EXACT_SELECTED_CORE_AND_JNI_ONLY"
+    },
+    "x86_64": {
+      "AAR": {
+        "path": "build/android-close-final-r8-x86_64/MeguvizMemory-Android-Pressure-0.2.0-x86_64.aar",
+        "bytes": 145737,
+        "sha256": "2772ca6a2bf6b7a31a0c5d97605d8382dd6d14ce5430365944c8022793696388"
+      },
+      "APK": {
+        "path": "build/android-close-final-r8-x86_64/MeguvizMemory-R8-Stability-Probe.apk",
+        "bytes": 430632,
+        "sha256": "7be5ad00e2df25e086698921c91daa0cfd5d00b34f475d3124e3fda78026d5e2"
+      },
+      "JNI_sha256": "81c1f3f8e015c64159998dee9729591a8f4c03c85f2446088e83a6763142ae0f",
+      "core_sha256": "8866dffbcaf4a1be82e8a4491cfd031d0b533b787e07588312796ce732395c8a",
+      "source_build_receipt_sha256": "1d4d84166958d13a5d1f32110a3b882265157e749f1f9d9da63b2cd1d6c1f7e0",
+      "native_library_closure": "EXACT_SELECTED_CORE_AND_JNI_ONLY"
+    }
+  },
+  "shared_classes_jar_sha256": "cf9b3bf7428129c0488196bb646f90f22839bcb998947f6d85cbd89a71fa8534",
+  "shared_consumer_rules_sha256": "cdaee8699424bb7d2887cd411b1a71ed2ddcff80c09937f94980882013761b71",
+  "LLVM_notice_sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1",
+  "path_scan": "USER_PROFILE_AND_WORKSPACE_ASCII_AND_UTF16LE_NO_MATCH",
+  "runtime_qualification": "NOT_INFERRED_FROM_THIS_READ_ONLY_CHECK",
+  "prior_15_minute_byte_identity": "NOT_CLAIMED"
+}

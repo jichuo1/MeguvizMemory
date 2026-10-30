@@ -1,0 +1,65 @@
+{
+  "state": "PASS",
+  "started_at_utc": "2026-10-30T14:22:03.328413+00:00",
+  "scope": "ISOLATED_OWN_API34_EMULATOR_FUNCTIONAL_ONLY",
+  "source_sha256": "59ef070322c3e3dc45dafc0ee94540972532cdb186e78af840092634162b7993",
+  "device_serial_sha256": "d966c9c5e93ec89df8ebb92d4d37167633af6e2520ee5830b12d1db56d5fa8f3",
+  "gates": [
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 323,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "b9d8c8841dbe7824b16ec73a5117ffc123d602ecdedf3df6fff38468d5e09b06",
+      "activity_inventory_sha256": "de7657e5c9f502d2e73ec4978151d839392ebe1f12fb68ae9b39ef3a458eb540",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    },
+    {
+      "scope": "SUCCESSFUL_PROCESS_AND_ACTIVITY_DUMP_FILTERED_IN_MEMORY",
+      "process_rows": 323,
+      "matching_tests": 0,
+      "active_instrumentation": 0,
+      "process_inventory_sha256": "2c5554c2ccdcd85f3002a53c5acd8a9eb67b1aea234740baad762ba987a2a47e",
+      "activity_inventory_sha256": "56b22c39bb7c379367d1b03589d3ed59bf1260f3b23a6e0065d6fc4d223e3233",
+      "result": "PASS_OBSERVATIONAL_ONLY"
+    }
+  ],
+  "shared_device_lock": false,
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "device": {
+    "api": 34,
+    "abi": "x86_64",
+    "page_bytes": 4096,
+    "boot_sha256": "de25896834b1f25aae676badc8a99ab034d1578c8561ec6d4b22a13b6283ce70"
+  },
+  "APK": {
+    "apk_sha256": "dbf221fc722e0a9673f5633402dc487e93ac7af7b62a64d3a8810113b8628f30",
+    "build_receipt_sha256": "91e8c6945015a31afc496a0bcdcb01cb4f6505f6363821cb7ae071db65144bf0",
+    "native_build_receipt_sha256": "2d152ebb41a2dc2d5bf6fec0f628142588947d40cb72567f98ab26a853499139",
+    "certificate_sha256": "9615607b900dffe1a6bce5820b9b222d8cb4c3a160e72186d261c4b26c172aa3",
+    "package": "io.github.jichuo1.meguviz.memory.pressureprobe.r8",
+    "native_overrides": [
+      {
+        "kind": "jni",
+        "path": "build/android-close-retry-jni-x86_64/libmgmem_pressure_jni.so",
+        "sha256": "26b80388507defeb3cb6f2110df146ae68c42604a198ea669792d5635e9f3f95"
+      },
+      {
+        "kind": "core",
+        "path": "install/continuation-x86_64/lib/libmgmem.so",
+        "sha256": "e1257a686392c77496d995eb28c1cc41d1b96983144d6bb8adc03f4201631c1c"
+      }
+    ],
+    "r8_marker_after": "io.github.jichuo1.meguviz.memory.android.a"
+  },
+  "resume_provenance": {
+    "first_controller_receipt_sha256": "8709af8603d5d695bd3c4963ee7386e44d519bd229dab7bbb65ae24ed6476dd2",
+    "exact_first_controller_source_sha256": "4a8e77b8d8443c5f1afc8e5dd5782ddab573da58e566b08d398f43100da9fe53",
+    "first_guard_stdout_sha256": "f3ca40e0a3bf20eaf9ab861db129a85ecafc52160588fc2089c7bb0239bc1d94",
+    "guard_repeated": false
+  },
+  "guard_receipt_sha256": "ce5def91dfeaa94ebf002cf5df6c5da0e9d15ae135ae051a2eb94f708c56e8a9",
+  "normal_receipt_sha256": "6434e1482623a93ebb230e870ae0040b4a9c9809f7cbb2926c54dd3eb140a525",
+  "finished_at_utc": "2026-10-30T14:22:14.776733+00:00"
+}

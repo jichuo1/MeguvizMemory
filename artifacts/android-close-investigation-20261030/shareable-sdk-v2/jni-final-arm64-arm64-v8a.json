@@ -1,0 +1,62 @@
+{
+  "state": "PASS_STRIP_AND_ELF_CONTRACT_DEVICE_NOT_EXECUTED",
+  "ABI": "arm64-v8a",
+  "JNI_source_sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+  "transformation": {
+    "source": {
+      "path": "build/android-close-final-jni-arm64-unstripped/libmgmem_pressure_jni.so",
+      "bytes": 472680,
+      "sha256": "a1c5a3ec9db58d7e45332038e53bd0cd11c1371f405a3c643e41354ddb02289f"
+    },
+    "candidate": {
+      "path": "build/android-close-shareable/delivery-v2/jni-final-arm64/arm64-v8a/libmgmem_pressure_jni.so",
+      "bytes": 86816,
+      "sha256": "377610fdb957d55c453d0f071d796e89ebf58953ae25bc5c9b08548f846cef59"
+    },
+    "format": "ELF",
+    "same_bytes": false,
+    "ELF_PT_LOAD": {
+      "machine": 183,
+      "load_headers": [
+        [
+          5,
+          0,
+          0,
+          0,
+          59008,
+          59008,
+          16384
+        ],
+        [
+          6,
+          59008,
+          75392,
+          75392,
+          1512,
+          2432,
+          16384
+        ],
+        [
+          6,
+          60520,
+          93288,
+          93288,
+          64,
+          2344,
+          16384
+        ]
+      ],
+      "load_sha256_with_section_header_fields_masked": [
+        "4ec767943bf2e3091513ea6c2dde2500423b99cf71ca987f9b6b6838161a5efc",
+        "927ec4d801aca5d26e0f3691222fea90dce4eb8d854df9c483488e6e43adb018",
+        "b1c9b330f4a703f35b17f24846b4e498d01127488d584516b65d510a0ccf1713"
+      ]
+    },
+    "dynamic_symbols_sha256": "ddae1261c59bbb5af00e9c78b2d268162add40031227dce522546624acb3e87d",
+    "contract": "PT_LOAD_BYTES_EQUAL_EXCEPT_E_SHOFF_AND_E_SHENTSIZE_E_SHNUM_E_SHSTRNDX; DYNAMIC_SYMBOLS_EQUAL"
+  },
+  "helper_sha256": "18fc8dc4528ebd0ec095707e64571d1dbd1da724782984cb7c2f9c7f7cf6b47f",
+  "executed_binary_contract_helper_sha256": "c700ecb8feb29ac6b18c130fa9c29a0c897d074250e17e138e68e5a4982207e5",
+  "prior_run_byte_identity": "DISTINCT_IF_SHA_DIFFERS_NEEDS_NEW_ANDROID_VALIDATION",
+  "production_input_unchanged": true
+}

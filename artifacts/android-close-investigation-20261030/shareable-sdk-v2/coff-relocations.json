@@ -1,0 +1,15 @@
+{
+  "state": "PASS",
+  "scope": "WINDOWS_COFF_STATIC_PRESSURE_ARCHIVE_NON_DEBUG_SEMANTIC_RELOCATIONS",
+  "original_sha256": "88793f80172ba23901042911f810bed1a323bedec66a1e7597fb78652c09ff11",
+  "candidate_sha256": "79b0186efc51fe672b559ac96da7bafa43d07ad9c88b9e24ec5e984e09529394",
+  "LLVM_readobj_sha256": "d24b456477ce343b085006e76692e60cc5297f261a2fcc19eb32cacffc31a2a1",
+  "relocation_groups": 373,
+  "relocations": 956,
+  "normalized_relocations_sha256": "f96b33f77f0038529d745fbae505658313be0e048166a8de59cfe447c4eefccd",
+  "normalization": "Preserve section name/order, relocation virtual offset, relocation type and target symbol name; discard numeric section/symbol table indices that change when debug sections are removed.",
+  "limitations": [
+    "Comparison covers relocations and nondebug section payloads; host consumer also tested.",
+    "No Android runtime or performance qualification."
+  ]
+}

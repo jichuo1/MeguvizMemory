@@ -1,0 +1,44 @@
+"""Read-only verification of final candidate AAR/APK members and path hygiene."""
+from pathlib import Path
+import hashlib,io,json,re,zipfile
+root=Path(__file__).resolve().parents[2];base=root/'artifacts/android-close-investigation-20261030';out=base/'shareable-sdk-v2/final-aar-apk-members.json'
+if out.exists():raise RuntimeError('new proof output required')
+hashb=lambda b:hashlib.sha256(b).hexdigest();hashf=lambda p:hashb(p.read_bytes())
+def scan(data):
+ low=data.lower();home=Path.home().name.lower().encode();variants=[str(Path.home()).lower(),str(root).lower()]
+ bad=[x.encode() for p in variants for x in (p.replace(chr(92),'/'),p.replace('/',chr(92)))]
+ assert home not in low and home.decode().encode('utf-16le') not in low
+ assert not any(v in low or v.decode().encode('utf-16le') in low for v in bad)
+ assert not re.search(rb'[a-z]:[/\\](?:users[/\\]|meguvizmemory(?:[/\\]|\x00))',low)
+def identity(p):return {'path':p.relative_to(root).as_posix(),'bytes':p.stat().st_size,'sha256':hashf(p)}
+classes=[];rules=[];notice=[];profiles={}
+for abi,label in [('arm64-v8a','arm64'),('x86_64','x86_64')]:
+ build=json.loads((base/('final-r8-'+label+'-build.json')).read_text());assert build['status']=='PASS' and build['abi']==abi
+ aar=root/build['input_aar']['path'];assert hashf(aar)==build['input_aar']['sha256']
+ apk=next(root/e['path'] for e in build['artifacts'] if e['path'].endswith('MeguvizMemory-R8-Stability-Probe.apk'))
+ assert hashf(apk)==next(e['sha256'] for e in build['artifacts'] if e['path'].endswith('MeguvizMemory-R8-Stability-Probe.apk'))
+ jni=root/'build/android-close-shareable/delivery-v2'/('jni-final-arm64/arm64-v8a' if label=='arm64' else 'jni-final-x86/x86_64')/'libmgmem_pressure_jni.so'
+ core=root/'build/android-close-shareable/delivery-v2/sdk'/('android-arm64-v8a' if label=='arm64' else 'android-x86_64')/'lib/libmgmem.so'
+ with zipfile.ZipFile(aar) as z:
+  assert z.testzip() is None and len(z.namelist())==len(set(z.namelist()))
+  assert sorted(n for n in z.namelist() if n.endswith('.so'))==sorted([f'jni/{abi}/libmgmem.so',f'jni/{abi}/libmgmem_pressure_jni.so'])
+  for member in z.namelist():
+   data=z.read(member);scan(data)
+   if member.endswith('.jar'):
+    with zipfile.ZipFile(io.BytesIO(data)) as nested:
+     assert nested.testzip() is None
+     for entry in nested.namelist():scan(nested.read(entry))
+  jni_bytes=z.read(f'jni/{abi}/libmgmem_pressure_jni.so');core_bytes=z.read(f'jni/{abi}/libmgmem.so')
+  assert hashb(jni_bytes)==hashf(jni) and hashb(core_bytes)==hashf(core)
+  classes.append(hashb(z.read('classes.jar')));rules.append(hashb(z.read('proguard.txt')))
+  notice_member=[n for n in z.namelist() if 'NOTICE' in n.upper()];assert len(notice_member)==1
+  notice.append(hashb(z.read(notice_member[0])));assert notice[-1]==hashf(root/'third_party_notices/llvm-NOTICE.txt')
+ with zipfile.ZipFile(apk) as z:
+  assert z.testzip() is None and len(z.namelist())==len(set(z.namelist()))
+  for member in z.namelist():scan(z.read(member))
+  assert hashb(z.read(f'lib/{abi}/libmgmem_pressure_jni.so'))==hashf(jni)
+  assert hashb(z.read(f'lib/{abi}/libmgmem.so'))==hashf(core)
+ profiles[abi]={'AAR':identity(aar),'APK':identity(apk),'JNI_sha256':hashf(jni),'core_sha256':hashf(core),'source_build_receipt_sha256':hashf(base/('final-r8-'+label+'-build.json')),'native_library_closure':'EXACT_SELECTED_CORE_AND_JNI_ONLY'}
+assert len(set(classes))==len(set(rules))==len(set(notice))==1
+value={'state':'PASS_AAR_APK_MEMBER_IDENTITY_AND_RECURSIVE_PATH_SCAN','profiles':profiles,'shared_classes_jar_sha256':classes[0],'shared_consumer_rules_sha256':rules[0],'LLVM_notice_sha256':notice[0],'path_scan':'USER_PROFILE_AND_WORKSPACE_ASCII_AND_UTF16LE_NO_MATCH','runtime_qualification':'NOT_INFERRED_FROM_THIS_READ_ONLY_CHECK','prior_15_minute_byte_identity':'NOT_CLAIMED'}
+out.write_text(json.dumps(value,indent=2)+'\n');print(json.dumps({'state':value['state'],'receipt':out.relative_to(root).as_posix(),'sha256':hashf(out)}))

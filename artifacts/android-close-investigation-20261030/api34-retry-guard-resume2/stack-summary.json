@@ -1,0 +1,36 @@
+{
+  "scope": "INJECTED_PROGRESS_LOCK_CASE_ONLY_NOT_PHYSICAL_HANG_ROOT_CAUSE",
+  "stack_status": "CAPTURED_JAVA_THREADS_ONLY",
+  "observed_thread_count": 16,
+  "selected_thread_states_and_methods": [
+    {
+      "role": "main",
+      "state": "RUNNABLE",
+      "key_methods": [
+        "android.os.MessageQueue.nativePollOnce"
+      ]
+    },
+    {
+      "role": "instrumentation",
+      "state": "WAITING",
+      "key_methods": [
+        "java.util.concurrent.locks.ReentrantLock.lock",
+        "io.github.jichuo1.meguviz.memory.android.PressureR8Instrumentation.phase"
+      ]
+    },
+    {
+      "role": "injected_lock_holder",
+      "state": "WAITING",
+      "key_methods": [
+        "java.util.concurrent.CountDownLatch.await"
+      ]
+    },
+    {
+      "role": "watchdog",
+      "state": "TIMED_WAITING",
+      "key_methods": []
+    }
+  ],
+  "raw_own_stack_sha256": "087a41abda66802d8b578d856c596aba1a3908f07b6e3f4d02bae9b15c568eb8",
+  "raw_stack": "RETAINED_IN_IGNORED_BUILD_ONLY_NO_THREAD_IDS_OR_DEVICE_PATHS_PUBLISHED"
+}

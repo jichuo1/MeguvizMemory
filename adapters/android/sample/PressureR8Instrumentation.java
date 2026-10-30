@@ -286,6 +286,21 @@ public final class PressureR8Instrumentation extends Instrumentation {
         foregroundFinished = true;
         phase("foreground.stopped");
     }
+    private void verifyLogicalUnavailableReasons() {
+        phase("logical-unavailable-reasons");
+        long[] unknown = new long[16];
+        for (int i=0;i<13;i++) unknown[i]=-1;
+        unknown[13]=1; unknown[14]=1; unknown[15]=1;
+        check("NATIVE_SNAPSHOT_UNAVAILABLE_AFTER_CLEANUP_ERROR".equals(
+                NativePressureBackend.logicalUnavailableReason(unknown,3)), "unknown snapshot reason");
+        long[] overflow = new long[16];
+        overflow[0]=2; overflow[1]=2; overflow[3]=-1; overflow[15]=1;
+        check("UNSIGNED_NATIVE_COUNTER_EXCEEDS_JAVA_LONG".equals(
+                NativePressureBackend.logicalUnavailableReason(overflow,3)), "unsigned overflow reason");
+        check(NativePressureBackend.logicalUnavailableReason(overflow,2)==null, "known zero reason");
+        check("NATIVE_OBSERVATION_BUSY_OR_UNAVAILABLE".equals(
+                NativePressureBackend.logicalUnavailableReason(null,0)), "unavailable observation reason");
+    }
     private void verifyFireAndForget() throws Exception {
         phase("fire-forget.reflect");
         Field tokenField = NativePressureBackend.class.getDeclaredField("registration");
@@ -603,6 +618,7 @@ public final class PressureR8Instrumentation extends Instrumentation {
             // with the exact mapping from this APK's build receipt instead.
             check(marker != null && !marker.isEmpty(), "R8 runtime marker available");
             JSONObject callback = framework(observeAms);
+            verifyLogicalUnavailableReasons();
             verifyFireAndForget();
             JSONArray observations = new JSONArray(); observations.put(observation());
             while (completed < iterations || (System.nanoTime() - started) / 1000000L < minimum) {
@@ -638,6 +654,7 @@ public final class PressureR8Instrumentation extends Instrumentation {
             report.put("process_pid", android.os.Process.myPid());
             report.put("foreground_finish_policy", "OWN_MAIN_FINISH_THEN_OBSERVED_ONSTOP_OR_ONDESTROY");
             report.put("fire_and_forget_state", fireAndForgetState);
+            report.put("logical_unavailable_reason_checks", "PASS");
             report.put("fire_and_forget_elapsed_ms", fireAndForgetElapsedMillis);
             report.put("fire_and_forget_polls", fireAndForgetPolls);
             report.put("fire_and_forget_scope", "CALLER_ONLY_CLOSE_AND_NATIVE_EXISTS_NO_AWAIT_SNAPSHOT_OR_NATIVE_POLL");
