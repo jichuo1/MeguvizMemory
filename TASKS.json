@@ -1035,7 +1035,7 @@
     "performance": "NOT_STARTED_FOR_NEW_STRATEGIES_OLD_RETRY1_INCONCLUSIVE"
   },
   "live_v2_20261030": {
-    "state": "PILOT_FROZEN_AND_SCHEDULED_NO_FORMAL_RESULT_YET",
+    "state": "ONE_PREREGISTERED_ENGINEERING_RETRY_PILOT_SCHEDULED",
     "device": {
       "model": "2210132C",
       "api": 33,
@@ -1051,9 +1051,12 @@
     "collector": "IMPLEMENTED_FAKE_ADB_20_TESTS_PASS",
     "suite_analysis": "IMPLEMENTED_OFFLINE_40_TESTS_PASS",
     "device_functional_runner": "IMPLEMENTED_OFFLINE_13_TESTS_PASS",
-    "protocol": "artifacts/device-v2-20261030/frozen-suite/protocol.json",
-    "plan": "artifacts/device-v2-20261030/frozen-suite/plan.json",
+    "protocol": "artifacts/device-v2-20261030/frozen-suite-retry1/protocol.json",
+    "plan": "artifacts/device-v2-20261030/frozen-suite-retry1/plan.json",
     "new_performance": "PENDING_PREDECLARED_PILOT_AND_FORMAL",
-    "BIL": "UNCHANGED_NO_INTEGRATION"
+    "BIL": "UNCHANGED_NO_INTEGRATION",
+    "first_attempt": "INCOMPLETE_28_SUCCESSFUL_TASKS_SESSION_WALL_CAP",
+    "engineering_retry_cap": 1,
+    "old_attempt_pooling": false
   }
 }

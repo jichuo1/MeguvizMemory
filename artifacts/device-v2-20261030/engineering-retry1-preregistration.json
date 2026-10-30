@@ -1,0 +1,33 @@
+{
+  "schema_version": 2,
+  "state": "FIRST_ATTEMPT_INCOMPLETE_ENGINEERING_WALL_CAP",
+  "reason": "Blocked:session_wall_cap_exceeded",
+  "successful_native_tasks": 28,
+  "planned_pilot_tasks": 128,
+  "formal_started": false,
+  "native_semantics_or_environment_failure": false,
+  "aggregate_native_task_seconds": 48.685330401,
+  "aggregate_native_ADB_wall_seconds": 63.53,
+  "aggregate_environment_ADB_wall_seconds": 44.606,
+  "gain_estimates_examined": false,
+  "original_protocol_sha256": "f6187d9580a51be90529fec61598c9224e8a64918b25cc4436e8a5c7f660cb6f",
+  "original_pilot_journal_sha256": "62024253d4a26e5c172c764539803f991236f7888380cbb66bb134e71fe176dd",
+  "one_engineering_retry_predeclared": true,
+  "retry_changes": [
+    "window start gap 120 to 240 seconds",
+    "session wall cap 110 to 210 seconds",
+    "overall bounded cap 2400 to 4500 seconds"
+  ],
+  "unchanged": [
+    "native binaries and algorithms",
+    "four groups and complete work",
+    "absolute resource budgets",
+    "environment qualification",
+    "4 pilot and 12 formal windows",
+    "2 mirrored 8-task blocks per family per window",
+    "statistics and descriptive inference limits"
+  ],
+  "pool_old_attempt": false,
+  "additional_retry_after_retry1": false,
+  "scope": "Collector scheduling correction before any formal estimation; no retry to select favorable effects"
+}

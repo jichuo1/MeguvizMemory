@@ -1,0 +1,249 @@
+{
+  "schema_version": 2,
+  "scope": "DEVICE_V2_CURRENT_FREEZE_ONLY",
+  "static_integrity_verified": true,
+  "functional_cases": 196,
+  "core_safety_tests": 3,
+  "artifacts": [
+    {
+      "role": "library",
+      "name": "libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    {
+      "role": "dex_formal",
+      "name": "mgmem_dex_paired_v2",
+      "bytes": 15069328,
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497"
+    },
+    {
+      "role": "image_formal",
+      "name": "mgmem_image_perf",
+      "bytes": 3504400,
+      "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90"
+    },
+    {
+      "role": "dex_input",
+      "name": "input.dex",
+      "bytes": 10540184,
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0"
+    },
+    {
+      "role": "image_input",
+      "name": "input.ppm",
+      "bytes": 6220817,
+      "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb"
+    }
+  ],
+  "captures": {
+    "pilot": {
+      "state": "FAILED_OR_BLOCKED",
+      "tasks_recorded": 28,
+      "hash_chain_errors": [],
+      "command_events": 155,
+      "command_chain_errors": [],
+      "all_passed": false
+    },
+    "formal": {
+      "state": "NOT_STARTED"
+    }
+  },
+  "reports": {},
+  "files": [
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal-plan.json",
+      "bytes": 8918,
+      "sha256": "219d9f3c4fe8ea8b4ffd603b824de3804055d5372591ce55df47d4ab0334a565"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+      "bytes": 649882,
+      "sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8"
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/report.json",
+      "bytes": 20413,
+      "sha256": "40fe90483845bc74d31f4175dbb39ef2e129d687a562ee9d732832d9c51ad729"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/capture-pilot/command-events.jsonl",
+      "bytes": 357407,
+      "sha256": "8655c82a91212d6f83aef8e26f2f1796569534609ec1655fb6eabaf198f02b7e"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/capture-pilot/receipt.json",
+      "bytes": 268246,
+      "sha256": "45847c340e92108e2d1f54c8c11077abafa82558e2a6dfa70a8885972ec1d529"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/capture-pilot/tasks.jsonl",
+      "bytes": 220055,
+      "sha256": "62024253d4a26e5c172c764539803f991236f7888380cbb66bb134e71fe176dd"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/capture-stage/deployment.json",
+      "bytes": 1834,
+      "sha256": "61715ba874ce1936cc180c5248fed54f693ef3e1eb29052af8ddba3af1c36ae0"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/capture-stage/receipt.json",
+      "bytes": 21494,
+      "sha256": "6902fd5b6716938f61b37fcc15c16dc3ffc31c64ac5b199779c76cfaa914cf6f"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/collector-offline-tests.json",
+      "bytes": 374,
+      "sha256": "8cb1552e49f5e98e830697b15679387b49d446ee6adb28ecf562722a4b118045"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/frozen-suite/plan.json",
+      "bytes": 211046,
+      "sha256": "4ca6866f4c2b17ccd581e4521c52b91ca7864b8ae9df40c7d683186592cda6b3"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/frozen-suite/protocol.json",
+      "bytes": 19854,
+      "sha256": "f6187d9580a51be90529fec61598c9224e8a64918b25cc4436e8a5c7f660cb6f"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/image-arm64-cross-build.json",
+      "bytes": 1947,
+      "sha256": "bd584e6f1de6a015f334c95e47061c214c672f5e696d63c30e911f25ab2b3034"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/image-host-functional.json",
+      "bytes": 385493,
+      "sha256": "23e664a9542f44660d7795f33d887d86f67cf1e0e70b756040b9347c67966d7f"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/new-device-functional/functional-receipt.json",
+      "bytes": 760514,
+      "sha256": "44374fcb4dcdae844c0ced2539e34c031c7e95af257231300918e8a0fb6e66bd"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/new-device-functional/functional.jsonl",
+      "bytes": 832705,
+      "sha256": "6769dbbe338eb7ac2d5bd5303f273e5a7f4d5ed799dfd41106093d2184648cbe"
+    },
+    {
+      "path": "artifacts/device-v2-20261030/suite-offline-tests.json",
+      "bytes": 2839,
+      "sha256": "bb8aae8771ac2863624f00eccab87f6e161fb54c52af37dbebbc4e893b702847"
+    },
+    {
+      "path": "artifacts/research-20261030/evidence_manifest.json",
+      "bytes": 2606,
+      "sha256": "e31244623955a7de9ede7fe535e68f2f43576c61f0ef1a4a5e7c0cc5fe45648d"
+    },
+    {
+      "path": "bench/paired_protocol_retry1.json",
+      "bytes": 4405,
+      "sha256": "7e864ad7ea74e26857cf9a04c9ac162fc20bff1b71bf9ac5a6d32cf1e8592492"
+    },
+    {
+      "path": "build/image-perf-v2-arm64/mgmem_image_perf",
+      "bytes": 3504400,
+      "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90"
+    },
+    {
+      "path": "build/image-perf-v2/mgmem_image_perf.exe",
+      "bytes": 70144,
+      "sha256": "7a23e852c95afe53f1985498b770e6ca45ebcffd11bb04c81f6d9e08d1fac24d"
+    },
+    {
+      "path": "consumers/dex/CMakeLists.txt",
+      "bytes": 2331,
+      "sha256": "d0e0319d00aa687e81abbad97c08eaedbb204eff6dd9d2e97b4c6b21719a3108"
+    },
+    {
+      "path": "consumers/dex/paired.cpp",
+      "bytes": 20796,
+      "sha256": "ca1795d5db4871b1c842267b12037c5f6b308769074e93f4d32b8525f7f351a1"
+    },
+    {
+      "path": "consumers/dex/paired_v2.cpp",
+      "bytes": 26574,
+      "sha256": "1b156fc937b05a04e2c772c876ede193a05d0d1340a93d65301f7a202c37b577"
+    },
+    {
+      "path": "consumers/image/CMakeLists.txt",
+      "bytes": 1193,
+      "sha256": "75be0147444e35ac6357f3a1c22515532d4b740988a4ac79e47c1feb080a5552"
+    },
+    {
+      "path": "consumers/image/perf.cpp",
+      "bytes": 18629,
+      "sha256": "900ffdbcdcc758574dd52f6f0b5a4ed2024432a760aee3ea222a512a5777b1df"
+    },
+    {
+      "path": "install/android-arm64-v8a/lib/libmgmem.so",
+      "bytes": 1665960,
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919"
+    },
+    {
+      "path": "tools/device_capture_v2.py",
+      "bytes": 37812,
+      "sha256": "cd0d3b17d9bb3799fd8fa3d4f9eee1a5e1e2a2c592c3de519965d6a6512f4298"
+    },
+    {
+      "path": "tools/freeze_device_suite_v2.py",
+      "bytes": 8872,
+      "sha256": "1166f5a7962ab74f9dfcced7e4cd8cfa245ebaa470a982f9696156ae5d34b770"
+    },
+    {
+      "path": "tools/paired_analysis.py",
+      "bytes": 20382,
+      "sha256": "f1eac2aa6d2fbe1f0073d1f488baf086e2f17a1f5ea4cf4d1a613f760a2c62ee"
+    },
+    {
+      "path": "tools/paired_analysis_v2.py",
+      "bytes": 24413,
+      "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee"
+    },
+    {
+      "path": "tools/paired_suite_v2.py",
+      "bytes": 37230,
+      "sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
+    },
+    {
+      "path": "tools/run_arm64_validation.py",
+      "bytes": 23760,
+      "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+    },
+    {
+      "path": "tools/run_device_suite_v2.py",
+      "bytes": 2571,
+      "sha256": "600062b7d305fd66d5e8ec502c5c62b6b26110425fba414901e2ae4c689c0530"
+    },
+    {
+      "path": "tools/run_paired_device.py",
+      "bytes": 33269,
+      "sha256": "e96af715bab510a4a6eccf237e095437620d4d97c7a8c670ccdca9889049a707"
+    },
+    {
+      "path": "tools/test_device_capture_v2.py",
+      "bytes": 22115,
+      "sha256": "53a6bad3d46ef23ec9680d9cd35f7808589b72485832cabf47c9cea07f276936"
+    },
+    {
+      "path": "tools/test_paired_suite_v2.py",
+      "bytes": 17765,
+      "sha256": "371e44356582fc9a87aceccd633153ae892f813afccf1ee71acf330c0c77315c"
+    },
+    {
+      "path": "tools/validate_arm64_consumers_v2.py",
+      "bytes": 34541,
+      "sha256": "68a196ddc23e15f534fb2a9b101484c1e655ae8b2ffe41d85a82c99e6b3e59a5"
+    },
+    {
+      "path": "tools/verify_image_perf_v2.py",
+      "bytes": 8463,
+      "sha256": "a441a3eab9713c32e382e47e1cd40aef2394978fb79deb0d63687b0bee6001b9"
+    }
+  ],
+  "performance_qualification": "INCONCLUSIVE_OUTER_INDEPENDENCE_NOT_ESTABLISHED",
+  "BIL_integration": "NOT_SELECTED",
+  "history": "5ac9b4f research manifest remains applicable to its original snapshot; not revalidated against changed current CMake",
+  "privacy": "No raw inputs, admission body, absolute paths, duplicate command sidecars or file bodies included; active captures are explicitly IN_PROGRESS."
+}

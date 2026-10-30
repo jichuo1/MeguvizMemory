@@ -3,7 +3,7 @@
   "scope": "SCOPED_SOURCE_TREE_LOCK",
   "roots": {
     "MeguvizMemory": {
-      "head": "5ac9b4f2d2863f0e886148a2d831002fd403a3b2",
+      "head": "5a7611a8a40e06e1259524be8164d1f55b2dd3a1",
       "dirty": true,
       "state": "READ_ONLY_LOCAL_CHECK"
     },
@@ -14,8 +14,8 @@
     }
   },
   "external_parser_source": "LOCKED",
-  "source_set_sha256": "d1ffd1847165a40b8879fbcfb5f80f1380f7645df90fba22255229c932fbde29",
-  "file_count": 150,
+  "source_set_sha256": "795c168519cb7403320b3af23f853a889a6fd92cfc8151146161f63b70c2493c",
+  "file_count": 151,
   "files": [
     {
       "root": "DexMeguviz",
@@ -458,8 +458,8 @@
     {
       "root": "MeguvizMemory",
       "path": "TASKS.json",
-      "bytes": 43877,
-      "sha256": "4e2af4bbe7b592789d69635f90d42c81932e1a60380287de1c2bdb55ee7f49b2"
+      "bytes": 44033,
+      "sha256": "0c229e653d75909091656ba3f9624fb181f155201a6c4dd48b0778ad823f299e"
     },
     {
       "root": "MeguvizMemory",
@@ -632,8 +632,8 @@
     {
       "root": "MeguvizMemory",
       "path": "docs/DEVICE_V2_20261030.md",
-      "bytes": 3679,
-      "sha256": "c6ca970d7d0b4f2a710dad8c91645f454846eadf9e2e06aea9d4cf58cc070ddd"
+      "bytes": 4647,
+      "sha256": "70f785daa3f945290e68ef3312e2c4af8ab5728b80eb9c1df97a2e7d1a5782ba"
     },
     {
       "root": "MeguvizMemory",
@@ -776,8 +776,8 @@
     {
       "root": "MeguvizMemory",
       "path": "tools/freeze_device_suite_v2.py",
-      "bytes": 8872,
-      "sha256": "1166f5a7962ab74f9dfcced7e4cd8cfa245ebaa470a982f9696156ae5d34b770"
+      "bytes": 10716,
+      "sha256": "bda03c3b27e568cd0261175374981e022a0ec6f7d649ac90e26d09637c13f27c"
     },
     {
       "root": "MeguvizMemory",
@@ -814,6 +814,12 @@
       "path": "tools/record_artifacts.py",
       "bytes": 6918,
       "sha256": "3627d5e90b0f697ca3006feea9789d350b2879ddf1e19ed679fb38f90f16d092"
+    },
+    {
+      "root": "MeguvizMemory",
+      "path": "tools/record_device_v2_evidence.py",
+      "bytes": 9467,
+      "sha256": "f2319cc9d861edcd0693f7093c00c175d9240ff477987c1ec9f814d4d37e3b25"
     },
     {
       "root": "MeguvizMemory",

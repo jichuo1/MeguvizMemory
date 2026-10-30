@@ -29,9 +29,13 @@ def read(path):
     return strict_json(Path(path).read_text(encoding="utf-8-sig"))
 
 
-def freeze(functional_path, admission_path, output, start_delay=240, battery_source="dumpsys_battery"):
+def freeze(functional_path, admission_path, output, start_delay=240, battery_source="dumpsys_battery",
+           window_gap=120, session_cap=110, overall_cap=2400, engineering_retry=None):
     require(120 <= start_delay <= 1800, "start_delay_outside_bounded_range")
     require(battery_source in ("sysfs", "dumpsys_battery"), "unsupported_battery_source")
+    require(120 <= window_gap <= 600 and 60 <= session_cap < window_gap,
+            "session_cap_must_fit_bounded_window_gap")
+    require(2400 <= overall_cap <= 7200, "overall_cap_outside_bounded_range")
     functional, admission = read(functional_path), read(admission_path)
     require(functional.get("state") == "PASS" and functional.get("all_passed") is True,
             "real_functional_qualification_required")
@@ -50,7 +54,7 @@ def freeze(functional_path, admission_path, output, start_delay=240, battery_sou
             "functional_qualification_too_old_for_this_freeze")
     first = now + timedelta(seconds=start_delay)
     deadline = datetime.fromisoformat(admission["expires_at_utc"])
-    require(deadline > first + timedelta(seconds=15*120+110), "admission_does_not_cover_full_schedule")
+    require(deadline > first + timedelta(seconds=15*window_gap+session_cap), "admission_does_not_cover_full_schedule")
     profile = dict(functional["device"])
     require("arm64-v8a" in profile["abi_list"].split(",") and profile["api"] >= 27, "unsupported_device")
     require(profile["requested_cpu"] == 2, "this_protocol_selects_CPU2")
@@ -61,6 +65,23 @@ def freeze(functional_path, admission_path, output, start_delay=240, battery_sou
                      "state":"FROZEN_BEFORE_PILOT", "device_execution":"AUTHORIZED_CURRENT_BATCH",
                      "frozen_at_utc":now.isoformat(),
                      "parent_protocol_file_sha256":file_sha(ROOT/"bench/paired_protocol_v2_draft.json")})
+    if engineering_retry:
+        evidence=read(engineering_retry)
+        require(evidence.get("state")=="FIRST_ATTEMPT_INCOMPLETE_ENGINEERING_WALL_CAP" and
+                evidence.get("one_engineering_retry_predeclared") is True and
+                evidence.get("additional_retry_after_retry1") is False and
+                evidence.get("gain_estimates_examined") is False, "not_a_bounded_predeclared_engineering_retry")
+        require((window_gap,session_cap,overall_cap)==(240,210,4500), "retry_limits_differ_from_preregistration")
+        protocol["experiment_id"] += "-engineering-retry1"
+        protocol["attempt_id"] += "-retry1"
+        protocol["engineering_retry_preregistration_file_sha256"]=file_sha(engineering_retry)
+        protocol["prior_attempt_protocol_file_sha256"]=evidence["original_protocol_sha256"]
+        protocol["old_attempt_pooling"]=False
+        protocol["additional_engineering_retry_allowed"]=False
+    else:
+        require((window_gap,session_cap,overall_cap)==(120,110,2400),
+                "nondefault_limits_require_explicit_engineering_preregistration")
+    protocol["sampling"]["minimum_window_start_gap_seconds"]=window_gap
     image = read(ROOT/"bench/image_perf_v2.json")
     identity = protocol["families"]["image"]["semantic_identity"]
     identity.update({key:image["input"][key] for key in ("source_sha256","input_bytes","width","height")})
@@ -94,7 +115,7 @@ def freeze(functional_path, admission_path, output, start_delay=240, battery_sou
     for index in range(16):
         phase="pilot" if index<4 else "formal"
         scheduled.append({"phase":phase,"window_id":f"{phase}-w{index if index<4 else index-4:02d}",
-                          "start_utc":(first+timedelta(seconds=index*120)).isoformat(),
+                          "start_utc":(first+timedelta(seconds=index*window_gap)).isoformat(),
                           "day_id":first.astimezone(timezone(timedelta(hours=8))).date().isoformat(),
                           "environment_id":"new-device-shared-day-environment"})
     sources=["tools/device_capture_v2.py","tools/paired_suite_v2.py","tools/paired_analysis_v2.py",
@@ -110,7 +131,7 @@ def freeze(functional_path, admission_path, output, start_delay=240, battery_sou
         "source_closure":[{"path":path,"sha256":file_sha(ROOT/path)} for path in sources],
         "host_clock_epoch_id":"memory-v2-"+now.strftime("%Y%m%dT%H%M%SZ"),
         "scheduled_windows":scheduled,"single_task_timeout_seconds":30,
-        "session_wall_cap_seconds":110,"overall_wall_cap_seconds":2400,
+        "session_wall_cap_seconds":session_cap,"overall_wall_cap_seconds":overall_cap,
         "maximum_environment_waits":5,
         "cadence":{"battery_source":battery_source,"background_window_seconds":.4,"busy_interval_min_ns":300000000,
                    "busy_interval_max_ns":1500000000,"observation_to_launch_max_ns":2000000000,
@@ -138,8 +159,13 @@ def main():
     parser.add_argument("--out-dir",type=Path,required=True)
     parser.add_argument("--start-delay",type=int,default=240)
     parser.add_argument("--battery-source",choices=("sysfs","dumpsys_battery"),default="dumpsys_battery")
+    parser.add_argument("--window-gap",type=int,default=120)
+    parser.add_argument("--session-cap",type=int,default=110)
+    parser.add_argument("--overall-cap",type=int,default=2400)
+    parser.add_argument("--engineering-retry",type=Path)
     args=parser.parse_args()
-    print(json.dumps(freeze(args.functional_receipt,args.admission,args.out_dir,args.start_delay,args.battery_source)))
+    print(json.dumps(freeze(args.functional_receipt,args.admission,args.out_dir,args.start_delay,args.battery_source,
+                            args.window_gap,args.session_cap,args.overall_cap,args.engineering_retry)))
 
 
 if __name__=="__main__":

@@ -1,0 +1,51 @@
+{
+  "schema_version": 2,
+  "state": "STAGED",
+  "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e",
+  "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+  "device_directory": "/data/local/tmp/meguvizmemory-v2-20261030T082353Z-8ee171aaf0d3",
+  "protocol_canonical_sha256": "cb45ce4bb62da1a3f40921a633f2a7fe95d36d97a306ec92f5e4c4b7a28e91d1",
+  "artifacts": [
+    {
+      "role": "library",
+      "path": "install/android-arm64-v8a/lib/libmgmem.so",
+      "name": "libmgmem.so",
+      "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+      "executable": false,
+      "bytes": 1665960
+    },
+    {
+      "role": "dex_formal",
+      "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2",
+      "name": "mgmem_dex_paired_v2",
+      "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+      "executable": true,
+      "bytes": 15069328
+    },
+    {
+      "role": "image_formal",
+      "path": "build/image-perf-v2-arm64/mgmem_image_perf",
+      "name": "mgmem_image_perf",
+      "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90",
+      "executable": true,
+      "bytes": 3504400
+    },
+    {
+      "role": "dex_input",
+      "path": "artifacts/local/perf-inputs/bilibili-9.17.0-classes.dex",
+      "name": "input.dex",
+      "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+      "executable": false,
+      "bytes": 10540184
+    },
+    {
+      "role": "image_input",
+      "path": "build/image-perf-v2-checks/1920x1080.ppm",
+      "name": "input.ppm",
+      "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+      "executable": false,
+      "bytes": 6220817
+    }
+  ],
+  "created_at_utc": "2026-10-30T08:23:57.031576+00:00"
+}

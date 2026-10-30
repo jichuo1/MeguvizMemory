@@ -1,0 +1,631 @@
+{
+  "schema_version": 2,
+  "suite_schema": "FOUR_VARIANT_WINDOW_V1",
+  "experiment_id": "MM-v2-four-variant-suite-20261030-engineering-retry1",
+  "attempt_id": "new-device-20261030T083318Z-retry1",
+  "estimand_id": "complete_owner_task_v2",
+  "state": "FROZEN_BEFORE_PILOT",
+  "device_execution": "AUTHORIZED_CURRENT_BATCH",
+  "parent_protocol_file_sha256": "e8b25a3d3e518e2094c61cb436674a66097bf01f73083f02ab65691791acf958",
+  "sampling": {
+    "pilot_windows": 4,
+    "formal_windows": 12,
+    "blocks_per_family_window": 2,
+    "tasks_per_block": 8,
+    "per_family_total_task_cap": 256,
+    "suite_total_task_cap": 512,
+    "minimum_window_start_gap_seconds": 240,
+    "order_seed": 20261030,
+    "precision_target_log_half_width": 0.01,
+    "half_shift_warning_log": 0.01,
+    "familywise_alpha": 0.05,
+    "simultaneous_contrasts_per_family": 4,
+    "pilot_pooled": false,
+    "repeated_pilot": false,
+    "favorable_early_stop": false,
+    "pilot_precision_stop": "Stop affected family only; correctness failure stops entire suite",
+    "descriptive_memory_target": {
+      "minimum_point_gain": 0.03,
+      "gain_interval_lower_gt": 0.0,
+      "maximum_source_plus_backing_ratio": 1.05,
+      "qualification": "DESCRIPTIVE_ONLY_NOT_PERFORMANCE_PASS"
+    },
+    "outer_inference": "DESCRIPTIVE_SAME_DAY_SHARED_ENVIRONMENT_NOT_ESTABLISHED_INDEPENDENT"
+  },
+  "families": {
+    "dex": {
+      "variants": {
+        "D-C0": {
+          "executable_role": "dex_formal",
+          "input_role": "dex_input",
+          "argv": [
+            "@input",
+            "--variant",
+            "D-C0",
+            "--case",
+            "normal",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "D-C0"
+          }
+        },
+        "D-Z0": {
+          "executable_role": "dex_formal",
+          "input_role": "dex_input",
+          "argv": [
+            "@input",
+            "--variant",
+            "D-Z0",
+            "--case",
+            "normal",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "D-Z0"
+          }
+        },
+        "D-C1": {
+          "executable_role": "dex_formal",
+          "input_role": "dex_input",
+          "argv": [
+            "@input",
+            "--variant",
+            "D-C1",
+            "--case",
+            "normal",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "D-C1"
+          }
+        },
+        "D-C2": {
+          "executable_role": "dex_formal",
+          "input_role": "dex_input",
+          "argv": [
+            "@input",
+            "--variant",
+            "D-C2",
+            "--case",
+            "normal",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "D-C2"
+          }
+        }
+      },
+      "semantic_identity": {
+        "schema_version": 2,
+        "case": "normal",
+        "diagnostic": false,
+        "phases": null,
+        "workload": "dex_source_strategy_complete_owner_v2",
+        "source_sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+        "input_bytes": 10540184,
+        "method_count": 54147,
+        "result_checksum": 12701547145945416225
+      },
+      "required_success": {
+        "success": true,
+        "source_final_released": true,
+        "lease_final_correct": true,
+        "closed_backing_bytes": 0,
+        "final_resource_state": "CLOSED_ZERO"
+      },
+      "resource_fields": {
+        "logical_requested_bytes": "logical_requested_bytes",
+        "unique_owned_backing_peak_bytes": "unique_owned_backing_peak_bytes",
+        "external_source_capacity_bytes": "external_source_capacity_bytes",
+        "retained_before_collect_bytes": "retained_before_collect_bytes",
+        "reserved_final_bytes": "reserved_final_bytes",
+        "metadata_bytes": "memory_metadata_bytes",
+        "rss_pss_bytes": "rss_pss_bytes",
+        "energy_joules": "energy",
+        "parser_peak_owned_bytes": "parser_peak_owned_bytes"
+      },
+      "resource_limits": {
+        "D-C0": {
+          "unique_owned_backing_peak_bytes": 10540184,
+          "external_source_capacity_bytes": 21080368,
+          "parser_peak_owned_bytes": 268435456,
+          "reserved_final_bytes": 0
+        },
+        "D-Z0": {
+          "unique_owned_backing_peak_bytes": 0,
+          "external_source_capacity_bytes": 21080368,
+          "parser_peak_owned_bytes": 268435456,
+          "reserved_final_bytes": 0
+        },
+        "D-C1": {
+          "unique_owned_backing_peak_bytes": 10540184,
+          "external_source_capacity_bytes": 21080368,
+          "parser_peak_owned_bytes": 268435456,
+          "reserved_final_bytes": 0
+        },
+        "D-C2": {
+          "unique_owned_backing_peak_bytes": 10540184,
+          "external_source_capacity_bytes": 21080368,
+          "parser_peak_owned_bytes": 268435456,
+          "reserved_final_bytes": 0
+        }
+      },
+      "contrasts": [
+        {
+          "id": "ordinary",
+          "candidate": "D-Z0",
+          "reference": "D-C0",
+          "attribution": "ORDINARY_CONSUMER"
+        },
+        {
+          "id": "interface",
+          "candidate": "D-C1",
+          "reference": "D-C0",
+          "attribution": "MEMORY_INTERFACE_SAME_WORK"
+        },
+        {
+          "id": "arena",
+          "candidate": "D-C2",
+          "reference": "D-C1",
+          "attribution": "ARENA_VS_MEMORY_SYSTEM"
+        },
+        {
+          "id": "memory_net",
+          "candidate": "D-C2",
+          "reference": "D-Z0",
+          "attribution": "MEMORY_VS_PREDECLARED_ORDINARY_BASELINE"
+        }
+      ],
+      "secondary_contrasts": [
+        {
+          "id": "arena_vs_direct_copy",
+          "candidate": "D-C2",
+          "reference": "D-C0",
+          "attribution": "SECONDARY_WHOLE_STRATEGY_VS_DIRECT_COPY"
+        }
+      ]
+    },
+    "image": {
+      "variants": {
+        "I-DF": {
+          "executable_role": "image_formal",
+          "input_role": "image_input",
+          "argv": [
+            "@input",
+            "--provider",
+            "direct",
+            "--layout",
+            "full",
+            "--frames",
+            "3",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "I-DF",
+            "provider": "direct",
+            "layout": "full"
+          }
+        },
+        "I-DR": {
+          "executable_role": "image_formal",
+          "input_role": "image_input",
+          "argv": [
+            "@input",
+            "--provider",
+            "direct",
+            "--layout",
+            "ring",
+            "--frames",
+            "3",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "I-DR",
+            "provider": "direct",
+            "layout": "ring"
+          }
+        },
+        "I-SR": {
+          "executable_role": "image_formal",
+          "input_role": "image_input",
+          "argv": [
+            "@input",
+            "--provider",
+            "system",
+            "--layout",
+            "ring",
+            "--frames",
+            "3",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "I-SR",
+            "provider": "system",
+            "layout": "ring"
+          }
+        },
+        "I-AR": {
+          "executable_role": "image_formal",
+          "input_role": "image_input",
+          "argv": [
+            "@input",
+            "--provider",
+            "arena",
+            "--layout",
+            "ring",
+            "--frames",
+            "3",
+            "--cpu",
+            "2"
+          ],
+          "native_match": {
+            "variant": "I-AR",
+            "provider": "arena",
+            "layout": "ring"
+          }
+        }
+      },
+      "semantic_identity": {
+        "schema_version": 2,
+        "case": "normal",
+        "diagnostic": false,
+        "phases": null,
+        "workload": "image_workspace_complete_owner_v2",
+        "source_sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+        "input_bytes": 6220817,
+        "width": 1920,
+        "height": 1080,
+        "frames": 3,
+        "completed_frames": 3,
+        "result_checksum": 788817141,
+        "output_hash_fnv64": 17359518428462228935,
+        "gray_conversions": 6220800
+      },
+      "required_success": {
+        "success": true,
+        "source_final_released": true,
+        "lease_final_correct": true,
+        "closed_backing_bytes": 0,
+        "final_resource_state": "CLOSED_ZERO"
+      },
+      "resource_fields": {
+        "logical_requested_bytes": "logical_requested_bytes",
+        "unique_owned_backing_peak_bytes": "unique_owned_backing_peak_bytes",
+        "external_source_capacity_bytes": "external_source_capacity_bytes",
+        "retained_before_collect_bytes": "retained_before_collect_bytes",
+        "reserved_final_bytes": "reserved_final_bytes",
+        "metadata_bytes": "memory_metadata_bytes",
+        "rss_pss_bytes": "rss_pss_bytes",
+        "energy_joules": "energy"
+      },
+      "resource_limits": {
+        "I-DF": {
+          "unique_owned_backing_peak_bytes": 10368000,
+          "external_source_capacity_bytes": 12441634,
+          "steady_state_provider_allocations": 0,
+          "reserved_final_bytes": 0
+        },
+        "I-DR": {
+          "unique_owned_backing_peak_bytes": 8300160,
+          "external_source_capacity_bytes": 12441634,
+          "steady_state_provider_allocations": 0,
+          "reserved_final_bytes": 0
+        },
+        "I-SR": {
+          "unique_owned_backing_peak_bytes": 8300160,
+          "external_source_capacity_bytes": 12441634,
+          "steady_state_provider_allocations": 0,
+          "reserved_final_bytes": 0
+        },
+        "I-AR": {
+          "unique_owned_backing_peak_bytes": 8359936,
+          "external_source_capacity_bytes": 12441634,
+          "steady_state_provider_allocations": 0,
+          "reserved_final_bytes": 0
+        }
+      },
+      "contrasts": [
+        {
+          "id": "ordinary",
+          "candidate": "I-DR",
+          "reference": "I-DF",
+          "attribution": "ORDINARY_CONSUMER"
+        },
+        {
+          "id": "interface",
+          "candidate": "I-SR",
+          "reference": "I-DR",
+          "attribution": "MEMORY_INTERFACE_SAME_WORK"
+        },
+        {
+          "id": "arena",
+          "candidate": "I-AR",
+          "reference": "I-SR",
+          "attribution": "ARENA_VS_MEMORY_SYSTEM"
+        },
+        {
+          "id": "memory_net",
+          "candidate": "I-AR",
+          "reference": "I-DR",
+          "attribution": "MEMORY_VS_PREDECLARED_ORDINARY_BASELINE"
+        }
+      ],
+      "secondary_contrasts": [
+        {
+          "id": "arena_ring_vs_direct_full",
+          "candidate": "I-AR",
+          "reference": "I-DF",
+          "attribution": "SECONDARY_WHOLE_STRATEGY_VS_OTHER_ORDINARY_LAYOUT"
+        }
+      ]
+    }
+  },
+  "environment_limits": {
+    "battery_min_deci_c": 0,
+    "battery_max_deci_c": 400,
+    "thermal_status_max": 0,
+    "background_cpu_busy_max": 0.5
+  },
+  "freeze": {
+    "device_profile": {
+      "model": "2210132C",
+      "api": 33,
+      "abi_list": "arm64-v8a,armeabi-v7a,armeabi",
+      "kernel": "5.15.78-android13-8-00005-gb741ddfc2192-ab10346399",
+      "page_bytes": 4096,
+      "allowed_cpu_list": "0-7",
+      "requested_cpu": 2,
+      "boot_id_sha256": "c83456601f23aa08391b8331076076aa2a14db9a0f39c94020b15b0e475664bb",
+      "abi": "arm64-v8a",
+      "selected_cpu": 2,
+      "device_serial_sha256": "e6155b1c6863cc76efdbf0fd0b6c13d1f097612a793ac94f8fb63da274e11c7e"
+    },
+    "artifact_closure": [
+      {
+        "role": "library",
+        "path": "install/android-arm64-v8a/lib/libmgmem.so",
+        "name": "libmgmem.so",
+        "sha256": "9906104f022f18d9946deed60a5002bf4a8eadda71f8b051f4467d01d26dd919",
+        "executable": false
+      },
+      {
+        "role": "dex_formal",
+        "path": "build/dex-borrow-v2-arm64/mgmem_dex_paired_v2",
+        "name": "mgmem_dex_paired_v2",
+        "sha256": "4ebc7a82367d4682259619c2feb5c3786b34b2887c775efb1eb319e7db0ae497",
+        "executable": true
+      },
+      {
+        "role": "image_formal",
+        "path": "build/image-perf-v2-arm64/mgmem_image_perf",
+        "name": "mgmem_image_perf",
+        "sha256": "3da46e021eadd5e525b019721fa252b2a126c0bc0b356dccc33702f75ba10a90",
+        "executable": true
+      },
+      {
+        "role": "dex_input",
+        "path": "artifacts/local/perf-inputs/bilibili-9.17.0-classes.dex",
+        "name": "input.dex",
+        "sha256": "83ac99bc338e8bfc1980e382a4c318871cac0364dc449ae7b0316f601c136ab0",
+        "executable": false
+      },
+      {
+        "role": "image_input",
+        "path": "build/image-perf-v2-checks/1920x1080.ppm",
+        "name": "input.ppm",
+        "sha256": "5498f44c09551d42b3174a9cc5b2e8b96467ee6bed2162b5ab87a9fc776c6ddb",
+        "executable": false
+      }
+    ],
+    "functional_receipt_sha256": "44374fcb4dcdae844c0ced2539e34c031c7e95af257231300918e8a0fb6e66bd",
+    "scheduled_windows": [
+      {
+        "phase": "pilot",
+        "window_id": "pilot-w00",
+        "start_utc": "2026-10-30T08:37:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "pilot",
+        "window_id": "pilot-w01",
+        "start_utc": "2026-10-30T08:41:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "pilot",
+        "window_id": "pilot-w02",
+        "start_utc": "2026-10-30T08:45:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "pilot",
+        "window_id": "pilot-w03",
+        "start_utc": "2026-10-30T08:49:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w00",
+        "start_utc": "2026-10-30T08:53:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w01",
+        "start_utc": "2026-10-30T08:57:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w02",
+        "start_utc": "2026-10-30T09:01:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w03",
+        "start_utc": "2026-10-30T09:05:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w04",
+        "start_utc": "2026-10-30T09:09:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w05",
+        "start_utc": "2026-10-30T09:13:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w06",
+        "start_utc": "2026-10-30T09:17:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w07",
+        "start_utc": "2026-10-30T09:21:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w08",
+        "start_utc": "2026-10-30T09:25:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w09",
+        "start_utc": "2026-10-30T09:29:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w10",
+        "start_utc": "2026-10-30T09:33:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      },
+      {
+        "phase": "formal",
+        "window_id": "formal-w11",
+        "start_utc": "2026-10-30T09:37:18.249935+00:00",
+        "day_id": "2026-10-30",
+        "environment_id": "new-device-shared-day-environment"
+      }
+    ],
+    "single_task_timeout_seconds": 30,
+    "session_wall_cap_seconds": 210,
+    "overall_wall_cap_seconds": 4500,
+    "maximum_environment_waits": 5,
+    "cadence": {
+      "battery_source": "dumpsys_battery",
+      "background_window_seconds": 0.4,
+      "busy_interval_min_ns": 300000000,
+      "busy_interval_max_ns": 1500000000,
+      "observation_to_launch_max_ns": 2000000000,
+      "cooldown_seconds": 1,
+      "window_start_lateness_max_seconds": 45,
+      "minimum_actual_window_start_gap_seconds": 90
+    },
+    "resource_budgets": {
+      "scope": "NATIVE_REQUESTED_INPUT_WORKSPACE_AND_PARSER_ACCOUNTS_ONLY",
+      "metadata_RSS_PSS_energy": "UNMEASURED_NOT_ZERO_OR_NO_REGRESSION",
+      "limits": "families.<family>.resource_limits"
+    },
+    "functional_receipts": [
+      {
+        "path": "artifacts/device-v2-20261030/new-device-functional/functional-receipt.json",
+        "sha256": "44374fcb4dcdae844c0ced2539e34c031c7e95af257231300918e8a0fb6e66bd",
+        "expected": {
+          "state": "PASS",
+          "all_passed": true
+        }
+      }
+    ],
+    "source_closure": [
+      {
+        "path": "tools/device_capture_v2.py",
+        "sha256": "cd0d3b17d9bb3799fd8fa3d4f9eee1a5e1e2a2c592c3de519965d6a6512f4298"
+      },
+      {
+        "path": "tools/paired_suite_v2.py",
+        "sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965"
+      },
+      {
+        "path": "tools/paired_analysis_v2.py",
+        "sha256": "2ef27bb76af43f5165ac6cc880618d444b4076b1af364a77c04f257b6988a7ee"
+      },
+      {
+        "path": "tools/run_arm64_validation.py",
+        "sha256": "ebe8f303b2da1f428078624837dbbd220dfb9dd406f23a00bd5e2fb811294e82"
+      },
+      {
+        "path": "tools/run_paired_device.py",
+        "sha256": "e96af715bab510a4a6eccf237e095437620d4d97c7a8c670ccdca9889049a707"
+      },
+      {
+        "path": "tools/run_device_suite_v2.py",
+        "sha256": "600062b7d305fd66d5e8ec502c5c62b6b26110425fba414901e2ae4c689c0530"
+      },
+      {
+        "path": "tools/freeze_device_suite_v2.py",
+        "sha256": "bda03c3b27e568cd0261175374981e022a0ec6f7d649ac90e26d09637c13f27c"
+      },
+      {
+        "path": "tools/validate_arm64_consumers_v2.py",
+        "sha256": "68a196ddc23e15f534fb2a9b101484c1e655ae8b2ffe41d85a82c99e6b3e59a5"
+      },
+      {
+        "path": "consumers/image/perf.cpp",
+        "sha256": "900ffdbcdcc758574dd52f6f0b5a4ed2024432a760aee3ea222a512a5777b1df"
+      },
+      {
+        "path": "consumers/image/CMakeLists.txt",
+        "sha256": "75be0147444e35ac6357f3a1c22515532d4b740988a4ac79e47c1feb080a5552"
+      },
+      {
+        "path": "consumers/dex/paired_v2.cpp",
+        "sha256": "1b156fc937b05a04e2c772c876ede193a05d0d1340a93d65301f7a202c37b577"
+      },
+      {
+        "path": "consumers/dex/CMakeLists.txt",
+        "sha256": "d0e0319d00aa687e81abbad97c08eaedbb204eff6dd9d2e97b4c6b21719a3108"
+      }
+    ],
+    "host_clock_epoch_id": "memory-v2-20261030T083318Z"
+  },
+  "performance_qualified": false,
+  "BIL_auto_enable": false,
+  "frozen_at_utc": "2026-10-30T08:33:18.249935+00:00",
+  "engineering_retry_preregistration_file_sha256": "ae49fa848c7a4a4dafa83e6027236dde96b3d6ce8e834092f30e25856a0d04fe",
+  "prior_attempt_protocol_file_sha256": "f6187d9580a51be90529fec61598c9224e8a64918b25cc4436e8a5c7f660cb6f",
+  "old_attempt_pooling": false,
+  "additional_engineering_retry_allowed": false
+}
