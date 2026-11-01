@@ -53,6 +53,18 @@ jobs:
         run: python tools/verify_packed_reader.py --java-only --build-dir build/packed-java-ci --receipt artifacts/ci-packed/receipt.json
       - name: Android pressure Java lifecycle contracts
         run: python tools/verify_android_pressure.py --out-dir build/pressure-java-ci --receipt artifacts/ci-pressure/receipt.json
+      - name: Configure native pressure backend close regression
+        run: cmake -S tests/android_pressure_close -B build/pressure-backend-close-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build native pressure backend close regression
+        run: cmake --build build/pressure-backend-close-ci --config Release --parallel 2
+      - name: Verify native pressure backend close regression
+        run: ctest --test-dir build/pressure-backend-close-ci -C Release --output-on-failure
+      - name: Configure real JVM pressure close integration
+        run: cmake -S tests/pressure_real_jvm -B build/pressure-real-jvm-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build real JVM pressure close integration
+        run: cmake --build build/pressure-real-jvm-ci --config Release --parallel 2
+      - name: Verify real JVM pressure close integration
+        run: ctest --test-dir build/pressure-real-jvm-ci -C Release --output-on-failure
       - name: Android packaging ABI checks
         run: python tools/test_build_pressure_abi.py
       - name: Android candidate offline safety contracts

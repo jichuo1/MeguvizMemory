@@ -34,6 +34,10 @@ Android官方说明，API34起不再通知多数旧RUNNING/MODERATE/COMPLETE级�
 
 close需要的后台线程若未能准入，保留注册和owner并显式返回错误，可重试。VM线程附着/完成通知失败时保留可查询的已完成注册并自动重试；Java await/snapshot也可用现成JNIEnv补发通知，不把引用丢掉。该JNI模块按进程内稳定装载使用；动态classloader/DSO卸载不在本批资格内。
 
+`NativePressureBackend.beginClose()` 正常返回表示后台清理请求已接纳，不表示清理完成。在 JNI 准入调用尚未返回时，并发调用或同线程重入均抛出可重试的 `IllegalStateException`，以免上层 adapter 将未知结果记为已接纳。JNI 明确返回非零状态时可重试；若 JNI 抛出异常，准入结果未知，后端继续拒绝事件且不会盲目重复提交，后续 `beginClose()` 也报告未知。独立完成回调可以确认请求已接纳，此时才能把关闭视为已接纳；实际完成是否成功仍由 `awaitClosed` 的结果判断。
+
+原生 `mgmem_android_pressure_unregister_v1` 在后台线程尚处于启动准入时对并发调用返回 `MGMEM_BUSY`，调用方可以在该次调用返回后重试；只有线程已启动才将关闭视为受理。若线程构造失败，返回 `MGMEM_OUT_OF_MEMORY` 并恢复未受理状态。在极端的线程已启动但 `detach()` 抛异常时，reaper 仍运行，调用返回受理成功且不重复调度；为避免销毁可能仍可 join 的线程对象，线程对象及其可能的系统句柄被永久保留，不计入 domain backing。此分支不能声称全部进程资源回收，运行库仍须保持装载。
+
 完成通知若因VM线程附着或Java回调异常失败，**已有reaper线程**会以25 ms起、最高1000 ms的退避继续重试，直到正常或错误状态被单次成功发布；调用者无需继续poll。并发Java poll仍可先完成发布，单publisher保证仅有一次成功提交。Java回调若抛异常，调用可能再次发生；私有完成回调对同一结果幂等。错误状态仍隔离保留不确定引用，不因为重试超时而强制销毁。
 
 VM长期不可用时该注册保留global refs，已有reaper可无限期低频重试；每个此类注册占用一个线程及其资源，均不计入domain backing预算。**不支持在清理和通知仍在途时卸载JNI DSO**；调用方需保持运行库稳定装载。线程永久无法附着时不能声称自动关闭或正常资源归零。

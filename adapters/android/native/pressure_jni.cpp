@@ -12,9 +12,17 @@
 #include <mutex>
 #include <thread>
 
+#if defined(MGMEM_JNI_CLOSE_TEST_HOOKS)
+namespace mgmem_jni_close_test {
+void before_create();
+void before_detach(std::thread *worker);
+}
+#endif
+
 namespace {
 using u64 = uint64_t;
 constexpr u64 max_id = static_cast<u64>(std::numeric_limits<jlong>::max());
+constexpr unsigned close_open=0,close_starting=1,close_admitted=2;
 struct Holder {
     mgmem_domain *domain = nullptr;
     std::atomic<u64> active_probes{0};
@@ -40,7 +48,8 @@ struct Bridge {
     std::condition_variable changed;
     mgmem_pressure_controller *control = nullptr;
     std::shared_ptr<Holder> owned;
-    std::atomic<bool> closing{false};
+    // STARTING also rejects new events but is not yet a successful admission.
+    std::atomic<unsigned> closing{close_open};
     std::atomic<bool> ready{false};
     bool done = false;
     bool publishing = false, completion_published = false;
@@ -223,9 +232,34 @@ void reap(u64 id,const std::shared_ptr<Bridge> &state) noexcept {
 }
 mgmem_status schedule_close(u64 id) noexcept {
     auto state=bridge(id);if(!state)return MGMEM_IS_CLOSED;
-    bool expected=false;if(!state->closing.compare_exchange_strong(expected,true))return MGMEM_OK;
-    try {std::thread([state,id] {reap(id,state);}).detach();return MGMEM_OK;}
-    catch (...) {state->closing.store(false);return MGMEM_OUT_OF_MEMORY;}
+    unsigned expected=close_open;
+    if(!state->closing.compare_exchange_strong(expected,close_starting))
+        return expected==close_admitted?MGMEM_OK:MGMEM_BUSY;
+    std::thread *worker=nullptr;
+    try {
+#if defined(MGMEM_JNI_CLOSE_TEST_HOOKS)
+        mgmem_jni_close_test::before_create();
+#endif
+        // Allocate the thread object before its constructor starts the worker.
+        worker=new std::thread([state,id] {reap(id,state);});
+    } catch (...) {
+        // Construction failed: no thread exists and this admission is safe to retry.
+        state->closing.store(close_open);
+        return MGMEM_OUT_OF_MEMORY;
+    }
+    try {
+#if defined(MGMEM_JNI_CLOSE_TEST_HOOKS)
+        mgmem_jni_close_test::before_detach(worker);
+#endif
+        worker->detach();
+        delete worker;
+    } catch (...) {
+        // The worker has already started. Never retry or destroy a possibly
+        // joinable std::thread: retain its object and OS handle indefinitely.
+        // The worker still owns state and completes the usual cleanup.
+    }
+    state->closing.store(close_admitted);
+    return MGMEM_OK;
 }
 }
 

@@ -11,8 +11,12 @@ extern "C" {
 MGMEM_PRESSURE_API mgmem_status mgmem_android_pressure_register_v1(mgmem_domain *domain,
     const mgmem_domain_lifetime_v1 *lifetime, const mgmem_pressure_options_v1 *options,
     uint64_t *out_registration);
-/* Async detach/close. For external registrations it never closes the foreign
- * domain. Owned Java factory registrations include their domain's quiet close. */
+/* Async detach/close. MGMEM_OK confirms cleanup admission, not completion;
+ * MGMEM_BUSY means another admission is still in progress and may be retried.
+ * MGMEM_OUT_OF_MEMORY means worker construction failed before admission.
+ * For external registrations it never closes the foreign domain. Owned Java
+ * factory registrations include their domain's quiet close. See the Android
+ * pressure contract for lifecycle and exceptional thread-resource limits. */
 MGMEM_PRESSURE_API mgmem_status mgmem_android_pressure_unregister_v1(uint64_t registration);
 #ifdef __cplusplus
 }

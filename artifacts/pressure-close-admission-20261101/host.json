@@ -1,0 +1,21 @@
+{
+  "state": "PASS_SCOPED_HOST_REGRESSIONS_ANDROID_NOT_RUN",
+  "scope": "JAVA_AND_NATIVE_PRESSURE_CLOSE_ADMISSION_RACE",
+  "old_java_counterexample": "FAKE_JNI_CONCURRENT_ADAPTER_CLOSE_FALSE_ACCEPTANCE_REPRODUCED",
+  "old_native_counterexample": "CONTROLLED_PRE_THREAD_FAILURE_CONCURRENT_FALSE_ACCEPTANCE_REPRODUCED",
+  "java_backend_fake_jni": {"ctest_passed": 1, "ctest_total": 1, "assertions": 26},
+  "native_jni_host": {"passed": 22, "total": 22, "new_admission_cases": 3},
+  "core_host_release": {"passed": 42, "total": 42, "includes_native_jni_cases": true},
+  "real_host_jvm_jni": {"cycles": 24, "checks_passed": 264, "android_framework": "HOST_STUBS"},
+  "android_pressure_framework_stubs": {"checks_passed": 38, "android_sdk_compile": "PASS"},
+  "device_operations": 0,
+  "android_runtime": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Fake JNI and real host JVM execution with framework stubs are not Android ART or physical-device validation.",
+    "The native old-version counterexample includes only a controlled test gate before thread creation.",
+    "A started thread whose detach fails is retained with its possible OS handle and is not claimed as process-resource recovery.",
+    "Previously built Android and host candidates predate this source fix."
+  ]
+}

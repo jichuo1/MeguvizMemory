@@ -9,6 +9,9 @@ public final class NativePressureBackend implements MemoryPressureAdapter.Backen
     static { System.loadLibrary("mgmem_pressure_jni"); }
     private final long registration;
     private final AtomicBoolean closing = new AtomicBoolean();
+    private static final int CLOSE_OPEN = 0, CLOSE_ADMITTING = 1, CLOSE_ACCEPTED = 2, CLOSE_UNKNOWN = 3;
+    private final Object closeAdmission = new Object();
+    private int closePhase = CLOSE_OPEN;
     private final Object completion = new Object();
     private final long[] completedSnapshot = new long[16];
     private boolean completed;
@@ -58,11 +61,36 @@ public final class NativePressureBackend implements MemoryPressureAdapter.Backen
             return "NATIVE_SNAPSHOT_UNAVAILABLE_AFTER_CLEANUP_ERROR";
         return "UNSIGNED_NATIVE_COUNTER_EXCEEDS_JAVA_LONG";
     }
+    /** A normal return confirms cleanup admission, not cleanup completion.
+     * Concurrent or same-thread reentry while admission is in progress throws
+     * a retryable exception instead of reporting unconfirmed success. If JNI
+     * throws, admission is unknown and must not be blindly attempted again. */
     @Override public void beginClose() {
-        if (closing.compareAndSet(false,true)) {
-            int status=nativeBeginClose(registration);
-            if (status!=0) {closing.set(false);throw new IllegalStateException("cleanup admission failed: "+status);}
+        synchronized (closeAdmission) {
+            if (closePhase == CLOSE_ACCEPTED) return;
+            if (closePhase == CLOSE_ADMITTING) throw new IllegalStateException("cleanup admission in progress; retry");
+            if (closePhase == CLOSE_UNKNOWN) throw new IllegalStateException("cleanup admission outcome unknown");
+            closePhase = CLOSE_ADMITTING;
+            closing.set(true);
         }
+        int status = -1;
+        boolean returned = false;
+        try {
+            status = nativeBeginClose(registration);
+            returned = true;
+        } finally {
+            synchronized (closeAdmission) {
+                // An external unregister may already have completed and
+                // published its callback while this JNI call was in flight.
+                // Do not erase that independent confirmation on its return.
+                if (closePhase != CLOSE_ACCEPTED) {
+                    if (!returned) closePhase = CLOSE_UNKNOWN;
+                    else if (status == 0) closePhase = CLOSE_ACCEPTED;
+                    else { closePhase = CLOSE_OPEN; closing.set(false); }
+                }
+            }
+        }
+        if (status != 0) throw new IllegalStateException("cleanup admission failed: " + status);
     }
     @Override public boolean awaitClosed(long timeoutMillis) {
         if (timeoutMillis < 0 || timeoutMillis > 60_000) throw new IllegalArgumentException("bounded timeout required");
@@ -81,7 +109,10 @@ public final class NativePressureBackend implements MemoryPressureAdapter.Backen
         nativePollCompletion(registration);
         synchronized(completion) {return completed && completionStatus==0;}
     }
-    private void onNativeClosed(int status) { synchronized(completion) {completionStatus=status;completed=true;completion.notifyAll();} }
+    private void onNativeClosed(int status) {
+        synchronized (closeAdmission) { closePhase = CLOSE_ACCEPTED; closing.set(true); }
+        synchronized(completion) {completionStatus=status;completed=true;completion.notifyAll();}
+    }
     @Override public void close() { beginClose(); }
     // Diagnostic leases expose no address or Java ByteBuffer. Their separate
     // owner registry lets the last lease finish even after backend close.

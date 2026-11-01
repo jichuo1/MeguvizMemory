@@ -8,6 +8,13 @@
 #include <string>
 #include <vector>
 #include <mgmem/pressure.h>
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+namespace mgmem_jni_close_test {
+void before_create();
+void before_detach(std::thread *worker);
+}
 // A narrow test-only seam. The worker/controller and Memory remain real;
 // only the JNI reaper's observation can be made to fail or report bad data.
 namespace {
@@ -23,10 +30,30 @@ mgmem_status test_pressure_snapshot(mgmem_pressure_controller *control,mgmem_pre
 }
 }
 #define mgmem_pressure_snapshot_v1_get test_pressure_snapshot
+#define MGMEM_JNI_CLOSE_TEST_HOOKS 1
 // Compile the real production composition with JDK JNI headers. Function tables
 // below emulate only VM operations; the pressure worker and Memory are real.
 #include "../adapters/android/native/pressure_jni.cpp"
+#undef MGMEM_JNI_CLOSE_TEST_HOOKS
 #undef mgmem_pressure_snapshot_v1_get
+
+namespace mgmem_jni_close_test {
+std::mutex gate;
+std::condition_variable changed;
+bool block_create=false,create_entered=false,release_create=false,fail_create=false,fail_detach=false;
+std::thread *retained_worker=nullptr;
+void before_create() {
+    std::unique_lock<std::mutex> lock(gate);
+    if(!block_create)return;
+    create_entered=true;changed.notify_all();
+    if(!changed.wait_for(lock,std::chrono::seconds(3),[]{return release_create;}))throw std::bad_alloc();
+    if(fail_create)throw std::bad_alloc();
+}
+void before_detach(std::thread *worker) {
+    std::lock_guard<std::mutex> lock(gate);
+    if(fail_detach) {retained_worker=worker;throw std::runtime_error("injected detach failure");}
+}
+}
 
 namespace test {
 struct Fixture {
@@ -166,6 +193,73 @@ template <typename Predicate> bool bounded_wait(Predicate predicate,int millisec
     do {if(predicate())return true;std::this_thread::sleep_for(std::chrono::milliseconds(2));}
     while(std::chrono::steady_clock::now()<end);
     return predicate();
+}
+void close_test_release(void *p) {
+    auto &f=*static_cast<Fixture *>(p);
+    ++f.lifetime_releases;
+    if(!mgmem_jni_close_test::fail_detach)return;
+    std::unique_lock<std::mutex> lock(f.gate);
+    f.entered=true;f.changed.notify_all();
+    if(!f.changed.wait_for(lock,std::chrono::seconds(3),[&]{return f.resume.load();}))std::_Exit(8);
+}
+bool close_admission_case(Fixture &f,bool fail_create,bool fail_detach) {
+    mgmem_domain *domain=nullptr;
+    mgmem_domain_options_v1 options{sizeof(options),1,1,0,MGMEM_SYSTEM,0,4096,0,nullptr};
+    if(mgmem_domain_create_v1(&options,&domain)!=MGMEM_OK)return false;
+    mgmem_domain_lifetime_v1 life{sizeof(life),1,&f,&lifetime_retain,&close_test_release};
+    mgmem_pressure_options_v1 policy{sizeof(policy),1,4096,2048,0,1,0};
+    if(mgmem_android_pressure_register_v1(domain,&life,&policy,&f.id)!=MGMEM_OK)return false;
+    f.state=bridge(f.id);
+    {
+        std::lock_guard<std::mutex> lock(mgmem_jni_close_test::gate);
+        mgmem_jni_close_test::block_create=true;
+        mgmem_jni_close_test::create_entered=false;
+        mgmem_jni_close_test::release_create=false;
+        mgmem_jni_close_test::fail_create=fail_create;
+        mgmem_jni_close_test::fail_detach=fail_detach;
+        mgmem_jni_close_test::retained_worker=nullptr;
+    }
+    mgmem_status first=MGMEM_PROVIDER_ERROR;
+    std::thread caller([&]{first=mgmem_android_pressure_unregister_v1(f.id);});
+    bool entered=false;
+    {
+        std::unique_lock<std::mutex> lock(mgmem_jni_close_test::gate);
+        entered=mgmem_jni_close_test::changed.wait_for(lock,std::chrono::seconds(2),[]{return mgmem_jni_close_test::create_entered;});
+    }
+    const auto concurrent=mgmem_android_pressure_unregister_v1(f.id);
+    const auto during_notify=JNI_NAME(nativeNotify)(nullptr,nullptr,static_cast<jlong>(f.id),MGMEM_PRESSURE_NORMAL);
+    {
+        std::lock_guard<std::mutex> lock(mgmem_jni_close_test::gate);
+        mgmem_jni_close_test::release_create=true;mgmem_jni_close_test::changed.notify_all();
+    }
+    caller.join();
+    bool retry=true;
+    if(fail_create) {
+        const auto after_failure=JNI_NAME(nativeNotify)(nullptr,nullptr,static_cast<jlong>(f.id),MGMEM_PRESSURE_NORMAL);
+        {
+            std::lock_guard<std::mutex> lock(mgmem_jni_close_test::gate);
+            mgmem_jni_close_test::block_create=false;
+        }
+        retry=first==MGMEM_OUT_OF_MEMORY && after_failure!=MGMEM_IS_CLOSED &&
+              mgmem_android_pressure_unregister_v1(f.id)==MGMEM_OK;
+    } else if(fail_detach) {
+        const bool release_entered=bounded_wait([&]{return f.entered.load();},2000);
+        const auto accepted_again=mgmem_android_pressure_unregister_v1(f.id);
+        retry=first==MGMEM_OK && release_entered && accepted_again==MGMEM_OK &&
+              mgmem_jni_close_test::retained_worker!=nullptr;
+        f.resume=true;f.changed.notify_all();
+    } else retry=first==MGMEM_OK;
+    if(!bounded_wait([&]{return !exists(f.id);},3000))std::_Exit(9);
+    if(fail_detach) {
+        // Test-only recovery of the deliberately retained thread object; real
+        // production cannot safely infer detach outcome and does not retry.
+        auto *worker=mgmem_jni_close_test::retained_worker;
+        if(worker) {if(worker->joinable())worker->join();delete worker;}
+    }
+    const bool paired=f.lifetime_retains==1 && f.lifetime_releases==1;
+    const bool clean=mgmem_domain_begin_close_v1(domain)==MGMEM_OK && mgmem_domain_collect_v1(domain)==MGMEM_OK &&
+        mgmem_domain_drain_v1(domain,0)==MGMEM_OK && mgmem_domain_destroy_v1(domain)==MGMEM_OK;
+    return entered && concurrent==MGMEM_BUSY && during_notify==MGMEM_IS_CLOSED && retry && paired && clean;
 }
 bool binding_exception_matrix() {
     for(int bind=0;bind!=2;++bind)for(int step=0;step!=6;++step) {
@@ -350,7 +444,10 @@ int main(int argc,char **argv) {
     if(argc!=2)return 2;
     initialize();Fixture f;active=&f;const std::string test_case=argv[1];
     bool pass=false;
-    if(test_case=="binding-exception-matrix") {
+    if(test_case=="close-admission-create-fail" || test_case=="close-admission-detach-fail" ||
+       test_case=="close-admission-success") {
+        pass=close_admission_case(f,test_case=="close-admission-create-fail",test_case=="close-admission-detach-fail");
+    } else if(test_case=="binding-exception-matrix") {
         pass=binding_exception_matrix();active=&f;
     } else if(test_case=="snapshot-error-external" || test_case=="snapshot-error-owned" ||
               test_case=="snapshot-state-external" || test_case=="snapshot-state-owned" ||

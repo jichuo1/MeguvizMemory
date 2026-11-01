@@ -2,6 +2,11 @@
 
 最近补充：2026-11-01。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 压力关闭准入竞争修复（2026-11-01）
+
+- 修复 Java backend 和原生 JNI 两层竞争：后台线程启动尚未确认时，并发关闭不得误报已受理；明确失败可重试，JNI 异常未知时不盲目重试，独立完成回调可确认受理。极端线程已启动但 detach 抛异常时保守保留线程对象和可能的系统句柄。[合同](docs/ANDROID_PRESSURE.md)
+- [宿主旧新对照](artifacts/pressure-close-admission-20261101/host.json)复现两层旧版误报；修复后 Java fake-JNI 26 项断言、native JNI 22 项用例、完整核心 42 项及 framework stub 38 项通过，真实宿主 JVM/JNI 组合验证 24 周期、264 项检查，真实 Android SDK 源码编译通过。此前 `2e25092` Android 候选、`085cc13` Linux 候选和真机短测均早于本修复，不能作为修复后制品或设备资格；新源码仍需重建及按范围验证。
+
 ## 统一验证准备（2026-11-01）
 
 - 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查；arm64 后续真机短测见下，x86_64 尚无本诊断运行证据。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)

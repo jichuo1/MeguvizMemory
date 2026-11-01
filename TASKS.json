@@ -1278,6 +1278,17 @@
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/android-candidate-20261101/candidate.json"
   },
+  "pressure_close_admission_20261101": {
+    "parents": ["MM-007", "MM-009", "MM-015"],
+    "state": "TWO_LAYER_ADMISSION_RACE_FIXED_SCOPED_HOST_TESTS_PASS_ANDROID_PENDING",
+    "java_host": "FAKE_JNI_26_ASSERTIONS_OLD_FALSE_ACCEPTANCE_REPRODUCED",
+    "native_host": "FAKE_JNI_22_CASES_3_ADMISSION_OLD_FALSE_ACCEPTANCE_REPRODUCED",
+    "real_jvm_jni_host": "TWENTY_FOUR_CYCLES_264_CHECKS_ANDROID_FRAMEWORK_STUBS",
+    "android": "NOT_RUN_FOR_FIX",
+    "candidates": "PREVIOUS_ANDROID_AND_HOST_CANDIDATES_PREDATE_FIX",
+    "contract": "docs/ANDROID_PRESSURE.md",
+    "evidence": "artifacts/pressure-close-admission-20261101/host.json"
+  },
   "pressure_races_20261101": {
     "parents": ["MM-007", "MM-009", "MM-015"],
     "state": "FIXED_SCOPED_HOST_REGRESSIONS_PASS_UNIFIED_DEVICE_VALIDATION_PENDING",

@@ -315,6 +315,14 @@
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/android-candidate-20261101/candidate.json"
   },
+  "pressure_close_admission_20261101": {
+    "java": "IN_FLIGHT_ACCEPTED_UNKNOWN_DISTINCT_HOST_REGRESSION_PASS",
+    "native": "STARTING_BUSY_ADMITTED_DISTINCT_HOST_REGRESSION_PASS",
+    "real_jvm_jni_host": "TWENTY_FOUR_CYCLES_264_CHECKS_ANDROID_FRAMEWORK_STUBS",
+    "android": "NOT_RUN_FOR_FIX",
+    "candidates": "PREVIOUS_ANDROID_AND_HOST_CANDIDATES_PREDATE_FIX",
+    "evidence": "artifacts/pressure-close-admission-20261101/host.json"
+  },
   "pressure_races_20261101": {
     "native_attach": "FOUR_VERSION_PAIRS_OLD_STALE_BUDGET_NEW_BUSY",
     "java_close": "CONCURRENT_CLOSE_RETRYABLE_SAME_THREAD_REENTRY_SAFE",
