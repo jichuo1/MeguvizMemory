@@ -272,10 +272,20 @@
   "managed_domain_20261101": {
     "host": "MANAGED_47_JAVA_IMAGE_12_POSITIVE_8_NEGATIVE_NO_SIDECAR_PASS",
     "android": "THREE_ABI_SANITIZED_CANDIDATES_ARM64_R8_STATIC_ONLY_NO_ART_OR_DEVICE",
-    "automatic_pressure": "NOT_INTEGRATED",
+    "automatic_pressure": "NOT_INTEGRATED_AT_THIS_SNAPSHOT_SEE_MANAGED_PRESSURE_20261101",
     "performance": "NOT_MEASURED",
     "release": "NOT_QUALIFIED",
     "evidence": "artifacts/managed-domain-20261101/README.md",
     "host_ci": "PASS_WINDOWS_LINUX_MANAGED_47_JAVA_IMAGE_12_PLUS_8_ON_92b419f"
+  },
+  "managed_pressure_20261101": {
+    "implementation": "OPT_IN_SAME_DOMAIN_V2_BUDGET_ARBITRATION_AND_BOUNDED_EVENTS",
+    "host": "WINDOWS_CORE_39_MANAGED_49_STUB_38_AND_INSTALLED_IMAGE_12_PLUS_12_PLUS_10_PASS",
+    "host_ci": "WINDOWS_LINUX_CORE_39_MANAGED_49_IMAGE_12_PLUS_12_PLUS_10_PASS_ON_d90f9d8",
+    "android": "NOT_RUN_FOR_THIS_SOURCE",
+    "performance": "NOT_MEASURED",
+    "BIL": "NOT_INTEGRATED",
+    "release": "NOT_QUALIFIED",
+    "evidence": "artifacts/managed-pressure-20261101/host.json"
   }
 }

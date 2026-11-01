@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "tested_commit": "d90f9d85b70d9a3ce6e0f494a978b3579004334c",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41278653859",
+  "profiles": [
+    {"name": "verify (windows-latest)", "conclusion": "success", "core_ctest": 39, "managed_ctest": 49, "java_image_default": 12, "java_image_synthetic_pressure": 12, "java_image_negative": 10},
+    {"name": "verify (ubuntu-latest)", "conclusion": "success", "core_ctest": 39, "managed_ctest": 49, "java_image_default": 12, "java_image_synthetic_pressure": 12, "java_image_negative": 10}
+  ],
+  "limits": [
+    "Host tests and Android framework stubs do not establish Android ART, R8 runtime, actual system callback delivery or physical-device qualification.",
+    "Synthetic pressure and logical backing do not establish performance, process RSS/PSS or energy improvements.",
+    "The tested source does not yet have a matching distributable Android artifact."
+  ]
+}
