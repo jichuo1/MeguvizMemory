@@ -1,0 +1,21 @@
+{
+  "state": "INCOMPLETE_NO_QUALIFIED_CAPTURE_OR_REPLAY",
+  "input_scope": "HISTORICAL_USER_AUTHORIZED_REAL_DEX_OFFLINE_ONLY",
+  "input_bytes": 10540184,
+  "source_identity": "MATCHED_PRIOR_FROZEN_PROTOCOL_LOCALLY",
+  "baseline_first_case": {"variant": "D-C0", "case": "normal", "status": "SUCCESS", "method_count": 54147},
+  "instrumented_first_case": {"status": "INCOMPLETE", "reason": "trace_incomplete", "method_count": 54147},
+  "completed_pairs": 0,
+  "planned_pairs": 20,
+  "capture_receipt": "NOT_CREATED",
+  "replay_receipt": "NOT_CREATED",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "The recorder combined event limit, input span/range, scope and output failures under the same reason; the precise cause is unknown.",
+    "The maximum configured events was 1000000; no inference is made that this limit was reached.",
+    "The baseline source count is a scoped host execution, not a BIL product integration or performance result.",
+    "Raw input, identifiers, local paths, logs and incomplete output remain private."
+  ]
+}

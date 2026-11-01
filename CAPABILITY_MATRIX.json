@@ -352,6 +352,8 @@
     "paired_consumer_host": "artifacts/dex-metadata-trace-20261101/paired-host.json",
     "paired_consumer_ci": "artifacts/dex-metadata-trace-20261101/paired-ci-fd420a2.json",
     "paired_replay_host": "artifacts/dex-metadata-trace-20261101/paired-replay-host.json",
+    "paired_replay_ci": "artifacts/dex-metadata-trace-20261101/replay-ci-812ce41.json",
+    "real_dex_first_attempt": "artifacts/dex-metadata-trace-20261101/real-dex-first-attempt.json",
     "contract": "consumers/dex_trace/README.md",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },

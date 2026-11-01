@@ -1,0 +1,10 @@
+{
+  "state": "PASS_SCOPED_HOST_CI",
+  "source_commit": "812ce4162382f4cf1a638eb0f5b57032ad6c1f42",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41296653045",
+  "windows": {"coordinator_tests": 17, "worker_tests": 11, "skipped": 0},
+  "linux": {"coordinator_tests": 17, "worker_tests": 11, "skipped": 0},
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": ["Host CI checks the offline contracts and does not prove product DEX or Android device qualification."]
+}
