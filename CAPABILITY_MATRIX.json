@@ -337,6 +337,7 @@
     "arm64_profile_consumer_host": "artifacts/pressure-close-admission-20261101/arm64-profile-consumer-host.json",
     "arm64_profile_consumer_deadline_host": "artifacts/pressure-close-admission-20261101/arm64-profile-consumer-deadline-host.json",
     "profile_suite_preparation_host": "artifacts/pressure-close-admission-20261101/profile-suite-preparation-host.json",
+    "profile_suite_ci": "artifacts/pressure-close-admission-20261101/profile-suite-ci-f19ebe4.json",
     "stability_profile_ci": "artifacts/pressure-close-admission-20261101/stability-profile-ci-b9ada4c.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },

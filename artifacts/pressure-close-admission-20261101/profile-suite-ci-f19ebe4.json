@@ -1,0 +1,12 @@
+{
+  "state": "PASS_HOST_CI",
+  "code_commit": "f19ebe4989ad2e59e17b1cfa6d7db070d1e7c513",
+  "workflow": "core-and-installed-image",
+  "run_url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41305280177",
+  "jobs": {"ubuntu-latest": "PASS", "windows-latest": "PASS"},
+  "scope": "HOST_BUILDS_AND_OFFLINE_CONTRACTS_NOT_ANDROID_DEVICE_OR_PERFORMANCE",
+  "limits": [
+    "This result verifies the referenced code commit, not subsequent changes.",
+    "Host CI does not establish a device run, long stability, or performance qualification."
+  ]
+}
