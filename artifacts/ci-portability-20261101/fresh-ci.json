@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_WINDOWS_AND_LINUX_CI",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41273022264",
+  "tested_commit": "17aee94265c84cf0af00c0458383a950febbc4ae",
+  "jobs": [
+    {
+      "name": "verify (windows-latest)",
+      "conclusion": "success",
+      "independent_checks": {
+        "Historical paired archive audit": "success",
+        "Paired suite offline checks": "success",
+        "Follow-up preview contract checks": "success",
+        "Verify Android borrow host-only diagnostic": "success",
+        "Verify installed Java image consumer": "success"
+      }
+    },
+    {
+      "name": "verify (ubuntu-latest)",
+      "conclusion": "success",
+      "independent_checks": {
+        "Historical paired archive audit": "success",
+        "Paired suite offline checks": "success",
+        "Follow-up preview contract checks": "success",
+        "Verify Android borrow host-only diagnostic": "success",
+        "Verify installed Java image consumer": "success"
+      }
+    }
+  ],
+  "tested_source_lock_sha256": "131c9acdc3a7ffdffead0a470b99af0632c29888ced7930165dfa782917e3775",
+  "key_tested_files_match_source_lock": [
+    ".gitattributes",
+    ".github/workflows/core.yml",
+    "tests/android_borrow/host_stub/run_host_probe.py",
+    "tests/android_borrow/host_stub/test_host_launcher.py",
+    "tools/package_followup_preview.py",
+    "tools/test_package_followup_preview.py"
+  ],
+  "old_linux_stderr": "UNKNOWN_NOT_RECORDED",
+  "device_execution": "NOT_PERFORMED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Passing host CI does not prove Android ART, device, product, performance or release qualification.",
+    "The old CI stderr was not captured; the new passing run does not establish its exact contents.",
+    "Key file hashes match the tested commit; this is not a signed build attestation."
+  ]
+}

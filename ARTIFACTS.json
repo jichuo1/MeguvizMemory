@@ -426,10 +426,13 @@
     "windows_latest": "HOST_CHECKED_SDK_AND_JNI_BUILT_SCOPED_HOST_ONLY"
   },
   "ci_portability_20261101": {
-    "state": "REPAIR_IN_PROGRESS_AWAITING_FRESH_CI",
+    "state": "PASS_SCOPED_WINDOWS_AND_LINUX_CI_FOR_TESTED_COMMIT",
     "initial_observations": "artifacts/ci-portability-20261101/initial-observations.json",
     "source_lock": "artifacts/ci-portability-20261101/SOURCE_LOCK.json",
     "existing_preview": "PRESERVED_PRE_CI_REPAIR_SOURCE_SNAPSHOT",
-    "device_execution": "NOT_PERFORMED"
+    "device_execution": "NOT_PERFORMED",
+    "tested_commit": "17aee94265c84cf0af00c0458383a950febbc4ae",
+    "fresh_ci_evidence": "artifacts/ci-portability-20261101/fresh-ci.json",
+    "source_lock_scope": "OBSERVED_INPUTS_FOR_TESTED_COMMIT_NOT_LATER_DOCUMENTATION"
   }
 }

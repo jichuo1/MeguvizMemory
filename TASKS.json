@@ -1219,6 +1219,7 @@
     "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json",
     "windows_latest": "SHARED_SDK_HOST_JNI_REBUILT_INSTALLED_HOST_CHECKS_ONLY",
     "android_borrow_v2": "HOST_STUB_62_AND_R8_BUILD_ONLY_NO_ART_OR_DEVICE",
-    "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED"
+    "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED",
+    "ci_portability": "PASS_WINDOWS_AND_LINUX_ON_17aee942_EXACT_STEPS_SEPARATE_NO_DEVICE"
   }
 }

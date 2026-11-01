@@ -9,3 +9,5 @@ Windows 的预览包单元测试报桥源码哈希不匹配。同一任务中更
 宿主桩对 JDK 24+ 使用受限对照：先无选项运行并只接受完整已知 native-access 警告或空 stderr，未知错误仍失败；再显式启用 classpath native access 执行正式检查，正式轮要求 stderr 为空。失败诊断只记录固定类别和哈希，不公开捕获的路径或原始日志。JDK 17 不接收新选项。此兼容仅用于宿主测试，不是 Android ART、设备或生产路径资格。
 
 已有预览包及其源码锁保留为当时的快照，不能声称包含本次 CI 修复；其中的库二进制没有因为这些测试脚本或 Git 属性修改而自动获得新的运行资格。
+
+后续提交 `17aee94265c84cf0af00c0458383a950febbc4ae` 的[新 CI](https://github.com/jichuo1/MeguvizMemory/actions/runs/41273022264)在 Windows 和 Linux 均通过；历史归档审计、配对套件、预览包合同、宿主桩诊断及独立安装 Java 图像消费者分别通过。关键测试源码与当时源码锁的字节一致，见[脱敏记录](../artifacts/ci-portability-20261101/fresh-ci.json)。成功测试的控制轮输出未进入公开 CI 日志，因此先前 Linux stderr 的具体内容仍未知，不能倒推为已证实的 JDK 警告。
