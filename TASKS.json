@@ -1247,5 +1247,31 @@
     "BIL": "NOT_INTEGRATED",
     "evidence": "artifacts/managed-pressure-20261101/host.json",
     "contract": "docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md"
+  },
+  "multi_arena_diagnostic_20261101": {
+    "parent": "MM-021",
+    "state": "IMPLEMENTED_SCOPED_HOST_FUNCTIONAL_NOT_TLB_QUALIFIED",
+    "workload": "SINGLE_THREAD_MULTI_ARENA_OWNED_DENSE_GROUPED_AND_INTERLEAVED",
+    "host": "WINDOWS_FIVE_POSITIVE_EIGHT_NEGATIVE_PASS",
+    "android_device": "NOT_RUN",
+    "performance": "NOT_MEASURED",
+    "mechanism": "INCONCLUSIVE",
+    "evidence": "artifacts/multi-arena-20261101/host.json",
+    "contract": "bench/TLB_MULTI_ARENA.md"
+  },
+  "android_managed_sample_20261101": {
+    "state": "SOURCE_IMPLEMENTED_HOST_STUB_AND_ANDROID_SDK_COMPILE_ONLY",
+    "aar_consumer": "NEW_AAR_NOT_YET_AVAILABLE",
+    "android_runtime": "NOT_RUN",
+    "performance": "NOT_MEASURED",
+    "contract": "consumers/android_managed/README.md"
+  },
+  "android_candidate_builder_20261101": {
+    "parent": "MM-001",
+    "state": "IMPLEMENTED_THREE_ABI_DEVELOPMENT_BUILD_PASS_FINAL_SNAPSHOT_PENDING",
+    "offline_contracts": "FOURTEEN_PASS",
+    "device": "NOT_RUN",
+    "formal_release": "NOT_QUALIFIED",
+    "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
   }
 }

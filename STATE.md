@@ -2,6 +2,12 @@
 
 最近补充：2026-11-01。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 多域诊断与 Android 接入示例（2026-11-01）
+
+- 新增 [MM-021 多域 Arena 诊断](bench/TLB_MULTI_ARENA.md)，以相同工作量比较两种访问顺序，检查预算、持有 lease 时关闭及最后归零；Windows 宿主 5 个正例与 8 个拒绝路径通过。它是单线程功能工具，不证明 TLB 机制或性能收益。[限定证据](artifacts/multi-arena-20261101/host.json)
+- 新增[独立 Android 使用示例](consumers/android_managed/README.md)，显式处理后台注册、合成压力票据、注销与关闭；宿主 JNI 和 framework 类型桩通过，真实 Android SDK 的源码编译已完成。新版 AAR 编译、ART、真机和 R8 运行仍须分别验证。
+- 新增[Android 工程候选构建器](docs/ANDROID_CANDIDATE_BUILDER.md)，从独立源码快照构建并检查三 ABI AAR 与 SDK；开发轮和 14 项离线合同检查通过，尚待用最终冻结源码生成本批候选。构建和脱敏检查不替代设备或正式发布资格。
+
 ## 托管域同域压力继续开发（2026-11-01）
 
 - 新增显式选用的同域压力绑定：手动预算和压力事件由同一控制器仲裁；事件排队、应用、失败、取消与过期分开观察。关闭先结束压力控制器，再清理托管域；已有租约不被强制释放。Android 回调桥提供拒绝计数和最近状态，但回调路径会取短锁，不承诺硬实时。见[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。

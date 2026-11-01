@@ -247,5 +247,16 @@
     "mechanism": "NOT_ESTABLISHED",
     "report": "artifacts/arm64-20261030/paired-retry1/report.json",
     "tlb_profile_selected": false
+  },
+  "multi_arena_functional_20261101": {
+    "state": "SCOPED_HOST_FUNCTIONAL_PASS",
+    "source": "bench/tlb_multi_arena.cpp",
+    "contract": "bench/TLB_MULTI_ARENA.md",
+    "evidence": "artifacts/multi-arena-20261101/host.json",
+    "scope": "SINGLE_THREAD_PHASE_INTERLEAVING_OWNED_ARENA_NO_HINT_OR_SPECIAL_PLACEMENT",
+    "original_matrix_record": "HISTORICAL_20261030_REMAINING_LIST_PRESERVED",
+    "device": "NOT_RUN",
+    "mechanism": "INCONCLUSIVE",
+    "performance": "NOT_MEASURED"
   }
 }

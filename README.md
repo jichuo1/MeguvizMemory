@@ -1,12 +1,14 @@
 # MeguvizMemory
 
-显式 CPU 内存域、System provider、有界 arena 和可验证的所有权/借用合同。当前版本为 **0.2.0 功能工程预览**，公共原生接口使用 `mgmem_*_v1` / ABI 1.1。独立于 BIL、Xposed、GPU 后端及 Android UI；不接管进程全局 allocator。
+显式 CPU 内存域、System provider、有界 arena 和可验证的所有权/借用合同。当前版本为 **0.2.0 功能工程预览**，核心原生接口使用 `mgmem_*_v1` / ABI 1.1，压力适配另提供可选的 v2 接口。独立于 BIL、Xposed、GPU 后端及 Android UI；不接管进程全局 allocator。
 
 继续开发：新增可选的外部释放状态检查、Java 受控字节 lease，以及独立的 Compute CPU 只读桥；宿主功能检查通过，新增 Android 运行、R8 和性能资格仍待验证。见[开发状态](STATE.md)。
 
 后续源码还补充了 C++ checked 导入、Java 关闭状态与独立 Java 图像消费者；此前预览包不包含这些改动。[当前证据](artifacts/continuation-next-20261101/README.md)。
 
 最新源码提供可选 Java 托管 System/Arena 域及同域压力绑定，图像消费者已迁移并增加显式压力场景；宿主检查通过，匹配新版的 Android 制品及运行验证仍待完成。[托管域合同](docs/ANDROID_MANAGED_DOMAIN.md)、[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
+
+新版还提供 [Android 后台使用示例](consumers/android_managed/README.md)和[多域 Arena 功能诊断](bench/TLB_MULTI_ARENA.md)；宿主或源码编译通过不代表 Android 运行、硬件机制或性能资格。
 
 首个0.2功能阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
 上一消费者阶段（closefix1）完成DEX外部导入、图像压力/预算/异步关闭及原生900秒循环；当时JNI可重入锁修复后的API33 Android长稳未获资格。旧阶段结果见[交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)，不覆盖下述新版验证。

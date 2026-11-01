@@ -14,6 +14,12 @@ jobs:
         run: cmake --build build/core --config Release --parallel 2
       - name: Core safety verification
         run: ctest --test-dir build/core -C Release --output-on-failure
+      - name: Multi-arena diagnostic contracts (Linux)
+        if: runner.os == 'Linux'
+        run: python bench/test_tlb_multi_arena.py --exe build/core/mgmem_tlb_multi_arena --runtime-dir build/core
+      - name: Multi-arena diagnostic contracts (Windows)
+        if: runner.os == 'Windows'
+        run: python bench/test_tlb_multi_arena.py --exe build/core/Release/mgmem_tlb_multi_arena.exe --runtime-dir build/core/Release
       - name: Configure checked C++ adapter contracts
         run: cmake -S tests/cpp_checked -B build/cpp-checked-ci -DCMAKE_BUILD_TYPE=Release
       - name: Build checked C++ adapter contracts
@@ -43,12 +49,16 @@ jobs:
         run: python tools/verify_android_pressure.py --out-dir build/pressure-java-ci --receipt artifacts/ci-pressure/receipt.json
       - name: Android packaging ABI checks
         run: python tools/test_build_pressure_abi.py
+      - name: Android candidate offline safety contracts
+        run: python tools/test_build_android_candidate.py
       - name: Feature preview privacy scanner checks
         run: python tools/test_package_feature_preview.py
       - name: Follow-up preview contract checks
         run: python tools/test_package_followup_preview.py
       - name: Android borrow diagnostic protocol checks
         run: python tools/test_android_borrow_round.py
+      - name: Managed Android sample AAR structure checks
+        run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture
         run: cmake -S tests/borrow_host -B build/borrow-jni-ci -DCMAKE_BUILD_TYPE=Release
       - name: Build host JNI borrowing fixture
@@ -61,6 +71,12 @@ jobs:
         run: cmake --build build/managed-host-ci --config Release --parallel 2
       - name: Verify managed domain host contracts
         run: ctest --test-dir build/managed-host-ci -C Release --output-on-failure
+      - name: Verify managed Android sample with host stubs (Linux)
+        if: runner.os == 'Linux'
+        run: python consumers/android_managed/verify_host.py --fixture-classes build/managed-host-ci/classes --fixture-jni build/managed-host-ci/plain --out-dir build/android-managed-sample-ci
+      - name: Verify managed Android sample with host stubs (Windows)
+        if: runner.os == 'Windows'
+        run: python consumers/android_managed/verify_host.py --fixture-classes build/managed-host-ci/classes --fixture-jni build/managed-host-ci/plain/Release --out-dir build/android-managed-sample-ci
       - name: Configure Android borrow host-only diagnostic
         run: cmake -S tests/android_borrow/host_stub -B build/android-borrow-stub-ci -DCMAKE_BUILD_TYPE=Release
       - name: Build Android borrow host-only diagnostic

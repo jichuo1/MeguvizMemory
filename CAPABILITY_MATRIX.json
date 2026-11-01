@@ -287,5 +287,28 @@
     "BIL": "NOT_INTEGRATED",
     "release": "NOT_QUALIFIED",
     "evidence": "artifacts/managed-pressure-20261101/host.json"
+  },
+  "multi_arena_diagnostic_20261101": {
+    "implementation": "OWNED_MULTI_ARENA_GROUPED_AND_INTERLEAVED_SINGLE_THREAD_DIAGNOSTIC",
+    "host": "WINDOWS_FIVE_POSITIVE_EIGHT_NEGATIVE_PASS",
+    "device": "NOT_RUN",
+    "mechanism": "INCONCLUSIVE",
+    "performance": "NOT_MEASURED",
+    "evidence": "artifacts/multi-arena-20261101/host.json"
+  },
+  "android_managed_sample_20261101": {
+    "implementation": "OPTIONAL_ANDROID_SOURCE_CONSUMER",
+    "host": "JVM_JNI_SYNTHETIC_ANDROID_STUBS_PASS",
+    "android_sdk_compile": "SOURCE_BUILT_CLASSES_ONLY",
+    "aar_consumer": "NEW_AAR_NOT_YET_AVAILABLE",
+    "device": "NOT_RUN",
+    "performance": "NOT_MEASURED"
+  },
+  "android_candidate_builder_20261101": {
+    "implementation": "SOURCE_LOCKED_THREE_ABI_ANDROID_AAR_AND_NATIVE_SDK_BUILDER",
+    "development_build": "STATIC_CHECKS_PASS_FINAL_SNAPSHOT_PENDING",
+    "device": "NOT_RUN",
+    "release": "NOT_QUALIFIED",
+    "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
   }
 }

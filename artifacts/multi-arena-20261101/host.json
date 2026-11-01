@@ -1,0 +1,21 @@
+{
+  "state": "PASS_SCOPED_WINDOWS_HOST_FUNCTIONAL",
+  "scope": "MULTI_ARENA_OWNED_NORMAL_LAYOUT_ONLY",
+  "positive_cases": 5,
+  "negative_cases": 8,
+  "source_sha256": {
+    "bench/tlb_multi_arena.cpp": "57871fba0c992816c2c5427a0582c4c362168eea4ff11699f70093497dcac0b2",
+    "bench/test_tlb_multi_arena.py": "f091576126578bfd98d2055ed9b17ea47042c45ac4f973e8d8e4f6e9859a1b48",
+    "bench/TLB_MULTI_ARENA.md": "78f9911cc98ee4e1e279619a2b3ede8d3328592dae4fec5e119cd10355a68444",
+    "CMakeLists.txt": "432a43006c8f482d5bf0fc69190da44b6885ea4d9a926bb4a39106dfc09262df"
+  },
+  "binary_sha256": "34bb844d320c36b427120e970b9f7ff48d13b1e11883f6c50ebc31107d0f0f8e",
+  "performance": "NOT_MEASURED",
+  "mechanism": "INCONCLUSIVE",
+  "device": "NOT_RUN",
+  "limits": [
+    "No hardware TLB, physical contiguity or product performance claim.",
+    "Backing/payload accounting is not process RSS/PSS.",
+    "Single-thread phase interleaving is not concurrent access qualification."
+  ]
+}
