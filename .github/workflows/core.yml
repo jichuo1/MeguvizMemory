@@ -73,6 +73,10 @@ jobs:
         run: python tools/test_android_managed_round.py
       - name: Android managed diagnostic builder contracts
         run: python tools/test_build_android_managed_probe.py
+      - name: Android managed stability builder contracts
+        run: python tools/test_build_android_managed_stability_probe.py
+      - name: Android managed stability runner contracts
+        run: python tools/test_android_managed_stability_round.py
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture
@@ -93,6 +97,12 @@ jobs:
         run: cmake --build build/android-managed-probe-ci --config Release --parallel 2
       - name: Verify managed diagnostic host stubs
         run: ctest --test-dir build/android-managed-probe-ci -C Release --output-on-failure
+      - name: Configure managed stability host stubs
+        run: cmake -S tests/android_managed_stability/host_stub -B build/android-managed-stability-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build managed stability host stubs
+        run: cmake --build build/android-managed-stability-ci --config Release --parallel 2
+      - name: Verify managed stability host stubs
+        run: ctest --test-dir build/android-managed-stability-ci -C Release --output-on-failure
       - name: Verify managed Android sample with host stubs (Linux)
         if: runner.os == 'Linux'
         run: python consumers/android_managed/verify_host.py --fixture-classes build/managed-host-ci/classes --fixture-jni build/managed-host-ci/plain --out-dir build/android-managed-sample-ci

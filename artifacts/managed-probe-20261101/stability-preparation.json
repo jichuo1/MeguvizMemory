@@ -1,0 +1,31 @@
+{
+  "state": "HOST_AND_R8_BUILD_ONLY_DEVICE_NOT_RUN",
+  "scope": "ISOLATED_MANAGED_STABILITY_DIAGNOSTIC",
+  "candidate_source_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "host_stub_tests": {"passed": 8, "total": 8},
+  "builder_offline_tests": {"passed": 11, "total": 11},
+  "runner_offline_tests": {"passed": 30, "total": 30},
+  "r8_builds": {
+    "arm64-v8a": {
+      "apk_sha256": "4331b580db5047d26816cd6e3f251e6e5a9f38ef9068f135b5bf4b540db9fc47",
+      "private_build_receipt_sha256": "d09d33a44eeab49f7a1f6f2f3303350506ba7d327f2cf1bd3eed495081c8f390",
+      "local_freeze_with_fixture_identity": "PASS_NO_ADB"
+    },
+    "x86_64": {
+      "apk_sha256": "75f95104a77b0087faf9a3a110cf7fc06d56098a011fb766bc0f4bb89685e01c",
+      "private_build_receipt_sha256": "08dc50ab09f5d6548627d0b6c178aeb45346e156c06ff593c5b9393fd2e0edc5",
+      "local_freeze_with_fixture_identity": "PASS_NO_ADB"
+    }
+  },
+  "android_device_execution": "NOT_RUN",
+  "long_stability": "NOT_QUALIFIED",
+  "real_system_low_memory": "NOT_TESTED",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Offline time simulation and host stubs are not a device long-stability result.",
+    "R8 build and static checks do not establish ART execution or actual 16 KB loading.",
+    "A successful future run would only establish the scoped repeated domain workload and discrete observations.",
+    "Diagnostic APKs, keys, raw logs and private plans remain in the ignored local build directory."
+  ]
+}

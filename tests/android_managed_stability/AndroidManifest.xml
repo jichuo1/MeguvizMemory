@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.jichuo1.meguviz.memory.stabilityprobe">
+  <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="33" />
+  <application android:debuggable="true" android:label="Memory Stability Probe" android:allowBackup="false">
+    <activity android:name="io.github.jichuo1.meguviz.memory.android.PressureR8ForegroundActivity"
+        android:exported="true" android:permission="android.permission.DUMP" />
+  </application>
+  <instrumentation android:name="io.github.jichuo1.meguviz.memory.android.ManagedStabilityInstrumentation"
+      android:targetPackage="io.github.jichuo1.meguviz.memory.stabilityprobe" android:functionalTest="true" />
+</manifest>

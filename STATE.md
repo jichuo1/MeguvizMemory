@@ -9,6 +9,7 @@
 - 随后重试安装并完成 [API33 arm64/4KB 的 R8 真机短诊断](artifacts/managed-probe-20261101/device-short-pass-20261101.json)：3 组、306 项检查通过，覆盖合成压力、预算和关闭，最终 backing 为 0；安装包身份和运行后核验通过。transport 耗时 0.79 秒；进程 cgroup 获得 0 个样本，`NOT_OBSERVED` 不表示未冻结。该结果不证明长稳、真实系统低内存、性能、BIL 或其他 ABI。
 - 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者。[首轮](artifacts/managed-probe-20261101/linux-host-first-attempt.json)、[第二轮](artifacts/managed-probe-20261101/linux-host-second-attempt.json)均失败且未上传制品；[第三轮](artifacts/managed-probe-20261101/linux-host-third-attempt.json)的受控诊断将静态库处理错误归类为未知选项，但不能独立证明根因。构建器此前解析工具符号链接可能改变 LLVM 多调用程序的模式，现保留请求的入口名称并新增回归；本机 22 项通过、1 项 POSIX 专属测试跳过，修复后的 Linux 结果见下。runner 的 34 项离线检查通过；CI sentinel 不等同用户本机私有标识扫描。
 - 修复后的 `085cc13` [Linux x86_64 工程候选](artifacts/managed-probe-20261101/linux-host-candidate-pass.json)已在 GitHub-hosted Linux 构建并通过安装消费者检查：图像默认 12 组、合成压力 12 组、负例 10 组及 pressure v1/v2；43 步的 86 个日志流摘要经校验。Actions 制品下载回读的大小和哈希匹配，另存本地独立候选。CI 标识扫描不等于用户本机私有标识扫描；设备、性能和正式发布不因此取得资格。
+- 独立[托管域长稳诊断与采集协议](docs/ANDROID_MANAGED_STABILITY_PROTOCOL.md)已补齐：包含已知前台身份、预算和关闭循环、停滞优先、保守采样时间和自身窗口退场检查。宿主 8 项、构建器 11 项及采集器 30 项离线检查通过；arm64 与 x86_64 的 R8 APK 已本机构建并以虚拟设备标识完成无 ADB 冻结检查。[限定记录](artifacts/managed-probe-20261101/stability-preparation.json)不代表 Android 运行、900 秒设备长稳、真实系统压力或性能资格。
 
 ## 修复后工程候选（2026-11-01）
 

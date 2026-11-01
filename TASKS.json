@@ -1331,10 +1331,11 @@
     "first_install": "INSTALL_FAILED_USER_RESTRICTED_TEST_NOT_RUN_HISTORY_PRESERVED",
     "cgroup_observation": "ZERO_SAMPLES_NOT_OBSERVED_NOT_PROOF_UNFROZEN",
     "postflight": "PASS_OBSERVATIONAL_NO_SHARED_DEVICE_LOCK",
-    "long_stability": "SEPARATE_FOREGROUND_PROTOCOL_NOT_YET_READY",
+    "long_stability": "SEPARATE_FOREGROUND_RUNNER_HOST_AND_R8_BUILD_READY_DEVICE_NOT_RUN",
     "performance": "NOT_MEASURED",
     "evidence": "artifacts/managed-probe-20261101/build-only.json",
     "device_evidence": "artifacts/managed-probe-20261101/device-short-pass-20261101.json",
+    "stability_preparation": "artifacts/managed-probe-20261101/stability-preparation.json",
     "contract": "docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md"
   },
   "linux_host_candidate_ci_20261101": {
