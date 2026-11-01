@@ -193,7 +193,7 @@ def verify_stripped_sections(before, after, abi):
     return original
 
 
-def run_tool(command, work, operations, label, timeout=600):
+def run_tool(command, work, operations, label, timeout=600, expected_error=None):
     log = work / 'logs'; log.mkdir(exist_ok=True)
     try:
         completed = subprocess.run([str(x) for x in command], capture_output=True, timeout=timeout, check=False)
@@ -211,7 +211,11 @@ def run_tool(command, work, operations, label, timeout=600):
         journal.write(canonical(record) + b'\n'); journal.flush(); os.fsync(journal.fileno())
     require(state != 'TIMEOUT', 'tool_timeout_' + label)
     require(state != 'LAUNCH_ERROR', 'tool_launch_error_' + label)
-    require(code == 0, 'tool_failed_' + label)
+    if expected_error is None:
+        require(code == 0, 'tool_failed_' + label)
+    else:
+        require(code != 0 and expected_error.encode('utf-8') in stdout + stderr,
+                'expected_rejection_missing_' + label)
     return stdout.decode('utf-8', 'strict')
 
 
@@ -225,6 +229,15 @@ def dynamic_contract(readelf, path, work, operations, label):
     require(all('/' not in x and '\\' not in x for x in needed), 'invalid_needed')
     return {'symbols_sha256': sha(normalized(symbols)), 'dynamic_sha256': sha(normalized(dynamic)),
             'relocations_sha256': sha(normalized(reloc)), 'needed': needed, 'soname': soname}, symbols
+
+
+def validate_static_section_payload(kind, size, payload):
+    # NOBITS occupies virtual storage only; every other selected section must
+    # actually contain exactly its advertised bytes in the readobj output.
+    if kind == 'SHT_NOBITS':
+        require(not payload, 'static_nobits_has_payload')
+    else:
+        require(len(payload) == size, 'static_section_size')
 
 
 def static_contract(readobj, nm, ar, path, work, operations, label):
@@ -243,8 +256,8 @@ def static_contract(readobj, nm, ar, path, work, operations, label):
         pieces = [''.join(re.findall(r'\b[0-9A-F]{2,8}\b', line.split('|')[0].split(':', 1)[1]))
                   for line in body.group(1).splitlines() if ':' in line] if body else []
         payload = bytes.fromhex(''.join(pieces))
-        require(not payload or len(payload) == size, 'static_section_size')
         typ = re.search(r'(?m)^    Type: (\S+)', block).group(1)
+        validate_static_section_payload(typ, size, payload)
         flags = re.search(r'(?m)^    Flags \[ \((0x[0-9A-Fa-f]+)\)', block).group(1)
         align = int(re.search(r'(?m)^    AddressAlignment: (\d+)', block).group(1))
         rows.append([name, typ, flags, size, align, sha(payload)])
@@ -302,11 +315,14 @@ def validate_keep_rules(rules):
 
 def validate_sdk_members(files, headers):
     required = {'include/mgmem/' + name for name in headers}
-    required.update({'lib/libmgmem.so', 'lib/libmgmem_pressure.a',
+    required.update({'lib/libmgmem.so', 'lib/libmgmem_pressure.a', 'lib/libmgmem_pressure_jni.so',
                      'lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake',
                      'lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake',
                      'lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake',
                      'lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake',
+                     'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniABI.cmake',
+                     'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets.cmake',
+                     'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets-release.cmake',
                      'share/MeguvizMemory/licenses/llvm-NOTICE.txt'})
     require(set(files) == required, 'sdk_unexpected_or_missing_member')
 
@@ -319,6 +335,98 @@ def validate_output_identities(aar, sdk_zip, abi, comparison):
         require(aar_value == sdk_value and ident(aar_value) == comparison[label]['candidate'],
                 'sdk_aar_' + label + '_mismatch')
     require(ident(sdk_members['lib/libmgmem_pressure.a']) == comparison['static']['candidate'], 'sdk_static_mismatch')
+
+
+def write_jni_consumer_fixture(work):
+    """Small native consumer for package-target configure/link checks only."""
+    fixture = work / 'android-jni-target-consumer'
+    fixture.mkdir()
+    (fixture / 'CMakeLists.txt').write_text('''cmake_minimum_required(VERSION 3.25)
+project(MeguvizMemoryJniTargetProbe LANGUAGES CXX)
+if(PREDEFINED_JNI)
+  add_library(MeguvizMemory::android_jni SHARED IMPORTED)
+  set_target_properties(MeguvizMemory::android_jni PROPERTIES
+    IMPORTED_CONFIGURATIONS RELEASE IMPORTED_LOCATION_RELEASE "${PREDEFINED_JNI}"
+    INTERFACE_LINK_LIBRARIES "MeguvizMemory::mgmem")
+endif()
+if(REQUIRE_JNI)
+  find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  if(RECHECK_SAME)
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_CORE_CONFIGURATION)
+    set_property(TARGET MeguvizMemory::mgmem APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+    set_target_properties(MeguvizMemory::mgmem PROPERTIES IMPORTED_LOCATION_DEBUG "${OTHER_CORE_CONFIGURATION}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_JNI_CONFIGURATION)
+    set_property(TARGET MeguvizMemory::android_jni APPEND PROPERTY IMPORTED_CONFIGURATIONS DEBUG)
+    set_target_properties(MeguvizMemory::android_jni PROPERTIES IMPORTED_LOCATION_DEBUG "${OTHER_JNI_CONFIGURATION}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_CORE_DIRECT)
+    set_target_properties(MeguvizMemory::mgmem PROPERTIES IMPORTED_LOCATION_DEBUG "${OTHER_CORE_DIRECT}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_JNI_DIRECT)
+    set_target_properties(MeguvizMemory::android_jni PROPERTIES IMPORTED_LOCATION_DEBUG "${OTHER_JNI_DIRECT}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_CORE_MAPPING)
+    set_target_properties(MeguvizMemory::mgmem PROPERTIES MAP_IMPORTED_CONFIG_DEBUG OTHER
+      IMPORTED_LOCATION_OTHER "${OTHER_CORE_MAPPING}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_JNI_MAPPING)
+    set_target_properties(MeguvizMemory::android_jni PROPERTIES MAP_IMPORTED_CONFIG_DEBUG OTHER
+      IMPORTED_LOCATION_OTHER "${OTHER_JNI_MAPPING}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(OTHER_PACKAGE_DIR)
+    set(MeguvizMemory_DIR "${OTHER_PACKAGE_DIR}")
+    find_package(MeguvizMemory CONFIG REQUIRED COMPONENTS android_jni)
+  endif()
+  if(NOT TARGET MeguvizMemory::android_jni)
+    message(FATAL_ERROR "jni_target_missing")
+  endif()
+  get_target_property(_links MeguvizMemory::android_jni INTERFACE_LINK_LIBRARIES)
+  if(NOT "MeguvizMemory::mgmem" IN_LIST _links)
+    message(FATAL_ERROR "jni_target_does_not_propagate_shared_core")
+  endif()
+  get_target_property(_jni MeguvizMemory::android_jni IMPORTED_LOCATION_RELEASE)
+  get_target_property(_core MeguvizMemory::mgmem IMPORTED_LOCATION_RELEASE)
+  if(NOT _jni OR NOT _core)
+    message(FATAL_ERROR "imported_binary_location_missing")
+  endif()
+  file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/imported-paths.txt" "${_jni}\\n${_core}\\n")
+  add_library(jni_target_probe SHARED probe.cpp)
+  target_link_libraries(jni_target_probe PRIVATE MeguvizMemory::android_jni)
+  target_link_options(jni_target_probe PRIVATE -Wl,--no-undefined)
+else()
+  find_package(MeguvizMemory CONFIG REQUIRED)
+  if(TARGET MeguvizMemory::android_jni)
+    message(FATAL_ERROR "jni_target_unexpected")
+  endif()
+endif()
+''', encoding='utf-8', newline='\n')
+    (fixture / 'probe.cpp').write_text('''#include <mgmem/android_borrow_jni.h>
+extern "C" mgmem_status probe(mgmem_domain *domain, uint64_t id) {
+    mgmem_status status = mgmem_android_borrow_cancel_v1(id);
+    return status == MGMEM_OK ? mgmem_domain_begin_close_v1(domain) : status;
+}
+''', encoding='utf-8', newline='\n')
+    return fixture
+
+
+def unpack_sdk_for_target_check(sdk_zip, destination):
+    """Use the packaged bytes, not the pre-sanitization installation."""
+    destination.mkdir()
+    for name, data in archive_members(sdk_zip).items():
+        pure = safe_relative(name)
+        path = destination.joinpath(*pure.parts)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with path.open('xb') as stream:
+            stream.write(data)
 
 
 def verify_generator_bindings(records, files):
@@ -349,6 +457,26 @@ def workspace_directory(name):
     path.mkdir(exist_ok=True)
     resolved = path.resolve(strict=True)
     require(resolved.is_relative_to(ROOT.resolve()), name + '_root_outside_workspace')
+    return resolved
+
+
+def fresh_work_directory(requested, build_root):
+    # Check the caller's literal name before resolving: a dangling symlink is
+    # still an existing entry, even if its resolved destination does not exist.
+    raw = requested.absolute()
+    require(not os.path.lexists(raw), 'work_dir_not_fresh_build_child')
+    resolved = raw.resolve()
+    require(resolved != build_root and resolved.is_relative_to(build_root) and not os.path.lexists(resolved),
+            'work_dir_not_fresh_build_child')
+    return resolved
+
+
+def fresh_output_path(requested, dist, suffix, reason):
+    raw = requested.absolute()
+    require(not os.path.lexists(raw), reason)
+    resolved = raw.resolve()
+    require(resolved.parent == dist and resolved.name == raw.name and resolved.name.lower().endswith(suffix)
+            and not os.path.lexists(resolved), reason)
     return resolved
 
 
@@ -412,9 +540,10 @@ def build_candidate(args, work, source, lock_bytes, records, markers):
                     b'package="io.github.jichuo1.meguviz.memory.android"><uses-sdk android:minSdkVersion="27" /></manifest>\n')
     payloads = {}
     results = {}
+    jni_target_fixture = write_jni_consumer_fixture(work)
     for abi in ABIS:
         core_build = work / ('core-build-' + abi); sdk = work / ('sdk-' + abi)
-        jni_build = work / ('jni-build-' + abi); jni_install = work / ('jni-install-' + abi)
+        jni_build = work / ('jni-build-' + abi)
         common = ['-G', 'Ninja', '-DCMAKE_MAKE_PROGRAM=' + str(tools['ninja']), '-DCMAKE_BUILD_TYPE=Release',
                   '-DCMAKE_TOOLCHAIN_FILE=' + str(tools['android_toolchain']), '-DANDROID_ABI=' + abi,
                   '-DANDROID_PLATFORM=android-27', '-DANDROID_STL=c++_static']
@@ -423,15 +552,23 @@ def build_candidate(args, work, source, lock_bytes, records, markers):
                  work, operations, abi + '-core-configure')
         run_tool([tools['cmake'], '--build', core_build, '--parallel', str(args.jobs)], work, operations, abi + '-core-build')
         run_tool([tools['cmake'], '--install', core_build], work, operations, abi + '-core-install')
+        core_only_dir = sdk / 'lib/cmake/MeguvizMemory'
+        for require_jni in (False, True):
+            label = abi + ('-core-only-required-jni' if require_jni else '-core-only-no-jni')
+            command = [tools['cmake'], '-S', jni_target_fixture, '-B', work / label, *common,
+                       '-DMeguvizMemory_DIR=' + core_only_dir.as_posix(),
+                       '-DREQUIRE_JNI=' + ('ON' if require_jni else 'OFF')]
+            run_tool(command, work, operations, label,
+                     expected_error='Android JNI is not installed for the requested Android ABI' if require_jni else None)
         run_tool([tools['cmake'], '-S', source / 'adapters/android', '-B', jni_build, *common,
                   '-DMeguvizMemory_DIR=' + (sdk / 'lib/cmake/MeguvizMemory').as_posix(),
                   '-DCMAKE_CXX_FLAGS=-include "' + umbrella.as_posix() + '"',
-                  '-DCMAKE_INSTALL_PREFIX=' + str(jni_install)],
+                  '-DCMAKE_INSTALL_PREFIX=' + str(sdk)],
                  work, operations, abi + '-jni-configure')
         run_tool([tools['cmake'], '--build', jni_build, '--parallel', str(args.jobs)], work, operations, abi + '-jni-build')
         run_tool([tools['cmake'], '--install', jni_build], work, operations, abi + '-jni-install')
         original_core = sdk / 'lib/libmgmem.so'; original_static = sdk / 'lib/libmgmem_pressure.a'
-        original_jni = jni_install / 'lib/libmgmem_pressure_jni.so'
+        original_jni = sdk / 'lib/libmgmem_pressure_jni.so'
         require(all(path.is_file() and not path.is_symlink() for path in (original_core, original_static, original_jni)), 'built_binary_missing')
         clean = work / ('clean-' + abi); clean.mkdir()
         clean_core = clean / 'libmgmem.so'; clean_jni = clean / 'libmgmem_pressure_jni.so'; clean_static = clean / 'libmgmem_pressure.a'
@@ -486,13 +623,113 @@ def build_candidate(args, work, source, lock_bytes, records, markers):
                      'jni/' + abi + '/libmgmem_pressure_jni.so': sanitized['jni']}
         aar = zip_bytes(aar_files)
         validate_output_identities(aar, sdk_zip, abi, comparison)
+        # Configure and link against the sanitized SDK as packaged, not the
+        # unsanitized build tree or a manually assembled imported target.
+        verify_sdk = work / ('jni-target-sdk-' + abi)
+        unpack_sdk_for_target_check(sdk_zip, verify_sdk)
+        verify_build = work / ('jni-target-build-' + abi)
+        verify_dir = verify_sdk / 'lib/cmake/MeguvizMemory'
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', verify_build, *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON', '-DRECHECK_SAME=ON'],
+                 work, operations, abi + '-jni-target-configure')
+        imported = (verify_build / 'imported-paths.txt').read_text(encoding='utf-8').splitlines()
+        require(len(imported) == 2 and Path(imported[0]).resolve() == (verify_sdk / 'lib/libmgmem_pressure_jni.so').resolve()
+                and Path(imported[1]).resolve() == (verify_sdk / 'lib/libmgmem.so').resolve(),
+                'jni_target_imported_path_mismatch')
+        run_tool([tools['cmake'], '--build', verify_build, '--parallel', str(args.jobs)],
+                 work, operations, abi + '-jni-target-build')
+        target_dynamic, _ = dynamic_contract(tools['llvm-readelf'], verify_build / 'libjni_target_probe.so',
+                                             work, operations, abi + '-jni-target-consumer')
+        require(target_dynamic['needed'].count('libmgmem.so') == 1 and
+                target_dynamic['needed'].count('libmgmem_pressure_jni.so') == 1,
+                'jni_target_consumer_dependency_mismatch')
+        # Keep pointer width equal so CMake's generic package-version check
+        # cannot reject before the JNI component's own ABI guard is exercised.
+        wrong_abi = 'x86' if abi == 'armeabi-v7a' else ('x86_64' if abi == 'arm64-v8a' else 'arm64-v8a')
+        wrong_common = ['-DANDROID_ABI=' + wrong_abi if item.startswith('-DANDROID_ABI=') else item for item in common]
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-wrong-abi-' + abi), *wrong_common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON'],
+                 work, operations, abi + '-jni-target-wrong-abi',
+                 expected_error='Android JNI is not installed for the requested Android ABI')
+        # Separate same-ABI prefixes must not reuse an imported core or JNI
+        # target from the other package, even when their bytes are identical.
+        other_sdk = work / ('jni-target-other-sdk-' + abi)
+        unpack_sdk_for_target_check(sdk_zip, other_sdk)
+        other_dir = other_sdk / 'lib/cmake/MeguvizMemory'
+        rejection = 'Android JNI is not installed for the requested Android ABI'
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-core-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_PACKAGE_DIR=' + other_dir.as_posix()],
+                 work, operations, abi + '-jni-target-mixed-core', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-jni-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DPREDEFINED_JNI=' + (other_sdk / 'lib/libmgmem_pressure_jni.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-jni', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-core-config-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_CORE_CONFIGURATION=' + (other_sdk / 'lib/libmgmem.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-core-config', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-jni-config-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_JNI_CONFIGURATION=' + (other_sdk / 'lib/libmgmem_pressure_jni.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-jni-config', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-core-direct-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_CORE_DIRECT=' + (other_sdk / 'lib/libmgmem.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-core-direct', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-jni-direct-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_JNI_DIRECT=' + (other_sdk / 'lib/libmgmem_pressure_jni.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-jni-direct', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-core-map-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_CORE_MAPPING=' + (other_sdk / 'lib/libmgmem.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-core-map', expected_error=rejection)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-mixed-jni-map-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + verify_dir.as_posix(), '-DREQUIRE_JNI=ON',
+                  '-DOTHER_JNI_MAPPING=' + (other_sdk / 'lib/libmgmem_pressure_jni.so').as_posix()],
+                 work, operations, abi + '-jni-target-mixed-jni-map', expected_error=rejection)
+        # A malformed export can create a target that CMake cannot subsequently
+        # remove. Even a default (no component) find must therefore fail.
+        tampered_sdk = work / ('jni-target-bad-export-sdk-' + abi)
+        unpack_sdk_for_target_check(sdk_zip, tampered_sdk)
+        export_file = tampered_sdk / 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets.cmake'
+        export_text = export_file.read_text(encoding='utf-8')
+        original_link = 'INTERFACE_LINK_LIBRARIES "MeguvizMemory::mgmem"'
+        require(export_text.count(original_link) == 1, 'jni_target_export_format_mismatch')
+        export_file.write_text(export_text.replace(original_link,
+                               'INTERFACE_LINK_LIBRARIES "MeguvizMemory::mgmem;unexpected_extra"'),
+                               encoding='utf-8', newline='\n')
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-bad-export-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + (tampered_sdk / 'lib/cmake/MeguvizMemory').as_posix(), '-DREQUIRE_JNI=OFF'],
+                 work, operations, abi + '-jni-target-bad-export',
+                 expected_error='Android JNI target is incompatible with this package')
+        # A package with matching metadata but a different ELF machine is also
+        # rejected at configure time. Mutate only this private test copy.
+        mismatch_binary = other_sdk / 'lib/libmgmem_pressure_jni.so'
+        mismatched = bytearray(mismatch_binary.read_bytes())
+        mismatched[18:20] = (62 if abi != 'x86_64' else 183).to_bytes(2, 'little')
+        mismatch_binary.write_bytes(mismatched)
+        run_tool([tools['cmake'], '-S', jni_target_fixture, '-B', work / ('jni-target-wrong-elf-' + abi), *common,
+                  '-DMeguvizMemory_DIR=' + other_dir.as_posix(), '-DREQUIRE_JNI=ON'],
+                 work, operations, abi + '-jni-target-wrong-elf', expected_error=rejection)
         Scanner(markers).archive(aar, 'aar_' + abi)
         Scanner(markers).archive(sdk_zip, 'sdk_' + abi)
         payloads['android/' + abi + '/MeguvizMemory.aar'] = aar
         payloads['android/' + abi + '/MeguvizMemory-sdk.zip'] = sdk_zip
         results[abi] = {'aar': ident(aar), 'sdk': ident(sdk_zip), 'binaries': comparison,
                         'jni_native_declaration_count': len(expected_jni),
-                        'same_sdk_aar_core': True, 'same_sdk_aar_jni': True, 'sdk_static_matches_validated': True}
+                        'same_sdk_aar_core': True, 'same_sdk_aar_jni': True, 'sdk_static_matches_validated': True,
+                        'jni_cmake_target': {'same_abi_compile_link': 'PASS', 'core_only_without_jni': 'PASS',
+                                             'missing_jni_component': 'REJECTED', 'wrong_abi': 'REJECTED',
+                                             'same_abi_other_prefix_core': 'REJECTED',
+                                             'same_abi_other_prefix_jni': 'REJECTED', 'wrong_elf': 'REJECTED',
+                                             'other_prefix_configuration_core_and_jni': 'REJECTED',
+                                             'unlisted_direct_configuration_core_and_jni': 'REJECTED',
+                                             'other_prefix_mapping_core_and_jni': 'REJECTED',
+                                             'bad_first_import_default_find': 'REJECTED',
+                                             'same_prefix_repeat': 'PASS',
+                                             'needed': target_dynamic['needed']}}
     verify_snapshot(source, records)
     require(all(file_identity(path) == tool_hashes[name] for name, path in tools.items()), 'toolchain_changed')
     require(all(file_identity(path) == generator_hashes[name] for name, path in generator_files.items()), 'generator_changed')
@@ -541,16 +778,14 @@ def main():
     lock_path = args.source_lock.resolve(strict=True)
     require(source_root.is_dir() and lock_path.is_file(), 'source_or_lock_missing')
     build_root = workspace_directory('build')
-    work = args.work_dir.resolve()
-    require(work != build_root and work.is_relative_to(build_root) and not work.exists(), 'work_dir_not_fresh_build_child')
+    work = fresh_work_directory(args.work_dir, build_root)
     require(not source_root.is_relative_to(work) and not work.is_relative_to(source_root), 'work_overlaps_source')
     private = args.private_identifiers_file.resolve(strict=True)
     require(private.is_relative_to(build_root) and private.is_file() and not args.private_identifiers_file.is_symlink(), 'private_markers_outside_build')
     markers = [line.strip().lower() for line in private.read_text(encoding='utf-8-sig').splitlines() if line.strip()]
     require(markers and all(len(marker) >= 3 for marker in markers), 'invalid_private_markers')
     dist = workspace_directory('dist')
-    out = args.output.resolve()
-    require(out.parent == dist and out.suffix.lower() == '.zip' and not out.exists(), 'output_not_fresh_dist_zip')
+    out = fresh_output_path(args.output, dist, '.zip', 'output_not_fresh_dist_zip')
     work.mkdir(parents=True, exist_ok=False)
     status = work / 'STATUS.json'
     status.write_bytes(json_bytes({'state': 'RUNNING', 'output_written': False}))

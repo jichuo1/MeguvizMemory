@@ -314,5 +314,37 @@
     "release": "NOT_QUALIFIED",
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/android-candidate-20261101/candidate.json"
+  },
+  "pressure_races_20261101": {
+    "native_attach": "FOUR_VERSION_PAIRS_OLD_STALE_BUDGET_NEW_BUSY",
+    "java_close": "CONCURRENT_CLOSE_RETRYABLE_SAME_THREAD_REENTRY_SAFE",
+    "host": "PRESSURE_JNI_22_MANAGED_50_ATTACH_FIXTURE_PASS",
+    "android": "NOT_RUN",
+    "previous_candidate": "C45723F_PREDATES_FIXES",
+    "evidence": "artifacts/pressure-races-20261101/host.json"
+  },
+  "android_jni_target_20261101": {
+    "implementation": "OPTIONAL_INSTALLED_ANDROID_JNI_TARGET_WITH_ABI_AND_PREFIX_CHECKS",
+    "development": "EARLIER_THREE_ABI_CROSS_LINK_AND_CURRENT_THIRTY_TWO_CMAKE_FIXTURES_PASS",
+    "android": "NOT_RUN",
+    "previous_candidate": "C45723F_PREDATES_TARGET",
+    "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
+  },
+  "image_trace_20261101": {
+    "implementation": "OPT_IN_REAL_IMAGE_ALGORITHM_SOURCE_SEMANTIC_CAPTURE_AND_REPLAY",
+    "host": "SYNTHETIC_P6_CAPTURE_6_PLUS_4_REPLAY_12_PLUS_53_SYMLINK_UNAVAILABLE",
+    "host_ci": "WINDOWS_LINUX_CAPTURE_6_PLUS_4_REPLAY_12_PLUS_53_SYMLINK_PASS_ON_91464aa",
+    "product_trace": "NOT_CAPTURED",
+    "device": "NOT_RUN",
+    "performance": "NOT_MEASURED",
+    "mechanism": "NOT_ESTABLISHED",
+    "evidence": "artifacts/image-trace-20261101/host.json"
+  },
+  "host_candidate_builder_20261101": {
+    "implementation": "SOURCE_LOCKED_HOST_CORE_JNI_PURE_JVM_PACKAGE",
+    "windows": "DEV_BUILD_AND_INSTALLED_CONSUMER_PASS_FINAL_SNAPSHOT_PENDING",
+    "linux": "OFFLINE_CONTRACTS_ONLY_REAL_BUILD_NOT_RUN",
+    "release": "NOT_QUALIFIED",
+    "contract": "docs/HOST_CANDIDATE_BUILDER.md"
   }
 }

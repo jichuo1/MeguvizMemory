@@ -1,5 +1,6 @@
 """Offline, host-only contracts for Android candidate assembly; no NDK or ADB."""
 import json
+import os
 from pathlib import Path
 import struct
 import subprocess
@@ -12,6 +13,25 @@ from source_lock import LOCAL_DIRECTORIES, scoped_files
 
 
 class CandidateContracts(unittest.TestCase):
+    def test_static_section_requires_complete_initialized_payload(self):
+        subject.validate_static_section_payload('SHT_PROGBITS', 2, b'xy')
+        subject.validate_static_section_payload('SHT_PROGBITS', 0, b'')
+        subject.validate_static_section_payload('SHT_NOBITS', 8, b'')
+        with self.assertRaisesRegex(ValueError, 'static_section_size'):
+            subject.validate_static_section_payload('SHT_PROGBITS', 2, b'')
+        with self.assertRaisesRegex(ValueError, 'static_section_size'):
+            subject.validate_static_section_payload('SHT_PROGBITS', 2, b'x')
+        with self.assertRaisesRegex(ValueError, 'static_nobits_has_payload'):
+            subject.validate_static_section_payload('SHT_NOBITS', 8, b'x')
+
+    def test_static_contract_rejects_missing_initialized_section_data(self):
+        section = ('  Section {\n    Name: .data\n    Type: SHT_PROGBITS\n'
+                   '    Flags [ (0x2)\n      SHF_ALLOC\n    ]\n    Size: 2\n'
+                   '    AddressAlignment: 8\n  }\n')
+        with patch.object(subject, 'run_tool', side_effect=['pressure.o\n', section]):
+            with self.assertRaisesRegex(ValueError, 'static_section_size'):
+                subject.static_contract('readobj', 'nm', 'ar', Path('pressure.a'), Path('.'), [], 'test')
+
     def fixture(self, directory):
         root = directory / 'source'
         root.mkdir()
@@ -103,10 +123,14 @@ class CandidateContracts(unittest.TestCase):
 
     def test_sdk_exact_member_allowlist(self):
         files = {'include/mgmem/a.h': b'h', 'lib/libmgmem.so': b'a', 'lib/libmgmem_pressure.a': b'b',
+                 'lib/libmgmem_pressure_jni.so': b'jni',
                  'lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake': b'',
                  'lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake': b'',
                  'lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake': b'',
                  'lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniABI.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets-release.cmake': b'',
                  'share/MeguvizMemory/licenses/llvm-NOTICE.txt': b''}
         subject.validate_sdk_members(files, {'a.h': b'h'})
         with self.assertRaisesRegex(ValueError, 'sdk_unexpected_or_missing_member'):
@@ -114,6 +138,37 @@ class CandidateContracts(unittest.TestCase):
         del files['lib/libmgmem.so']
         with self.assertRaisesRegex(ValueError, 'sdk_unexpected_or_missing_member'):
             subject.validate_sdk_members(files, {'a.h': b'h'})
+
+    def test_sdk_requires_installed_jni_target_metadata(self):
+        files = {'include/mgmem/a.h': b'h', 'lib/libmgmem.so': b'a', 'lib/libmgmem_pressure.a': b'b',
+                 'lib/libmgmem_pressure_jni.so': b'jni',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryConfig.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryConfigVersion.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryTargets.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryTargets-release.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniABI.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets.cmake': b'',
+                 'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets-release.cmake': b'',
+                 'share/MeguvizMemory/licenses/llvm-NOTICE.txt': b''}
+        subject.validate_sdk_members(files, {'a.h': b'h'})
+        for name in ('lib/libmgmem_pressure_jni.so',
+                     'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniABI.cmake',
+                     'lib/cmake/MeguvizMemory/MeguvizMemoryAndroidJniTargets.cmake'):
+            with self.subTest(name=name), self.assertRaisesRegex(ValueError, 'sdk_unexpected_or_missing_member'):
+                subject.validate_sdk_members({k: v for k, v in files.items() if k != name}, {'a.h': b'h'})
+
+    def test_expected_failure_must_match_reason(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); operations = []
+            rejected = subprocess.CompletedProcess(['fake'], 1, stdout=b'', stderr=b'known rejection')
+            with patch.object(subject.subprocess, 'run', return_value=rejected):
+                subject.run_tool(['fake'], root, operations, 'expected', expected_error='known rejection')
+                with self.assertRaisesRegex(ValueError, 'expected_rejection_missing'):
+                    subject.run_tool(['fake'], root, operations, 'wrong-reason', expected_error='different reason')
+            unexpected = subprocess.CompletedProcess(['fake'], 0, stdout=b'known rejection', stderr=b'')
+            with patch.object(subject.subprocess, 'run', return_value=unexpected):
+                with self.assertRaisesRegex(ValueError, 'expected_rejection_missing'):
+                    subject.run_tool(['fake'], root, operations, 'unexpected-success', expected_error='known rejection')
 
     def test_aar_sdk_independent_readback_rejects_mixed_binaries(self):
         abi = 'arm64-v8a'
@@ -210,6 +265,32 @@ class CandidateContracts(unittest.TestCase):
                 with patch.object(Path, 'resolve', fake_resolve):
                     with self.assertRaisesRegex(ValueError, 'dist_root_outside_workspace'):
                         subject.workspace_directory('dist')
+
+    def test_fresh_destination_rejects_existing_and_dangling_names(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); dist = root / 'dist'; build = root / 'build'; dist.mkdir(); build.mkdir()
+            output = dist / 'candidate.zip'; work = build / 'new-work'
+            self.assertEqual(subject.fresh_output_path(output, dist.resolve(), '.zip', 'not_fresh'), output.resolve())
+            self.assertEqual(subject.fresh_work_directory(work, build.resolve()), work.resolve())
+            output.write_bytes(b'existing')
+            with self.assertRaisesRegex(ValueError, 'not_fresh'):
+                subject.fresh_output_path(output, dist.resolve(), '.zip', 'not_fresh')
+            missing = dist / 'dangling.zip'; dangling_work = build / 'dangling-work'
+            if os.name != 'nt':
+                missing.symlink_to(dist / 'absent.zip'); dangling_work.symlink_to(build / 'absent-work')
+                with self.assertRaisesRegex(ValueError, 'not_fresh'):
+                    subject.fresh_output_path(missing, dist.resolve(), '.zip', 'not_fresh')
+                with self.assertRaisesRegex(ValueError, 'work_dir_not_fresh'):
+                    subject.fresh_work_directory(dangling_work, build.resolve())
+            else:
+                real_lexists = os.path.lexists
+                def simulate_dangling(value):
+                    return Path(value) in (missing, dangling_work) or real_lexists(value)
+                with patch.object(subject.os.path, 'lexists', side_effect=simulate_dangling):
+                    with self.assertRaisesRegex(ValueError, 'not_fresh'):
+                        subject.fresh_output_path(missing, dist.resolve(), '.zip', 'not_fresh')
+                    with self.assertRaisesRegex(ValueError, 'work_dir_not_fresh'):
+                        subject.fresh_work_directory(dangling_work, build.resolve())
 
 
 if __name__ == '__main__':

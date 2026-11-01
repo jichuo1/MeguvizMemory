@@ -893,8 +893,8 @@
       "dependency_contract": "MM 002、MM 003、MM 021功能资格",
       "acceptance": "访问/寿命/并发/成功状态等价；A1已有收益去重；暴露成本未知不倒填；允许无值得接入的TLB热点",
       "status": "BLOCKED",
-      "implementation": "SOURCE_AUDIT_AND_FUNCTIONAL_CONSUMERS_ONLY_REAL_TRACE_REPLAY_NOT_STARTED",
-      "functional_validation": "NOT_STARTED_FOR_REAL_REPLAY",
+      "implementation": "IMAGE_SOURCE_SEMANTIC_TRACE_CAPTURE_REPLAY_IMPLEMENTED_PRODUCT_TRACE_NOT_CAPTURED",
+      "functional_validation": "HOST_SYNTHETIC_INPUT_REAL_IMAGE_ALGORITHM_PASS_PRODUCT_REPLAY_NOT_STARTED",
       "device_validation": "NOT_STARTED",
       "performance_validation": "INCONCLUSIVE_INDEPENDENT_DMG_TASK_NOT_BIL_PLAYER",
       "mechanism_evidence": "INCONCLUSIVE",
@@ -1277,5 +1277,47 @@
     "formal_release": "NOT_QUALIFIED",
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/android-candidate-20261101/candidate.json"
+  },
+  "pressure_races_20261101": {
+    "parents": ["MM-007", "MM-009", "MM-015"],
+    "state": "FIXED_SCOPED_HOST_REGRESSIONS_PASS_UNIFIED_DEVICE_VALIDATION_PENDING",
+    "native_attach": "FOUR_V1_V2_COMBINATIONS_OLD_STALE_BUDGET_NEW_BUSY",
+    "java_close": "SAME_THREAD_REENTRY_OTHER_THREAD_RETRYABLE_41_HOST_CHECKS",
+    "host": "PRESSURE_JNI_22_MANAGED_50_ATTACH_FIXTURE_PASS",
+    "android_runtime": "NOT_RUN",
+    "previous_candidate": "C45723F_PREDATES_FIXES",
+    "performance": "NOT_MEASURED",
+    "evidence": "artifacts/pressure-races-20261101/host.json"
+  },
+  "android_jni_target_20261101": {
+    "parents": ["MM-001", "MM-009"],
+    "state": "OPTIONAL_INSTALLED_TARGET_IMPLEMENTED_DEV_CROSS_LINK_ONLY",
+    "host_fixture": "THIRTY_TWO_CMAKE_CONTRACTS_PASS",
+    "builder_fixture": "NINETEEN_OFFLINE_CONTRACTS_PASS",
+    "android_runtime": "NOT_RUN",
+    "previous_candidate": "C45723F_PREDATES_TARGET",
+    "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
+  },
+  "image_trace_20261101": {
+    "parent": "MM-022",
+    "state": "SCOPED_SOURCE_SEMANTIC_CAPTURE_REPLAY_IMPLEMENTED_HOST_ONLY",
+    "capture": "SIX_POSITIVE_FOUR_NEGATIVE_SYMLINK_UNAVAILABLE",
+    "replay": "TWELVE_POSITIVE_FIFTY_THREE_NEGATIVE",
+    "host_ci": "WINDOWS_LINUX_CAPTURE_6_PLUS_4_REPLAY_12_PLUS_53_SYMLINK_PASS_ON_91464aa",
+    "input": "SYNTHETIC_P6_REAL_IMAGE_ALGORITHM_NO_PRODUCT_TRACE",
+    "device": "NOT_RUN",
+    "performance": "NOT_MEASURED",
+    "mechanism": "NOT_ESTABLISHED",
+    "evidence": "artifacts/image-trace-20261101/host.json",
+    "contract": "consumers/image/TRACE_CONTRACT.md"
+  },
+  "host_candidate_builder_20261101": {
+    "parent": "MM-001",
+    "state": "IMPLEMENTED_WINDOWS_DEV_BUILD_PASS_FINAL_SNAPSHOT_PENDING",
+    "windows": "DEV_ARCHIVE_INSTALLED_JAVA_IMAGE_12_PLUS_12_PLUS_10_PASS",
+    "linux": "OFFLINE_CONTRACTS_ONLY_REAL_BUILD_NOT_RUN",
+    "offline_contracts": "TWENTY_ONE_PASS",
+    "formal_release": "NOT_QUALIFIED",
+    "contract": "docs/HOST_CANDIDATE_BUILDER.md"
   }
 }

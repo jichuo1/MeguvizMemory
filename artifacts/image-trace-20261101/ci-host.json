@@ -1,0 +1,16 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "tested_commit": "91464aa495ba8e51eb03b0d8d30b667ef3b82c78",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41282581663",
+  "previous_failed_run": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41282493929",
+  "previous_failure": "UBUNTU_TEST_FIXTURE_MISSING_INITIALIZER_LIST_WINDOWS_CANCELLED",
+  "profiles": [
+    {"name": "verify (ubuntu-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_symlink_rejection": "PASS", "trace_replay_positive": 12, "trace_replay_negative": 53, "sha256_vectors": "PASS"},
+    {"name": "verify (windows-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_symlink_rejection": "PASS", "trace_replay_positive": 12, "trace_replay_negative": 53, "sha256_vectors": "PASS"}
+  ],
+  "limits": [
+    "CI uses synthetic inputs for the real image algorithm and Android type stubs; no production trace or Android runtime is established.",
+    "Source-level trace and single-thread logical replay do not establish instruction ordering, TLB mechanism or performance.",
+    "The prior failed run is retained separately and is not reclassified as passing."
+  ]
+}

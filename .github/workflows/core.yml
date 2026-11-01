@@ -57,6 +57,10 @@ jobs:
         run: python tools/test_build_pressure_abi.py
       - name: Android candidate offline safety contracts
         run: python tools/test_build_android_candidate.py
+      - name: Host candidate offline safety contracts
+        run: python tools/test_build_host_candidate.py
+      - name: Android JNI CMake package contracts
+        run: python tools/test_android_jni_cmake_config.py
       - name: Feature preview privacy scanner checks
         run: python tools/test_package_feature_preview.py
       - name: Follow-up preview contract checks
