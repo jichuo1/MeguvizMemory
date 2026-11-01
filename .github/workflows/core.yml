@@ -123,6 +123,20 @@ jobs:
         run: cmake --build build/dex-count-recorder-ci --config Release --parallel 2
       - name: Verify DEX count-only recorder
         run: ctest --test-dir build/dex-count-recorder-ci -C Release --output-on-failure
+      - name: DEX stream v2 collector contracts
+        run: python consumers/dex_trace/stream_v2/test_collector.py
+      - name: DEX stream v2 generator contracts
+        run: python consumers/dex_trace/stream_v2/capture/test_prepare_stream_paired.py
+      - name: DEX stream v2 replay worker contracts
+        run: python consumers/dex_trace/stream_v2/replay/test_stream_worker.py
+      - name: DEX stream v2 controller contracts
+        run: python consumers/dex_trace/stream_v2/test_controller.py
+      - name: Configure DEX stream v2 recorder
+        run: cmake -S consumers/dex_trace/stream_v2/capture/host_test -B build/dex-stream-v2-recorder-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build DEX stream v2 recorder
+        run: cmake --build build/dex-stream-v2-recorder-ci --config Release --parallel 2
+      - name: Verify DEX stream v2 recorder
+        run: ctest --test-dir build/dex-stream-v2-recorder-ci -C Release --output-on-failure
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture

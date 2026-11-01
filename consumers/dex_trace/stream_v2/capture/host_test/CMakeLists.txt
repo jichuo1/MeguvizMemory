@@ -1,0 +1,12 @@
+cmake_minimum_required(VERSION 3.25)
+project(DexTraceStreamV2Host LANGUAGES CXX)
+get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/../../../../.." ABSOLUTE)
+get_filename_component(CAPTURE_DIR "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
+add_executable(dex_trace_stream_v2_host recorder_test.cpp "${CAPTURE_DIR}/stream_trace.cpp")
+target_compile_features(dex_trace_stream_v2_host PRIVATE cxx_std_20)
+target_include_directories(dex_trace_stream_v2_host PRIVATE "${ROOT}/include" "${ROOT}/consumers/dex_trace"
+  "${ROOT}/consumers/image" "${CAPTURE_DIR}")
+target_link_libraries(dex_trace_stream_v2_host PRIVATE ${CMAKE_DL_LIBS})
+enable_testing()
+add_test(NAME dex_trace_stream_v2_recorder COMMAND dex_trace_stream_v2_host)
+set_tests_properties(dex_trace_stream_v2_recorder PROPERTIES TIMEOUT 30)

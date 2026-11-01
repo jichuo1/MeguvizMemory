@@ -1,0 +1,27 @@
+{
+  "state": "PASS_SCOPED_STREAM_V2_DIAGNOSTIC_DEX",
+  "scope": "SNAPSHOT_OPEN_READER_SYNTHETIC_SINGLE_THREAD_REPLAY",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "input_origin": "ANDROID_DIAGNOSTIC_APK_CLASSES_DEX_NOT_PRODUCT",
+  "paired_comparisons_and_replays": 20,
+  "normal_events_each": 19401,
+  "normal_sites_each": 23,
+  "static_sites": 32,
+  "recorder_host_checks": 55,
+  "generator_contract_tests": 6,
+  "parser_worker_contract_tests": 21,
+  "collector_contract_tests": {"passed": 11, "skipped": 1, "skip_reason": "WINDOWS_SYMLINK_PERMISSION"},
+  "controller_contract_tests": 9,
+  "disk_budget_negative": "INCOMPLETE_NO_RECEIPT",
+  "trace_size_negative": "INCOMPLETE_NO_RECEIPT",
+  "private_receipt_sha256": "b2142a47fd5ba50e4288a24192149ff3ae555ea1f98241b3e13957374cfc7c8d",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "The diagnostic DEX is not a product workload and this record does not claim real-input qualification.",
+    "The replay simulates a single-thread local lifetime, not original query or cross-thread access.",
+    "Disk budget covers controller-persisted files, not filesystem metadata or child temporary files.",
+    "Input, trace files, paths, logs, requests and private receipts remain local."
+  ]
+}

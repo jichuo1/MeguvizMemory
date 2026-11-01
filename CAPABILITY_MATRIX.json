@@ -357,6 +357,7 @@
     "real_dex_second_attempt": "artifacts/dex-metadata-trace-20261101/real-dex-second-attempt.json",
     "real_dex_count_only": "artifacts/dex-metadata-trace-20261101/real-dex-count-only.json",
     "count_profile_host": "artifacts/dex-metadata-trace-20261101/count-profile-host.json",
+    "stream_v2_host": "artifacts/dex-metadata-trace-20261101/stream-v2-host.json",
     "failure_classification_host": "artifacts/dex-metadata-trace-20261101/failure-classification-host.json",
     "contract": "consumers/dex_trace/README.md",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"

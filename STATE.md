@@ -46,6 +46,7 @@
 - 采集器现可报告固定失败类别及有界计数，旧结果保留不变；[第二次真实 DEX 尝试](artifacts/dex-metadata-trace-20261101/real-dex-second-attempt.json)中子进程自报 `EVENT_LIMIT`：记录 100 万条、尝试下界 100 万零 1 条，0/20 对完成。该下界不是实际总数，也不是独立执行映像认证；需扩展有界采集能力，仍无性能资格。[分类合同检查](artifacts/dex-metadata-trace-20261101/failure-classification-host.json)
 - 对同一完整真实 DEX 的 D-C0/normal 使用[常量事件空间计数诊断](artifacts/dex-metadata-trace-20261101/real-dex-count-only.json)，子进程报告 6113916 次选定 reader 读取、命中 28/32 个位点并完整消费 54147 个方法；仅用于该单场景容量参考，不是可回放轨迹或性能。该轮后另补计数工具的截止时间后验检查，不改历史回执。
 - [独立 count-only 工具](consumers/dex_trace/count_profile/README.md)已以诊断 DEX 完成 20 对宿主对照并通过固定状态、溢出和截止检查；[限定证据](artifacts/dex-metadata-trace-20261101/count-profile-host.json)不将计数提升为可回放轨迹或性能结果。
+- [独立 V2 流式采集与回放](consumers/dex_trace/stream_v2/README.md)使用固定缓冲、明确事件及磁盘预算、独立文件回读与合成域寿命；诊断 DEX 的 20 对已通过，磁盘及单轨迹限额负例均为 INCOMPLETE。[宿主证据](artifacts/dex-metadata-trace-20261101/stream-v2-host.json)不代表真实产品、完整查询、设备或性能资格；真实 DEX 轮次另行记录。
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。
