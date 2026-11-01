@@ -1,0 +1,23 @@
+{
+  "state": "INCOMPLETE_LINUX_CANDIDATE_NOT_PUBLISHED",
+  "source_commit": "bf94cf4e50658b580f00d669c15aa1cb07fcb56f",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41290370861",
+  "stage": "host_builder",
+  "outcome": "EXITED_NONZERO",
+  "reason": "tool_failed_pressure-strip",
+  "diagnosis": {
+    "journal": "VERIFIED",
+    "stderr_category": "UNKNOWN_OPTION",
+    "classification_scope": "FIXED_STDERR_PATTERNS_ONLY_NOT_ROOT_CAUSE",
+    "archive_format": "AR",
+    "requested_tool_identity": "MATCH_PREBUILD_NOT_EXECUTED_IMAGE_ATTESTATION"
+  },
+  "uploaded_artifact_count": 0,
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "A fixed error-pattern match does not identify the unsupported option or prove the underlying cause.",
+    "Private raw stderr and runner paths were not published.",
+    "No Linux engineering candidate, Android device or performance qualification was obtained."
+  ]
+}

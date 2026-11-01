@@ -215,7 +215,11 @@ def materialize(files, links, directory):
 def executable(tools, name):
     path = tools / (name + ('.exe' if os.name == 'nt' else ''))
     require(path.is_file(), 'required_host_tool_missing')
-    return path.resolve()
+    # LLVM multicall binaries select their mode from argv[0].  In particular,
+    # llvm-strip can be a symlink to llvm-objcopy; resolving that link before
+    # execution changes its mode and makes strip's -o option invalid.
+    # file_identity still follows the link when checking tool bytes.
+    return path
 
 
 def read_cmake_compiler(cache):

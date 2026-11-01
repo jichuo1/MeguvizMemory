@@ -1,6 +1,8 @@
 """Offline contracts for host SDK archive safety; no device or toolchain."""
 import io
+import os
 from pathlib import Path
+import subprocess
 import tarfile
 import tempfile
 import unittest
@@ -10,6 +12,29 @@ import build_host_candidate as subject
 
 
 class HostCandidateContracts(unittest.TestCase):
+    def test_tool_invocation_keeps_requested_name(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            name = 'llvm-strip' + ('.exe' if os.name == 'nt' else '')
+            requested = root / name
+            requested.write_bytes(b'fixture')
+            with patch.object(Path, 'resolve', side_effect=AssertionError('must retain argv zero')):
+                self.assertEqual(subject.executable(root, 'llvm-strip'), requested)
+
+    @unittest.skipIf(os.name == 'nt', 'POSIX executable symlink fixture')
+    def test_multicall_symlink_keeps_mode_when_invoked(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = root / 'llvm-objcopy'
+            target.write_text('#!/bin/sh\ncase "$0" in */llvm-strip) exit 0;; *) exit 1;; esac\n', encoding='ascii')
+            target.chmod(0o755)
+            (root / 'llvm-strip').symlink_to(target.name)
+            requested = subject.executable(root, 'llvm-strip')
+            self.assertEqual(requested.name, 'llvm-strip')
+            self.assertEqual(subprocess.run([requested], check=False).returncode, 0)
+            self.assertEqual(subprocess.run([requested.resolve()], check=False).returncode, 1)
+            self.assertEqual(subject.common.file_identity(requested), subject.common.file_identity(target))
+
     def linux_fixture(self):
         files = {'sdk/lib/libmgmem.so.0.2.0': b'core', 'sdk/lib/libmgmem_pressure.a': b'pressure',
                  'sdk/lib/libmgmem_pressure_jni.so': b'jni', 'java/managed-api.jar': b'jar'}

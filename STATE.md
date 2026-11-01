@@ -7,7 +7,7 @@
 - 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查；arm64 后续真机短测见下，x86_64 尚无本诊断运行证据。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)
 - 独立 runner 已完成假 ADB 的准入、签名、冻结、超时和后验离线回归；真实冻结计划默认仅写入被忽略的 `build/`。首轮真机安装返回 `INSTALL_FAILED_USER_RESTRICTED`，诊断没有运行；后续只读观察在可见用户中未发现该包，具体取消原因未知。[脱敏记录](artifacts/managed-probe-20261101/device-install-incomplete.json) 设备观察不构成共享锁，短诊断也不能作为 900 秒资格。
 - 随后重试安装并完成 [API33 arm64/4KB 的 R8 真机短诊断](artifacts/managed-probe-20261101/device-short-pass-20261101.json)：3 组、306 项检查通过，覆盖合成压力、预算和关闭，最终 backing 为 0；安装包身份和运行后核验通过。transport 耗时 0.79 秒；进程 cgroup 获得 0 个样本，`NOT_OBSERVED` 不表示未冻结。该结果不证明长稳、真实系统低内存、性能、BIL 或其他 ABI。
-- 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者。[首轮 CI](artifacts/managed-probe-20261101/linux-host-first-attempt.json) 失败且未上传制品；[第二轮](artifacts/managed-probe-20261101/linux-host-second-attempt.json)在静态库处理步骤失败，原始错误未保留，具体原因未知。新增限定分类与脱敏诊断，runner 的 34 项离线检查通过，需在新提交单独运行；CI sentinel 不等同用户本机私有标识扫描。
+- 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者。[首轮](artifacts/managed-probe-20261101/linux-host-first-attempt.json)、[第二轮](artifacts/managed-probe-20261101/linux-host-second-attempt.json)均失败且未上传制品；[第三轮](artifacts/managed-probe-20261101/linux-host-third-attempt.json)的受控诊断将静态库处理错误归类为未知选项，但不能独立证明根因。构建器此前解析工具符号链接可能改变 LLVM 多调用程序的模式，现保留请求的入口名称并新增回归；本机 22 项通过、1 项 POSIX 专属测试跳过，Linux 实机候选仍需新一轮确认。runner 的 34 项离线检查通过；CI sentinel 不等同用户本机私有标识扫描。
 
 ## 修复后工程候选（2026-11-01）
 

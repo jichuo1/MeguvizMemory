@@ -35,6 +35,8 @@ jobs:
           persist-credentials: false
       - name: Verify runner safety contracts
         run: python3 tools/test_run_linux_host_candidate_ci.py
+      - name: Verify host builder contracts
+        run: python3 tools/test_build_host_candidate.py
       - name: Build and independently inspect Linux candidate
         env:
           REQUESTED_COMMIT: ${{ inputs.commit_sha }}
