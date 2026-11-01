@@ -456,6 +456,8 @@
     "performance": "NOT_MEASURED",
     "BIL": "NOT_INTEGRATED",
     "android_sanitized_proof": "artifacts/managed-domain-20261101/android-sanitized/metadata-index.json",
-    "android_r8_build": "PASS_ARM64_R8_STATIC_BUILD_ONLY_NO_DEVICE"
+    "android_r8_build": "PASS_ARM64_R8_STATIC_BUILD_ONLY_NO_DEVICE",
+    "ci_host": "artifacts/managed-domain-20261101/ci-host.json",
+    "ci_tested_commit": "92b419fa2a541802a8ebdd1346ca251d3062b216"
   }
 }

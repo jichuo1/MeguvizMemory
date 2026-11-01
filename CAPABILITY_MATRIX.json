@@ -275,6 +275,7 @@
     "automatic_pressure": "NOT_INTEGRATED",
     "performance": "NOT_MEASURED",
     "release": "NOT_QUALIFIED",
-    "evidence": "artifacts/managed-domain-20261101/README.md"
+    "evidence": "artifacts/managed-domain-20261101/README.md",
+    "host_ci": "PASS_WINDOWS_LINUX_MANAGED_47_JAVA_IMAGE_12_PLUS_8_ON_92b419f"
   }
 }

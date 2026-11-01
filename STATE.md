@@ -5,7 +5,7 @@
 ## Java 托管域继续开发（2026-11-01）
 
 - 新增纯 Java 可调用的 `ManagedMemoryDomain`、allocation 和受控 lease；自有 System/Arena 域分配时先清零，显式软预算，关闭先停止准入并在后台等待 owner、lease 和相关调用。未知结果进入隔离，不强制释放；未接入同域自动压力 worker。[托管合同](docs/ANDROID_MANAGED_DOMAIN.md)和[待实现的压力接入合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
-- 使用真实宿主 JVM 的 46 项受控故障/并发检查及 1 项无注入检查通过；独立 Java 图像消费者迁移到托管 API 后，安装共享核心与宿主 JNI 的 12 组像素对照、8 组拒绝及无诊断 sidecar 普通路径通过。[证据范围](artifacts/managed-domain-20261101/README.md)
+- Windows 与 Linux CI 均通过真实宿主 JVM 的 46 项受控故障/并发检查及 1 项无注入检查；独立 Java 图像消费者迁移到托管 API 后，两端安装共享核心与宿主 JNI 的 12 组像素对照、8 组拒绝及无诊断 sidecar 普通路径通过。[证据范围](artifacts/managed-domain-20261101/README.md)
 - 新源码已完成三 ABI 交叉构建及独立脱敏候选，arm64 R8 名称/签名静态检查通过；原始 AAR 未脱敏且不可分享。最新接口的 R8 运行、Android ART、真机、性能和正式发布资格均待统一验证。此前预览包不包含托管域和本次消费者迁移。
 
 ## 后续功能继续开发（2026-11-01）

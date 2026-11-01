@@ -1,0 +1,41 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41277123721",
+  "tested_commit": "92b419fa2a541802a8ebdd1346ca251d3062b216",
+  "profiles": [
+    {
+      "name": "verify (ubuntu-latest)",
+      "conclusion": "success",
+      "managed_ctest": 47,
+      "java_image_positive": 12,
+      "java_image_negative": 8,
+      "job_log_sha256": "617df87825bb723445bd5720487e7e05d4a4e8e0a1d4d544e1eaf6dd5bc65761"
+    },
+    {
+      "name": "verify (windows-latest)",
+      "conclusion": "success",
+      "managed_ctest": 47,
+      "java_image_positive": 12,
+      "java_image_negative": 8,
+      "job_log_sha256": "47593f03ee0bd108f83f5e41df1e377f1169144e3110ab7b92c2d62788bca229"
+    }
+  ],
+  "source_lock_sha256": "41ca45d902d7df0d5c0219d3e2427bf1e25e886aec147cf6804b5b54b1078349",
+  "key_source_files_matched": [
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java",
+    "adapters/android/native/workspace_jni.cpp",
+    "adapters/android/CMakeLists.txt",
+    "adapters/android/consumer-rules.pro",
+    "consumers/java_image/java/io/github/jichuo1/meguviz/memory/image/JavaImage.java",
+    "consumers/java_image/run_host_ci.py",
+    "tests/managed_host/CMakeLists.txt",
+    ".github/workflows/core.yml"
+  ],
+  "device_execution": "NOT_PERFORMED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host checks do not prove Android ART, device, performance, or release qualification.",
+    "Failure cases deliberately quarantine uncertain resources and do not count as normal reclamation.",
+    "Key file hashes and CI logs are scoped evidence, not signed build provenance."
+  ]
+}

@@ -1232,6 +1232,7 @@
     "performance": "NOT_MEASURED",
     "BIL": "NOT_INTEGRATED",
     "evidence": "artifacts/managed-domain-20261101/README.md",
-    "pressure_contract": "docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md"
+    "pressure_contract": "docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md",
+    "host_ci": "PASS_WINDOWS_LINUX_MANAGED_47_JAVA_IMAGE_12_PLUS_8_ON_92b419f"
   }
 }
