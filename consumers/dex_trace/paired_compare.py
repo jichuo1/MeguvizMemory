@@ -37,6 +37,9 @@ STABLE = ('schema_version', 'workload', 'variant', 'case', 'success', 'diagnosti
           'expected_status', 'observed_status', 'lease_final_correct', 'snapshot_released_before_last_read',
           'source_final_released', 'final_release_on_other_thread', 'closed_backing_bytes', 'final_resource_state',
           'resource_scope', 'product_scope')
+BINDING_NAME = 'paired-capture-binding.json'
+BINDING_SCOPE = 'SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY'
+EMPTY_SHA256 = hashlib.sha256(b'').hexdigest()
 
 
 def unique_json(data):
@@ -232,6 +235,93 @@ def remaining(deadline):
     return value
 
 
+def _hash_value(value):
+    return isinstance(value, str) and re.fullmatch(r'[0-9a-f]{64}', value) is not None
+
+
+def output_binding(name, data):
+    """Describe bytes already written to a private per-process output file."""
+    return {'name': name, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+
+
+def validate_pair_binding(value):
+    """Validate the complete v2 binding, without claiming producer exit."""
+    fields = {'schema_version', 'state', 'scope', 'producer_exit', 'candidate_source_commit',
+              'candidate_sha256', 'producer_script_sha256', 'baseline_executable_sha256',
+              'traced_executable_sha256', 'core_file_sha256', 'source_lock_sha256',
+              'input_bytes', 'input_sha256', 'corrupt_snapshot_sha256', 'event_limit',
+              'stdout_limit_bytes', 'stderr_limit_bytes', 'pairs'}
+    prepare.require(isinstance(value, dict) and set(value) == fields and
+                    type(value['schema_version']) is int and value['schema_version'] == 2 and
+                    value['state'] == 'PAIR_OUTPUT_FILES_BOUND' and value['scope'] == BINDING_SCOPE and
+                    value['producer_exit'] == 'NOT_ATTESTED' and
+                    isinstance(value['candidate_source_commit'], str) and
+                    re.fullmatch(r'[0-9a-f]{40}', value['candidate_source_commit']) is not None and
+                    all(_hash_value(value[k]) for k in ('candidate_sha256', 'producer_script_sha256',
+                        'baseline_executable_sha256', 'traced_executable_sha256', 'core_file_sha256',
+                        'source_lock_sha256', 'input_sha256', 'corrupt_snapshot_sha256')) and
+                    type(value['input_bytes']) is int and 1 <= value['input_bytes'] <= capture.MAX_INPUT and
+                    type(value['event_limit']) is int and 1 <= value['event_limit'] <= 1000000 and
+                    type(value['stdout_limit_bytes']) is int and value['stdout_limit_bytes'] == capture.MAX_STDOUT and
+                    type(value['stderr_limit_bytes']) is int and value['stderr_limit_bytes'] == capture.MAX_STDERR,
+                    'binding_header_invalid')
+    pairs = value['pairs']
+    expected = [(variant, case) for variant in VARIANTS for case in CASES]
+    prepare.require(isinstance(pairs, list) and len(pairs) == len(expected), 'binding_pairs_invalid')
+    for pair, (variant, case) in zip(pairs, expected):
+        prepare.require(isinstance(pair, dict) and set(pair) == {'variant', 'case', 'snapshot_sha256',
+            'snapshot_digest_evidence', 'events', 'sites', 'baseline', 'traced'} and
+            pair['variant'] == variant and pair['case'] == case and
+            pair['snapshot_sha256'] == (value['corrupt_snapshot_sha256'] if case == 'corrupt-input' else value['input_sha256']) and
+            pair['snapshot_digest_evidence'] == 'TRACED_SCOPE_HEADER_REPORTED' and
+            type(pair['events']) is int and 0 <= pair['events'] <= value['event_limit'] and
+            type(pair['sites']) is int and 0 <= pair['sites'] <= min(32, pair['events']) and
+            ((pair['events'] == pair['sites'] == 0) if case in ('invalid-lease', 'borrow-budget')
+             else pair['events'] > 0 and pair['sites'] > 0), 'binding_pair_invalid')
+        for mode in ('baseline', 'traced'):
+            process = pair[mode]
+            prepare.require(isinstance(process, dict) and set(process) == {'exit_code', 'stdout', 'stderr'} and
+                            type(process['exit_code']) is int and process['exit_code'] == 0,
+                            'binding_process_invalid')
+            for stream in ('stdout', 'stderr'):
+                record = process[stream]
+                expected_name = mode + '-' + variant + '-' + case + '.' + stream
+                maximum = value[stream + '_limit_bytes']
+                prepare.require(isinstance(record, dict) and set(record) == {'name', 'bytes', 'sha256'} and
+                                record['name'] == expected_name and type(record['bytes']) is int and
+                                0 <= record['bytes'] <= maximum and _hash_value(record['sha256']) and
+                                (record['bytes'] > 0 if stream == 'stdout' else
+                                 record['bytes'] == 0 and record['sha256'] == EMPTY_SHA256),
+                                'binding_output_invalid')
+    return value
+
+
+def verify_bound_outputs(directory, binding):
+    """Re-read the exact regular files under the output directory and check bytes."""
+    validate_pair_binding(binding)
+    for pair in binding['pairs']:
+        for mode in ('baseline', 'traced'):
+            for stream in ('stdout', 'stderr'):
+                record = pair[mode][stream]
+                data = prepare_consumer.read_regular(Path(directory) / record['name'], binding[stream + '_limit_bytes'])
+                prepare.require(len(data) == record['bytes'] and hashlib.sha256(data).hexdigest() == record['sha256'],
+                                'binding_output_drift')
+
+
+def publish_pair_binding(directory, binding):
+    """Write only after complete validation; the caller must also attest its exit."""
+    directory = Path(directory)
+    verify_bound_outputs(directory, binding)
+    target = directory / BINDING_NAME
+    data = (json.dumps(binding, ensure_ascii=False, indent=2, allow_nan=False) + '\n').encode('utf-8')
+    with target.open('xb') as stream:
+        stream.write(data)
+        stream.flush()
+        os.fsync(stream.fileno())
+    prepare.require(prepare_consumer.read_regular(target, len(data)) == data, 'binding_write_drift')
+    return target
+
+
 def progress(out, completed, current, state='RUNNING'):
     pending = out / 'progress.pending'
     data = {'state': state, 'completed_pairs': completed, 'total_pairs': len(VARIANTS) * len(CASES),
@@ -286,25 +376,36 @@ def main(args):
     if os.name != 'nt': env['LD_LIBRARY_PATH'] = str(core.parent)
     out.mkdir(parents=True, exist_ok=False)
     summaries = []
+    bindings = []
     progress(out, 0, None)
     for variant in VARIANTS:
         for case in CASES:
             remaining(deadline)
             progress(out, len(summaries), variant + ':' + case)
             reports = []
+            process_bindings = {}
             for mode, exe in (('baseline', baseline), ('traced', traced)):
                 code, stdout, stderr = capture.run_bounded([str(exe), str(source), '--variant', variant, '--case', case],
                                                            min(args.timeout_seconds, remaining(deadline)), env=env)
-                with (out / (mode + '-' + variant + '-' + case + '.stdout')).open('xb') as stream: stream.write(stdout)
-                with (out / (mode + '-' + variant + '-' + case + '.stderr')).open('xb') as stream: stream.write(stderr)
+                stdout_name = mode + '-' + variant + '-' + case + '.stdout'
+                stderr_name = mode + '-' + variant + '-' + case + '.stderr'
+                with (out / stdout_name).open('xb') as stream: stream.write(stdout)
+                with (out / stderr_name).open('xb') as stream: stream.write(stderr)
                 prepare.require(code == 0 and not stderr, 'consumer_process_incomplete')
                 reports.append(parse_output(stdout, mode == 'traced', variant, case, size, file_hash,
                                             corrupt_hash if case == 'corrupt-input' else file_hash, core, args.max_events))
+                process_bindings[mode] = {'exit_code': code, 'stdout': output_binding(stdout_name, stdout),
+                                          'stderr': output_binding(stderr_name, stderr)}
             left, right = reports[0][0], reports[1][0]
             prepare.require(all(left[key] == right[key] for key in STABLE), 'consumer_result_mismatch')
             summaries.append({'variant': variant, 'case': case, 'events': reports[1][1]['events'],
                               'sites': reports[1][1]['site_count'],
                               'memory_domain': 'PRESENT' if variant in ('D-C1', 'D-C2') else 'NOT_APPLICABLE'})
+            bindings.append({'variant': variant, 'case': case,
+                             'snapshot_sha256': corrupt_hash if case == 'corrupt-input' else file_hash,
+                             'snapshot_digest_evidence': 'TRACED_SCOPE_HEADER_REPORTED',
+                             'events': reports[1][1]['events'], 'sites': reports[1][1]['site_count'],
+                             'baseline': process_bindings['baseline'], 'traced': process_bindings['traced']})
             progress(out, len(summaries), None)
             if len(summaries) % 5 == 0:
                 print(json.dumps({'state': 'RUNNING', 'completed_pairs': len(summaries),
@@ -315,6 +416,18 @@ def main(args):
     prepare.require(prepare_consumer.verify_prepared(dex_stage, lock) == dex_manifest and
                     verify_paired(paired_stage) == paired_manifest and
                     verify_sdk(candidate, evidence, sdk) == (candidate_commit, candidate_hash), 'prepared_inputs_drift')
+    remaining(deadline)
+    binding = {'schema_version': 2, 'state': 'PAIR_OUTPUT_FILES_BOUND', 'scope': BINDING_SCOPE,
+               'producer_exit': 'NOT_ATTESTED', 'candidate_source_commit': candidate_commit,
+               'candidate_sha256': candidate_hash,
+               'producer_script_sha256': identities[str(Path(__file__).resolve())],
+               'baseline_executable_sha256': identities[str(baseline)],
+               'traced_executable_sha256': identities[str(traced)],
+               'core_file_sha256': identities[str(core)], 'source_lock_sha256': identities[str(lock)],
+               'input_bytes': size, 'input_sha256': file_hash, 'corrupt_snapshot_sha256': corrupt_hash,
+               'event_limit': args.max_events, 'stdout_limit_bytes': capture.MAX_STDOUT,
+               'stderr_limit_bytes': capture.MAX_STDERR, 'pairs': bindings}
+    publish_pair_binding(out, binding)
     remaining(deadline)
     result = {'state': 'PASS_SCOPED_PAIRED_READER_CAPTURE', 'scope': 'SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY',
               'candidate_source_commit': candidate_commit, 'candidate_sha256': candidate_hash,

@@ -105,6 +105,10 @@ jobs:
         run: python consumers/dex_trace/test_prepare_consumer.py
       - name: DEX paired trace offline contracts
         run: python consumers/dex_trace/test_paired_compare.py
+      - name: DEX paired reader replay coordinator contracts
+        run: python consumers/dex_trace/test_paired_replay.py
+      - name: DEX paired reader replay worker contracts
+        run: python consumers/dex_trace/test_paired_replay_worker.py
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture

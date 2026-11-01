@@ -52,6 +52,73 @@ class PairedContracts(unittest.TestCase):
         return subject.parse_output(self.output(value, events), True, 'D-C1', value['case'], 4,
                                     self.input_hash, self.input_hash, self.core, 10)
 
+    def binding(self):
+        pairs = []
+        for variant in subject.VARIANTS:
+            for case in subject.CASES:
+                entries = {}
+                for mode in ('baseline', 'traced'):
+                    files = {}
+                    for kind in ('stdout', 'stderr'):
+                        name = mode + '-' + variant + '-' + case + '.' + kind
+                        data = (mode + ':' + case).encode() if kind == 'stdout' else b''
+                        (self.root / name).write_bytes(data)
+                        files[kind] = subject.output_binding(name, data)
+                    entries[mode] = {'exit_code': 0, **files}
+                count = 0 if case in ('invalid-lease', 'borrow-budget') else 1
+                pairs.append({'variant': variant, 'case': case,
+                              'snapshot_sha256': 'b' * 64 if case == 'corrupt-input' else self.input_hash,
+                              'snapshot_digest_evidence': 'TRACED_SCOPE_HEADER_REPORTED',
+                              'events': count, 'sites': count, **entries})
+        return {'schema_version': 2, 'state': 'PAIR_OUTPUT_FILES_BOUND', 'scope': subject.BINDING_SCOPE,
+                'producer_exit': 'NOT_ATTESTED', 'candidate_source_commit': 'a' * 40,
+                'candidate_sha256': 'a' * 64, 'producer_script_sha256': 'a' * 64,
+                'baseline_executable_sha256': 'a' * 64, 'traced_executable_sha256': 'a' * 64,
+                'core_file_sha256': 'a' * 64, 'source_lock_sha256': 'a' * 64,
+                'input_bytes': 4, 'input_sha256': self.input_hash, 'corrupt_snapshot_sha256': 'b' * 64,
+                'event_limit': 10, 'stdout_limit_bytes': subject.capture.MAX_STDOUT,
+                'stderr_limit_bytes': subject.capture.MAX_STDERR, 'pairs': pairs}
+
+    def test_v2_binding_requires_complete_outputs_and_does_not_attest_producer_exit(self):
+        value = self.binding()
+        self.assertEqual(subject.validate_pair_binding(value), value)
+        subject.verify_bound_outputs(self.root, value)
+        output = subject.publish_pair_binding(self.root, value)
+        actual = subject.unique_json(output.read_text(encoding='utf-8'))
+        self.assertEqual(actual, value)
+        self.assertEqual(actual['producer_exit'], 'NOT_ATTESTED')
+        with self.assertRaises(FileExistsError): subject.publish_pair_binding(self.root, value)
+
+    def test_v2_binding_rejects_field_forgery_and_bad_relative_names(self):
+        for changed in ('extra', 'boolean', 'duplicate', 'relative', 'corrupt', 'zero_events', 'exit', 'size'):
+            value = self.binding()
+            pair = value['pairs'][0]
+            if changed == 'extra': value['unexpected'] = True
+            elif changed == 'boolean': value['input_bytes'] = True
+            elif changed == 'duplicate': value['pairs'][1] = dict(pair)
+            elif changed == 'relative': pair['traced']['stdout']['name'] = '../outside.stdout'
+            elif changed == 'corrupt': value['pairs'][4]['snapshot_sha256'] = self.input_hash
+            elif changed == 'zero_events': pair['events'] = pair['sites'] = 0
+            elif changed == 'exit': pair['baseline']['exit_code'] = False
+            elif changed == 'size': pair['traced']['stderr']['bytes'] = 1
+            with self.subTest(changed=changed), self.assertRaises(ValueError): subject.validate_pair_binding(value)
+
+    def test_v2_binding_does_not_publish_on_output_drift(self):
+        value = self.binding()
+        output = self.root / value['pairs'][0]['traced']['stdout']['name']
+        output.write_bytes(b'tampered')
+        with self.assertRaisesRegex(ValueError, 'binding_output_drift'):
+            subject.publish_pair_binding(self.root, value)
+        self.assertFalse((self.root / subject.BINDING_NAME).exists())
+
+    def test_v2_binding_zero_event_cases_require_zero_sites(self):
+        value = self.binding()
+        pair = value['pairs'][2]
+        self.assertEqual(pair['case'], 'invalid-lease')
+        self.assertEqual((pair['events'], pair['sites']), (0, 0))
+        pair['sites'] = 1
+        with self.assertRaises(ValueError): subject.validate_pair_binding(value)
+
     def test_valid_reader_and_expected_zero_event_rejection(self):
         self.assertEqual(self.parse(self.value())[1]['events'], 1)
         self.assertEqual(self.parse(self.value('invalid-lease'), ())[1]['events'], 0)

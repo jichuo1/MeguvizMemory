@@ -1325,6 +1325,8 @@
     "contract": "consumers/dex_trace/README.md",
     "host_ci": "artifacts/dex-metadata-trace-20261101/ci-182cc7c.json",
     "paired_consumer_host": "artifacts/dex-metadata-trace-20261101/paired-host.json",
+    "paired_consumer_ci": "artifacts/dex-metadata-trace-20261101/paired-ci-fd420a2.json",
+    "paired_replay_host": "artifacts/dex-metadata-trace-20261101/paired-replay-host.json",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },
   "image_trace_20261101": {

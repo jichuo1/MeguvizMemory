@@ -1,0 +1,27 @@
+{
+  "state": "PASS_BOUND_PAIRED_READER_REPLAY",
+  "scope": "BOUND_READER_BYTE_READS_SINGLE_THREAD_SYNTHETIC_LIFECYCLE",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "input_origin": "ANDROID_DIAGNOSTIC_APK_CLASSES_DEX_NOT_PRODUCT",
+  "input_bytes": 29480,
+  "capture_and_replay_pairs": 20,
+  "independent_replay_pairs": 20,
+  "memory_core_closed_zero_and_destroyed": 10,
+  "direct_references_cleared_not_os_reclaim_proof": 10,
+  "event_limit_negative": "INCOMPLETE_NO_REPLAY_RECEIPT",
+  "coordinator_offline_tests": {"passed": 17, "total": 17},
+  "worker_offline_tests": {"passed": 11, "total": 11},
+  "paired_binding_offline_tests": {"passed": 14, "skipped": 1, "skip_reason": "WINDOWS_SYMLINK_PERMISSION"},
+  "private_receipt_sha256": "0970db8949693e11e05ad8e362d7a5946e997e0ec97a835e6ca689fca6dcb90d",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "product_trace": "NOT_CAPTURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Replay covers bound reader site/offset/byte reads with a synthetic local lifetime, not query internals or original concurrent callbacks.",
+    "The input is a diagnostic APK DEX, not a product workload.",
+    "The requested core and executables are checked on disk; that is not signed provenance or mapped-byte proof.",
+    "The direct cases do not create Memory domains; clearing references does not prove operating-system reclamation.",
+    "No energy, timing, Memory net benefit, hardware mechanism or Android qualification is claimed."
+  ]
+}

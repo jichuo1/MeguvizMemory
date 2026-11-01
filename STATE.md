@@ -40,6 +40,7 @@
 
 - 新增[独立 DEX 元数据 reader 轨迹诊断](consumers/dex_trace/README.md)，仅在隔离源码副本插桩固定读取点；不修改共享 DexMeguviz。宿主用诊断 APK 的 DEX 对照原样与插桩 reader，摘要一致并记录 19401 次读取、命中 23/32 个静态位点；损坏输入与事件上限负例、13 项离线合同检查通过。[限定证据](artifacts/dex-metadata-trace-20261101/host.json)不代表 Memory 消费者、DEX 查询全路径、产品轨迹或性能。`182cc7c` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/ci-182cc7c.json) 均通过 12 项并各跳过 1 项缺少外部源码的检查。
 - [真实 DexMeguviz 配对消费者的隔离 reader 采集](consumers/dex_trace/PAIRED_CONTRACT.md)已接入安装版 Memory：使用诊断 APK 的 DEX，四种输入策略与五类场景共 20 对原样/插桩宿主对照通过；正常及跨线程场景每次记录 19401 条、命中 23/32 个位点，坏输入和 lease/预算拒绝的事件数符合预期。[证据](artifacts/dex-metadata-trace-20261101/paired-host.json)仅覆盖 snapshot-open 调用线程的元数据 reader，不涵盖完整查询、产品输入或性能；模块路径由子进程自报并与磁盘哈希对照。
+- 配对采集 `fd420a2` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/paired-ci-fd420a2.json) 均完整通过。新增[受控 reader 字节回放](consumers/dex_trace/REPLAY_CONTRACT.md)，先实际执行并绑定采集，再以独立 oracle 对照 20 对回放；10 个 System/Arena 合成域关闭归零，另 10 个普通路径只确认引用清除。[宿主证据](artifacts/dex-metadata-trace-20261101/paired-replay-host.json)不证明原始跨线程寿命、完整查询、产品性能或操作系统内存回收。
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。

@@ -20,3 +20,5 @@ python consumers/dex_trace/capture.py --input <本工作区的原始DEX> --basel
 `smoke.py` 接受与 `capture.py` 相同的五个路径参数，在私有新目录内用所选有效 DEX 执行原样与插桩对照，另生成一个 magic 损坏副本验证两者拒绝一致，并检查事件上限失败不会写 PASS 回执。原始输入不会修改；该测试仍不提供性能或产品资格。
 
 另提供[安装 Memory SDK 的真实 DexMeguviz 配对消费者诊断](PAIRED_CONTRACT.md)：它执行四种输入策略及明确的正常、跨线程和拒绝用例，但仍只记录 snapshot-open 调用线程中的元数据 reader 位点，不记录整个查询或跨线程生命周期轨迹。
+
+[受控字节回放](REPLAY_CONTRACT.md)会自行启动配对采集、验证进程退出和绑定后，按记录偏移读取同一输入快照并核对独立 checksum；其 Memory 生命周期是单线程合成模型，不是完整查询、性能或并发重放。
