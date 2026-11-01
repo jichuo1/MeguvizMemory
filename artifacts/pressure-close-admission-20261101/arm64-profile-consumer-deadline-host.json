@@ -1,0 +1,13 @@
+{
+  "state": "PASS_SCOPED_OFFLINE_DEADLINE_CONTRACTS",
+  "scope": "NEW_PROFILE_FUNCTIONAL_VALIDATOR_LOCAL_TRANSPORT",
+  "offline_tests": {"passed": 20, "total": 20},
+  "coverage": ["SPAWN_CROSSED_DEADLINE", "LATE_EXIT_OBSERVATION", "PIPE_JOIN_CROSSED_DEADLINE", "OUTPUT_LIMIT", "LOCAL_EXIT_UNKNOWN"],
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Timing checks are cooperative; a blocked operating-system process creation or pipe operation cannot be forcibly bounded by Python alone.",
+    "Only the local transport is targeted; device-side process state remains unknown after an interrupted operation.",
+    "This is not an Android runtime or performance qualification."
+  ]
+}

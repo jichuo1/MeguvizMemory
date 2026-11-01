@@ -134,6 +134,36 @@ class ProfileRunnerTests(unittest.TestCase):
             self.assertEqual(result[6], "LOCAL_EXIT_UNCONFIRMED")
             self.assertEqual(result[1:3], (b"", b""))
 
+    def test_transport_deadline_covers_start_late_poll_and_pipe_completion(self):
+        class ExitedTransport:
+            def __init__(self):
+                self.stdout = io.BytesIO(b"private output")
+                self.stderr = io.BytesIO(b"")
+                self.returncode = 0
+                self.polled = 0
+                self.killed = 0
+            def poll(self):
+                self.polled += 1
+                return 0
+            def kill(self):
+                self.killed += 1
+            def wait(self, timeout):
+                return 0
+        for clocks, expected_polls, expected_kills in (
+                ((0.0, 1.1, 1.1), 0, 1),       # Startup crosses the deadline.
+                ((0.0, 0.1, 1.1, 1.1), 1, 0),  # Exit was observed too late.
+                ((0.0, 0.1, 0.2, 1.1), 1, 0)): # Pipe completion crossed it.
+            process = ExitedTransport()
+            times = iter(clocks)
+            with patch.object(runner_module.subprocess, "Popen", return_value=process), \
+                 patch.object(runner_module, "transport_clock", side_effect=lambda: next(times)):
+                result = runner_module.bounded_adb(["synthetic-only"], 1)
+            self.assertTrue(result[3])
+            self.assertIsNone(result[0])
+            self.assertEqual(result[1:3], (b"", b""))
+            self.assertEqual(process.polled, expected_polls)
+            self.assertEqual(process.killed, expected_kills)
+
     def test_unconfirmed_transport_is_blocked_and_marked_unknown(self):
         runner = self.runner()
         runner.admission_gate(first=True)
@@ -143,6 +173,16 @@ class ProfileRunnerTests(unittest.TestCase):
                 runner.command("fake-flood", ["shell", "true"])
         self.assertEqual(runner.receipt["remote_process_state_after_abort"], "UNKNOWN_DO_NOT_ASSUME_STOPPED")
         self.assertEqual(runner.receipt["commands"][-1]["local_transport_state"], "LOCAL_EXIT_UNCONFIRMED")
+
+    def test_late_observed_success_cannot_pass_and_marks_remote_unknown(self):
+        runner = self.runner()
+        runner.admission_gate(first=True)
+        late = (None, b"", b"", True, False, False, "LOCAL_EXIT_CONFIRMED")
+        with patch.object(runner_module, "bounded_adb", return_value=late):
+            with self.assertRaises(Blocked):
+                runner.checked("fake-late", ["shell", "true"])
+        self.assertEqual(runner.receipt["remote_process_state_after_abort"], "UNKNOWN_DO_NOT_ASSUME_STOPPED")
+        self.assertIs(runner.receipt["all_passed"], False)
 
     def test_invalid_profile_blocks_before_any_fake_adb(self):
         runner = self.runner()

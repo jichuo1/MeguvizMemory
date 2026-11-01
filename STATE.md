@@ -19,6 +19,7 @@
 - 长稳 runner 的自身启动器误判和 PID/UID 跨快照身份检查已修复，[38 项离线合同](artifacts/pressure-close-admission-20261101/stability-launcher-fix-host.json)通过；真实设备 `/proc` 可读性及修复后新轮仍未验证，原中断轮不因修复升级。
 - 新增[私有 ARM64 输入 profile](docs/ARM64_INPUT_PROFILE.md)，绑定选定修复版制品、源码和工具入口；[10 项宿主合同及本地自一致检查](artifacts/pressure-close-admission-20261101/arm64-profile-host.json)通过。它尚未接入旧设备 runner，也不冻结完整环境或证明加载/性能。
 - 新增独立 profile 功能验证入口，旧 runner 字节保持不变；[18 项离线合同](artifacts/pressure-close-admission-20261101/arm64-profile-consumer-host.json)、旧入口 13 项及本地制品映射通过。新收据采用独立 scope 并被旧性能冻结器拒绝，尚未在设备运行或接入新性能冻结协议。
+- 该入口随后补足本地传输启动、退出观察和管道收尾跨截止的失败处理，[20 项离线合同](artifacts/pressure-close-admission-20261101/arm64-profile-consumer-deadline-host.json)通过；单次系统调用不保证硬截止，设备端仍按未知处理。
 - 上述 runner 和 profile 提交 `b9ada4c` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/stability-profile-ci-b9ada4c.json) 分别通过 38 项和 10 项离线合同；修复后 runner 的设备运行仍待重新协调验证。
 
 ## 统一验证准备（2026-11-01）

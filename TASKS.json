@@ -1301,6 +1301,7 @@
     "arm64_consumer_cross_build": "artifacts/pressure-close-admission-20261101/arm64-consumer-cross-build.json",
     "arm64_input_profile_host": "artifacts/pressure-close-admission-20261101/arm64-profile-host.json",
     "arm64_profile_consumer_host": "artifacts/pressure-close-admission-20261101/arm64-profile-consumer-host.json",
+    "arm64_profile_consumer_deadline_host": "artifacts/pressure-close-admission-20261101/arm64-profile-consumer-deadline-host.json",
     "stability_profile_ci": "artifacts/pressure-close-admission-20261101/stability-profile-ci-b9ada4c.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },

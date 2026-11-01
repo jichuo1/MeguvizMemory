@@ -18,6 +18,7 @@ import secrets
 import subprocess
 import threading
 import time
+from time import monotonic as transport_clock
 
 import freeze_arm64_input_profile as input_profile
 from run_arm64_validation import Blocked, Failed, BUSY_PROCESS, CORE_CASES, digest, nonempty_evidence, parse_last_json, utc_now, verify_arm64_elf
@@ -62,6 +63,7 @@ def write_json(path, value):
 
 def bounded_adb(command, timeout):
     """Bound both pipes and the local transport; a remote child is never killed."""
+    deadline = transport_clock() + timeout
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     buffers, exceeded, errors = [bytearray(), bytearray()], [False, False], []
     abort = threading.Event()
@@ -87,19 +89,27 @@ def bounded_adb(command, timeout):
     for thread in threads:
         thread.start()
     timed_out, confirmed = False, False
-    deadline = time.monotonic() + timeout
     while True:
+        remaining = deadline - transport_clock()
+        if remaining <= 0:
+            timed_out = True
+            break
         if abort.is_set():
             break
         try:
-            if process.poll() is not None:
+            result = process.poll()
+            if transport_clock() >= deadline:
+                timed_out = True
+                confirmed = result is not None
+                break
+            if result is not None:
                 confirmed = True
                 break
         except OSError:
             errors.append(True)
             abort.set()
             break
-        remaining = deadline - time.monotonic()
+        remaining = deadline - transport_clock()
         if remaining <= 0:
             timed_out = True
             break
@@ -118,6 +128,8 @@ def bounded_adb(command, timeout):
         thread.join(timeout=PIPE_JOIN_WAIT_SECONDS)
     if any(thread.is_alive() for thread in threads):
         errors.append(True)
+    if transport_clock() >= deadline:
+        timed_out = True
     overflow, read_error = any(exceeded), bool(errors)
     # Never retain partial output from an aborted or unconfirmed transport.
     unsafe = timed_out or overflow or read_error or not confirmed
