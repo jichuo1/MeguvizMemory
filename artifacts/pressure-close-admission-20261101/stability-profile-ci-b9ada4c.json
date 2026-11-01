@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_HOST_CI",
+  "source_commit": "b9ada4ce9e1e6e8836f58d6697e944120e4e4c43",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41303133591",
+  "windows": {"stability_runner_tests": 38, "arm64_profile_tests": 10, "skipped": 0},
+  "linux": {"stability_runner_tests": 38, "arm64_profile_tests": 10, "skipped": 0},
+  "device": "NOT_RUN_FOR_MODIFIED_RUNNER",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host CI does not establish Android proc readability or physical-device behavior.",
+    "Input profile screening does not prove complete ABI, runtime loading or signed build provenance.",
+    "The interrupted 900-second observation remains separately INCOMPLETE."
+  ]
+}

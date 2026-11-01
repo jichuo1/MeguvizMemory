@@ -18,6 +18,7 @@
 - 修复版 [arm64 安全、DEX 和图像目标](artifacts/pressure-close-admission-20261101/arm64-consumer-cross-build.json)已完成 10 个目标交叉构建及安装核心链接回读；首次后验检查因辅助正则误匹配失败，修正后重跑通过，原始失败 stdout 未保存。交叉构建不构成设备或性能验证。
 - 长稳 runner 的自身启动器误判和 PID/UID 跨快照身份检查已修复，[38 项离线合同](artifacts/pressure-close-admission-20261101/stability-launcher-fix-host.json)通过；真实设备 `/proc` 可读性及修复后新轮仍未验证，原中断轮不因修复升级。
 - 新增[私有 ARM64 输入 profile](docs/ARM64_INPUT_PROFILE.md)，绑定选定修复版制品、源码和工具入口；[10 项宿主合同及本地自一致检查](artifacts/pressure-close-admission-20261101/arm64-profile-host.json)通过。它尚未接入旧设备 runner，也不冻结完整环境或证明加载/性能。
+- 上述 runner 和 profile 提交 `b9ada4c` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/stability-profile-ci-b9ada4c.json) 分别通过 38 项和 10 项离线合同；修复后 runner 的设备运行仍待重新协调验证。
 
 ## 统一验证准备（2026-11-01）
 
