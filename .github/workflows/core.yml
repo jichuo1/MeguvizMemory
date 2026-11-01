@@ -103,9 +103,27 @@ jobs:
       - name: Verify installed Java image consumer
         run: python consumers/java_image/run_host_ci.py --memory-sdk install/host --out-dir build/java-image-ci
       - name: Configure installed consumer
-        run: cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install/host
+        run: cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install/host -DMGMEM_IMAGE_BUILD_TRACE=ON -DMGMEM_IMAGE_BUILD_TRACE_TESTS=ON
       - name: Build installed consumer
         run: cmake --build build/image --config Release --parallel 2
+      - name: Verify image trace SHA-256 vectors (Linux)
+        if: runner.os == 'Linux'
+        run: build/image/mgmem_image_trace_sha256
+      - name: Verify image trace SHA-256 vectors (Windows)
+        if: runner.os == 'Windows'
+        run: build/image/Release/mgmem_image_trace_sha256.exe
+      - name: Verify image trace capture (Linux)
+        if: runner.os == 'Linux'
+        run: python consumers/image/test_trace_capture.py --plain-exe build/image/mgmem_image_paired --trace-exe build/image/mgmem_image_trace --fault-exe build/image/mgmem_image_trace_fault --runtime-dir install/host/lib --out-dir build/image-trace-ci
+      - name: Verify image trace capture (Windows)
+        if: runner.os == 'Windows'
+        run: python consumers/image/test_trace_capture.py --plain-exe build/image/Release/mgmem_image_paired.exe --trace-exe build/image/Release/mgmem_image_trace.exe --fault-exe build/image/Release/mgmem_image_trace_fault.exe --runtime-dir install/host/bin --out-dir build/image-trace-ci
+      - name: Verify image trace replay (Linux)
+        if: runner.os == 'Linux'
+        run: python consumers/image/test_trace_replay.py --trace-exe build/image/mgmem_image_trace --core install/host/lib/libmgmem.so --runtime-dir install/host/lib --out-dir build/image-trace-replay-ci
+      - name: Verify image trace replay (Windows)
+        if: runner.os == 'Windows'
+        run: python consumers/image/test_trace_replay.py --trace-exe build/image/Release/mgmem_image_trace.exe --core install/host/bin/mgmem.dll --runtime-dir install/host/bin --out-dir build/image-trace-replay-ci
       - name: Verify image outputs (Linux)
         if: runner.os == 'Linux'
         run: LD_LIBRARY_PATH=$PWD/install/host/lib python3 tools/verify_consumers.py --image-only --image-exe build/image/mgmem_image --out-dir artifacts/ci-image

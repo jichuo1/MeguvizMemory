@@ -13,12 +13,25 @@
 #include <string>
 #include <thread>
 #include <vector>
+#if defined(MGMEM_IMAGE_TRACE)
+#include "trace_contract.hpp"
+#include "trace_sha256.hpp"
+#include <memory>
+#endif
 #if defined(_WIN32)
 #include <malloc.h>
 #endif
 
 namespace {
 using u64 = uint64_t;
+#if defined(MGMEM_IMAGE_TRACE)
+image_trace::Capture *trace_capture = nullptr;
+#define IMAGE_TRACE(actor, op, id, offset, length) do { if (trace_capture) trace_capture->record(actor, op, id, offset, length); } while (false)
+#define IMAGE_TRACE_ACCESS(op, id, ptr) do { if (trace_capture) trace_capture->access(op, id, ptr); } while (false)
+#else
+#define IMAGE_TRACE(actor, op, id, offset, length) do {} while (false)
+#define IMAGE_TRACE_ACCESS(op, id, ptr) do {} while (false)
+#endif
 void require(bool condition, const char *message) { if (!condition) throw std::runtime_error(message); }
 void check(mgmem_status status) {
     if (status != MGMEM_OK) throw std::runtime_error("Memory status " + std::to_string(status));
@@ -90,6 +103,7 @@ struct Workspace {
             mgmem_domain_options_v1 options{sizeof(options), 1, 0, 0, mode, 0,
                                            64ull * 1024 * 1024, 65536, nullptr};
             check(mgmem_domain_create_v1(&options, &domain));
+            IMAGE_TRACE('M', "DOMAIN", 255, 0, 0);
         }
         for (size_t i = 0; i < sizes.size(); ++i) {
             if (provider == "direct") {
@@ -103,31 +117,50 @@ struct Workspace {
                 require(pointers[i] != nullptr, "direct System allocation failed");
                 direct_backing += sizes[i];
                 ++direct_allocations;
-            } else check(mgmem_allocate_v1(domain, sizes[i], 64, &owners[i]));
+                IMAGE_TRACE('M', "DIRECT_ALLOC", static_cast<unsigned>(i), 0, sizes[i]);
+            } else {
+                check(mgmem_allocate_v1(domain, sizes[i], 64, &owners[i]));
+                IMAGE_TRACE('M', "ALLOC", static_cast<unsigned>(i), 0, sizes[i]);
+            }
         }
         if (domain) check(mgmem_domain_snapshot_v1(domain, &allocated, sizeof(allocated)));
     }
     void acquire() {
-        if (!domain) return;
+        if (!domain) {
+            IMAGE_TRACE('M', "DIRECT_READY", 255, 0, 0);
+#if defined(MGMEM_IMAGE_TRACE)
+            if (trace_capture) trace_capture->bounds(pointers, sizes);
+#endif
+            return;
+        }
         // A one-byte write excludes another view of the entire allocation,
         // including its disjoint last byte when the temporary buffer is wider.
         check(mgmem_borrow_acquire_v1(domain, owners[1], 0, 1, MGMEM_WRITE, &leases[1]));
+        IMAGE_TRACE('M', "ACQUIRE", 1, 0, 1);
         mgmem_borrow_v1 incompatible{};
         whole_allocation_exclusive = mgmem_borrow_acquire_v1(
             domain, owners[1], sizes[1] - 1, 1, MGMEM_READ, &incompatible) == MGMEM_BUSY;
         if (incompatible.lease.id) check(mgmem_borrow_release_v1(domain, incompatible.lease));
         require(whole_allocation_exclusive, "write lease did not exclude another view");
+        IMAGE_TRACE('M', "ACQUIRE_BUSY", 1, sizes[1] - 1, 1);
         check(mgmem_borrow_release_v1(domain, leases[1].lease));
+        IMAGE_TRACE('M', "RELEASE_LEASE", 1, 0, 1);
         leases[1] = {};
         for (size_t i = 0; i < sizes.size(); ++i) {
             check(mgmem_borrow_acquire_v1(domain, owners[i], 0, sizes[i], MGMEM_WRITE, &leases[i]));
+            IMAGE_TRACE('M', "ACQUIRE", static_cast<unsigned>(i), 0, sizes[i]);
             pointers[i] = leases[i].data;
         }
+#if defined(MGMEM_IMAGE_TRACE)
+        if (trace_capture) trace_capture->bounds(pointers, sizes);
+#endif
     }
     void release_leases() {
         if (!domain) return;
         for (auto &lease : leases) if (lease.lease.id) {
             check(mgmem_borrow_release_v1(domain, lease.lease));
+            IMAGE_TRACE('W', "RELEASE_LEASE", static_cast<unsigned>(&lease - leases.data()), 0,
+                        sizes[static_cast<size_t>(&lease - leases.data())]);
             lease = {};
         }
         pointers = {};
@@ -135,13 +168,21 @@ struct Workspace {
     void release_owners() {
         for (auto &owner : owners) if (owner.id) {
             check(mgmem_release_v1(domain, owner));
+            IMAGE_TRACE('M', "RELEASE_OWNER", static_cast<unsigned>(&owner - owners.data()), 0,
+                        sizes[static_cast<size_t>(&owner - owners.data())]);
             owner = {};
         }
     }
     void close_before_worker_finishes() {
-        if (!domain) return; // Direct owner remains alive until join, then is freed.
+        if (!domain) {
+            // Direct owner remains alive until join, then is freed; no Memory
+            // domain or lease exists for this baseline.
+            IMAGE_TRACE('M', "DIRECT_CLOSE_DEFERRED", 255, 0, 0);
+            return;
+        }
         release_owners();
         check(mgmem_domain_begin_close_v1(domain));
+        IMAGE_TRACE('M', "BEGIN_CLOSE", 255, 0, 0);
         closing = true;
         const bool collect_busy = mgmem_domain_collect_v1(domain) == MGMEM_BUSY;
         const bool drain_timeout = mgmem_domain_drain_v1(domain, 0) == MGMEM_TIMEOUT;
@@ -150,6 +191,8 @@ struct Workspace {
         close_while_leased = collect_busy && drain_timeout && active.active_leases == 3 &&
                              active.retiring_bytes == sizes[0] + sizes[1] + sizes[2];
         require(close_while_leased, "close reclaimed active worker storage");
+        IMAGE_TRACE('M', "COLLECT_BUSY", 255, 0, 0);
+        IMAGE_TRACE('M', "DRAIN_TIMEOUT", 255, 0, 0);
     }
     void finish() {
         if (closed) return;
@@ -160,6 +203,8 @@ struct Workspace {
 #else
                 std::free(pointer);
 #endif
+                IMAGE_TRACE('M', "DIRECT_FREE", static_cast<unsigned>(&pointer - pointers.data()), 0,
+                            sizes[static_cast<size_t>(&pointer - pointers.data())]);
                 pointer = nullptr;
             }
             direct_backing = 0;
@@ -167,14 +212,17 @@ struct Workspace {
             release_leases();
             check(mgmem_domain_snapshot_v1(domain, &before_cleanup, sizeof(before_cleanup)));
             release_owners();
-            if (!closing) { check(mgmem_domain_begin_close_v1(domain)); closing = true; }
+            if (!closing) { check(mgmem_domain_begin_close_v1(domain)); closing = true; IMAGE_TRACE('M', "BEGIN_CLOSE", 255, 0, 0); }
             check(mgmem_domain_collect_v1(domain));
+            IMAGE_TRACE('M', "COLLECT_OK", 255, 0, 0);
             check(mgmem_domain_drain_v1(domain, 0));
+            IMAGE_TRACE('M', "DRAIN_OK", 255, 0, 0);
             check(mgmem_domain_snapshot_v1(domain, &finished, sizeof(finished)));
             require(finished.state == MGMEM_CLOSED && finished.backing_bytes == 0 &&
                     finished.reserved_bytes == 0 && finished.active_allocations == 0 &&
                     finished.active_leases == 0, "workspace did not close to zero");
             check(mgmem_domain_destroy_v1(domain));
+            IMAGE_TRACE('M', "DESTROY", 255, 0, 0);
             domain = nullptr;
         }
         closed = true;
@@ -184,8 +232,21 @@ struct Workspace {
 void gray_row(const uint8_t *rgb, uint8_t *luma, u64 row, u64 width, u64 &converted) {
     for (u64 x = 0; x < width; ++x) {
         const u64 input = 3 * (row * width + x);
+#if defined(MGMEM_IMAGE_TRACE)
+        // Sequence the diagnostic observer explicitly; the non-tracing build
+        // keeps its original expression and has no observer branch.
+        IMAGE_TRACE_ACCESS("RGB_READ", 0, rgb + input);
+        const auto red = rgb[input];
+        IMAGE_TRACE_ACCESS("RGB_READ", 0, rgb + input + 1);
+        const auto green = rgb[input + 1];
+        IMAGE_TRACE_ACCESS("RGB_READ", 0, rgb + input + 2);
+        const auto blue = rgb[input + 2];
+        IMAGE_TRACE_ACCESS("LUMA_WRITE", 1, luma + x);
+        luma[x] = static_cast<uint8_t>((77u * red + 150u * green + 29u * blue) >> 8);
+#else
         luma[x] = static_cast<uint8_t>((77u * rgb[input] + 150u * rgb[input+1] +
                                       29u * rgb[input+2]) >> 8);
+#endif
         ++converted;
     }
 }
@@ -209,10 +270,13 @@ u64 process(const uint8_t *rgb, uint8_t *temporary, uint8_t *output,
                 const auto *row = temporary + (ring ? yy % rows : yy) * width;
                 for (int dx = -1; dx <= 1; ++dx) {
                     const u64 xx = dx < 0 ? (x ? x-1 : 0) : (dx > 0 ? std::min(x+1, width-1) : x);
+                    IMAGE_TRACE_ACCESS("LUMA_READ", 1, row + xx);
                     sum += row[xx];
                 }
             }
+            IMAGE_TRACE_ACCESS("OUTPUT_WRITE", 2, output + y * width + x);
             output[y * width + x] = static_cast<uint8_t>(sum / 9);
+            IMAGE_TRACE_ACCESS("OUTPUT_READ", 2, output + y * width + x);
             checksum += output[y * width + x];
         }
     }
@@ -221,6 +285,14 @@ u64 process(const uint8_t *rgb, uint8_t *temporary, uint8_t *output,
 } // namespace
 
 int main(int argc, char **argv) {
+#if defined(MGMEM_IMAGE_TRACE)
+    std::unique_ptr<image_trace::Capture> capture;
+    std::string trace_directory;
+    u64 trace_limit = 250000;
+#if defined(MGMEM_IMAGE_TRACE_TESTING)
+    u64 trace_test_fail_at = 0;
+#endif
+#endif
     Workspace workspace;
     std::string provider = "direct", layout = "full", failure;
     bool close_race = false, worker_fault = false;
@@ -241,12 +313,23 @@ int main(int argc, char **argv) {
                 if (option == "--provider") provider = value;
                 else if (option == "--layout") layout = value;
                 else if (option == "--frames") frames = number(value);
+#if defined(MGMEM_IMAGE_TRACE)
+                else if (option == "--trace-dir") trace_directory = value;
+                else if (option == "--trace-max-events") trace_limit = number(value);
+#if defined(MGMEM_IMAGE_TRACE_TESTING)
+                else if (option == "--trace-test-fail-at") trace_test_fail_at = number(value);
+#endif
+#endif
                 else throw std::runtime_error("unknown option");
             }
         }
         require(provider == "direct" || provider == "system" || provider == "arena", "invalid provider");
         require(layout == "full" || layout == "ring", "invalid layout");
         require(frames >= 1 && frames <= 32, "frames outside bounded batch");
+#if defined(MGMEM_IMAGE_TRACE)
+        require(!trace_directory.empty(), "trace directory required");
+        require(!worker_fault, "trace does not admit worker fault injection");
+#endif
         std::ifstream input(argv[1], std::ios::binary);
         require(input.is_open() && token(input) == "P6", "expected P6 PPM input");
         width = number(token(input)); height = number(token(input));
@@ -261,6 +344,15 @@ int main(int argc, char **argv) {
         const u64 temporary_bytes = layout == "ring" ? multiply(std::min<u64>(height, 3), width) : pixels;
         const std::array<u64, 3> sizes{rgb_bytes, temporary_bytes, pixels};
         payload = rgb_bytes + temporary_bytes + pixels;
+#if defined(MGMEM_IMAGE_TRACE)
+        capture = std::make_unique<image_trace::Capture>(trace_directory, trace_limit, width, height,
+                                                        frames, provider, layout, close_race,
+                                                        image_trace::sha256_hex(source.data(), source.size()));
+#if defined(MGMEM_IMAGE_TRACE_TESTING)
+        capture->test_fail_at(trace_test_fail_at);
+#endif
+        trace_capture = capture.get();
+#endif
         start = std::chrono::steady_clock::now(); started = true;
         workspace.open(provider, sizes);
         peak_backing = provider == "direct" ? workspace.direct_backing : workspace.allocated.peak_backing_bytes;
@@ -273,7 +365,9 @@ int main(int argc, char **argv) {
             std::packaged_task<u64()> operation([&] {
                 try {
                     admission.get();
+                    IMAGE_TRACE('W', "WORKER_START", 255, frame, 0);
                     std::memcpy(workspace.pointers[0], source.data(), static_cast<size_t>(rgb_bytes));
+                    IMAGE_TRACE('W', "COPY_IN", 0, 0, rgb_bytes);
                     if (worker_fault) throw std::runtime_error("injected worker exception");
                     u64 count = 0;
                     const u64 result = process(static_cast<const uint8_t *>(workspace.pointers[0]),
@@ -282,14 +376,23 @@ int main(int argc, char **argv) {
                     require(count == pixels, "gray pixel conversion count differs");
                     converted += count;
                     if (frame + 1 == frames) {
+#if defined(MGMEM_IMAGE_TRACE)
+                        const std::string header = "P5\n" + std::to_string(width) + ' ' + std::to_string(height) + "\n255\n";
+                        IMAGE_TRACE('W', "OUTPUT_IO_READ", 2, 0, pixels);
+                        require(image_trace::write_output_exclusive(argv[2], header, workspace.pointers[2],
+                                                                    static_cast<size_t>(pixels)),
+                                "cannot exclusively create or write output");
+#else
                         std::ofstream output(argv[2], std::ios::binary);
                         require(output.is_open(), "cannot open output file");
                         output << "P5\n" << width << ' ' << height << "\n255\n";
                         output.write(static_cast<const char *>(workspace.pointers[2]), static_cast<std::streamsize>(pixels));
                         output.close();
                         require(output.good(), "failed output write");
+#endif
                     }
                     workspace.release_leases();
+                    IMAGE_TRACE('W', "WORKER_END", 255, frame, 0);
                     return result;
                 } catch (...) {
                     workspace.release_leases();
@@ -297,11 +400,13 @@ int main(int argc, char **argv) {
                 }
             });
             auto result = operation.get_future();
+            IMAGE_TRACE('M', "ENQUEUE", 255, frame, 0);
             std::thread worker(std::move(operation));
             try {
                 // The worker exists and owns its admitted leases, but waits
                 // before its first data access. Close cannot revoke its storage.
                 if (close_race && frame + 1 == frames) workspace.close_before_worker_finishes();
+                IMAGE_TRACE('M', "ADMIT", 255, frame, 0);
                 accepted.set_value();
             } catch (...) {
                 const auto admission_error = std::current_exception();
@@ -310,6 +415,7 @@ int main(int argc, char **argv) {
                 std::rethrow_exception(admission_error);
             }
             worker.join();
+            IMAGE_TRACE('M', "JOIN", 255, frame, 0);
             checksum += result.get();
             ++completed;
         }
@@ -325,6 +431,11 @@ int main(int argc, char **argv) {
         if (started) elapsed_ns = static_cast<u64>(std::chrono::duration_cast<std::chrono::nanoseconds>(
             std::chrono::steady_clock::now() - start).count());
     }
+#if defined(MGMEM_IMAGE_TRACE)
+    const bool trace_complete = capture && capture->finish(failure.empty(), checksum, converted, completed);
+    if (!trace_complete && failure.empty()) failure = "trace_incomplete";
+    trace_capture = nullptr;
+#endif
     const bool success = failure.empty();
     const u64 final_provider_allocations = provider == "direct" ? workspace.direct_allocations :
                                           workspace.before_cleanup.provider_allocation_count;
@@ -349,6 +460,10 @@ int main(int argc, char **argv) {
               << ",\"whole_allocation_exclusive\":" << (provider == "direct" ? "null" : workspace.whole_allocation_exclusive ? "true" : "false")
               << ",\"close_race_requested\":" << (close_race ? "true" : "false")
               << ",\"close_while_leased_verified\":" << (provider == "direct" ? "null" : workspace.close_while_leased ? "true" : "false")
-              << ",\"diagnostic_total_ns\":" << elapsed_ns << ",\"performance_qualification\":\"NOT_STARTED\",\"error\":" << quoted(failure) << "}\n";
+              << ",\"diagnostic_total_ns\":" << elapsed_ns << ",\"performance_qualification\":\"NOT_STARTED\""
+#if defined(MGMEM_IMAGE_TRACE)
+              << ",\"trace_status\":\"" << (trace_complete ? "COMPLETE" : "INCOMPLETE") << "\""
+#endif
+              << ",\"error\":" << quoted(failure) << "}\n";
     return success ? 0 : 1;
 }

@@ -1,0 +1,69 @@
+{
+  "state": "PASS_SCOPED_WINDOWS_HOST_TRACE_CAPTURE_REPLAY",
+  "scope": "SYNTHETIC_P6_REAL_IMAGE_ALGORITHM_SOURCE_SEMANTICS",
+  "capture_positive": 6,
+  "capture_negative": 4,
+  "symlink_rejection": "UNAVAILABLE",
+  "replay_positive": 12,
+  "replay_negative": 53,
+  "sha256_known_vectors": 12,
+  "source_sha256": {
+    "consumers/image/paired.cpp": "7286b00ccc816324a336d3540973f18e944634c9674e2d901859de710218e4b6",
+    "consumers/image/trace_contract.hpp": "172a25d53a46efa56aa87d3ada53d595f3d119fea3cc3fffac9be03fd3488205",
+    "consumers/image/trace_sha256.hpp": "d1e0bedfd5bdff25e648250e87fa6a13efb047bb3ad7a326a73bb3b8a822bb82",
+    "consumers/image/TRACE_CONTRACT.md": "13750e8ff4848fb109d58c2424ddaa3b4e72cc9d3cb7e0dc890b09eaa4a07139",
+    "consumers/image/test_trace_sha256.cpp": "d0f47d5d1625e78f019026a40dcb763dc4a884feba908b34fe614a6a9757eaae",
+    "consumers/image/test_trace_capture.py": "3e190b0d53ff8b87f38bb7ef0cc8bd8915d94bb72a7ac1d73cd58d7220d0f266",
+    "consumers/image/test_trace_replay.py": "5c63ef6074322cde14a07c15c949f10d4cf8b2076ff7ec7839d10287f309a5c6",
+    "consumers/image/trace_replay.py": "1ddaf6a488f4361a9098f095907ff56835a53559a1f30720da0325b8ff2b72bc",
+    "consumers/image/trace_replay_worker.py": "5e809017d9d9ddc67dc0f3c32a1697dffd6668e7425ff78bc56faa4da5c88967",
+    "consumers/image/trace_runner.py": "2ba97a30b4845c30a5c85176e42eb9dd8da3f4d29554cf859d9413c2fc108fe6",
+    "consumers/image/CMakeLists.txt": "be1a54fc072855bc5634b420448c9fca22704b320ea1414b0f39dcb75172a290"
+  },
+  "core_file_sha256": "3e10c673185dfa8e817e4f3adf143fefe0c992aa1f6b867c4ad1bff7d68e6d46",
+  "trace_executable_sha256": "e3c54975796a846252f011273be286940a75c26aa5d47114d87b646363118b7a",
+  "commands": {
+    "sha": {
+      "stdout_sha256": "92b53abafb40f72504c02d841d558d10b82cdee4b5a78796ec7982a00785ba3e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0
+    },
+    "capture": {
+      "stdout_sha256": "6eca0962136485ac8f15870ad50da579e445975c41527dee1ba1de9c35110df2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "summary": {
+        "state": "PASS_HOST_CAPTURE_CONTRACT",
+        "positive": 6,
+        "negative": 4,
+        "symlink_rejection": "UNAVAILABLE",
+        "fixture": "SYNTHETIC_INPUT_REAL_IMAGE_ALGORITHM",
+        "device": "NOT_RUN",
+        "performance": "NOT_MEASURED"
+      }
+    },
+    "replay": {
+      "stdout_sha256": "d6e12b565208c913c906f2b378c3e7a68aed73ee16b946891ff860f1e75cef6e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "exit_code": 0,
+      "summary": {
+        "state": "PASS_SCOPED_CAPTURE_AND_REPLAY",
+        "positive": 12,
+        "negative": 53,
+        "fixture": "SYNTHETIC_INPUT_REAL_IMAGE_ALGORITHM",
+        "device": "NOT_RUN",
+        "performance": "NOT_MEASURED"
+      }
+    }
+  },
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "tlb_mechanism": "NOT_ESTABLISHED",
+  "limits": [
+    "Only synthetic P6 inputs were used; no production trace or actual Android execution.",
+    "RGB payload and dimensions are bound to the actual captured data; PPM raw header is not attested by the consumer.",
+    "Executable and requested core file hashes do not prove loaded image or mapped bytes identity.",
+    "Replay uses a single logical thread, and trace operations are source semantics rather than CPU instruction or TLB events.",
+    "The verification report does not include source images, original traces or raw local logs."
+  ]
+}
