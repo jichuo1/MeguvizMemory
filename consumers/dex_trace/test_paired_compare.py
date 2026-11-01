@@ -52,6 +52,38 @@ class PairedContracts(unittest.TestCase):
         return subject.parse_output(self.output(value, events), True, 'D-C1', value['case'], 4,
                                     self.input_hash, self.input_hash, self.core, 10)
 
+    def test_trace_failure_accepts_only_fixed_bounded_schema(self):
+        value = {'reason': 'EVENT_LIMIT', 'attempted_lower_bound': 11,
+                 'attempted_capped': True, 'recorded': 10, 'event_limit': 10}
+        raw = (subject.TRACE_FAILURE_PREFIX + json.dumps(value) + '\n').encode()
+        self.assertEqual(subject.parse_trace_failure(raw, 10), value)
+        self.assertEqual(subject.traced_failure(1, raw, 10), value)
+        for code in (0, 2, -1, True):
+            self.assertIsNone(subject.traced_failure(code, raw, 10))
+        for change in ({'reason': 'secret'}, {'attempted_lower_bound': True}, {'recorded': False},
+                       {'event_limit': 11}, {'attempted_capped': 1}, {'attempted_lower_bound': 12},
+                       {'recorded': 9}, {'unexpected': 'secret'}):
+            with self.subTest(change=change):
+                bad = value | change
+                self.assertIsNone(subject.parse_trace_failure(
+                    (subject.TRACE_FAILURE_PREFIX + json.dumps(bad) + '\n').encode(), 10))
+        for extra in (b'private text\n' + raw, raw + b'private text\n', raw.rstrip(b'\n'),
+                      raw.replace(b'"reason":', b'"reason":"EVENT_LIMIT","reason":')):
+            self.assertIsNone(subject.parse_trace_failure(extra, 10))
+
+    def test_trace_failure_first_reason_and_zero_counts(self):
+        for reason in ('SPAN_MISMATCH', 'OFFSET_OUT_OF_RANGE', 'SITE_INVALID', 'SCOPE_INVALID', 'OUTPUT_FAILURE'):
+            attempted = 1 if reason in ('SPAN_MISMATCH', 'OFFSET_OUT_OF_RANGE', 'SITE_INVALID') else 0
+            value = {'reason': reason, 'attempted_lower_bound': attempted,
+                     'attempted_capped': False, 'recorded': 0, 'event_limit': 10}
+            raw = (subject.TRACE_FAILURE_PREFIX + json.dumps(value) + '\r\n').encode()
+            self.assertEqual(subject.parse_trace_failure(raw, 10), value)
+            if attempted:
+                for change in ({'attempted_lower_bound': 0}, {'recorded': 1}):
+                    forged = value | change
+                    self.assertIsNone(subject.parse_trace_failure(
+                        (subject.TRACE_FAILURE_PREFIX + json.dumps(forged) + '\n').encode(), 10))
+
     def binding(self):
         pairs = []
         for variant in subject.VARIANTS:

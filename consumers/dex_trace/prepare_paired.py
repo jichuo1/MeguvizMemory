@@ -32,9 +32,14 @@ def transform(data):
          '                &lease, &options, &raw_snapshot, &error);',
          '            #if defined(MGMEM_DEX_CONSUMER_TRACE)\n'
          '            const auto opened = [&] {\n'
-         '                mgmem_dex_trace::Scope capture(trace, input.address, m.bytes);\n'
-         '                return dmg_snapshot_open_borrowed(engine.get(), static_cast<const uint8_t *>(input.address), m.bytes,\n'
-         '                    &lease, &options, &raw_snapshot, &error);\n'
+         '                try {\n'
+         '                    mgmem_dex_trace::Scope capture(trace, input.address, m.bytes);\n'
+         '                    return dmg_snapshot_open_borrowed(engine.get(), static_cast<const uint8_t *>(input.address), m.bytes,\n'
+         '                        &lease, &options, &raw_snapshot, &error);\n'
+         '                } catch (...) {\n'
+         '                    if (!trace.complete()) trace.report_failure(std::cerr);\n'
+         '                    throw;\n'
+         '                }\n'
          '            }();\n'
          '            #else\n'
          '            const auto opened = dmg_snapshot_open_borrowed(engine.get(), static_cast<const uint8_t *>(input.address), m.bytes,\n'
@@ -42,12 +47,12 @@ def transform(data):
          '            #endif'),
         ('        m.success = true; print(m); return 0;',
          '        #if defined(MGMEM_DEX_CONSUMER_TRACE)\n'
-         '        require(trace.complete(), "trace_incomplete");\n'
+         '        if (!trace.complete()) { trace.report_failure(std::cerr); require(false, "trace_incomplete"); }\n'
          '        #endif\n'
          '        std::cout << "MGMEM_CORE_MODULE_HEX " << mgmem_dex_trace::core_module_path_hex() << \'\\n\';\n'
          '        m.success = true; print(m);\n'
          '        #if defined(MGMEM_DEX_CONSUMER_TRACE)\n'
-         '        if (!trace.emit(std::cout)) return 1;\n'
+         '        if (!trace.emit(std::cout)) { trace.report_failure(std::cerr); return 1; }\n'
          '        #endif\n'
          '        return std::cout ? 0 : 1;'),
     ]

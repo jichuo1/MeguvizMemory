@@ -29,3 +29,11 @@ python consumers/dex_trace/paired_compare.py --input <工作区内原始DEX> --b
 每个诊断子进程报告其 OS 模块路径，runner 对照所选安装 core 路径及磁盘文件摘要；这是**子进程自报的模块路径和磁盘文件匹配**，不独立证明进程映射字节、可执行文件确由本次源码构建，也不是签名来源证明。用户业务输入、原始 events、路径和子进程输出都只保存在 ignored `build/`，公开时应另做脱敏摘要。
 
 每个子进程有独立超时及 stdout/stderr 实时内存限额；另有默认 300 秒、最高 3600 秒的总 deadline 和私有 `progress.json`，每完成 5 对打印计数。总 deadline 是协作式边界：单次文件/解压系统调用及最终持久化可能跨过截止，不是硬实时保证；超时只终止本工具自己启动的子进程，不声称其后代已退出。只有整个进程退出码为 0 且 `receipt.json` 为 PASS，才是限定对照通过；单独存在中间输出或 progress 不是成功证据。该诊断不执行 Android 设备、不验证真实产品工作负载或 Memory 净性能收益。
+
+## 采集失败的限定分类
+
+插桩 Recorder 保存**首次观察到**的固定类别：`EVENT_LIMIT`（达到事件容量）、`SPAN_MISMATCH`（传入 span 与预定输入不一致）、`OFFSET_OUT_OF_RANGE`（偏移越界）、`SITE_INVALID`（未识别位点）、`SCOPE_INVALID`（可观察的作用域进入/退出错误）或 `OUTPUT_FAILURE`（trace 输出失败）。它只写固定类别、事件上限、已记录数和尝试数下界，不写输入字节、偏移、地址或路径。尝试数最多保留 `event_limit + 1`，`attempted_capped=true` 表示实际尝试数至少为此值，不是精确总数。若先后发生多种异常，类别只反映首个异常；不可据此推断其他异常没有发生。未处于本线程活跃采集窗口的其他线程读取不会被统计，不能据此声称跨线程访问已经覆盖。
+
+仅当 traced 程序以约定的退出码 1 返回，且 stderr 恰好是唯一、字段与计数均严格有效的固定诊断时，配对 runner 才写私有 `trace-incomplete.json` 并输出脱敏 `INCOMPLETE`。它标记 `evidence_scope=CHILD_REPORTED_NOT_INDEPENDENTLY_VERIFIED`：类别是诊断子进程自报，不是对实际执行映像或根因的独立认证。崩溃、其他退出码、构造/分配失败、stderr 缺失或含额外文本、状态不一致、采集超时及自身输出失败均保留通用 INCOMPLETE；特别地，stderr 自身不可写时不保证可获得分类。分类失败永远不生成采集 PASS、绑定 PASS 或回放 PASS。`paired_replay.py` 只在采集器退出码 2 且脱敏 sidecar、末条报告及已完成对数相互一致时传播这些字段，其余情况不回显原始子进程日志。
+
+本次修改了诊断 Recorder 和源码生成器。此前已准备的 paired 源码、已编译程序、冻结计划与私有签名/身份不自动适用于新版；使用前应从锁定源码重新准备、构建并另行冻结输入身份。历史结果保持原样，不能混入新版结论。

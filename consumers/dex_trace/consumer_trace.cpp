@@ -30,35 +30,69 @@ size_t event_limit() {
 
 namespace mgmem_dex_trace {
 Recorder::Recorder() : limit_(event_limit()) { events_.reserve(limit_); }
+void Recorder::fail(Failure reason) noexcept {
+    if (failure_ == Failure::NONE) failure_ = reason;
+}
+const char *Recorder::failure_name() const noexcept {
+    switch (failure_) {
+    case Failure::EVENT_LIMIT: return "EVENT_LIMIT";
+    case Failure::SPAN_MISMATCH: return "SPAN_MISMATCH";
+    case Failure::OFFSET_OUT_OF_RANGE: return "OFFSET_OUT_OF_RANGE";
+    case Failure::SITE_INVALID: return "SITE_INVALID";
+    case Failure::OUTPUT_FAILURE: return "OUTPUT_FAILURE";
+    case Failure::NONE:
+    case Failure::SCOPE_INVALID: return "SCOPE_INVALID";
+    }
+    return "SCOPE_INVALID";
+}
 void Recorder::enter(const void *base, uint64_t size) {
-    if (active || entered_ || !base || !size) throw std::runtime_error("trace_scope_invalid");
-    base_ = static_cast<const uint8_t *>(base); size_ = size;
-    input_sha_ = image_trace::sha256_hex(base_, static_cast<size_t>(size_));
-    entered_ = true; active = this;
+    if (active || entered_ || !base || !size) {
+        fail(Failure::SCOPE_INVALID); throw std::runtime_error("trace_scope_invalid");
+    }
+    try {
+        base_ = static_cast<const uint8_t *>(base); size_ = size;
+        input_sha_ = image_trace::sha256_hex(base_, static_cast<size_t>(size_));
+        entered_ = true; active = this;
+    } catch (...) { fail(Failure::SCOPE_INVALID); throw; }
 }
 void Recorder::leave() noexcept {
-    if (active != this || !entered_ || left_) incomplete_ = true;
+    if (active != this || !entered_ || left_) fail(Failure::SCOPE_INVALID);
     if (active == this) active = nullptr;
     left_ = true;
 }
 void Recorder::record(std::span<const uint8_t> input, uint64_t offset, uint32_t site) noexcept {
-    ++attempted_;
-    if (input.data() != base_ || input.size() != size_ || offset >= size_ ||
-        !((site >= 1 && site <= 31) || site == 1001) || events_.size() >= limit_) {
-        incomplete_ = true; return;
-    }
+    // Retain a bounded lower bound even for unexpectedly long failure paths.
+    if (attempted_ < limit_ + 1) ++attempted_; else attempted_capped_ = true;
+    if (!entered_ || left_ || active != this) { fail(Failure::SCOPE_INVALID); return; }
+    if (input.data() != base_ || input.size() != size_) { fail(Failure::SPAN_MISMATCH); return; }
+    if (offset >= size_) { fail(Failure::OFFSET_OUT_OF_RANGE); return; }
+    if (!((site >= 1 && site <= 31) || site == 1001)) { fail(Failure::SITE_INVALID); return; }
+    if (events_.size() >= limit_) { fail(Failure::EVENT_LIMIT); return; }
     // reserve() has already allocated the complete bounded capacity; Event is
     // trivial and the callback performs no allocation or ownership change.
     events_.push_back({offset, site});
 }
 bool Recorder::complete() const noexcept {
-    return entered_ && left_ && !incomplete_ && attempted_ == events_.size();
+    return entered_ && left_ && failure_ == Failure::NONE && !attempted_capped_ && attempted_ == events_.size();
 }
-bool Recorder::emit(std::ostream &out) const {
-    if (!complete()) return false;
-    out << "MGMEM_DEX_READER_TRACE_V1 " << events_.size() << ' ' << input_sha_ << '\n';
-    for (const auto &event : events_) out << "E " << event.site << ' ' << event.offset << '\n';
-    out.flush(); return static_cast<bool>(out);
+bool Recorder::emit(std::ostream &out) noexcept {
+    if (!complete()) { if (failure_ == Failure::NONE) fail(Failure::SCOPE_INVALID); return false; }
+    try {
+        out << "MGMEM_DEX_READER_TRACE_V1 " << events_.size() << ' ' << input_sha_ << '\n';
+        for (const auto &event : events_) out << "E " << event.site << ' ' << event.offset << '\n';
+        out.flush();
+        if (out) return true;
+    } catch (...) { /* A partial stdout cannot be treated as a complete trace. */ }
+    fail(Failure::OUTPUT_FAILURE); return false;
+}
+bool Recorder::report_failure(std::ostream &out) const noexcept {
+    try {
+        out << "MGMEM_DEX_TRACE_INCOMPLETE {\"reason\":\"" << failure_name()
+            << "\",\"attempted_lower_bound\":" << attempted_
+            << ",\"attempted_capped\":" << (attempted_capped_ ? "true" : "false")
+            << ",\"recorded\":" << events_.size() << ",\"event_limit\":" << limit_ << "}\n";
+        out.flush(); return static_cast<bool>(out);
+    } catch (...) { return false; }
 }
 void observed(std::span<const uint8_t> input, uint64_t offset, uint32_t site) noexcept {
     if (active) active->record(input, offset, site);

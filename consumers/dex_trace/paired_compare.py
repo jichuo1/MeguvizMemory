@@ -39,6 +39,53 @@ STABLE = ('schema_version', 'workload', 'variant', 'case', 'success', 'diagnosti
           'resource_scope', 'product_scope')
 BINDING_NAME = 'paired-capture-binding.json'
 BINDING_SCOPE = 'SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY'
+TRACE_FAILURE_PREFIX = 'MGMEM_DEX_TRACE_INCOMPLETE '
+TRACE_FAILURE_REASONS = frozenset({'EVENT_LIMIT', 'SPAN_MISMATCH', 'OFFSET_OUT_OF_RANGE',
+                                   'SITE_INVALID', 'SCOPE_INVALID', 'OUTPUT_FAILURE'})
+
+
+class TraceIncomplete(ValueError):
+    def __init__(self, report):
+        super().__init__('trace_reported_incomplete')
+        self.report = report
+
+
+def parse_trace_failure(stderr, expected_limit):
+    """Accept one fixed diagnostic only; never reflect arbitrary child stderr."""
+    if not isinstance(stderr, bytes) or len(stderr) > capture.MAX_STDERR:
+        return None
+    try:
+        text = stderr.decode('ascii', 'strict').replace('\r\n', '\n')
+        if not text.endswith('\n') or len(text.splitlines()) != 1 or not text.startswith(TRACE_FAILURE_PREFIX):
+            return None
+        value = unique_json(text[len(TRACE_FAILURE_PREFIX):-1])
+        fields = {'reason', 'attempted_lower_bound', 'attempted_capped', 'recorded', 'event_limit'}
+        if not isinstance(value, dict) or set(value) != fields:
+            return None
+        limit, attempted, recorded = value['event_limit'], value['attempted_lower_bound'], value['recorded']
+        if (value['reason'] not in TRACE_FAILURE_REASONS or type(limit) is not int or
+                type(expected_limit) is not int or limit != expected_limit or not 1 <= limit <= 1000000 or
+                type(attempted) is not int or not 0 <= attempted <= limit + 1 or
+                type(recorded) is not int or not 0 <= recorded <= min(attempted, limit) or
+                type(value['attempted_capped']) is not bool or
+                (value['attempted_capped'] and attempted != limit + 1)):
+            return None
+        if value['reason'] == 'EVENT_LIMIT' and (recorded != limit or attempted <= recorded):
+            return None
+        if value['reason'] in ('SPAN_MISMATCH', 'OFFSET_OUT_OF_RANGE', 'SITE_INVALID') and (
+                attempted == 0 or recorded >= attempted):
+            return None
+        if value['reason'] == 'OUTPUT_FAILURE' and (value['attempted_capped'] or attempted != recorded):
+            return None
+        return value
+    except (UnicodeError, ValueError, TypeError, KeyError):
+        return None
+
+
+def traced_failure(code, stderr, expected_limit):
+    # The generated diagnostic's classified failure path returns exactly 1.
+    # A signal or different exit is not independently classified.
+    return parse_trace_failure(stderr, expected_limit) if type(code) is int and code == 1 else None
 EMPTY_SHA256 = hashlib.sha256(b'').hexdigest()
 
 
@@ -391,6 +438,18 @@ def main(args):
                 stderr_name = mode + '-' + variant + '-' + case + '.stderr'
                 with (out / stdout_name).open('xb') as stream: stream.write(stdout)
                 with (out / stderr_name).open('xb') as stream: stream.write(stderr)
+                if mode == 'traced':
+                    diagnostic = traced_failure(code, stderr, args.max_events)
+                    if diagnostic is not None:
+                        safe = {'state': 'INCOMPLETE', 'scope': BINDING_SCOPE,
+                                'evidence_scope': 'CHILD_REPORTED_NOT_INDEPENDENTLY_VERIFIED',
+                                'variant': variant, 'case': case, **diagnostic}
+                        # This is a failure sidecar, never a capture or replay PASS.
+                        with (out / 'trace-incomplete.json').open('xb') as stream:
+                            stream.write((json.dumps(safe, ensure_ascii=False, indent=2,
+                                                     allow_nan=False) + '\n').encode('utf-8'))
+                            stream.flush(); os.fsync(stream.fileno())
+                        raise TraceIncomplete(safe)
                 prepare.require(code == 0 and not stderr, 'consumer_process_incomplete')
                 reports.append(parse_output(stdout, mode == 'traced', variant, case, size, file_hash,
                                             corrupt_hash if case == 'corrupt-input' else file_hash, core, args.max_events))
@@ -455,6 +514,9 @@ if __name__ == '__main__':
         result = main(parser.parse_args())
         print(json.dumps({'state': result['state'], 'pair_count': len(result['cases']),
                           'scope': result['scope'], 'performance_qualified': False}))
+    except TraceIncomplete as error:
+        print(json.dumps(error.report, ensure_ascii=False, allow_nan=False))
+        raise SystemExit(2)
     except (OSError, ValueError, TypeError, KeyError, UnicodeError, zipfile.BadZipFile, tarfile.TarError) as error:
         print(json.dumps({'state': 'INCOMPLETE', 'reason': type(error).__name__}))
         raise SystemExit(2)

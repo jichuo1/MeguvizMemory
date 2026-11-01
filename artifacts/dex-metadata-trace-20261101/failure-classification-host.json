@@ -1,0 +1,17 @@
+{
+  "state": "PASS_SCOPED_HOST_FAILURE_CLASSIFICATION",
+  "scope": "PAIRED_READER_TRACE_ONLY",
+  "recorder_host_checks": 27,
+  "paired_offline_tests": {"passed": 16, "skipped": 1, "skip_reason": "WINDOWS_SYMLINK_PERMISSION"},
+  "replay_offline_tests": {"passed": 19, "total": 19},
+  "worker_offline_tests": {"passed": 11, "total": 11},
+  "diagnostic_dex_full_pairs": 20,
+  "event_limit_negative": {"state": "INCOMPLETE", "reason": "EVENT_LIMIT", "evidence_scope": "CHILD_REPORTED", "recorded": 1, "attempted_lower_bound": 2, "attempted_capped": true},
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Failure classification is child reported and is not an independently authenticated process image.",
+    "The test input is a diagnostic APK DEX, not a product workload.",
+    "Host checks and a bounded failure do not establish Android or performance qualification."
+  ]
+}

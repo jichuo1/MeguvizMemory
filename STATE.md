@@ -42,7 +42,8 @@
 - [真实 DexMeguviz 配对消费者的隔离 reader 采集](consumers/dex_trace/PAIRED_CONTRACT.md)已接入安装版 Memory：使用诊断 APK 的 DEX，四种输入策略与五类场景共 20 对原样/插桩宿主对照通过；正常及跨线程场景每次记录 19401 条、命中 23/32 个位点，坏输入和 lease/预算拒绝的事件数符合预期。[证据](artifacts/dex-metadata-trace-20261101/paired-host.json)仅覆盖 snapshot-open 调用线程的元数据 reader，不涵盖完整查询、产品输入或性能；模块路径由子进程自报并与磁盘哈希对照。
 - 配对采集 `fd420a2` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/paired-ci-fd420a2.json) 均完整通过。新增[受控 reader 字节回放](consumers/dex_trace/REPLAY_CONTRACT.md)，先实际执行并绑定采集，再以独立 oracle 对照 20 对回放；10 个 System/Arena 合成域关闭归零，另 10 个普通路径只确认引用清除。[宿主证据](artifacts/dex-metadata-trace-20261101/paired-replay-host.json)不证明原始跨线程寿命、完整查询、产品性能或操作系统内存回收。
 - 回放提交 `812ce41` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/replay-ci-812ce41.json) 均通过外层 17 项和 worker 11 项合同；这些仍是宿主测试。
-- 此前授权的真实 DEX 在首次[宿主有界尝试](artifacts/dex-metadata-trace-20261101/real-dex-first-attempt.json)中，首个基线完整消费 54147 个方法，但插桩侧返回 `trace_incomplete`，0/20 对完成、没有合格采集或回放回执。当前错误把多种原因合并，不能断言已触发事件上限；需要先补足明确失败原因，不计性能或 BIL 收益。
+- 此前授权的真实 DEX 在首次[宿主有界尝试](artifacts/dex-metadata-trace-20261101/real-dex-first-attempt.json)中，首个基线完整消费 54147 个方法，但插桩侧返回 `trace_incomplete`，0/20 对完成、没有合格采集或回放回执。该轮的错误合并了多种原因，不能断言其已触发事件上限；不计性能或 BIL 收益。
+- 采集器现可报告固定失败类别及有界计数，旧结果保留不变；[第二次真实 DEX 尝试](artifacts/dex-metadata-trace-20261101/real-dex-second-attempt.json)中子进程自报 `EVENT_LIMIT`：记录 100 万条、尝试下界 100 万零 1 条，0/20 对完成。该下界不是实际总数，也不是独立执行映像认证；需扩展有界采集能力，仍无性能资格。[分类合同检查](artifacts/dex-metadata-trace-20261101/failure-classification-host.json)
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。

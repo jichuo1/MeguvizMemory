@@ -132,6 +132,49 @@ def verify_capture_stdout(data):
     return terminal
 
 
+def verified_trace_incomplete(capture_dir, stdout, stderr, code, event_limit):
+    """Accept only the producer's matching fixed failure sidecar and terminal JSON."""
+    if type(code) is not int or code != 2 or stderr or not isinstance(stdout, bytes):
+        return None
+    try:
+        text = stdout.decode('ascii', 'strict').replace('\r\n', '\n')
+        if not text.endswith('\n'):
+            return None
+        lines = text.splitlines()
+        if not 1 <= len(lines) <= 5 or not all(lines):
+            return None
+        for index, line in enumerate(lines[:-1], 1):
+            value = paired.unique_json(line)
+            if not (isinstance(value, dict) and set(value) == {'state', 'completed_pairs', 'total_pairs'} and
+                    value['state'] == 'RUNNING' and type(value['completed_pairs']) is int and
+                    value['completed_pairs'] == index * 5 and type(value['total_pairs']) is int and
+                    value['total_pairs'] == 20):
+                return None
+        terminal = paired.unique_json(lines[-1])
+        capture_dir = prepare_consumer.confined(capture_dir, prepare_consumer.build_root(), must_exist=True)
+        sidecar = paired.unique_json(prepare_consumer.read_regular(capture_dir / 'trace-incomplete.json', 4096)
+                                     .decode('ascii', 'strict'))
+        fields = {'state', 'scope', 'evidence_scope', 'variant', 'case', 'reason', 'attempted_lower_bound',
+                  'attempted_capped', 'recorded', 'event_limit'}
+        if not (isinstance(sidecar, dict) and set(sidecar) == fields and
+                json.dumps(terminal, sort_keys=True, separators=(',', ':'), allow_nan=False) ==
+                json.dumps(sidecar, sort_keys=True, separators=(',', ':'), allow_nan=False) and
+                sidecar['state'] == 'INCOMPLETE' and sidecar['scope'] == PAIR_SCOPE and
+                sidecar['evidence_scope'] == 'CHILD_REPORTED_NOT_INDEPENDENTLY_VERIFIED' and
+                sidecar['variant'] in paired.VARIANTS and sidecar['case'] in paired.CASES):
+            return None
+        completed = 5 * (len(lines) - 1)
+        pair_index = paired.VARIANTS.index(sidecar['variant']) * len(paired.CASES) + paired.CASES.index(sidecar['case'])
+        if not completed <= pair_index < min(completed + 5, len(paired.VARIANTS) * len(paired.CASES)):
+            return None
+        diagnostic = {key: sidecar[key] for key in ('reason', 'attempted_lower_bound',
+                      'attempted_capped', 'recorded', 'event_limit')}
+        encoded = (paired.TRACE_FAILURE_PREFIX + json.dumps(diagnostic, allow_nan=False) + '\n').encode('ascii')
+        return sidecar if paired.parse_trace_failure(encoded, event_limit) == diagnostic else None
+    except (OSError, ValueError, TypeError, KeyError, UnicodeError):
+        return None
+
+
 def oracle(stdout, input_bytes, consumed_sha, variant, case, expected_events, expected_sites, limit, deadline=None):
     """Independent byte oracle for exactly the bound reader event sequence."""
     prepare.require(variant in paired.VARIANTS and case in paired.CASES and
@@ -271,6 +314,10 @@ def run(args):
                                                env=environment)
     write_new(out / 'capture.stdout', stdout)
     write_new(out / 'capture.stderr', stderr)
+    diagnostic = verified_trace_incomplete(capture_dir, stdout, stderr, code, args.max_events)
+    if diagnostic is not None:
+        write_new(out / 'trace-incomplete.json', json_bytes(diagnostic))
+        raise paired.TraceIncomplete(diagnostic)
     verify_child_exit(code, stderr, 'capture_process_incomplete')
     capture_exit_code = code
     verify_capture_stdout(stdout)
@@ -402,6 +449,9 @@ def main():
         print(json.dumps({'state': result['state'], 'pairs': len(result['pairs']), 'scope': result['scope'],
                           'device': 'NOT_RUN', 'performance': 'NOT_MEASURED'}))
         return 0
+    except paired.TraceIncomplete as error:
+        print(json.dumps(error.report, ensure_ascii=False, allow_nan=False))
+        return 2
     except (OSError, ValueError, TypeError, KeyError, UnicodeError) as error:
         print(json.dumps({'state': 'INCOMPLETE', 'reason': type(error).__name__,
                           'cleanup_outcome': 'UNKNOWN_OR_WORKER_REPORTED_LOCALLY'}))

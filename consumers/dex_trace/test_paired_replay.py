@@ -32,6 +32,14 @@ def trace(payload, events):
 
 
 class ReplayContractTests(unittest.TestCase):
+    @staticmethod
+    def trace_failure():
+        return {'state': 'INCOMPLETE', 'scope': subject.PAIR_SCOPE,
+                'evidence_scope': 'CHILD_REPORTED_NOT_INDEPENDENTLY_VERIFIED',
+                'variant': 'D-C0', 'case': 'normal',
+                'reason': 'EVENT_LIMIT', 'attempted_lower_bound': 11, 'attempted_capped': True,
+                'recorded': 10, 'event_limit': 10}
+
     def fake_workspace(self, base):
         base = Path(base)
         def file(name, data=b'x'):
@@ -145,6 +153,44 @@ class ReplayContractTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'capture_process_incomplete'):
                     subject.run(args)
             self.assertFalse((args.out_dir / 'replay-receipt.json').exists())
+
+    def test_validated_trace_failure_reaches_outer_without_raw_logs(self):
+        build = subject.prepare_consumer.build_root()
+        with tempfile.TemporaryDirectory(dir=build) as tmp:
+            args = self.fake_workspace(tmp); safe = self.trace_failure()
+            def failed_capture(command, *unused, **kwargs):
+                directory = Path(command[command.index('--out-dir') + 1]); directory.mkdir()
+                (directory / 'trace-incomplete.json').write_text(json.dumps(safe), encoding='utf-8')
+                # Raw process logs remain private and are not part of the diagnostic.
+                (directory / 'raw.stderr').write_text('private data', encoding='utf-8')
+                return 2, (json.dumps(safe) + '\n').encode(), b''
+            with mock.patch.object(subject, 'preflight_sdk', return_value=('a' * 40, 'b' * 64)), \
+                 mock.patch.object(subject.prepare_consumer, 'verify_prepared'), \
+                 mock.patch.object(subject.paired, 'verify_paired'), \
+                 mock.patch.object(subject.capture, 'run_bounded', side_effect=failed_capture):
+                with self.assertRaises(subject.paired.TraceIncomplete) as raised:
+                    subject.run(args)
+            self.assertEqual(raised.exception.report, safe)
+            self.assertEqual(json.loads((args.out_dir / 'trace-incomplete.json').read_text()), safe)
+            self.assertFalse((args.out_dir / 'replay-receipt.json').exists())
+
+    def test_trace_failure_rejects_forged_terminal_and_extra_text(self):
+        build = subject.prepare_consumer.build_root()
+        with tempfile.TemporaryDirectory(dir=build) as tmp:
+            directory = Path(tmp); safe = self.trace_failure()
+            (directory / 'trace-incomplete.json').write_text(json.dumps(safe), encoding='utf-8')
+            stdout = (json.dumps(safe) + '\n').encode()
+            self.assertEqual(subject.verified_trace_incomplete(directory, stdout, b'', 2, 10), safe)
+            wrong = dict(safe); wrong['attempted_lower_bound'] = True
+            for data, err, code, limit in ((stdout, b'', 0, 10), (stdout, b'', -1, 10),
+                                           (stdout, b'', 3, 10), (stdout, b'private', 2, 10),
+                                           (b'private\n' + stdout, b'', 2, 10),
+                                           ((json.dumps({'state': 'RUNNING', 'completed_pairs': 5,
+                                                        'total_pairs': 20}) + '\n').encode() + stdout, b'', 2, 10),
+                                           ((json.dumps(wrong) + '\n').encode(), b'', 2, 10),
+                                           (stdout, b'', 2, 11)):
+                with self.subTest(code=code, limit=limit):
+                    self.assertIsNone(subject.verified_trace_incomplete(directory, data, err, code, limit))
 
     def test_failed_worker_with_success_json_does_not_publish_replay(self):
         build = subject.prepare_consumer.build_root()

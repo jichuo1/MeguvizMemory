@@ -109,6 +109,12 @@ jobs:
         run: python consumers/dex_trace/test_paired_replay.py
       - name: DEX paired reader replay worker contracts
         run: python consumers/dex_trace/test_paired_replay_worker.py
+      - name: Configure DEX trace recorder contracts
+        run: cmake -S consumers/dex_trace/recorder_host -B build/dex-trace-recorder-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build DEX trace recorder contracts
+        run: cmake --build build/dex-trace-recorder-ci --config Release --parallel 2
+      - name: Verify DEX trace recorder contracts
+        run: ctest --test-dir build/dex-trace-recorder-ci -C Release --output-on-failure
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture

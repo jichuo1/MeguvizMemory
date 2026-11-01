@@ -19,12 +19,19 @@ public:
     void leave() noexcept;
     void record(std::span<const uint8_t> input, uint64_t offset, uint32_t site) noexcept;
     bool complete() const noexcept;
-    bool emit(std::ostream &output) const;
+    bool emit(std::ostream &output) noexcept;
+    // Fixed category and bounded counts only; never prints input bytes or addresses.
+    bool report_failure(std::ostream &output) const noexcept;
 private:
+    enum class Failure { NONE, EVENT_LIMIT, SPAN_MISMATCH, OFFSET_OUT_OF_RANGE,
+                         SITE_INVALID, SCOPE_INVALID, OUTPUT_FAILURE };
+    void fail(Failure reason) noexcept;
+    const char *failure_name() const noexcept;
     const uint8_t *base_ = nullptr;
     uint64_t size_ = 0, attempted_ = 0;
     size_t limit_ = 0;
-    bool entered_ = false, left_ = false, incomplete_ = false;
+    bool entered_ = false, left_ = false, attempted_capped_ = false;
+    Failure failure_ = Failure::NONE;
     std::string input_sha_;
     std::vector<Event> events_;
 };

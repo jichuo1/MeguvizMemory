@@ -1329,6 +1329,8 @@
     "paired_replay_host": "artifacts/dex-metadata-trace-20261101/paired-replay-host.json",
     "paired_replay_ci": "artifacts/dex-metadata-trace-20261101/replay-ci-812ce41.json",
     "real_dex_first_attempt": "artifacts/dex-metadata-trace-20261101/real-dex-first-attempt.json",
+    "real_dex_second_attempt": "artifacts/dex-metadata-trace-20261101/real-dex-second-attempt.json",
+    "failure_classification_host": "artifacts/dex-metadata-trace-20261101/failure-classification-host.json",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },
   "image_trace_20261101": {

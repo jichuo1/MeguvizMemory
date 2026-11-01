@@ -1,0 +1,11 @@
+cmake_minimum_required(VERSION 3.25)
+project(DexTraceRecorderHost LANGUAGES CXX)
+get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
+add_executable(dex_trace_recorder_test recorder_test.cpp "${ROOT}/consumers/dex_trace/consumer_trace.cpp")
+target_compile_features(dex_trace_recorder_test PRIVATE cxx_std_20)
+target_include_directories(dex_trace_recorder_test PRIVATE "${ROOT}/include"
+  "${ROOT}/consumers/dex_trace" "${ROOT}/consumers/image")
+target_link_libraries(dex_trace_recorder_test PRIVATE ${CMAKE_DL_LIBS})
+enable_testing()
+add_test(NAME dex_trace_recorder_failure_categories COMMAND dex_trace_recorder_test)
+set_tests_properties(dex_trace_recorder_failure_categories PROPERTIES TIMEOUT 30)

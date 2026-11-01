@@ -1,0 +1,27 @@
+{
+  "state": "INCOMPLETE_NO_QUALIFIED_CAPTURE_OR_REPLAY",
+  "input_scope": "HISTORICAL_USER_AUTHORIZED_REAL_DEX_OFFLINE_ONLY",
+  "input_bytes": 10540184,
+  "variant": "D-C0",
+  "case": "normal",
+  "completed_pairs": 0,
+  "planned_pairs": 20,
+  "diagnostic": {
+    "evidence_scope": "CHILD_REPORTED_NOT_INDEPENDENTLY_VERIFIED",
+    "reason": "EVENT_LIMIT",
+    "recorded": 1000000,
+    "attempted_lower_bound": 1000001,
+    "attempted_capped": true,
+    "event_limit": 1000000
+  },
+  "capture_receipt": "NOT_CREATED",
+  "replay_receipt": "NOT_CREATED",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "The count is a capped lower bound reported by the diagnostic process, not the total number of accesses.",
+    "No complete real-workload capture or replay was obtained.",
+    "Input, hashes, raw output and local paths remain private."
+  ]
+}
