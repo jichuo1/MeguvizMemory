@@ -13,6 +13,8 @@
 - 诊断提交 `f109a8a` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/native-probe-ci-f109a8a.json) 均通过构建器、运行器及宿主桩检查；未进行设备操作。
 - 随后确认其他会话释放设备后，修复版 NativePressure 独立诊断的[首次安装](artifacts/pressure-close-admission-20261101/native-probe-first-install.json)返回系统安装受限及取消，instrumentation 未启动；后续只读观察两名可见用户中无该包。具体取消原因未知，该轮没有取得设备结论。
 - 用户确认后重新协调窗口并重试，修复版 [NativePressure API33 arm64/4KB R8 真机短诊断](artifacts/pressure-close-admission-20261101/native-probe-arm64-short-pass.json) 4 周期、53 检查通过，持借用关闭后最终账目归零，安装与后验通过。0 个 cgroup 样本只表示未观察，不能证明无冻结；并发不保证命中特定窗口，长稳、真实系统压力和性能仍未资格。
+- 修复版托管域[长稳首次安装](artifacts/pressure-close-admission-20261101/managed-stability-first-install.json)被系统取消，前台 Activity 和 instrumentation 均未启动；只读观察两名可见用户均无该包。该轮没有长稳结果，具体取消原因未知。
+- 修复版 [arm64 安全、DEX 和图像目标](artifacts/pressure-close-admission-20261101/arm64-consumer-cross-build.json)已完成 10 个目标交叉构建及安装核心链接回读；首次后验检查因辅助正则误匹配失败，修正后重跑通过，原始失败 stdout 未保存。交叉构建不构成设备或性能验证。
 
 ## 统一验证准备（2026-11-01）
 

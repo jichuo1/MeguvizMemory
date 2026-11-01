@@ -329,6 +329,8 @@
     "native_probe_ci": "artifacts/pressure-close-admission-20261101/native-probe-ci-f109a8a.json",
     "native_probe_first_install": "artifacts/pressure-close-admission-20261101/native-probe-first-install.json",
     "native_probe_device_short": "artifacts/pressure-close-admission-20261101/native-probe-arm64-short-pass.json",
+    "managed_stability_first_install": "artifacts/pressure-close-admission-20261101/managed-stability-first-install.json",
+    "arm64_consumer_cross_build": "artifacts/pressure-close-admission-20261101/arm64-consumer-cross-build.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },
   "pressure_races_20261101": {

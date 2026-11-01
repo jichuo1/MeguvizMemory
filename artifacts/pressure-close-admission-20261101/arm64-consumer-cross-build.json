@@ -1,0 +1,159 @@
+{
+  "state": "PASS_STATIC_CROSS_BUILD_AND_INDEPENDENT_READBACK_ONLY",
+  "source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "abi": "arm64-v8a",
+  "api_target": 27,
+  "candidate_core": {
+    "bytes": 582240,
+    "sha256": "73cf6bc3db37be754d36f84cec06b4019066d5037a41ab67be87a22beb5c6f6b"
+  },
+  "candidate_jni": {
+    "bytes": 157256,
+    "sha256": "33ccc46f352883cb2eb5a417d7f0dc828d84f4609540176cecf97d85000b6cb4"
+  },
+  "source_records_verified": 306,
+  "dex_source_records_verified": 65,
+  "outputs": {
+    "mgmem_core_tests": {
+      "identity": {
+        "bytes": 514144,
+        "sha256": "f62b0501e5df3c743dddfeaf65803b62f1f626e41066a42a682e892d456afcd7"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_c_consumer": {
+      "identity": {
+        "bytes": 14088,
+        "sha256": "ff82044eb4726f7066a6a247d503dc345b029fb5f0ff95165850d524a2241fba"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_cpp_consumer": {
+      "identity": {
+        "bytes": 202576,
+        "sha256": "9c595d5f272ed3704ea1025a09c947f6753adcf873a1f5fc1fa1f57bdc053815"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_dex_paired": {
+      "identity": {
+        "bytes": 14168368,
+        "sha256": "fbc39467b180ea90b55fa50d40c29fa90792c9edb619d36a2b23b547d1be22d9"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_dex_paired_v2": {
+      "identity": {
+        "bytes": 14855896,
+        "sha256": "a8ecc633673da59987dc4f7d6bb90b21025f05966c0f04da7366430490084606"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_dex_paired_v2_diagnostic": {
+      "identity": {
+        "bytes": 14870744,
+        "sha256": "2b7dd33fbdee9d1d5d700a596e8414ed1c91f00e141167cb14419e08c6054f88"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_dex_import_consumer": {
+      "identity": {
+        "bytes": 14253088,
+        "sha256": "32f60bc6874b95868d0a951cb298115a7ce2efef4e867e47af0fed6b7a0464ba"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_image_paired": {
+      "identity": {
+        "bytes": 3272448,
+        "sha256": "b39e3edb9413b55bd1f7e79733113d3234665286aaae2fb4ff4215147bb8dfcb"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_image_perf": {
+      "identity": {
+        "bytes": 3336304,
+        "sha256": "c71d2782cab2c16131825881cd40a582f3dbba7528c2104e71b361a4bb02af56"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    },
+    "mgmem_image_pressure_stability": {
+      "identity": {
+        "bytes": 3403464,
+        "sha256": "d1915a89ef398ba571fd7b4281370714ce081edbb7dfe44c165ef46ad919c5d8"
+      },
+      "needed": [
+        "libc.so",
+        "libdl.so",
+        "libm.so",
+        "libmgmem.so"
+      ],
+      "link_uses_candidate_sdk": true
+    }
+  },
+  "bundle_core_identity": {
+    "bytes": 582240,
+    "sha256": "73cf6bc3db37be754d36f84cec06b4019066d5037a41ab67be87a22beb5c6f6b"
+  },
+  "device_executed": false,
+  "performance_qualified": false,
+  "limits": [
+    "Static link evidence does not attest the runtime loader or mapped code.",
+    "No ADB, ART, device, long-stability or performance operation occurred."
+  ],
+  "first_postcheck": "FAILED_CHECKER_REGEX_CROSS_LINE_FALSE_POSITIVE_CORRECTED_RERUN_PASSED_RAW_STDOUT_NOT_RETAINED"
+}

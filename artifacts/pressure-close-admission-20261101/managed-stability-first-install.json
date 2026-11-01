@@ -1,0 +1,21 @@
+{
+  "state": "INSTALL_REJECTED_TEST_NOT_RUN",
+  "scope": "OWN_MANAGED_STABILITY_DIAGNOSTIC",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "private_receipt_sha256": "0e478957529b7fda5515014c955058f9014ab8e45ebfa462509759c6f81a74bb",
+  "install_error": "INSTALL_FAILED_USER_RESTRICTED",
+  "system_message": "INSTALL_CANCELED_BY_USER",
+  "initial_install_outcome": "UNKNOWN_AT_RETURN",
+  "subsequent_read_only_observation": "PACKAGE_ABSENT_IN_TWO_VISIBLE_USERS",
+  "matching_probe_processes": 0,
+  "active_instrumentation": 0,
+  "activity": "NOT_STARTED",
+  "instrumentation": "NOT_RUN",
+  "long_stability": "NOT_QUALIFIED",
+  "shared_device_lock": false,
+  "limits": [
+    "The system reports cancellation; it does not establish who or what caused it.",
+    "Later absence is a point observation over visible users, not a shared device lock.",
+    "No data clearing, uninstall or forced process stop was performed."
+  ]
+}
