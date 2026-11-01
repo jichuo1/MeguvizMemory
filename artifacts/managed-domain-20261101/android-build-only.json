@@ -1,0 +1,58 @@
+{
+  "state": "PASS_CROSS_BUILD_AND_STATIC_CLOSURE_ONLY",
+  "scope": "THREE_ANDROID_ABI_UNSANITIZED_LOCAL_NOT_ART_DEVICE_R8",
+  "sources": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+    "adapters/android/native/workspace_jni.cpp": "c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8"
+  },
+  "profiles": {
+    "arm64-v8a": {
+      "aar_sha256": "6764c60bf3a3be5845287e1b2ca16211ef3da791b4ee10e3541c77c2d9d1eb44",
+      "jni_sha256": "c2df07951da522cfdc3cb525bd60a02024baa7a73b39a000edbf61d7609bc90e",
+      "core_sha256": "b0b16a64a8ce3e8cb4a8f3c41d817f3cc3dfea110018d814ecc3c9090b91710a",
+      "build_receipt_sha256": "299c3c87d5edd8b56989a3dcea579b75555c96a5a098c676e4e19880d90188fc",
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "needed": [
+        "libmgmem.so",
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    "x86_64": {
+      "aar_sha256": "21d8056ade70a1347395d0c294c98e4214a25b5209fc42eb88a10d1f2f30f9c5",
+      "jni_sha256": "cc97dbd3aa55e95dd3586a2b8e4641b0021306b451766e246df3e5f0d105e05e",
+      "core_sha256": "627e48d9845dd04e890cb5d8830e9b91724018d524dc71e75404fa0944641ed8",
+      "build_receipt_sha256": "a49ec405a59fea732654cd779da97183baa4fda41ecf6e3138a38929660441cc",
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "needed": [
+        "libmgmem.so",
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ]
+    },
+    "armeabi-v7a": {
+      "aar_sha256": "b75c53fb68662f84990312eff3a087e585c605c0869ffa337839fbaec7692ecd",
+      "jni_sha256": "cbee99b5ac588940baf805e0bcb92b175ba800c79d650f18a52a41e8d66a7299",
+      "core_sha256": "6d7908797d9ab54456a5ea6aa325bebf9bac63b2de91ec171b9a116b881d350b",
+      "build_receipt_sha256": "8e36a361d4764bfc783bcea72e9bbcba81f42c30822cded249b4b96e3e283cb8",
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "needed": [
+        "libmgmem.so",
+        "libm.so",
+        "libdl.so",
+        "libc.so"
+      ]
+    }
+  },
+  "device_executed": false,
+  "limitations": [
+    "Local binaries are unsanitized development inputs and are not shareable.",
+    "Build receipt and matching source hashes do not alone establish full build provenance.",
+    "No Android ART, R8 runtime, device, performance, or formal-release qualification."
+  ]
+}

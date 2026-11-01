@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "state": "PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE",
+  "scope": "HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE",
+  "host": "windows",
+  "functional_cases": 12,
+  "plain_without_sidecar": "PASS",
+  "negative_cases": 8,
+  "installed_core_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425",
+  "installed_jni_sha256": "f77e4e59d2d3a5efe2fc3f4c400c01cdd7f3b528d158c3c94e5ebbd3a3d4c913",
+  "adapter_jar_sha256": "c87857299bf0fca3388b5ef8dff8f4d0fd8c430fffa3a8c63131a587f7a87eef",
+  "adapter_class_sha256": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595",
+  "managed_class_sha256": "3d3d2266cc65ca8a749c7574c4e6ef7ea758d73e0425843bbfdb9198dc081f6c",
+  "consumer_jni_sha256": "f3918b4b4b3bd88fc6d97059d57c48c00bed3d0cedcd9be40b60abbb50d873b4",
+  "reference_sha256": "a5277d73c58f0a7011acaa32f42b4427eff69ca9cf5452a59f0d8955475d6506",
+  "verification_receipt_sha256": "4824562f99a777eca908ef2b9e127a9e6d31bd477941e37e47badc29a07fba2c",
+  "source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+    "src/mgmem.cpp": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+    "include/mgmem/mgmem.h": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+    "include/mgmem/pressure.h": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32",
+    "include/mgmem/android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+    "include/mgmem/android_pressure_jni.h": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54",
+    "adapters/android/native/borrow_jni.cpp": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+    "adapters/android/native/pressure_jni.cpp": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+    "adapters/android/native/workspace_jni.cpp": "c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8",
+    "consumers/java_image/runtime/CMakeLists.txt": "f0c39b071cdcffad841d3d755eb157454da03eb4ee9393fe5f93e99bd283f0d6",
+    "consumers/java_image/CMakeLists.txt": "2daf969dc2c8dadaa2bff9cb05b21fa79214d7809e18f46804a6c873ce48815a",
+    "consumers/java_image/native/image_jni.cpp": "c15eebcaebcfd817967b0f8af5caf7256cd2a4090b6d3aefd99fe6261a03ac31",
+    "consumers/java_image/java/io/github/jichuo1/meguviz/memory/image/JavaImage.java": "3606ac9561c80852bc1aaec6797cde685eaf97a00be0e46c84f857df560c8012",
+    "consumers/java_image/verify_host.py": "2b890caf9002537011c3b3f8ff5d5953d45b3584660c31a12f4742d01f7c27a6",
+    "consumers/java_image/run_host_ci.py": "3d95cdf2ee330918889ab690b2c9633061b6fe6489be0f754f9c94abf3690d04",
+    "consumers/image/CMakeLists.txt": "8128f030073881080f01722e968f550ba83a9bbb211a4108bd42c2468690bd6e",
+    "consumers/image/main.cpp": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd"
+  },
+  "operations": [
+    {
+      "name": "configure-jni",
+      "exit_code": 0,
+      "stdout_sha256": "d4f45540c2302a1ae013957f69953391b8a35389a6ff530f19f2b7b531454ff7",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-jni",
+      "exit_code": 0,
+      "stdout_sha256": "bca2806980bb5291c713f042cd9225c290bdb69385523a129f2abfe8c18dc38a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install-jni",
+      "exit_code": 0,
+      "stdout_sha256": "68dd6a5e0d65738d408e8dea30ef5684cdf8535b288ab13ddb37e0187b2273c4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "compile-current-adapter",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "package-current-adapter",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "configure-plain-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "e09b47bc296fd037869dfa564def8824ecd9352a324c55fed5dff1948ec6e731",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "build-plain-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "d9fdb4def77c88fcd06a126316577a396c6af3efab313e8e1217f6fa12edfde6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "configure-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "eb9d83dcff777e73d537ede26181a66190b8906bfbc58bb2944520e9b9f8f62b",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "ec4bd16be1cc4eef364d625d0e8c81ffb40087a9119ac2904986da7b79245ba0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "configure-reference",
+      "exit_code": 0,
+      "stdout_sha256": "2a8cf668ed1e0e655fabe569d0b596dd3d8ec5282c024d50cc48949f4d6ff63d",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-reference",
+      "exit_code": 0,
+      "stdout_sha256": "650aa090494eb30410f87b2893e796daea680f70bb11035dfb51d386bcb75a71",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "verify-installed-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "0287e89090ae3adec40f4553abcc9f99ecdf22b5db2294fa537212b8f727ba2f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limitations": [
+    "The host JNI is separately built from the adapter sources; it is not the Android AAR JNI binary.",
+    "Module paths and current file hashes were compared inside the JVM; mapped executable bytes were not hashed.",
+    "Source and file hashes alone are not reproducible-build provenance or a performance claim.",
+    "No device, ART, BIL, energy or formal release qualification is implied."
+  ]
+}

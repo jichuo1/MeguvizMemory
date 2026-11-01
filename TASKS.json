@@ -431,19 +431,20 @@
       "dependency_contract": "MM 006",
       "acceptance": "Java 引用保活、无逃逸 early-free、批量调用",
       "status": "PARTIAL",
-      "implementation": "CONTROLLED_JNI_COPY_LEASE_NONBLOCKING_CLOSE_STATE_AND_CALLBACK_LOCK_FIX",
-      "functional_validation": "PASS_HOST_FAKE_JNI_REAL_JVM_CLOSE_CALLBACK_AND_STATUS",
-      "device_validation": "NOT_RUN_FOR_LATEST_JAVA_BORROW_REVISION",
+      "implementation": "MANAGED_SYSTEM_ARENA_DOMAIN_ALLOCATION_AND_CONTROLLED_COPY_LEASE_IMPLEMENTED",
+      "functional_validation": "PASS_SCOPED_HOST_JVM_MANAGED_47_AND_REAL_JAVA_IMAGE_CONSUMER",
+      "device_validation": "NOT_RUN_FOR_MANAGED_DOMAIN_API",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "NOT_QUALIFIED",
       "scope": "core_or_qualification",
-      "reason": "Close admission now releases the Java monitor before native cleanup and exposes non-waiting close state; latest source has no Android ART/R8/device qualification",
+      "reason": "Host System/Arena managed domain with bounded slots, explicit cleanup and conservative quarantine; automatic pressure bridge, ART/R8/device qualification pending",
       "evidence": [
         "docs/ANDROID_NATIVE_BORROW.md",
         "tests/android_borrow/README.md",
         "artifacts/feature-development-20261101/android-borrow-r8-build.json",
-        "docs/ANDROID_BORROW_DEVICE_PROTOCOL.md"
+        "docs/ANDROID_BORROW_DEVICE_PROTOCOL.md",
+        "docs/ANDROID_MANAGED_DOMAIN.md"
       ]
     },
     {
@@ -624,7 +625,7 @@
         "Formal performance and device qualification of applicable real consumers",
         "Fixture success is not BIL product integration"
       ],
-      "java_image_consumer": "IMPLEMENTED_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_12_ORACLE_CASES_8_NEGATIVE_CASES"
+      "java_image_consumer": "MIGRATED_TO_MANAGED_DOMAIN_INSTALL_SHARED_CORE_HOST_JNI_12_ORACLE_8_NEGATIVE_AND_NO_SIDECAR_PASS"
     },
     {
       "id": "MM-015",
@@ -1221,5 +1222,16 @@
     "android_borrow_v2": "HOST_STUB_62_AND_R8_BUILD_ONLY_NO_ART_OR_DEVICE",
     "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED",
     "ci_portability": "PASS_WINDOWS_AND_LINUX_ON_17aee942_EXACT_STEPS_SEPARATE_NO_DEVICE"
+  },
+  "managed_domain_20261101": {
+    "state": "FUNCTION_IMPLEMENTED_SCOPED_HOST_CHECKS_FINAL_QUALIFICATION_PENDING",
+    "host_jvm": "PASS_46_INJECTION_AND_1_PLAIN",
+    "java_image": "PASS_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_NO_SIDECAR_NORMAL",
+    "android": "THREE_ABI_SANITIZED_CANDIDATES_ARM64_R8_STATIC_ONLY_NO_ART_OR_DEVICE",
+    "automatic_pressure": "NOT_IMPLEMENTED_MANUAL_SET_BUDGET_ONLY",
+    "performance": "NOT_MEASURED",
+    "BIL": "NOT_INTEGRATED",
+    "evidence": "artifacts/managed-domain-20261101/README.md",
+    "pressure_contract": "docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md"
   }
 }

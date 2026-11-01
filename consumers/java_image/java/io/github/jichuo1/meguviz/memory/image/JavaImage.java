@@ -1,6 +1,7 @@
 package io.github.jichuo1.meguviz.memory.image;
 
 import io.github.jichuo1.meguviz.memory.android.NativeMemoryLease;
+import io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,76 +20,134 @@ import java.util.concurrent.FutureTask;
 
 /** Independent file consumer of an installed Memory runtime and JNI adapter. */
 public final class JavaImage {
-    static {
-        System.loadLibrary("mgmem_pressure_jni");
-        System.loadLibrary("mgmem_java_image");
-    }
+    private static boolean identityProbeLoaded;
+    private static volatile String cleanupObservation="NO_DOMAIN_ATTEMPTED";
     private static final long MAX_PIXELS = 8L * 1024 * 1024;
     private static final long MAX_BUDGET = 64L * 1024 * 1024;
     // Divisible by three and less than the JNI staging limit.
     private static final int TRANSFER_BYTES = 24 * 1024;
-    private static native long nativeOpen(long bytes, long budget, boolean system);
-    private static native long nativeRegister(long session);
-    private static native int nativeRetire(long session);
-    private static native int nativeCancel(long registration);
-    private static native long nativeFinish(long session);
-    private static native int nativeActiveSessions();
     private static native String[] nativeModulePaths();
 
     private static IllegalStateException status(String action, long code) {
         return new IllegalStateException(action + " failed: " + code);
     }
     private static final class Session implements AutoCloseable {
-        private long id, registration;
-        private NativeMemoryLease lease;
+        private ManagedMemoryDomain domain;
+        private ManagedMemoryDomain.Allocation owner;
+        private ManagedMemoryDomain.Lease lease;
         private long peak;
         static Session open(long bytes, long budget, boolean system) {
             Session result = new Session();
-            result.id = nativeOpen(bytes, budget, system);
-            if (result.id <= 0) throw status("open", -result.id);
+            cleanupObservation="UNKNOWN_CREATION";
             try {
-                result.registration = nativeRegister(result.id);
-                if (result.registration <= 0) {
-                    long code = -result.registration;
-                    result.registration = 0;
-                    throw status("register", code);
-                }
-                result.lease = NativeMemoryLease.fromNativeRegistration(result.registration);
-                result.registration = 0;
-                int retired = nativeRetire(result.id);
-                if (retired != 0) throw status("retire", retired);
+                result.domain=system?ManagedMemoryDomain.system(budget):ManagedMemoryDomain.arena(budget,65536);
+                cleanupObservation="NOT_CONFIRMED";
+                result.owner=result.domain.allocate(bytes,64);
+                result.lease=result.owner.borrowWrite(0,bytes);
+                result.releaseOwnerOnce();
+                result.domain.beginClose();
+                long[] held=result.domain.snapshot();
+                if(result.domain.state()!=ManagedMemoryDomain.CLOSING || held==null || held.length!=10 ||
+                    held[0]!=ManagedMemoryDomain.CLOSING || (held[1]!=0 && held[1]!=1) ||
+                    held[7]!=bytes || held[8]!=1 || held[9]!=1)
+                    throw new IllegalStateException("closing domain did not retain the image lease");
                 return result;
             } catch (RuntimeException | Error error) {
                 try { result.close(); } catch (RuntimeException | Error cleanup) { error.addSuppressed(cleanup); }
                 throw error;
             }
         }
+        private void releaseOwnerOnce() {
+            if(owner==null) return;
+            try {owner.close();owner=null;}
+            catch(ManagedMemoryDomain.ManagedException error) {
+                // Java report admission failure is known to happen before the
+                // owner token is consumed. Other results may already consume it.
+                if(error.status()!=ManagedMemoryDomain.STATUS_CLOSE_GUARD_LIMIT || owner.length()==0) owner=null;
+                throw error;
+            } catch(RuntimeException | Error error) {owner=null;throw error;}
+        }
         @Override public void close() {
-            if (id == 0) return;
-            Throwable problem = null;
-            if (lease != null) {
-                try { lease.close(); } catch (RuntimeException | Error error) { problem = error; }
-                finally { lease = null; }
-            }
-            if (registration != 0) {
-                int cancelled = nativeCancel(registration);
-                registration = 0; // A failed cancellation may have consumed the registration.
-                if (cancelled != 0) {
-                    Throwable error = status("cancel", cancelled);
-                    if (problem == null) problem = error; else problem.addSuppressed(error);
+            if(domain==null) return;
+            Throwable problem=null;
+            final long deadline=System.nanoTime()+10_000_000_000L;
+            boolean interrupted=Thread.interrupted();
+            try {
+                while(owner!=null && System.nanoTime()-deadline<0) {
+                    try {releaseOwnerOnce();}
+                    catch(ManagedMemoryDomain.ManagedException error) {
+                        if(owner==null || error.status()!=ManagedMemoryDomain.STATUS_CLOSE_GUARD_LIMIT) {
+                            problem=merge(problem,error);break;
+                        }
+                        try {Thread.sleep(2);} catch(InterruptedException ignored) {interrupted=true;}
+                    } catch(RuntimeException | Error error) {problem=merge(problem,error);break;}
                 }
-            }
-            long finished = nativeFinish(id);
-            if (finished < 0) {
-                Throwable error = status("finish", -finished);
-                if (problem == null) problem = error; else problem.addSuppressed(error);
-            } else {
-                peak = finished;
-                id = 0;
+                if(owner!=null) problem=merge(problem,new IllegalStateException("owner close not confirmed"));
+                if(lease!=null) {
+                    while(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED && System.nanoTime()-deadline<0) {
+                        int state=lease.closeState();
+                        if(state==NativeMemoryLease.CLOSE_FAILED) {
+                            problem=merge(problem,status("lease close",lease.closeFailureStatus()));break;
+                        }
+                        if(state==NativeMemoryLease.CLOSE_OPEN) {
+                            try {lease.close();}
+                            catch(ManagedMemoryDomain.ManagedException error) {
+                                if(lease.closeState()!=NativeMemoryLease.CLOSE_OPEN ||
+                                    (error.status()!=ManagedMemoryDomain.STATUS_CLOSE_GUARD_LIMIT && error.status()!=3)) {
+                                    problem=merge(problem,error);break;
+                                }
+                            } catch(RuntimeException | Error error) {problem=merge(problem,error);break;}
+                        }
+                        if(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED) {
+                            try {Thread.sleep(2);} catch(InterruptedException error) {interrupted=true;}
+                        }
+                    }
+                    if(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED)
+                        problem=merge(problem,new IllegalStateException("lease close not confirmed"));
+                    else lease=null;
+                }
+                boolean scheduled=false;
+                while(!scheduled && System.nanoTime()-deadline<0) {
+                    try {domain.beginClose();scheduled=true;}
+                    catch(ManagedMemoryDomain.ManagedException error) {
+                        if(error.status()!=ManagedMemoryDomain.STATUS_WORKER_LIMIT &&
+                            error.status()!=ManagedMemoryDomain.STATUS_CLOSE_GUARD_LIMIT && error.status()!=3) {
+                            problem=merge(problem,error);break;
+                        }
+                        try {Thread.sleep(2);} catch(InterruptedException ignored) {interrupted=true;}
+                    } catch(RuntimeException | Error error) {problem=merge(problem,error);break;}
+                }
+                if(scheduled) {
+                    int state=domain.state();
+                    while(state==ManagedMemoryDomain.CLOSING && System.nanoTime()-deadline<0) {
+                        try {Thread.sleep(2);} catch(InterruptedException ignored) {interrupted=true;}
+                        state=domain.state();
+                    }
+                    if(state==ManagedMemoryDomain.CLOSED) {
+                        long[] finalSnapshot=domain.snapshot();
+                        if(finalSnapshot==null || finalSnapshot.length!=10 || finalSnapshot[0]!=ManagedMemoryDomain.CLOSED ||
+                            finalSnapshot[1]!=2 || finalSnapshot[3]!=0 || finalSnapshot[4]!=0 || finalSnapshot[6]!=0 ||
+                            finalSnapshot[7]!=0 || finalSnapshot[8]!=0 || finalSnapshot[9]!=0 || finalSnapshot[5]<0) {
+                            problem=merge(problem,new IllegalStateException("final domain accounting unavailable"));
+                        } else {
+                            peak=finalSnapshot[5];
+                            try {domain.forgetClosed();cleanupObservation="CLOSED_AND_FORGOTTEN";domain=null;}
+                            catch(RuntimeException | Error error) {problem=merge(problem,error);}
+                        }
+                    } else if(state==ManagedMemoryDomain.QUARANTINED) {
+                        problem=merge(problem,status("domain quarantined",domain.failureStatus()));
+                    } else problem=merge(problem,new IllegalStateException("domain close not confirmed"));
+                } else problem=merge(problem,new IllegalStateException("domain cleanup worker not admitted"));
+            } finally {
+                if(interrupted) Thread.currentThread().interrupt();
             }
             if (problem instanceof Error) throw (Error) problem;
             if (problem != null) throw (RuntimeException) problem;
         }
+    }
+    private static Throwable merge(Throwable first,Throwable next) {
+        if(first==null) return next;
+        first.addSuppressed(next);return first;
     }
     private static boolean whitespace(int c) { return c == ' ' || c == '\t' || c == '\r' || c == '\n'; }
     private static String token(PushbackInputStream input) throws IOException {
@@ -138,7 +197,7 @@ public final class JavaImage {
         final long checksum;
         Result(byte[] pixels,long checksum) {this.pixels=pixels;this.checksum=checksum;}
     }
-    private static Result calculate(NativeMemoryLease lease, int width, int height, byte[] transfer) throws InterruptedException {
+    private static Result calculate(ManagedMemoryDomain.Lease lease, int width, int height, byte[] transfer) throws InterruptedException {
         final int pixels=width*height;
         byte[] luma=new byte[pixels], output=new byte[pixels];
         int position=0;
@@ -169,7 +228,7 @@ public final class JavaImage {
         }
         return new Result(output,checksum);
     }
-    private static Result onWorker(NativeMemoryLease lease,int width,int height,byte[] transfer) throws Exception {
+    private static Result onWorker(ManagedMemoryDomain.Lease lease,int width,int height,byte[] transfer) throws Exception {
         // The native lease is already held before the task is constructed or started.
         FutureTask<Result> task=new FutureTask<>(()->calculate(lease,width,height,transfer));
         Thread worker=new Thread(task,"mgmem-java-image");
@@ -201,32 +260,41 @@ public final class JavaImage {
         try (InputStream stream=Files.newInputStream(path)) {return hash(stream);}
     }
     private static final class Identity {
-        final String core,jni,jar,javaClass;
-        Identity(String core,String jni,String jar,String javaClass) {this.core=core;this.jni=jni;this.jar=jar;this.javaClass=javaClass;}
+        final String core,jni,jar,javaClass,managedClass;
+        Identity(String core,String jni,String jar,String javaClass,String managedClass) {
+            this.core=core;this.jni=jni;this.jar=jar;this.javaClass=javaClass;this.managedClass=managedClass;
+        }
     }
-    private static Identity attest(Path core,Path jni,Path jar) throws Exception {
-        String[] loaded=nativeModulePaths();
-        if(loaded==null || loaded.length!=2 || loaded[0]==null || loaded[1]==null ||
-                !Files.isSameFile(Paths.get(loaded[0]),core) || !Files.isSameFile(Paths.get(loaded[1]),jni))
-            throw new IllegalStateException("loaded native modules do not match the expected installed files");
-        if(NativeMemoryLease.class.getProtectionDomain()==null ||
-                NativeMemoryLease.class.getProtectionDomain().getCodeSource()==null)
+    private static String attestClass(Class<?> type,Path jar,String resource) throws Exception {
+        if(type.getProtectionDomain()==null || type.getProtectionDomain().getCodeSource()==null)
             throw new IllegalStateException("Java adapter code source unavailable");
-        Path loadedJar=Paths.get(NativeMemoryLease.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+        Path loadedJar=Paths.get(type.getProtectionDomain().getCodeSource().getLocation().toURI());
         if(!Files.isSameFile(loadedJar,jar)) throw new IllegalStateException("loaded Java adapter is not from the expected JAR");
-        String resource="io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.class";
         String jarClass,loadedClass;
         try(JarFile file=new JarFile(jar.toFile())) {
             JarEntry entry=file.getJarEntry(resource);
             if(entry==null) throw new IllegalStateException("expected JAR does not contain the adapter class");
             try(InputStream input=file.getInputStream(entry)) {jarClass=hash(input);}
         }
-        try(InputStream input=NativeMemoryLease.class.getResourceAsStream("NativeMemoryLease.class")) {
+        try(InputStream input=type.getResourceAsStream(type.getSimpleName()+".class")) {
             if(input==null) throw new IllegalStateException("loaded adapter class resource unavailable");
             loadedClass=hash(input);
         }
         if(!jarClass.equals(loadedClass)) throw new IllegalStateException("adapter class bytes do not match the expected JAR");
-        return new Identity(hashFile(core),hashFile(jni),hashFile(jar),loadedClass);
+        return loadedClass;
+    }
+    private static Identity attest(Path core,Path jni,Path jar) throws Exception {
+        synchronized(JavaImage.class) {
+            if(!identityProbeLoaded) {System.loadLibrary("mgmem_java_image");identityProbeLoaded=true;}
+        }
+        String[] loaded=nativeModulePaths();
+        if(loaded==null || loaded.length!=2 || loaded[0]==null || loaded[1]==null ||
+                !Files.isSameFile(Paths.get(loaded[0]),core) || !Files.isSameFile(Paths.get(loaded[1]),jni))
+            throw new IllegalStateException("loaded native modules do not match the expected installed files");
+        String prefix="io/github/jichuo1/meguviz/memory/android/";
+        String leaseClass=attestClass(NativeMemoryLease.class,jar,prefix+"NativeMemoryLease.class");
+        String managedClass=attestClass(ManagedMemoryDomain.class,jar,prefix+"ManagedMemoryDomain.class");
+        return new Identity(hashFile(core),hashFile(jni),hashFile(jar),leaseClass,managedClass);
     }
     private static void execute(String[] args) throws Exception {
         if (args.length<2) throw new IllegalArgumentException("usage: JavaImage input.ppm output.pgm [--system] [--budget bytes]");
@@ -262,7 +330,7 @@ public final class JavaImage {
                 result=onWorker(session.lease,width,height,transfer);
             }
         }
-        if(nativeActiveSessions()!=0) throw new IllegalStateException("native image session cleanup not confirmed");
+        if(!"CLOSED_AND_FORGOTTEN".equals(cleanupObservation)) throw new IllegalStateException("managed image domain cleanup not confirmed");
         // The Java result survives the native lease; do not overwrite an existing file.
         try (OutputStream output=Files.newOutputStream(outputPath,StandardOpenOption.CREATE_NEW,StandardOpenOption.WRITE)) {
             output.write(("P5\n"+width+" "+height+"\n255\n").getBytes(StandardCharsets.US_ASCII));
@@ -274,9 +342,10 @@ public final class JavaImage {
             ",\"native_initialized_bytes\":"+rgbBytes+",\"source_to_java_bytes\":"+rgbBytes+
             ",\"java_to_native_staging_bytes\":"+rgbBytes+",\"staging_to_native_backing_bytes\":"+rgbBytes+
             ",\"native_to_java_bytes\":"+rgbBytes+",\"java_luma_and_output_bytes\":"+(2L*width*height)+
-            ",\"transfer_buffer_bytes\":"+TRANSFER_BYTES+",\"lease_before_enqueue\":true,\"native_sessions_remaining\":0"+
+            ",\"transfer_buffer_bytes\":"+TRANSFER_BYTES+",\"lease_before_enqueue\":true,\"managed_cleanup\":\""+cleanupObservation+"\",\"identity_probe_loaded\":"+identityProbeLoaded+
             (identity==null?",\"identity_scope\":\"NOT_CHECKED\"":",\"identity_scope\":\"OS_MODULE_PATH_AND_CURRENT_FILE_HASH\",\"core_sha256\":\""+
-                identity.core+"\",\"jni_sha256\":\""+identity.jni+"\",\"java_jar_sha256\":\""+identity.jar+"\",\"java_class_sha256\":\""+identity.javaClass+"\"")+
+                identity.core+"\",\"jni_sha256\":\""+identity.jni+"\",\"java_jar_sha256\":\""+identity.jar+"\",\"java_class_sha256\":\""+identity.javaClass+
+                "\",\"managed_class_sha256\":\""+identity.managedClass+"\"")+
             ",\"scope\":\"HOST_FUNCTIONAL_NOT_PERFORMANCE\"}");
     }
     public static void main(String[] args) {
@@ -284,8 +353,7 @@ public final class JavaImage {
         catch (Throwable error) {
             System.err.println("Java image consumer: "+error.getClass().getSimpleName()+": "+error.getMessage());
             for (Throwable suppressed:error.getSuppressed()) System.err.println("cleanup: "+suppressed.getClass().getSimpleName()+": "+suppressed.getMessage());
-            try {System.err.println("native_sessions_remaining="+nativeActiveSessions());}
-            catch (Throwable unavailable) {System.err.println("native_sessions_remaining=UNKNOWN");}
+            System.err.println("managed_cleanup="+cleanupObservation);
             System.exit(1);
         }
     }

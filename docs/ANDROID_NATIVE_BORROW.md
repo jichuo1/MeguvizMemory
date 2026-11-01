@@ -1,6 +1,6 @@
 # Android 受控原生字节借用
 
-这是可选 JNI 适配层。可信原生代码通过 `mgmem_android_borrow_register_v1` 把已有 Memory allocation 的一段 READ 或 WRITE lease 注册为进程内 token；Java 用 `NativeMemoryLease.fromNativeRegistration` 单次认领，然后通过 `read` / `write` 在已有 `byte[]` 与受控范围之间复制。该接口不返回原生指针、`DirectByteBuffer` 或其他可绕过关闭检查的引用。它没有提供 Java 侧原生 allocation 工厂，也不接管进程 allocator。
+这是可选 JNI 适配层。可信原生代码通过 `mgmem_android_borrow_register_v1` 把已有 Memory allocation 的一段 READ 或 WRITE lease 注册为进程内 token；Java 用 `NativeMemoryLease.fromNativeRegistration` 单次认领，然后通过 `read` / `write` 在已有 `byte[]` 与受控范围之间复制。该接口不返回原生指针、`DirectByteBuffer` 或其他可绕过关闭检查的引用。`NativeMemoryLease` 本身不提供 allocation 工厂；自有 System/Arena 域可使用独立的 [ManagedMemoryDomain](ANDROID_MANAGED_DOMAIN.md)，两者均不接管进程 allocator。
 
 ## 原生依赖与归属
 
@@ -28,4 +28,4 @@ token 是只在当前已加载 JNI runtime 内有效、单调且不复用的标�
 
 独立宿主测试 `tests/borrow_host` 以真实 core 加 fake JNI 覆盖初始化标志、重复认领、权限/边界、owner 先释放、domain 关闭后访问、访问与关闭竞争、pending JNI 异常及失败回调隔离；另一项使用真实宿主 JVM、真实 JNI 和 core 进行字节读写、关闭与域清理。该测试组合的宿主 JVM fixture 将 core 编入测试 DLL，仅用于单进程测试，不是 Android 发布库链接方式。
 
-独立 [Java 图像消费者](../consumers/java_image/README.md)已在宿主通过安装后的共享核心和单独构建的 host JNI 使用此接口；它不是 Android 生产消费者。最新源码的三 ABI NDK/AAR 已重建，arm64 独立 R8 诊断也仅取得[构建证据](../artifacts/continuation-next-20261101/android-build/r8_build.json)；仍需统一验证 R8 后设备 ART 运行、压力与生命周期组合、长期稳定性和真实 Android 消费者接入。宿主及构建结果不替代这些设备和交付资格。BIL 未接入，也无性能或零拷贝收益声明。
+独立 [Java 图像消费者](../consumers/java_image/README.md)已迁移到 ManagedMemoryDomain，并在宿主通过安装后的共享核心和单独构建的 host JNI 使用受控借用；它不是 Android 生产消费者。此前 arm64 R8 诊断仅覆盖托管域加入前的版本，见[历史构建证据](../artifacts/continuation-next-20261101/android-build/r8_build.json)；最新托管版本尚需统一验证 R8 后设备 ART 运行、压力与生命周期组合、长期稳定性和真实 Android 消费者接入。宿主及构建结果不替代这些设备和交付资格。BIL 未接入，也无性能或零拷贝收益声明。

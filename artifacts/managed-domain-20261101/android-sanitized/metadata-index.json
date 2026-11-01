@@ -1,0 +1,57 @@
+{
+  "state": "PASS_SCOPED_PUBLIC_METADATA_SCAN",
+  "scope": "METADATA_ONLY_NO_DEVICE_NO_RAW_BINARIES",
+  "files": {
+    "sanitizer_manifest": {
+      "path": "build/managed-artifacts-20261101-v1/manifest.json",
+      "bytes": 8501,
+      "sha256": "8aecf4ba05427df561505f80c6153593df0b2a3f437cdee783a40e9f04297d2c"
+    },
+    "privacy": {
+      "path": "build/managed-artifacts-20261101-v1/independent-privacy-proof.json",
+      "bytes": 1660,
+      "sha256": "2fe33f413b2b3fc4a78c2329221aa9c0bae2c3bc2eaaabb6d464259ceba0eaf9"
+    },
+    "exports": {
+      "path": "build/managed-artifacts-20261101-v1/export-toolchain-proof.json",
+      "bytes": 1502,
+      "sha256": "c178433a548972ab8b1a415e7f88a47e1327230681c4f61cee1d0ef709c99633"
+    },
+    "r8_build": {
+      "path": "build/managed-r8-contract-20261101-v1/out/receipt.json",
+      "bytes": 6573,
+      "sha256": "9b64c205a45f9ec0417c1215a04ebafd4a3be90e33b4a6d12ff40237f3cd577d"
+    },
+    "r8_script": {
+      "path": "build/managed-r8-contract-20261101-v1/inspect_r8.py",
+      "bytes": 13860,
+      "sha256": "b2677058083fce67e01a275c0cd0ddaa0c111200b7c5a7dbbf1cb6b1f183d5f9"
+    },
+    "r8_class_source": {
+      "path": "build/managed-r8-contract-20261101-v1/out/class-source-proof.json",
+      "bytes": 1564,
+      "sha256": "881a1689cadf2da3bb5670c86ec2258f4de81462986e0cb40aa19c461dbc5e9d"
+    },
+    "input_build_arm64-v8a": {
+      "path": "build/managed-aar-20261101/arm64-v8a-receipt.json",
+      "bytes": 7738,
+      "sha256": "299c3c87d5edd8b56989a3dcea579b75555c96a5a098c676e4e19880d90188fc"
+    },
+    "input_build_x86_64": {
+      "path": "build/managed-aar-20261101/x86_64-receipt.json",
+      "bytes": 7720,
+      "sha256": "a49ec405a59fea732654cd779da97183baa4fda41ecf6e3138a38929660441cc"
+    },
+    "input_build_armeabi-v7a": {
+      "path": "build/managed-aar-20261101/armeabi-v7a-receipt.json",
+      "bytes": 7749,
+      "sha256": "8e36a361d4764bfc783bcea72e9bbcba81f42c30822cded249b4b96e3e283cb8"
+    }
+  },
+  "limitations": [
+    "Sanitizer preparation script contains local tool paths and remains private; its hash is in export proof.",
+    "Class-source supplemental comparison was a one-shot check without a separately saved script.",
+    "Proofs are static or build-only, not ART/device or complete build provenance.",
+    "Bounded privacy scans cannot guarantee absence of all secrets."
+  ]
+}

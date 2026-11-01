@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Inspect AAR consumer rules with an actual R8 build; never calls ADB.
+
+All transient files and raw logs are confined to a fresh ignored build folder.
+The JSON receipt is bounded metadata, not ART or device evidence.
+"""
+from pathlib import Path
+import argparse
+import hashlib
+import io
+import json
+import re
+import subprocess
+import sys
+import zipfile
+
+ROOT = Path(__file__).resolve().parents[2]
+JAVA_PACKAGE = 'io.github.jichuo1.meguviz.memory.android'
+MANAGED = JAVA_PACKAGE + '.ManagedMemoryDomain'
+CONSUMER = 'io.github.jichuo1.meguviz.memory.r8check.ManagedConsumer'
+WITNESS = 'io.github.jichuo1.meguviz.memory.r8check.UnusedWitness'
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def file_sha(path):
+    return sha(Path(path).read_bytes())
+
+
+def require(condition, reason):
+    if not condition:
+        raise RuntimeError(reason)
+
+
+def block_for(dump, name):
+    descriptor = 'L' + name.replace('.', '/') + ';'
+    blocks = re.split(r'(?m)^Class #\d+\s+-\s*$', dump)
+    matches = [x for x in blocks if "Class descriptor  : '" + descriptor + "'" in x]
+    require(len(matches) == 1, 'class_missing_or_duplicate:' + name)
+    return matches[0]
+
+
+def check_methods(dump, owner, methods, flag):
+    block = block_for(dump, owner)
+    for name, descriptor in methods.items():
+        method = (r"(?ms)^\s*#\d+\s+:\s+\(in\s+L" + re.escape(owner.replace('.', '/')) +
+                  r";\)\s*\n\s*name\s*:\s*'" + re.escape(name) +
+                  r"'\s*\n\s*type\s*:\s*'" + re.escape(descriptor) +
+                  r"'\s*\n\s*access\s*:\s*[^\n]*\b" + flag + r"\b")
+        require(re.search(method, block) is not None, 'method_missing:' + owner + ':' + name)
+
+
+def main():
+    p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--aar', type=Path, required=True)
+    p.add_argument('--sdk-core', type=Path, required=True)
+    p.add_argument('--out-dir', type=Path, required=True)
+    p.add_argument('--sdk', type=Path, required=True)
+    p.add_argument('--java-home', type=Path, required=True)
+    p.add_argument('--ndk-prebuilt', type=Path, required=True)
+    p.add_argument('--expected-aar-sha256', required=True)
+    a = p.parse_args()
+    out = a.out_dir.resolve()
+    require(out.is_relative_to((ROOT / 'build').resolve()) and not out.exists(), 'fresh_scoped_output_required')
+    aar, core = a.aar.resolve(), a.sdk_core.resolve()
+    require(aar.is_file() and core.is_file() and re.fullmatch('[0-9a-f]{64}', a.expected_aar_sha256) is not None,
+            'input_missing_or_hash_invalid')
+    require(file_sha(aar) == a.expected_aar_sha256, 'input_aar_hash_mismatch')
+    suffix = '.exe' if sys.platform == 'win32' else ''
+    java = a.java_home / 'bin' / ('java' + suffix)
+    javac = a.java_home / 'bin' / ('javac' + suffix)
+    build_tools = a.sdk / 'build-tools/37.0.0'
+    r8 = build_tools / 'lib/d8.jar'
+    dexdump = build_tools / ('dexdump' + suffix)
+    android = a.sdk / 'platforms/android-37.0/android.jar'
+    nm = a.ndk_prebuilt / 'bin' / ('llvm-nm' + suffix)
+    require(all(x.is_file() for x in (java, javac, r8, dexdump, android, nm)), 'local_tool_missing')
+    source_files = [ROOT / 'adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java',
+                    ROOT / 'adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java',
+                    ROOT / 'adapters/android/native/workspace_jni.cpp',
+                    ROOT / 'adapters/android/consumer-rules.pro', Path(__file__).resolve()]
+    initial = {x: file_sha(x) for x in source_files + [aar, core]}
+    out.mkdir(parents=True)
+    operations = []
+
+    def run(label, command, expected=0):
+        result = subprocess.run([str(x) for x in command], cwd=out, capture_output=True, timeout=120, check=False)
+        (out / (label + '.stdout')).write_bytes(result.stdout)
+        (out / (label + '.stderr')).write_bytes(result.stderr)
+        operations.append({'name': label, 'exit_code': result.returncode,
+                           'stdout_sha256': sha(result.stdout), 'stderr_sha256': sha(result.stderr)})
+        require(result.returncode == expected, label + '_failed')
+        return result.stdout.decode('utf-8', 'replace')
+
+    with zipfile.ZipFile(aar) as archive:
+        names = archive.namelist()
+        require(len(names) == len(set(names)) and archive.testzip() is None, 'aar_invalid')
+        libs = sorted(x for x in names if x.endswith('.so'))
+        require(libs == ['jni/arm64-v8a/libmgmem.so', 'jni/arm64-v8a/libmgmem_pressure_jni.so'], 'aar_native_closure')
+        require(archive.read(libs[0]) == core.read_bytes(), 'sdk_core_mismatch')
+        classes = archive.read('classes.jar')
+        rules = archive.read('proguard.txt')
+        require(rules == (ROOT / 'adapters/android/consumer-rules.pro').read_bytes(), 'aar_rules_drift')
+        require(any('NOTICE' in x.upper() for x in names), 'aar_llvm_notice_missing')
+        jni = archive.read(libs[1])
+    with zipfile.ZipFile(io.BytesIO(classes)) as jar:
+        for suffix_name in ('', '$Allocation', '$Lease', '$ManagedException'):
+            name = MANAGED.replace('.', '/') + suffix_name + '.class'
+            require(jar.namelist().count(name) == 1, 'aar_managed_class_missing:' + suffix_name)
+    inputs = out / 'inputs'; inputs.mkdir()
+    classes_jar = inputs / 'classes.jar'; classes_jar.write_bytes(classes)
+    jni_file = inputs / 'libmgmem_pressure_jni.so'; jni_file.write_bytes(jni)
+    rules_file = inputs / 'aar-proguard.pro'; rules_file.write_bytes(rules)
+    exported = run('jni-exports', [nm, '-D', '--defined-only', jni_file])
+    require('ManagedMemoryDomainJvmTest' not in exported and 'mgmem_managed_test' not in exported,
+            'test_export_in_production_jni')
+
+    source = out / 'src/io/github/jichuo1/meguviz/memory/r8check'
+    source.mkdir(parents=True)
+    consumer_source = source / 'ManagedConsumer.java'
+    consumer_source.write_text('''package io.github.jichuo1.meguviz.memory.r8check;
+import io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain;
+public final class ManagedConsumer {
+  public static int run(long budget) {
+    ManagedMemoryDomain d=ManagedMemoryDomain.system(budget);
+    ManagedMemoryDomain.Allocation a=d.allocate(16,8);
+    ManagedMemoryDomain.Lease l=a.borrowWrite(0,16);
+    byte[] b=new byte[16]; l.read(0,b,0,16); l.write(0,b,0,16);
+    int state=l.closeState()+l.closeFailureStatus(); l.close(); a.close(); d.beginClose();
+    return state+d.state()+d.failureStatus();
+  }
+}
+''', encoding='utf-8', newline='\n')
+    witness_source = source / 'UnusedWitness.java'
+    witness_source.write_text('package io.github.jichuo1.meguviz.memory.r8check; public final class UnusedWitness {}\n',
+                              encoding='utf-8', newline='\n')
+    classes_dir = out / 'consumer-classes'; classes_dir.mkdir()
+    run('javac', [javac, '--release', '8', '-classpath', classes_jar, '-d', classes_dir,
+                  consumer_source, witness_source])
+    from zipfile import ZIP_DEFLATED
+    consumer_jar = out / 'consumer.jar'
+    with zipfile.ZipFile(consumer_jar, 'x', compression=ZIP_DEFLATED) as jar:
+        for path in sorted(classes_dir.rglob('*.class')):
+            jar.write(path, path.relative_to(classes_dir).as_posix())
+    conf = out / 'consumer.pro'
+    usage = out / 'usage.txt'
+    conf.write_text('-keep class ' + CONSUMER + ' { *; }\n-printusage ' + usage.as_posix() + '\n',
+                    encoding='utf-8', newline='\n')
+    dex = out / 'dex'; dex.mkdir()
+    mapping = out / 'mapping.txt'
+    version = run('r8-version', [java, '-cp', r8, 'com.android.tools.r8.R8', '--version']).strip()
+    run('r8', [java, '-cp', r8, 'com.android.tools.r8.R8', '--release', '--min-api', '27', '--lib', android,
+               '--pg-conf', rules_file, '--pg-conf', conf, '--pg-map-output', mapping,
+               '--output', dex, classes_jar, consumer_jar])
+    require(sorted(x.name for x in dex.glob('*.dex')) == ['classes.dex'], 'r8_dex_closure')
+    require(re.search(r'(?m)^' + re.escape(WITNESS) + r'(?::.*)?$', usage.read_text(encoding='utf-8')) is not None,
+            'r8_unused_witness_not_removed')
+    mapped = mapping.read_text(encoding='utf-8')
+    owners = [MANAGED, MANAGED + '$Allocation', MANAGED + '$Lease', MANAGED + '$ManagedException']
+    for owner in owners:
+        require(re.search(r'(?m)^' + re.escape(owner) + r' -> ' + re.escape(owner) + r':$', mapped) is not None,
+                'r8_class_renamed:' + owner)
+    dump = run('dexdump', [dexdump, '-f', dex / 'classes.dex'])
+    require("Class descriptor  : 'L" + WITNESS.replace('.', '/') + ";'" not in dump, 'witness_present_in_dex')
+    native = {'nativeCreate':'(ZJJ)J', 'nativeClaimDomain':'(J)I', 'nativeAllocate':'(JJJ)J',
+              'nativeSetBudget':'(JJ)I', 'nativeBorrow':'(JJJZ)J', 'nativeCancel':'(J)I',
+              'nativeGuardEnter':'(J)J', 'nativeGuardExit':'(JZ)I', 'nativeRelease':'(J)I',
+              'nativeBeginClose':'(J)I', 'nativeState':'(J)I', 'nativeFailure':'(J)I',
+              'nativePrepareForget':'(J)I', 'nativeDropClosed':'(J)I', 'nativeSnapshot':'(J)[J',
+              'nativeQuarantine':'(J)V', 'nativeWorkerCount':'()I', 'nativeRuntimeCounts':'()[J'}
+    check_methods(dump, MANAGED, native, 'NATIVE')
+    prefix = 'Java_' + MANAGED.replace('.', '_') + '_'
+    for name in native:
+        require(re.search(r'\b' + re.escape(prefix + name) + r'\b', exported) is not None,
+                'jni_export_missing:' + name)
+    lease_desc = 'L' + MANAGED.replace('.', '/') + '$Lease;'
+    alloc_desc = 'L' + MANAGED.replace('.', '/') + '$Allocation;'
+    domain_desc = 'L' + MANAGED.replace('.', '/') + ';'
+    public = {
+        MANAGED: {'system':'(J)' + domain_desc, 'arena':'(JJ)' + domain_desc,
+                  'allocate':'(JJ)' + alloc_desc, 'setBudget':'(J)V', 'beginClose':'()V',
+                  'close':'()V', 'state':'()I', 'failureStatus':'()I', 'forgetClosed':'()V',
+                  'snapshot':'()[J', 'activeCleanupWorkers':'()I', 'runtimeCounts':'()[J',
+                  'javaQuarantineSignals':'()J', 'pendingManagedOperations':'()I'},
+        MANAGED + '$Allocation': {'length':'()J', 'borrowRead':'(JJ)' + lease_desc,
+                                   'borrowWrite':'(JJ)' + lease_desc, 'close':'()V'},
+        MANAGED + '$Lease': {'length':'()J', 'isWritable':'()Z', 'closeState':'()I',
+                             'closeFailureStatus':'()I', 'read':'(J[BII)V', 'write':'(J[BII)V', 'close':'()V'},
+        MANAGED + '$ManagedException': {'status':'()I'},
+    }
+    for owner, methods in public.items():
+        check_methods(dump, owner, methods, 'PUBLIC')
+    negative = out / 'negative'; negative.mkdir()
+    negative_conf = negative / 'consumer.pro'
+    negative_conf.write_text('-keep class ' + CONSUMER + ' { *; }\n', encoding='utf-8', newline='\n')
+    neg_dex = negative / 'dex'; neg_dex.mkdir()
+    neg_mapping = negative / 'mapping.txt'
+    run('r8-negative', [java, '-cp', r8, 'com.android.tools.r8.R8', '--release', '--min-api', '27', '--lib', android,
+                        '--pg-conf', negative_conf, '--pg-map-output', neg_mapping,
+                        '--output', neg_dex, classes_jar, consumer_jar])
+    negative_text = neg_mapping.read_text(encoding='utf-8')
+    found = re.search(r'(?m)^' + re.escape(MANAGED) + r' -> ([^:]+):$', negative_text)
+    negative_name = found.group(1) if found else None
+    require(negative_name != MANAGED, 'negative_control_did_not_change_or_remove_class')
+    require(all(file_sha(path) == expected for path, expected in initial.items()), 'input_or_source_changed')
+    receipt = {'state':'PASS_R8_BUILD_ONLY_NOT_ART_DEVICE', 'scope':'HOST_R8_STATIC_DEX_AND_NATIVE_EXPORT_CHECK',
+               'device_executed':False, 'performance_qualified':False, 'abi':'arm64-v8a',
+               'aar_sha256':file_sha(aar), 'sdk_core_sha256':file_sha(core), 'jni_sha256':sha(jni),
+               'classes_jar_sha256':sha(classes), 'aar_rules_sha256':sha(rules), 'r8_version':version,
+               'tools':{x.name:file_sha(x) for x in (java,javac,r8,dexdump,android,nm)},
+               'source_sha256':{x.relative_to(ROOT).as_posix():initial[x] for x in source_files},
+               'consumer_source_sha256':file_sha(consumer_source), 'unused_witness_removed':True,
+               'managed_class_names_preserved':owners, 'native_signatures_and_exports':native,
+               'public_methods':public, 'negative_without_aar_rules':{'mapped_managed_name':negative_name,
+                   'original_name_preserved':False, 'mapping_sha256':file_sha(neg_mapping)},
+               'dex_sha256':file_sha(dex / 'classes.dex'), 'mapping_sha256':file_sha(mapping),
+               'operations':operations, 'limitations':['Static R8/DEX evidence is not Android ART execution.',
+                   'The consumer is an isolated build-only witness, not a production integration.',
+                   'Input hashes identify the observed files, not full build provenance.']}
+    (out / 'receipt.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2) + '\n',
+                                      encoding='utf-8', newline='\n')
+    print(json.dumps({'state':receipt['state'], 'aar_sha256':receipt['aar_sha256'],
+                      'native_count':len(native), 'public_method_count':sum(len(x) for x in public.values()),
+                      'negative_name':negative_name, 'device_executed':False}))
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except Exception as error:
+        # Never reveal paths or raw tool output in the public command stream.
+        print(json.dumps({'state':'FAILED_OR_BLOCKED', 'error_type':type(error).__name__,
+                          'reason':str(error) if isinstance(error, RuntimeError) else 'inspect_local_build_logs'}))
+        raise SystemExit(1)

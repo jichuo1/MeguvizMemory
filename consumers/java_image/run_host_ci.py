@@ -19,6 +19,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[2]
 CONSUMER = ROOT / 'consumers/java_image'
 ADAPTER_SOURCE = ROOT / 'adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java'
+MANAGED_SOURCE = ROOT / 'adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java'
 
 
 def digest(path: Path) -> str:
@@ -70,10 +71,11 @@ def main() -> int:
     if len(cores) != 1:
         parser.error('Expected exactly one installed shared Memory core')
     core = cores[0].resolve()
-    source_paths = [ADAPTER_SOURCE, root / 'src/mgmem.cpp', root / 'include/mgmem/mgmem.h',
+    source_paths = [ADAPTER_SOURCE, MANAGED_SOURCE, root / 'src/mgmem.cpp', root / 'include/mgmem/mgmem.h',
         root / 'include/mgmem/pressure.h', root / 'include/mgmem/android_borrow_jni.h',
         root / 'include/mgmem/android_pressure_jni.h', root / 'adapters/android/native/borrow_jni.cpp',
-        root / 'adapters/android/native/pressure_jni.cpp', CONSUMER / 'runtime/CMakeLists.txt',
+        root / 'adapters/android/native/pressure_jni.cpp', root / 'adapters/android/native/workspace_jni.cpp',
+        CONSUMER / 'runtime/CMakeLists.txt',
         CONSUMER / 'CMakeLists.txt', CONSUMER / 'native/image_jni.cpp',
         CONSUMER / 'java/io/github/jichuo1/meguviz/memory/image/JavaImage.java',
         CONSUMER / 'verify_host.py', CONSUMER / 'run_host_ci.py',
@@ -119,13 +121,26 @@ def main() -> int:
         raise RuntimeError('installed_shared_jni_missing')
 
     adapter_classes = out / 'adapter-classes'; adapter_classes.mkdir()
-    run('compile-current-adapter', [javac, '--release', '8', '-d', adapter_classes, ADAPTER_SOURCE])
+    run('compile-current-adapter', [javac, '--release', '8', '-d', adapter_classes, ADAPTER_SOURCE, MANAGED_SOURCE])
     adapter_jar = out / 'adapter.jar'
     run('package-current-adapter', [jar, '--create', '--file', adapter_jar, '-C', adapter_classes, '.'])
 
+    # The ordinary consumer is Java-only and must be buildable without the
+    # diagnostic sidecar, JNI headers, a C++ compiler, or a Memory SDK path.
+    plain_build = out / 'plain-consumer-build'
+    plain_configure = [cmake, '-S', CONSUMER, '-B', plain_build]
+    if args.generator:
+        plain_configure += ['-G', args.generator]
+    plain_configure += ['-DMGMEM_ANDROID_CLASSES_JAR=' + str(adapter_jar)]
+    run('configure-plain-consumer', plain_configure)
+    run('build-plain-consumer', [cmake, '--build', plain_build, '--config', 'Release', '--parallel', '2'])
+    if (plain_build / 'java-image-library-Release.txt').exists():
+        raise RuntimeError('plain_consumer_unexpectedly_built_identity_probe')
+
     consumer_build = out / 'consumer-build'
     configure('configure-consumer', CONSUMER, consumer_build,
-              '-DMGMEM_JNI_PREFIX=' + str(jni_prefix), '-DMGMEM_ANDROID_CLASSES_JAR=' + str(adapter_jar))
+              '-DMGMEM_JNI_PREFIX=' + str(jni_prefix), '-DMGMEM_ANDROID_CLASSES_JAR=' + str(adapter_jar),
+              '-DMGMEM_JAVA_IMAGE_BUILD_IDENTITY_PROBE=ON')
     run('build-consumer', [cmake, '--build', consumer_build, '--config', 'Release', '--parallel', '2'])
     location = consumer_build / 'java-image-library-Release.txt'
     if not location.is_file():
@@ -147,9 +162,9 @@ def main() -> int:
     run('verify-installed-consumer', [sys.executable, CONSUMER / 'verify_host.py',
         '--java', java, '--javac', javac, '--reference', references[0], '--core', core,
         '--jni', jni, '--consumer-jni', consumer_jni, '--classes', consumer_build / 'classes',
-        '--adapter-jar', adapter_jar, '--out-dir', verification])
+        '--plain-classes', plain_build / 'classes', '--adapter-jar', adapter_jar, '--out-dir', verification])
     report = json.loads((verification / 'receipt.json').read_text(encoding='utf-8'))
-    if (report.get('state') != 'PASS_HOST_FUNCTIONAL_DEVELOPMENT' or len(report.get('cases', [])) != 12 or
+    if (report.get('state') != 'PASS_HOST_FUNCTIONAL_DEVELOPMENT' or report.get('plain_without_sidecar') != 'PASS' or len(report.get('cases', [])) != 12 or
             len(report.get('negative_cases', [])) != 8 or report.get('identities', {}).get('core_sha256') != core_before or
             report.get('identities', {}).get('jni_sha256') != digest(jni) or
             report.get('identities', {}).get('java_jar_sha256') != digest(adapter_jar)):
@@ -158,9 +173,11 @@ def main() -> int:
         raise RuntimeError('source_or_installed_core_changed_during_run')
     result = {'schema_version': 1, 'state': 'PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE',
         'scope': 'HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE', 'host': 'windows' if os.name == 'nt' else 'linux',
-        'functional_cases': len(report['cases']), 'negative_cases': len(report['negative_cases']),
+        'functional_cases': len(report['cases']), 'plain_without_sidecar': report['plain_without_sidecar'],
+        'negative_cases': len(report['negative_cases']),
         'installed_core_sha256': core_before, 'installed_jni_sha256': digest(jni),
         'adapter_jar_sha256': digest(adapter_jar), 'adapter_class_sha256': report['identities']['java_class_sha256'],
+        'managed_class_sha256': report['identities']['managed_class_sha256'],
         'consumer_jni_sha256': digest(consumer_jni), 'reference_sha256': digest(references[0]),
         'verification_receipt_sha256': digest(verification / 'receipt.json'),
         'source_sha256': before, 'operations': operations,

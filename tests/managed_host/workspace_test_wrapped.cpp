@@ -1,0 +1,6 @@
+// Test-only interception of the complete adapter cancellation call.
+#define mgmem_android_borrow_cancel_v1 managed_test_borrow_cancel_v1
+#define Java_io_github_jichuo1_meguviz_memory_android_ManagedMemoryDomain_nativeRelease managed_test_real_managedRelease
+#define Java_io_github_jichuo1_meguviz_memory_android_ManagedMemoryDomain_nativeAllocate managed_test_real_managedAllocate
+#define Java_io_github_jichuo1_meguviz_memory_android_ManagedMemoryDomain_nativeState managed_test_real_managedState
+#include "../../adapters/android/native/workspace_jni.cpp"

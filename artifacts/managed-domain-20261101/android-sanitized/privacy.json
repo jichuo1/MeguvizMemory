@@ -1,0 +1,60 @@
+{
+  "state": "PASS_BOUNDED_RECURSIVE_KNOWN_IDENTIFIERS_AND_GENERIC_PATHS",
+  "scope": "SANITIZED_AAR_AND_SDK_ARCHIVE_ONLY",
+  "profiles": [
+    {
+      "abi": "arm64-v8a",
+      "kind": "aar",
+      "bytes": 180159,
+      "sha256": "b1f181589f033744d283d99e6f584efb7ddf72717f7b4a033e1b702eb56bdfad",
+      "scanned_items": 160
+    },
+    {
+      "abi": "arm64-v8a",
+      "kind": "sdk",
+      "bytes": 133684,
+      "sha256": "846e32b023f514bfd0af6aa1e4d3f98f6d3c9a1e0fbdfa773132ae74ac32e06e",
+      "scanned_items": 75
+    },
+    {
+      "abi": "x86_64",
+      "kind": "aar",
+      "bytes": 171383,
+      "sha256": "515679bdb0c1fd66095be2d81da97fd820f6bfa903ba953cf322b0709d1a30a1",
+      "scanned_items": 160
+    },
+    {
+      "abi": "x86_64",
+      "kind": "sdk",
+      "bytes": 127980,
+      "sha256": "72253ee1685033bd23da4126e66b4eee2f3b442a7e15dc42bf2064e8aef07d78",
+      "scanned_items": 75
+    },
+    {
+      "abi": "armeabi-v7a",
+      "kind": "aar",
+      "bytes": 149051,
+      "sha256": "12aa67e28dae5d3ecf2f3a94f1abfdb90683eff21ec094beb0c1e41fd6f2a37c",
+      "scanned_items": 160
+    },
+    {
+      "abi": "armeabi-v7a",
+      "kind": "sdk",
+      "bytes": 118387,
+      "sha256": "c62ed3baf797a8e94d6fa71c63126668ad068229cfaf04cb05afd53898704906",
+      "scanned_items": 75
+    }
+  ],
+  "known_identifier_count": 17,
+  "normalized_identifier_variants": 17,
+  "encodings": [
+    "UTF-8",
+    "UTF-16LE",
+    "UTF-16BE"
+  ],
+  "limits": [
+    "A bounded scanner cannot prove absence of all secrets.",
+    "No original local binaries or intermediate paths are included.",
+    "Privacy and static ELF checks do not prove runtime behavior."
+  ]
+}

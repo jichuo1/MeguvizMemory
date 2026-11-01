@@ -45,7 +45,7 @@
     "image_pressure_composition": "PASS_HOST_SYSTEM_ARENA_AND_ARM64_ARENA_900_SECONDS",
     "BIL": "AUDITED_NOT_MODIFIED_NOT_INTEGRATED",
     "Compute_Media": "OPTIONAL_COMPUTE_CPU_READ_MAP_HOST_PASS_MEDIA_NOT_INTEGRATED",
-    "java_image": "REAL_JAVA_P6_TO_P5_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_ONLY"
+    "java_image": "MANAGED_JAVA_DOMAIN_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_ONLY"
   },
   "research": {
     "pmu": "UNAVAILABLE",
@@ -121,7 +121,8 @@
     "jni_close_fix": "AUTO_RETRY_AND_EXCEPTION_ISOLATION_HOST29_ASAN29_API33_FINAL_15M_API34_FINAL_SHORT",
     "checked_external_release": "IMPLEMENTED_OPTIONAL_CAPABILITY_HOST_RELEASE_ASAN_PASS",
     "jni_controlled_borrow": "JAVA_CLOSE_CALLBACK_LOCK_FIX_AND_NONBLOCKING_STATE_HOST_2_LATEST_ANDROID_PENDING",
-    "cpp_checked_import": "IMPLEMENTED_STICKY_QUARANTINE_HOST_10_LATEST_ANDROID_PENDING"
+    "cpp_checked_import": "IMPLEMENTED_STICKY_QUARANTINE_HOST_10_LATEST_ANDROID_PENDING",
+    "managed_java_domain": "IMPLEMENTED_OWNED_SYSTEM_ARENA_MANUAL_BUDGET_HOST_47_ANDROID_NOT_RUN"
   },
   "scope_note": "Top-level current fields describe 0.2; historical_0_1_and_draft fields are superseded snapshots, not current missing implementation.",
   "historical_0_1_and_draft": {
@@ -267,5 +268,13 @@
     "windows_latest": "SHARED_SDK_HOST_JNI_REBUILT_INSTALLED_HOST_CHECKS_ONLY",
     "android_borrow_v2": "HOST_STUB_62_AND_R8_BUILD_ONLY_NO_ART_OR_DEVICE",
     "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED"
+  },
+  "managed_domain_20261101": {
+    "host": "MANAGED_47_JAVA_IMAGE_12_POSITIVE_8_NEGATIVE_NO_SIDECAR_PASS",
+    "android": "THREE_ABI_SANITIZED_CANDIDATES_ARM64_R8_STATIC_ONLY_NO_ART_OR_DEVICE",
+    "automatic_pressure": "NOT_INTEGRATED",
+    "performance": "NOT_MEASURED",
+    "release": "NOT_QUALIFIED",
+    "evidence": "artifacts/managed-domain-20261101/README.md"
   }
 }

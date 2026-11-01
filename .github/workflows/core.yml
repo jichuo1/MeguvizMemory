@@ -55,6 +55,12 @@ jobs:
         run: cmake --build build/borrow-jni-ci --config Release --parallel 2
       - name: Verify host JNI borrowing fixture
         run: ctest --test-dir build/borrow-jni-ci -C Release --output-on-failure
+      - name: Configure managed domain host contracts
+        run: cmake -S tests/managed_host -B build/managed-host-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build managed domain host contracts
+        run: cmake --build build/managed-host-ci --config Release --parallel 2
+      - name: Verify managed domain host contracts
+        run: ctest --test-dir build/managed-host-ci -C Release --output-on-failure
       - name: Configure Android borrow host-only diagnostic
         run: cmake -S tests/android_borrow/host_stub -B build/android-borrow-stub-ci -DCMAKE_BUILD_TYPE=Release
       - name: Build Android borrow host-only diagnostic

@@ -1,0 +1,34 @@
+{
+  "state": "PASS_MANAGED_EXPORTS_STATIC_NOT_DEVICE",
+  "scope": "SANITIZED_JNI_THREE_ABI",
+  "exports": {
+    "arm64-v8a": {
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "jni_sha256": "3db2902e28f6231c75d7c005cdd1ba8a15b5f54ffbe8f04abdd56e5b7e49dc45"
+    },
+    "x86_64": {
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "jni_sha256": "b0b960232209d48f326d43b0ce4a27ae750cb1a7375e50861c602555ffe445d8"
+    },
+    "armeabi-v7a": {
+      "managed_native_exports": 18,
+      "test_exports": 0,
+      "jni_sha256": "bb2d27ed8aa426e85b628e0643ea8ecebb81cc9a9e0e6bec75ef57d0d2021e57"
+    }
+  },
+  "tool_sha256": {
+    "llvm_strip": "218dbc5dfed2ae740e46c84f039ed7f35973a0ce8832ae2f348a2cfe70af345b",
+    "llvm_readelf": "1db5adc13b69502b1f76406014943ef2d326aedeee3397b228d0e66347ab1c63",
+    "llvm_nm": "5638dd0187719347d76855a34331ac163eab6f7eaff5a9b87aa291a2fec798d2",
+    "javac": "50b7d8d069b58e10cd8cc6a36d647d8049144d0a0508da8a0a892b76610cc68b"
+  },
+  "executed_preparation_script_sha256": "0cb1fa3abd7ad908507b29777ef6d1988de347cc970d6296267f19edf811ea4d",
+  "imported_prior_comparator_sha256": "eee3a8fd71c7b9391f8e00e1fc782d4ad8b313817bbb94aecf60984cfd7dd860",
+  "limits": [
+    "Preparation scripts contain local tool paths and remain ignored; hash identifies observed local file only.",
+    "Tool and source hashes alone do not prove execution or build provenance.",
+    "Static export/ELF checks do not qualify R8 runtime or Android ART/device."
+  ]
+}

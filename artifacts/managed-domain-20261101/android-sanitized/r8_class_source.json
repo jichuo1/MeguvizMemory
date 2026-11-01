@@ -1,0 +1,20 @@
+{
+  "state": "PASS_FRESH_JAVAC_CLASS_IDENTITY_BUILD_ONLY",
+  "aar_sha256": "b1f181589f033744d283d99e6f584efb7ddf72717f7b4a033e1b702eb56bdfad",
+  "class_sha256": {
+    "io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$1.class": "94c61dfdfee88bcef315eab752361330f269b94e4e667ac8eca1efc5d4815785",
+    "io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$Allocation.class": "a104f06b0138de244fc31ce2f751b93bee48e6715a7251422222ef51bc60f2a2",
+    "io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$Lease.class": "37767f7260573818a8fcc8a1b28ccf01e310f89bd6ca03d25ea1f6c92c0e384d",
+    "io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$ManagedException.class": "f61a0978bf896eee6b3dfe1d021263045501309aba9f5da78a899dd313f16cbe",
+    "io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.class": "3d3d2266cc65ca8a749c7574c4e6ef7ea758d73e0425843bbfdb9198dc081f6c",
+    "io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.class": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595"
+  },
+  "source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2"
+  },
+  "limitations": [
+    "Byte identity with this compiler does not establish full reproducible build provenance.",
+    "No Android ART or device execution."
+  ]
+}

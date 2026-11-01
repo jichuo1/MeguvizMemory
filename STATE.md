@@ -2,12 +2,18 @@
 
 更新：2026-10-30。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## Java 托管域继续开发（2026-11-01）
+
+- 新增纯 Java 可调用的 `ManagedMemoryDomain`、allocation 和受控 lease；自有 System/Arena 域分配时先清零，显式软预算，关闭先停止准入并在后台等待 owner、lease 和相关调用。未知结果进入隔离，不强制释放；未接入同域自动压力 worker。[托管合同](docs/ANDROID_MANAGED_DOMAIN.md)和[待实现的压力接入合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
+- 使用真实宿主 JVM 的 46 项受控故障/并发检查及 1 项无注入检查通过；独立 Java 图像消费者迁移到托管 API 后，安装共享核心与宿主 JNI 的 12 组像素对照、8 组拒绝及无诊断 sidecar 普通路径通过。[证据范围](artifacts/managed-domain-20261101/README.md)
+- 新源码已完成三 ABI 交叉构建及独立脱敏候选，arm64 R8 名称/签名静态检查通过；原始 AAR 未脱敏且不可分享。最新接口的 R8 运行、Android ART、真机、性能和正式发布资格均待统一验证。此前预览包不包含托管域和本次消费者迁移。
+
 ## 后续功能继续开发（2026-11-01）
 
 - C++ RAII 新增 checked 外部导入及粘性隔离；释放结果不确定时不重试或销毁原域，保留的资源不能计为正常归零。[合同](docs/CPP_CHECKED_IMPORT.md)，限定宿主检查10项通过。
 - Java 受控借用的首次关闭不再在 Java monitor 内执行原生释放，并提供非等待的关闭状态观测；宿主 fake-JNI/真实 JVM 检查通过。状态仅描述本注册，不能替代 domain 归零证据。[合同](docs/ANDROID_NATIVE_BORROW.md)
 - 新增独立 Java/JNI P6→P5 图像消费者，使用安装后的共享核心和单独构建的宿主 JNI；12组像素对照及8组失败路径通过。Java 数组和 JNI 复制成本单独记录，不宣称性能收益。[消费者](consumers/java_image/README.md)
-- 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；最新三 ABI Android 和 Windows 宿主候选已重建。arm64 R8 诊断及关闭状态 v2 用例已有[构建和宿主模拟记录](artifacts/followup-delivery-20261101/android-borrow-v2/host-receipt-final.json)，故障域按合同保留，尚未执行 ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，Android 构建身份见[记录](artifacts/continuation-next-20261101/android-build/metadata-index.json)，BIL 仍未接入。
+- 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；该后续阶段的三 ABI Android 和 Windows 宿主候选已重建，但不包含之后新增的 Java 托管域。arm64 R8 诊断及关闭状态 v2 用例已有[构建和宿主模拟记录](artifacts/followup-delivery-20261101/android-borrow-v2/host-receipt-final.json)，故障域按合同保留，尚未执行 ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，Android 构建身份见[记录](artifacts/continuation-next-20261101/android-build/metadata-index.json)，BIL 仍未接入。
 - 仓库尚未提供项目许可证文件；既有 LLVM notice 已保留，正式发布前的项目授权条款仍需确定。
 - 交付候选后的 CI 发现 Windows 检出字节漂移和历史多命令步骤掩盖失败；修复后的 Windows/Linux CI 已分别通过。旧 Linux 宿主桩标准错误未被保存、具体内容仍未知。结果见[跨平台记录](docs/CI_BYTE_IDENTITY_20261101.md)，既有预览包和旧回执未改写。
 

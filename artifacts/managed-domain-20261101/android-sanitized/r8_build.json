@@ -1,0 +1,142 @@
+{
+  "state": "PASS_R8_BUILD_ONLY_NOT_ART_DEVICE",
+  "scope": "HOST_R8_STATIC_DEX_AND_NATIVE_EXPORT_CHECK",
+  "device_executed": false,
+  "performance_qualified": false,
+  "abi": "arm64-v8a",
+  "aar_sha256": "b1f181589f033744d283d99e6f584efb7ddf72717f7b4a033e1b702eb56bdfad",
+  "sdk_core_sha256": "b0b16a64a8ce3e8cb4a8f3c41d817f3cc3dfea110018d814ecc3c9090b91710a",
+  "jni_sha256": "3db2902e28f6231c75d7c005cdd1ba8a15b5f54ffbe8f04abdd56e5b7e49dc45",
+  "classes_jar_sha256": "ba293cc8c84872c83b89cfc3fc3e76042bd1fb944496207449e7fae18189978b",
+  "aar_rules_sha256": "1d05838baf513633f0f48208f5c75157d97b904403911356a04e3ad4fe21d497",
+  "r8_version": "R8 9.2.4-dev (build 084a89126ae0596c599143df57a654646af28313 from go/r8bot (luci-r8-custom-ci-archive-0-4u1w))",
+  "tools": {
+    "java.exe": "6db7759259dc79800c5c6014f0ec68961a1fe69c36bb9b2a15a42c3b0c413f6a",
+    "javac.exe": "50b7d8d069b58e10cd8cc6a36d647d8049144d0a0508da8a0a892b76610cc68b",
+    "d8.jar": "a26ee56252adcff6752c379ae255a0ad538ebec60189e078ec6855487107637d",
+    "dexdump.exe": "f870af85191214f8f59d78e6a27748f00e724bbcce362115347014419969bcce",
+    "android.jar": "bf1b4387cc7ca94fc6ef684f040d9d16fbf16248e181819f020736ea2053f177",
+    "llvm-nm.exe": "5638dd0187719347d76855a34331ac163eab6f7eaff5a9b87aa291a2fec798d2"
+  },
+  "source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "adapters/android/native/workspace_jni.cpp": "c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8",
+    "adapters/android/consumer-rules.pro": "1d05838baf513633f0f48208f5c75157d97b904403911356a04e3ad4fe21d497",
+    "build/managed-r8-contract-20261101-v1/inspect_r8.py": "b2677058083fce67e01a275c0cd0ddaa0c111200b7c5a7dbbf1cb6b1f183d5f9"
+  },
+  "consumer_source_sha256": "57afda054be44e0b1f460f5d7db408240b6cc304745465a366f7b9116545cdcf",
+  "unused_witness_removed": true,
+  "managed_class_names_preserved": [
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain",
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$Allocation",
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$Lease",
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$ManagedException"
+  ],
+  "native_signatures_and_exports": {
+    "nativeCreate": "(ZJJ)J",
+    "nativeClaimDomain": "(J)I",
+    "nativeAllocate": "(JJJ)J",
+    "nativeSetBudget": "(JJ)I",
+    "nativeBorrow": "(JJJZ)J",
+    "nativeCancel": "(J)I",
+    "nativeGuardEnter": "(J)J",
+    "nativeGuardExit": "(JZ)I",
+    "nativeRelease": "(J)I",
+    "nativeBeginClose": "(J)I",
+    "nativeState": "(J)I",
+    "nativeFailure": "(J)I",
+    "nativePrepareForget": "(J)I",
+    "nativeDropClosed": "(J)I",
+    "nativeSnapshot": "(J)[J",
+    "nativeQuarantine": "(J)V",
+    "nativeWorkerCount": "()I",
+    "nativeRuntimeCounts": "()[J"
+  },
+  "public_methods": {
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain": {
+      "system": "(J)Lio/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain;",
+      "arena": "(JJ)Lio/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain;",
+      "allocate": "(JJ)Lio/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$Allocation;",
+      "setBudget": "(J)V",
+      "beginClose": "()V",
+      "close": "()V",
+      "state": "()I",
+      "failureStatus": "()I",
+      "forgetClosed": "()V",
+      "snapshot": "()[J",
+      "activeCleanupWorkers": "()I",
+      "runtimeCounts": "()[J",
+      "javaQuarantineSignals": "()J",
+      "pendingManagedOperations": "()I"
+    },
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$Allocation": {
+      "length": "()J",
+      "borrowRead": "(JJ)Lio/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$Lease;",
+      "borrowWrite": "(JJ)Lio/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain$Lease;",
+      "close": "()V"
+    },
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$Lease": {
+      "length": "()J",
+      "isWritable": "()Z",
+      "closeState": "()I",
+      "closeFailureStatus": "()I",
+      "read": "(J[BII)V",
+      "write": "(J[BII)V",
+      "close": "()V"
+    },
+    "io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomain$ManagedException": {
+      "status": "()I"
+    }
+  },
+  "negative_without_aar_rules": {
+    "mapped_managed_name": "d",
+    "original_name_preserved": false,
+    "mapping_sha256": "5ea61fd79aaf074ed985f36e37b97f76a3070b2ce8a52538dce354909af6c233"
+  },
+  "dex_sha256": "13e03e7357dd0bcae7b442e5deabbb7607645084bd6d34cb60046e35b7bf1031",
+  "mapping_sha256": "9df559a4e4d3e91573e8c2ea524869417a1ad0e4fbb560e3a9883c98a2d4d211",
+  "operations": [
+    {
+      "name": "jni-exports",
+      "exit_code": 0,
+      "stdout_sha256": "d0ab0eb557b30ee267942ccb75f8ef23633b8faaa2ab06ae1b9ab3ebf739cc32",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "javac",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "r8-version",
+      "exit_code": 0,
+      "stdout_sha256": "2f059a980d6f0f0fc7dd97d92e22f00df04d9bff9ca2c147e1fe86c73246e4d8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "r8",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "dexdump",
+      "exit_code": 0,
+      "stdout_sha256": "d850235854a9029538c179699d959204ef4dd313501a0858918f7d26164c5e9f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "r8-negative",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limitations": [
+    "Static R8/DEX evidence is not Android ART execution.",
+    "The consumer is an isolated build-only witness, not a production integration.",
+    "Input hashes identify the observed files, not full build provenance."
+  ]
+}

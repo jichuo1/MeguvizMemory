@@ -1,0 +1,254 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SANITIZED_BINARY_CONTRACTS_NOT_DEVICE_EXECUTED",
+  "scope": "MANAGED_AAR_SDK_CANDIDATES_STATIC_ONLY",
+  "source_sha256": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+  "jni_source_sha256": "c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8",
+  "source_files_observed": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441",
+    "adapters/android/native/workspace_jni.cpp": "c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8",
+    "adapters/android/consumer-rules.pro": "1d05838baf513633f0f48208f5c75157d97b904403911356a04e3ad4fe21d497",
+    "third_party_notices/llvm-NOTICE.txt": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1"
+  },
+  "elf_header_masks": {
+    "ELF64": "e_shoff[40,48), e_shentsize/e_shnum/e_shstrndx[58,64)",
+    "ELF32": "e_shoff[32,36), e_shentsize/e_shnum/e_shstrndx[46,52)"
+  },
+  "profiles": {
+    "arm64-v8a": {
+      "aar": {
+        "bytes": 180159,
+        "sha256": "b1f181589f033744d283d99e6f584efb7ddf72717f7b4a033e1b702eb56bdfad"
+      },
+      "sdk_archive": {
+        "bytes": 133684,
+        "sha256": "846e32b023f514bfd0af6aa1e4d3f98f6d3c9a1e0fbdfa773132ae74ac32e06e"
+      },
+      "sdk_core": {
+        "bytes": 331520,
+        "sha256": "b0b16a64a8ce3e8cb4a8f3c41d817f3cc3dfea110018d814ecc3c9090b91710a"
+      },
+      "jni_elf": {
+        "original_sha256": "c2df07951da522cfdc3cb525bd60a02024baa7a73b39a000edbf61d7609bc90e",
+        "candidate_sha256": "3db2902e28f6231c75d7c005cdd1ba8a15b5f54ffbe8f04abdd56e5b7e49dc45",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 183,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              91664,
+              91664,
+              16384
+            ],
+            [
+              6,
+              91664,
+              108048,
+              108048,
+              1912,
+              2544,
+              16384
+            ],
+            [
+              6,
+              93576,
+              126344,
+              126344,
+              88,
+              2456,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "7a8a3c65fcbe9e146e0a0601fd5d5e5ffd16c59cde9767ea4c84641ca4ecf3a6",
+            "5ecd59da356b71f39ad0c54052e93467b9c1eb8fe5e73e82e02169ac764bde18",
+            "05d13ac8475b09b42cff09d929713ab1ead06641fac7bd7dc96a722b80324169"
+          ]
+        },
+        "dynsym_sha256": "de5260bc7f0b16d72c294867ded9181ac27205a36d71a4b8dcab206a81c94b4d",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "comment": {
+        "input_comment_sections": 1,
+        "input_comment_nonallocated_nonload": true,
+        "candidate_comment_and_debug_sections": 0
+      },
+      "non_jni_aar_members_unchanged": true,
+      "sdk_copy_byte_identical": true,
+      "privacy_scan": "PASS_BOUNDED_KNOWN_MARKERS_AND_GENERIC_PATHS",
+      "build_receipt_sha256": "299c3c87d5edd8b56989a3dcea579b75555c96a5a098c676e4e19880d90188fc"
+    },
+    "x86_64": {
+      "aar": {
+        "bytes": 171383,
+        "sha256": "515679bdb0c1fd66095be2d81da97fd820f6bfa903ba953cf322b0709d1a30a1"
+      },
+      "sdk_archive": {
+        "bytes": 127980,
+        "sha256": "72253ee1685033bd23da4126e66b4eee2f3b442a7e15dc42bf2064e8aef07d78"
+      },
+      "sdk_core": {
+        "bytes": 290712,
+        "sha256": "627e48d9845dd04e890cb5d8830e9b91724018d524dc71e75404fa0944641ed8"
+      },
+      "jni_elf": {
+        "original_sha256": "cc97dbd3aa55e95dd3586a2b8e4641b0021306b451766e246df3e5f0d105e05e",
+        "candidate_sha256": "b0b960232209d48f326d43b0ce4a27ae750cb1a7375e50861c602555ffe445d8",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 62,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              85200,
+              85200,
+              16384
+            ],
+            [
+              6,
+              85200,
+              101584,
+              101584,
+              1840,
+              4912,
+              16384
+            ],
+            [
+              6,
+              87040,
+              119808,
+              119808,
+              88,
+              2448,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "97e66fa18cce5bd1e42636a002acef91396e927f41c99d3ec9aec4bcd94580bb",
+            "b4da399c278caf19394da668518cf7ebb8e17ec668b7f7abca34754f35847e61",
+            "05d13ac8475b09b42cff09d929713ab1ead06641fac7bd7dc96a722b80324169"
+          ]
+        },
+        "dynsym_sha256": "a2c65304f10ba80d0db7a2871e0ca2ee574d409be16f91f48b93f3d80cbb469d",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "comment": {
+        "input_comment_sections": 1,
+        "input_comment_nonallocated_nonload": true,
+        "candidate_comment_and_debug_sections": 0
+      },
+      "non_jni_aar_members_unchanged": true,
+      "sdk_copy_byte_identical": true,
+      "privacy_scan": "PASS_BOUNDED_KNOWN_MARKERS_AND_GENERIC_PATHS",
+      "build_receipt_sha256": "a49ec405a59fea732654cd779da97183baa4fda41ecf6e3138a38929660441cc"
+    },
+    "armeabi-v7a": {
+      "aar": {
+        "bytes": 149051,
+        "sha256": "12aa67e28dae5d3ecf2f3a94f1abfdb90683eff21ec094beb0c1e41fd6f2a37c"
+      },
+      "sdk_archive": {
+        "bytes": 118387,
+        "sha256": "c62ed3baf797a8e94d6fa71c63126668ad068229cfaf04cb05afd53898704906"
+      },
+      "sdk_core": {
+        "bytes": 231424,
+        "sha256": "6d7908797d9ab54456a5ea6aa325bebf9bac63b2de91ec171b9a116b881d350b"
+      },
+      "jni_elf": {
+        "original_sha256": "cbee99b5ac588940baf805e0bcb92b175ba800c79d650f18a52a41e8d66a7299",
+        "candidate_sha256": "bb2d27ed8aa426e85b628e0643ea8ecebb81cc9a9e0e6bec75ef57d0d2021e57",
+        "PT_LOAD": {
+          "class": 1,
+          "machine": 40,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              48880,
+              48880,
+              16384
+            ],
+            [
+              6,
+              48880,
+              65264,
+              65264,
+              820,
+              4368,
+              16384
+            ],
+            [
+              6,
+              49704,
+              82472,
+              82472,
+              24,
+              96,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "f25012045e5497d609678c5b034fa2d5456f3404dd4ccaa6913cff8b1f034c73",
+            "7ab418f47a5b0586c40e0da5d5a30aae3e7558d5863cbd0d13521852eb284509",
+            "605390e5a369ee568b19ead1733af824c7c1d286d7d24b86283238fc44a99334"
+          ]
+        },
+        "dynsym_sha256": "f0dc59495efbfa97cc47eafa2ca655b89a5974b74e385615a6a99bd1558e5648",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "comment": {
+        "input_comment_sections": 1,
+        "input_comment_nonallocated_nonload": true,
+        "candidate_comment_and_debug_sections": 0
+      },
+      "non_jni_aar_members_unchanged": true,
+      "sdk_copy_byte_identical": true,
+      "privacy_scan": "PASS_BOUNDED_KNOWN_MARKERS_AND_GENERIC_PATHS",
+      "build_receipt_sha256": "8e36a361d4764bfc783bcea72e9bbcba81f42c30822cded249b4b96e3e283cb8"
+    }
+  },
+  "input_files_unchanged": true,
+  "device_executed": false,
+  "limitations": [
+    "Sanitized SDK was copied byte-for-byte from the prior sanitized installation, not rebuilt here.",
+    "Source hashes identify observed inputs but do not independently prove build provenance.",
+    "ELF load/dynamic equality is not behavioral or device verification.",
+    "Bounded path and private-identifier scans cannot prove absence of every secret.",
+    "No ART, runtime R8, performance, BIL or formal release qualification."
+  ]
+}

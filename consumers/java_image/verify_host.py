@@ -29,6 +29,7 @@ def main():
     ap=argparse.ArgumentParser(description=__doc__)
     for key in ('java','javac','reference','core','jni','consumer-jni','classes','adapter-jar','out-dir'):
         ap.add_argument('--'+key,type=Path,required=True)
+    ap.add_argument('--plain-classes',type=Path,help='Classes from a Java-only consumer build without the optional identity probe')
     a=ap.parse_args();out=a.out_dir.resolve()
     if not out.is_relative_to((ROOT/'build').resolve()) or out.exists():ap.error('fresh output directory under build/ required')
     inputs=[a.java,a.javac,a.reference,a.core,a.jni,a.consumer_jni,a.adapter_jar]
@@ -36,9 +37,12 @@ def main():
     out.mkdir(parents=True);logs=out/'private-logs';logs.mkdir()
     source=ROOT/'adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java'
     source_before=sha(source.read_bytes())
+    managed_source=ROOT/'adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java'
+    managed_before=sha(managed_source.read_bytes())
     source_paths={'memory_core':'src/mgmem.cpp','memory_header':'include/mgmem/mgmem.h',
         'pressure_jni':'adapters/android/native/pressure_jni.cpp',
         'borrow_jni':'adapters/android/native/borrow_jni.cpp',
+        'workspace_jni':'adapters/android/native/workspace_jni.cpp',
         'host_jni_cmake':'consumers/java_image/runtime/CMakeLists.txt',
         'consumer_cmake':'consumers/java_image/CMakeLists.txt',
         'verification_script':'consumers/java_image/verify_host.py'}
@@ -55,13 +59,22 @@ def main():
     dirs=[str(a.core.resolve().parent),str(a.jni.resolve().parent),str(a.consumer_jni.resolve().parent)]
     env['PATH']=os.pathsep.join(dirs+[env.get('PATH','')])
     if os.name!='nt':env['LD_LIBRARY_PATH']=os.pathsep.join(dirs+[env.get('LD_LIBRARY_PATH','')])
-    run('compile-current-adapter',[a.javac,'--release','8','-d',compiled,source],env,True)
+    run('compile-current-adapter',[a.javac,'--release','8','-d',compiled,source,managed_source],env,True)
     klass='io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.class'
+    managed_klass='io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.class'
     with zipfile.ZipFile(a.adapter_jar) as jar:
-        if jar.namelist().count(klass)!=1 or jar.read(klass)!=(compiled/klass).read_bytes():
-            raise RuntimeError('installed Java adapter differs from freshly compiled current source')
+        adapter_dir=compiled/'io/github/jichuo1/meguviz/memory/android'
+        expected={p.name:p.read_bytes() for pattern in ('NativeMemoryLease*.class','ManagedMemoryDomain*.class')
+                  for p in adapter_dir.glob(pattern)}
+        prefix='io/github/jichuo1/meguviz/memory/android/'
+        relevant=[n for n in jar.namelist() if n.startswith(prefix) and n.endswith('.class') and
+                  (n[len(prefix):].startswith('NativeMemoryLease') or n[len(prefix):].startswith('ManagedMemoryDomain'))]
+        if len(relevant)!=len(set(relevant)) or {n[len(prefix):]:jar.read(n) for n in relevant}!=expected:
+            raise RuntimeError('installed Java adapters differ from freshly compiled current sources')
         class_sha=sha(jar.read(klass))
-    if sha(source.read_bytes())!=source_before:raise RuntimeError('adapter source changed during compilation')
+        managed_class_sha=sha(jar.read(managed_klass))
+    if sha(source.read_bytes())!=source_before or sha(managed_source.read_bytes())!=managed_before:
+        raise RuntimeError('adapter source changed during compilation')
     consumer_source=ROOT/'consumers/java_image/java/io/github/jichuo1/meguviz/memory/image/JavaImage.java'
     consumer_before=sha(consumer_source.read_bytes())
     compiled_consumer=out/'compiled-consumer';compiled_consumer.mkdir()
@@ -77,7 +90,8 @@ def main():
           'io.github.jichuo1.meguviz.memory.image.JavaImage']
     identity=['--attest-core',a.core.resolve(),'--attest-jni',a.jni.resolve(),'--attest-jar',a.adapter_jar.resolve()]
     expected_hashes={'core_sha256':sha(a.core.read_bytes()),'jni_sha256':sha(a.jni.read_bytes()),
-                     'java_jar_sha256':sha(a.adapter_jar.read_bytes()),'java_class_sha256':class_sha}
+                     'java_jar_sha256':sha(a.adapter_jar.read_bytes()),'java_class_sha256':class_sha,
+                     'managed_class_sha256':managed_class_sha}
     cases=[]
     for index,(w,h,style) in enumerate([(1,1,'plain'),(1,8,'comment'),(8,1,'crlf'),(3,3,'plain'),
                                          (5,7,'comment'),(101,101,'crlf')]):
@@ -97,11 +111,12 @@ def main():
             report=json.loads(result.stdout.decode('utf-8'))
             if target.read_bytes()!=expected or report.get('success') is not True or report.get('mode')!=mode:
                 raise RuntimeError('Java image result differs from reference/oracle')
-            expected_counts={'pixels':w*h,'native_final_backing_bytes':0,'native_sessions_remaining':0,
+            expected_counts={'pixels':w*h,'native_final_backing_bytes':0,'managed_cleanup':'CLOSED_AND_FORGOTTEN',
                 'native_initialized_bytes':len(rgb),'source_to_java_bytes':len(rgb),
                 'java_to_native_staging_bytes':len(rgb),'staging_to_native_backing_bytes':len(rgb),
                 'native_to_java_bytes':len(rgb),'java_luma_and_output_bytes':2*w*h,'transfer_buffer_bytes':24576}
             if any(report.get(k)!=v for k,v in expected_counts.items()) or report.get('lease_before_enqueue') is not True or \
+                    report.get('identity_probe_loaded') is not True or \
                     report.get('identity_scope')!='OS_MODULE_PATH_AND_CURRENT_FILE_HASH' or \
                     any(report.get(k)!=v for k,v in expected_hashes.items()):
                 raise RuntimeError('consumer lifecycle, identity or copying report mismatch')
@@ -109,36 +124,58 @@ def main():
             cases.append({'width':w,'height':h,'header':style,'mode':mode,'output_sha256':sha(expected),
                           'checks':'PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY'})
     good=out/'input-0.ppm';original=good.read_bytes()
+    # Exclude the identity sidecar from both Java and OS library search paths.
+    # A normal Java-only caller must not require a consumer-native owner/probe.
+    probe_dir=a.consumer_jni.resolve().parent
+    if probe_dir in (a.core.resolve().parent,a.jni.resolve().parent):
+        raise RuntimeError('probe_directory_must_be_distinct_for_plain_consumer_check')
+    plain_env=env.copy()
+    for name in ('PATH','LD_LIBRARY_PATH'):
+        parts=[x for x in plain_env.get(name,'').split(os.pathsep) if x]
+        plain_env[name]=os.pathsep.join(x for x in parts if Path(x).resolve()!=probe_dir)
+    plain_classes=a.plain_classes if a.plain_classes is not None else a.classes
+    plain_actual={p.name:p.read_bytes() for p in (plain_classes/class_dir).glob('JavaImage*.class')}
+    if fresh!=plain_actual:raise RuntimeError('plain consumer classes differ from current source')
+    plain_java=[a.java,'-Djava.library.path='+os.pathsep.join(dirs[:2]),'-cp',
+        str(plain_classes.resolve())+os.pathsep+str(a.adapter_jar.resolve()),
+        'io.github.jichuo1.meguviz.memory.image.JavaImage']
+    plain_output=out/'plain-without-sidecar.pgm'
+    plain=run('plain-without-sidecar',plain_java+[good,plain_output],plain_env,True)
+    plain_report=json.loads(plain.stdout.decode('utf-8'))
+    if plain_output.read_bytes()!=(out/'reference-0.pgm').read_bytes() or \
+            plain_report.get('identity_scope')!='NOT_CHECKED' or plain_report.get('identity_probe_loaded') is not False or \
+            plain_report.get('managed_cleanup')!='CLOSED_AND_FORGOTTEN':
+        raise RuntimeError('plain managed consumer unexpectedly required identity sidecar')
     failures=[('short',original[:-1],[]),('trailing',original+b'x',[]),
               ('budget-system',original,['--system','--budget','1']),('budget-arena',original,['--budget','1'])]
     for name,data,extra in failures:
         inp=out/(name+'.ppm');inp.write_bytes(data);target=out/(name+'.pgm')
         r=run('reject-'+name,java+[inp,target]+identity+extra,env,False)
-        if target.exists() or b'native_sessions_remaining=0' not in r.stderr:raise RuntimeError('failed input leaked session or produced output')
+        if target.exists() or b'managed_cleanup=CLOSED_AND_FORGOTTEN' not in r.stderr:raise RuntimeError('failed input cleanup not confirmed or produced output')
     existing=out/'existing.pgm';existing.write_bytes(b'keep-existing')
     r=run('reject-existing-output',java+[good,existing]+identity,env,False)
-    if existing.read_bytes()!=b'keep-existing' or b'native_sessions_remaining=0' not in r.stderr:
-        raise RuntimeError('existing output changed or native session remained')
+    if existing.read_bytes()!=b'keep-existing' or b'managed_cleanup=CLOSED_AND_FORGOTTEN' not in r.stderr:
+        raise RuntimeError('existing output changed or domain cleanup was not confirmed')
     wrong=out/'wrong.jar';wrong.write_bytes(a.adapter_jar.read_bytes())
     target=out/'wrong-identity.pgm'
     r=run('reject-wrong-loaded-jar',java+[good,target,'--attest-core',a.core.resolve(),
           '--attest-jni',a.jni.resolve(),'--attest-jar',wrong.resolve()],env,False)
-    if target.exists() or b'native_sessions_remaining=0' not in r.stderr:raise RuntimeError('wrong JAR identity accepted')
+    if target.exists() or b'managed_cleanup=NO_DOMAIN_ATTEMPTED' not in r.stderr:raise RuntimeError('wrong JAR identity accepted')
     target=out/'wrong-core.pgm'
     r=run('reject-wrong-loaded-core',java+[good,target,'--attest-core',a.jni.resolve(),
           '--attest-jni',a.jni.resolve(),'--attest-jar',a.adapter_jar.resolve()],env,False)
-    if target.exists() or b'native_sessions_remaining=0' not in r.stderr:raise RuntimeError('wrong core identity accepted')
+    if target.exists() or b'managed_cleanup=NO_DOMAIN_ATTEMPTED' not in r.stderr:raise RuntimeError('wrong core identity accepted')
     target=out/'missing-option.pgm'
     r=run('reject-missing-option',java+[good,target,'--budget'],env,False)
-    if target.exists() or b'IllegalArgumentException' not in r.stderr or b'native_sessions_remaining=0' not in r.stderr:
+    if target.exists() or b'IllegalArgumentException' not in r.stderr or b'managed_cleanup=NO_DOMAIN_ATTEMPTED' not in r.stderr:
         raise RuntimeError('missing option did not fail safely')
-    if sha(source.read_bytes())!=source_before or sha(consumer_source.read_bytes())!=consumer_before or any(
+    if sha(source.read_bytes())!=source_before or sha(managed_source.read_bytes())!=managed_before or sha(consumer_source.read_bytes())!=consumer_before or any(
             sha((ROOT/path).read_bytes())!=source_hashes[name] for name,path in source_paths.items()):
         raise RuntimeError('source changed during host checks')
     receipt={'state':'PASS_HOST_FUNCTIONAL_DEVELOPMENT','scope':'INSTALLED_SHARED_CORE_AND_HOST_JNI_NO_ANDROID_NO_PERFORMANCE',
-             'cases':cases,'negative_cases':['truncated','trailing','budget_system','budget_arena',
+             'cases':cases,'plain_without_sidecar':'PASS','negative_cases':['truncated','trailing','budget_system','budget_arena',
                  'existing_output_preserved','wrong_loaded_jar','wrong_loaded_core','missing_option'],
-             'identities':expected_hashes,'adapter_java_source_sha256':source_before,
+             'identities':expected_hashes,'adapter_java_source_sha256':source_before,'managed_java_source_sha256':managed_before,
              'consumer_source_sha256':consumer_before,
              'native_source_sha256':sha((ROOT/'consumers/java_image/native/image_jni.cpp').read_bytes()),
              'consumer_native_sha256':sha(a.consumer_jni.read_bytes()),'reference_source_sha256':sha((ROOT/'consumers/image/main.cpp').read_bytes()),

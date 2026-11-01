@@ -423,7 +423,8 @@
     "android_build_evidence": "artifacts/continuation-next-20261101/android-build/metadata-index.json",
     "prior_source_lock": "artifacts/continuation-next-20261101/SOURCE_LOCK.json",
     "candidate_manifest": "artifacts/followup-delivery-20261101/manifest.json",
-    "windows_latest": "HOST_CHECKED_SDK_AND_JNI_BUILT_SCOPED_HOST_ONLY"
+    "windows_latest": "HOST_CHECKED_SDK_AND_JNI_BUILT_SCOPED_HOST_ONLY",
+    "subsequent_source_changes": "EXCLUDES_JAVA_MANAGED_DOMAIN_AND_MANAGED_JAVA_IMAGE_MIGRATION"
   },
   "ci_portability_20261101": {
     "state": "PASS_SCOPED_WINDOWS_AND_LINUX_CI_FOR_TESTED_COMMIT",
@@ -442,5 +443,19 @@
     "device_execution": "NOT_QUALIFIED",
     "performance": "NOT_MEASURED",
     "formal_release": "NOT_QUALIFIED"
+  },
+  "managed_domain_20261101": {
+    "state": "SOURCE_AND_SCOPED_HOST_DEVELOPMENT_ANDROID_BUILD_ONLY",
+    "host_evidence": "artifacts/managed-domain-20261101/host-dev.json",
+    "consumer_evidence": "artifacts/managed-domain-20261101/java-image-host.json",
+    "android_build": "artifacts/managed-domain-20261101/android-build-only.json",
+    "source_lock": "artifacts/managed-domain-20261101/SOURCE_LOCK.json",
+    "shareable_package": "THREE_INDEPENDENT_SANITIZED_AAR_CANDIDATES_NO_COMBINED_FINAL_PACKAGE",
+    "device_art_r8_runtime": "NOT_QUALIFIED",
+    "automatic_pressure_bridge": "NOT_IMPLEMENTED",
+    "performance": "NOT_MEASURED",
+    "BIL": "NOT_INTEGRATED",
+    "android_sanitized_proof": "artifacts/managed-domain-20261101/android-sanitized/metadata-index.json",
+    "android_r8_build": "PASS_ARM64_R8_STATIC_BUILD_ONLY_NO_DEVICE"
   }
 }
