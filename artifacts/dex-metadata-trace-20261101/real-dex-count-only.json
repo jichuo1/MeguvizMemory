@@ -1,0 +1,25 @@
+{
+  "state": "PASS_SCOPED_COUNT_ONLY_NOT_TRACE",
+  "scope": "SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY",
+  "input_scope": "HISTORICAL_USER_AUTHORIZED_REAL_DEX_OFFLINE_ONLY",
+  "input_bytes": 10540184,
+  "selection": "EXPLICIT_SUBSET",
+  "variant": "D-C0",
+  "case": "normal",
+  "complete_workload_methods": 54147,
+  "child_reported_selected_reader_events": 6113916,
+  "child_reported_sites_hit": 28,
+  "static_sites": 32,
+  "baseline_and_instrumented": "STATUS_QUERY_CHECKSUM_AND_OWNERSHIP_MATCH",
+  "memory_domain": "NOT_APPLICABLE",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "A single complete scenario is a subset, not all four variants or 20 cases.",
+    "The count is child reported for selected source-level reader sites, not an independently authenticated process image or total query accesses.",
+    "Count-only output contains no replayable event sequence and is not a performance or product integration result.",
+    "The count runner was later strengthened to check the cooperative deadline after postflight and publication; the original record is not rewritten.",
+    "Input, hashes, raw output and local paths remain private."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "state": "PASS_SCOPED_COUNT_ONLY_NOT_TRACE",
+  "scope": "SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY",
+  "input_origin": "ANDROID_DIAGNOSTIC_APK_CLASSES_DEX_NOT_PRODUCT",
+  "selection": "FULL_MATRIX",
+  "paired_comparisons": 20,
+  "normal_and_cross_thread_count_each": 19401,
+  "normal_and_cross_thread_sites_each": 23,
+  "invalid_lease_and_budget_count_each": 0,
+  "corrupt_input_count_each": 3,
+  "recorder_host_checks": 22,
+  "report_contract_tests": 5,
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The count-only recorder uses constant event memory, not constant memory for the complete Dex workload.",
+    "The count is child reported and is not a replayable trace or signed provenance.",
+    "No query-wide, hardware, product, Android or performance qualification is claimed."
+  ]
+}
