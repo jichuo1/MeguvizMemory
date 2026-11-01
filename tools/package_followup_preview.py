@@ -285,9 +285,12 @@ def check_android(data: dict) -> None:
 def check_host(data: dict) -> None:
     host = file_data(STAGE / 'host-dev-checks.json')
     consumer = file_data(STAGE / 'java-image-ci-host.json')
+    prior_consumer = file_data(STAGE / 'java-image-host.json')
     h, c = decoded(host), decoded(consumer)
     require(h.get('state') == 'PASS_SCOPED_HOST_DEVELOPMENT_CHECKS' and
             h['suites']['cpp_checked']['passed'] == 10 and h['suites']['borrow_host']['passed'] == 2 and
+            h['java_image']['receipt_sha256'] == sha(prior_consumer) and
+            h['java_image']['positive_cases'] == 12 and h['java_image']['negative_cases'] == 8 and
             c.get('state') == 'PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE' and
             c.get('functional_cases') == 12 and c.get('negative_cases') == 8 and
             c.get('scope') == 'HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE', 'host_scope')

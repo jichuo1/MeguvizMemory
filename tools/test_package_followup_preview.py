@@ -2,6 +2,7 @@
 """Focused contract checks for the follow-up preview selector; no files written."""
 from __future__ import annotations
 
+import copy
 import io
 import json
 import struct
@@ -57,6 +58,59 @@ class FollowupPreviewChecks(unittest.TestCase):
             subject.expected_source_hashes({'src/mgmem.cpp': 'a' * 64})
             with self.assertRaises(ValueError):
                 subject.expected_source_hashes({'src/mgmem.cpp': 'b' * 64})
+
+    def test_host_prior_receipt_hash_and_case_counts(self):
+        source_names = set(subject.HOST_SOURCES.values()) | set(subject.CONSUMER_SOURCES) | \
+            set(subject.BRIDGE_SOURCES) | set(subject.CONTRACT_DOCUMENTS)
+        source_bytes = {name: ('fixture:' + name + '\n').encode('utf-8') for name in source_names}
+        fixture = {subject.ROOT / name: payload for name, payload in source_bytes.items()}
+        prior = encoded({'scope': 'synthetic-prior-consumer', 'positive_cases': 12, 'negative_cases': 8})
+        host = {'state': 'PASS_SCOPED_HOST_DEVELOPMENT_CHECKS',
+                'suites': {'cpp_checked': {'passed': 10}, 'borrow_host': {'passed': 2}},
+                'java_image': {'receipt_sha256': subject.sha(prior), 'positive_cases': 12, 'negative_cases': 8},
+                'observed_source_sha256': {
+                    key: subject.sha(source_bytes[name]) for key, name in subject.HOST_SOURCES.items()}}
+        consumer = {'state': 'PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE',
+                    'scope': 'HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE',
+                    'functional_cases': 12, 'negative_cases': 8,
+                    'source_sha256': {subject.HOST_SOURCES['native_lease_java']:
+                                      subject.sha(source_bytes[subject.HOST_SOURCES['native_lease_java']])}}
+        host_path = subject.STAGE / 'host-dev-checks.json'
+        consumer_path = subject.STAGE / 'java-image-ci-host.json'
+        prior_path = subject.STAGE / 'java-image-host.json'
+        fixture.update({host_path: encoded(host), consumer_path: encoded(consumer), prior_path: prior})
+        for name in ('README.md', 'jni-close/receipt.json', 'jni-close/NativeMemoryLease.java.txt',
+                     'jni-close/NativeMemoryLeaseJvmTest.java.txt'):
+            fixture[subject.STAGE / name] = ('fixture:' + name).encode('utf-8')
+
+        def read(path):
+            if path not in fixture:
+                raise AssertionError('unexpected host fixture read')
+            return fixture[path]
+
+        with mock.patch.object(subject, 'file_data', side_effect=read), \
+             mock.patch.object(Path, 'is_file', return_value=False):
+            data = {}
+            subject.check_host(data)
+            self.assertEqual(prior, data['evidence/host/java-image-host.json'])
+            self.assertEqual(encoded(host), data['evidence/host/host-dev-checks.json'])
+
+            cases = [('receipt_sha256', '0' * 64), ('positive_cases', 11), ('negative_cases', 7)]
+            for field, wrong in cases:
+                with self.subTest(field=field):
+                    altered = copy.deepcopy(host)
+                    altered['java_image'][field] = wrong
+                    fixture[host_path] = encoded(altered)
+                    with self.assertRaisesRegex(ValueError, '^host_scope$'):
+                        subject.check_host({})
+            fixture[host_path] = encoded(host)
+            for field, wrong in (('functional_cases', 11), ('negative_cases', 7)):
+                with self.subTest(consumer_field=field):
+                    altered = copy.deepcopy(consumer)
+                    altered[field] = wrong
+                    fixture[consumer_path] = encoded(altered)
+                    with self.assertRaisesRegex(ValueError, '^host_scope$'):
+                        subject.check_host({})
 
     def test_bridge_source_only_without_candidate(self):
         args = SimpleNamespace(bridge_sdk_zip=None, bridge_evidence=None,
@@ -130,7 +184,15 @@ class FollowupPreviewChecks(unittest.TestCase):
                 subject.check_windows({'evidence/android/class_and_header.json': proof}, args)
 
     def test_bridge_binary_requires_exact_tested_core(self):
-        header = subject.file_data(subject.ROOT / subject.BRIDGE_SOURCES[3])
+        source_fixtures = {
+            'bridge_source': (subject.BRIDGE_SOURCES[4], b'bridge source\nsecond line\n'),
+            'bridge_header': (subject.BRIDGE_SOURCES[3], b'synthetic bridge header\n'),
+            'bridge_cmake': (subject.BRIDGE_SOURCES[0], b'synthetic bridge cmake\n'),
+            'bridge_tests': (subject.BRIDGE_SOURCES[5], b'synthetic real-sdk tests\n'),
+            'bridge_fake_pre_admission': (subject.BRIDGE_SOURCES[6], b'synthetic admission test\n'),
+            'bridge_fake_close_race': (subject.BRIDGE_SOURCES[7], b'synthetic close-race test\n'),
+        }
+        header = source_fixtures['bridge_header'][1]
         binary = b'synthetic-bridge'
         bundle = archive({'lib/mgmem_compute_read_bridge.lib': binary,
                           'include/mgmem/compute_read_bridge.h': header})
@@ -158,9 +220,16 @@ class FollowupPreviewChecks(unittest.TestCase):
                    args.bridge_test_source: test_source, args.bridge_test_cmake: test_cmake,
                    args.bridge_sanitization_evidence: sanitization,
                    args.bridge_comparison: comparison, args.bridge_path_scan: scan}
-        original = subject.file_data
+        fixture.update({subject.ROOT / path: payload for path, payload in source_fixtures.values()})
+        historical = {'source_fingerprints_observed_at_recording': {
+            key: subject.identity(payload) for key, (_, payload) in source_fixtures.items()}}
+        fixture[subject.ROOT / 'artifacts/feature-development-20261101/host-receipt-v2.json'] = encoded(historical)
+
         def read(path):
-            return fixture[path] if path in fixture else original(path)
+            if path not in fixture:
+                raise AssertionError('unexpected bridge fixture read')
+            return fixture[path]
+
         with mock.patch.object(subject, 'file_data', side_effect=read):
             windows_evidence = encoded({'bridge_new_core': {'receipt_sha256': subject.sha(evidence),
                 'loaded_core_identity': 'OS_MODULE_PATH_AND_FILE_HASH_MATCH', 'core_sha256': 'a' * 64}})
@@ -174,6 +243,13 @@ class FollowupPreviewChecks(unittest.TestCase):
             with self.assertRaises(ValueError):
                 subject.check_bridge({'evidence/windows/shareable-evidence.json': windows_evidence,
                                       'evidence/windows/path-scan.json': windows_scan}, args, 'b' * 64)
+            source_path = subject.ROOT / source_fixtures['bridge_source'][0]
+            source_bytes = fixture[source_path]
+            fixture[source_path] = source_bytes.replace(b'\n', b'\r\n')
+            with self.assertRaisesRegex(ValueError, '^bridge_recorded_source_drift:bridge_source$'):
+                subject.check_bridge({'evidence/windows/shareable-evidence.json': windows_evidence,
+                                      'evidence/windows/path-scan.json': windows_scan}, args, 'a' * 64)
+            fixture[source_path] = source_bytes
             missing_os_identity = json.loads(evidence)
             del missing_os_identity['installed_consumer']['loaded_core_identity']
             fixture[args.bridge_evidence] = encoded(missing_os_identity)

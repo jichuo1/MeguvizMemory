@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "state": "INITIAL_CI_FAILURE_AND_LOCAL_DIAGNOSIS",
+  "ci_run": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41272268881",
+  "commit": "0382a07ddc71e99c8dd6d3050117c59c6c979a01",
+  "linux": {
+    "observed": "HOST_STUB_STDERR_NONEMPTY_CONTENT_NOT_RECORDED",
+    "jdk": "25.0.5",
+    "native_access_warning": "HYPOTHESIS_NOT_PROVEN"
+  },
+  "windows": {
+    "observed": "BRIDGE_SOURCE_HASH_MISMATCH_AND_HISTORICAL_HASH_FAILURES",
+    "historical_multicommand_step": "PRIOR_FAILURES_MASKED_BY_LATER_SUCCESS",
+    "checkout_line_endings": "CONSISTENT_WITH_LOCAL_SIMULATION_NOT_DIRECTLY_CAPTURED"
+  },
+  "local_line_ending_simulation": [
+    {
+      "path": "adapters/compute/src/compute_read_bridge.cpp",
+      "original_sha256": "4142dfebea4404b4e9fa6f265bd00ecc06c5fd2fe3edde8724773a9e33d2175d",
+      "simulated_crlf_sha256": "649f910bbb7cfaf399c7ccf914412a8ba512387350f6e9c0c8715ace29315757",
+      "bytes_changed": true
+    },
+    {
+      "path": "artifacts/arm64-20261030/paired-retry1/formal.jsonl",
+      "original_sha256": "4a02c8b0a8c7fd7fec36dbb9458e55c649cfa6775207e11391df1dfba104bcf8",
+      "simulated_crlf_sha256": "95d67ce7d74683e30c86b07f57113157e40e85dc0705a8c4386410369f8069f4",
+      "bytes_changed": true
+    },
+    {
+      "path": "artifacts/device-v2-20261030/frozen-suite-analyzer-initial.txt",
+      "original_sha256": "0bfe612b9fcabda5abed9cdd343707f6dd740c8689e8d6e2bd9b09bd20554965",
+      "simulated_crlf_sha256": "2dbf107dfab54c5f1ec1e9e9b8e6565b3bb266ac8eba872ab717140f0e701b4e",
+      "bytes_changed": true
+    }
+  ],
+  "local_historical_audit": "PASS",
+  "local_paired_suite_tests": 43,
+  "local_packager_tests": 7,
+  "local_jdk17_launcher_tests": 8,
+  "device_operations": 0,
+  "limits": [
+    "The original Linux stderr was not preserved; this record does not identify its cause.",
+    "Local filter and CRLF simulations do not replace a fresh Windows CI checkout.",
+    "Host checks do not prove Android ART, device, product, or performance qualification."
+  ]
+}

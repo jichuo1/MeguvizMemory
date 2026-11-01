@@ -9,6 +9,7 @@
 - 新增独立 Java/JNI P6→P5 图像消费者，使用安装后的共享核心和单独构建的宿主 JNI；12组像素对照及8组失败路径通过。Java 数组和 JNI 复制成本单独记录，不宣称性能收益。[消费者](consumers/java_image/README.md)
 - 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；最新三 ABI Android 和 Windows 宿主候选已重建。arm64 R8 诊断及关闭状态 v2 用例已有[构建和宿主模拟记录](artifacts/followup-delivery-20261101/android-borrow-v2/host-receipt-final.json)，故障域按合同保留，尚未执行 ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，Android 构建身份见[记录](artifacts/continuation-next-20261101/android-build/metadata-index.json)，BIL 仍未接入。
 - 仓库尚未提供项目许可证文件；既有 LLVM notice 已保留，正式发布前的项目授权条款仍需确定。
+- 交付候选后的 CI 发现 Windows 检出字节漂移和历史多命令步骤可能掩盖失败；Linux 的宿主桩标准错误内容尚待定位。修复及结果按[跨平台记录](docs/CI_BYTE_IDENTITY_20261101.md)独立跟踪，不改写既有预览包或旧回执。
 
 ## 功能继续开发（2026-11-01）
 

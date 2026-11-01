@@ -37,4 +37,7 @@ enable_testing()
 add_test(NAME android_borrow_v2_host_stub COMMAND ${Python3_EXECUTABLE}
   "${CMAKE_CURRENT_SOURCE_DIR}/run_host_probe.py" --java "${Java_JAVA_EXECUTABLE}"
   --classes "${JAVA_CLASSES}" --libraries "$<TARGET_FILE_DIR:mgmem_borrow_fixture>")
-set_tests_properties(android_borrow_v2_host_stub PROPERTIES TIMEOUT 30)
+set_tests_properties(android_borrow_v2_host_stub PROPERTIES TIMEOUT 75)
+add_test(NAME android_borrow_host_launcher_unit COMMAND ${Python3_EXECUTABLE}
+  "${CMAKE_CURRENT_SOURCE_DIR}/test_host_launcher.py")
+set_tests_properties(android_borrow_host_launcher_unit PROPERTIES TIMEOUT 15)

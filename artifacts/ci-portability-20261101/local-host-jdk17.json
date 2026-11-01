@@ -1,0 +1,24 @@
+{
+  "state": "PASS_SCOPED_LOCAL_DEVELOPMENT_CHECKS",
+  "scope": "WINDOWS_JDK17_HOST_STUB_AND_OFFLINE_CHECKS",
+  "host_stub_tests": 2,
+  "host_launcher_unit_tests": 8,
+  "followup_package_unit_tests": 7,
+  "paired_suite_tests": 43,
+  "paired_archive_audit": "PASS",
+  "last_test_log_sha256": "9d820fb0e216e80abdad3120606af68d5d639c5c721efae056cd67c6278c0909",
+  "observed_source_sha256": {
+    "tests/android_borrow/host_stub/run_host_probe.py": "0c58863255a4d6a54f65d566b93e4f2fe7e8bbc8836081849268cb65b995c916",
+    "tests/android_borrow/host_stub/test_host_launcher.py": "30b4144271cfd036504eacb72f8298a77260be71e4e2e42bc97511e085a5bec3",
+    "tests/android_borrow/host_stub/CMakeLists.txt": "77a06e2604999049421e267d09e925e415fbb754394e4a827dfdc69622ac8f9c",
+    "tools/test_package_followup_preview.py": "7d2370f8f6371727c61e7396fd639baa517445e06971fae5b7b566e4aff9592c",
+    ".gitattributes": "77839d63ce98ebcc4021d8ff417b20a864eac737e78a810cc45e812516a295a4",
+    ".github/workflows/core.yml": "927e3c83dc8672125516f0830658e1f191cf92b355312ecd61916fe472ffa929"
+  },
+  "device_operations": 0,
+  "limitations": [
+    "Observed source hashes do not independently prove build provenance.",
+    "JDK25 control and fresh Windows checkout await CI.",
+    "These are host diagnostics, not Android ART or device evidence."
+  ]
+}

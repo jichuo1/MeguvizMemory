@@ -13,6 +13,8 @@
 
 本批交付范围与证据见 [STATE.md](STATE.md)、[验证记录](docs/VERIFICATION.md) 和 [TASKS.json](TASKS.json)。功能验证、设备运行、性能收益、TLB 机制和发布资格分别记录；研究模型中的 3.55% 等数值不代表本库实测。
 
+源码锁及历史采集记录按原始字节校验；仓库检出时保留 Git 中的字节，不应为统一换行而重新归一化历史文件。
+
 已完成 API 37、arm64、4 KB 真机的核心/C/C++ 安全用例；独立真实 DEX A1/A3 比较完成 32 块、128 次任务，性能为 INCONCLUSIVE，当前不接入 BIL。点估计与探索性区间不构成稳定收益，详见 [性能报告](docs/PERFORMANCE_A1_A3.md) 和 [接入决定](docs/BIL_ADOPTION_DECISION.md)。
 
 DEX直接借用/复制四组、图像full/三行环持久工作区和真实v2采集器均已实现并在新arm64设备执行。core3与196消费者功能用例通过；pilot128任务完成，DEX正式4/12窗口后环境停止，图像因pilot精度不足未进入正式轮。未取得稳定性能或资源净收益，见[v2最终结果](docs/DEVICE_V2_RESULTS.md)。普通借用/布局资源优化与Memory增量分开；自身RSS/PSS已有观测能力，同完成量资源收益及能量仍未验证。

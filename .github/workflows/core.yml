@@ -20,15 +20,20 @@ jobs:
         run: cmake --build build/cpp-checked-ci --config Release --parallel 2
       - name: Verify checked C++ adapter contracts
         run: ctest --test-dir build/cpp-checked-ci -C Release --output-on-failure
-      - name: Historical evidence and offline protocol checks
-        run: |
-          python tools/test_audit_paired_archive.py
-          python tools/audit_paired_archive.py --output-dir artifacts/ci-research
-          python tools/test_paired_analysis_v2.py --output artifacts/ci-research/offline-validator.json
-          python tools/test_paired_suite_v2.py --output artifacts/ci-research/four-group-suite.json
-          python tools/test_device_capture_v2.py --output artifacts/ci-research/fake-device-capture.json
-          python tools/test_validate_arm64_consumers_v2.py
-          python tools/test_freeze_device_suite_v2.py
+      - name: Historical paired archive tests
+        run: python tools/test_audit_paired_archive.py
+      - name: Historical paired archive audit
+        run: python tools/audit_paired_archive.py --output-dir artifacts/ci-research
+      - name: Paired analysis offline checks
+        run: python tools/test_paired_analysis_v2.py --output artifacts/ci-research/offline-validator.json
+      - name: Paired suite offline checks
+        run: python tools/test_paired_suite_v2.py --output artifacts/ci-research/four-group-suite.json
+      - name: Device capture offline checks
+        run: python tools/test_device_capture_v2.py --output artifacts/ci-research/fake-device-capture.json
+      - name: Arm64 consumer validation checks
+        run: python tools/test_validate_arm64_consumers_v2.py
+      - name: Device suite freezing checks
+        run: python tools/test_freeze_device_suite_v2.py
       - name: Windows capture journal regression
         if: runner.os == 'Windows'
         run: python tools/test_capture_journal.py --out-dir build/capture-journal-ci

@@ -1,3 +1,6 @@
+# Source locks and captured evidence are byte-based. Preserve the committed
+# bytes on checkout on every platform; do not run a repository renormalization.
+* -text
 # Diagnostic process output retains its native Windows CRLF; check actual spaces.
 artifacts/** whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # llvm-readelf intentionally pads section mappings with spaces; keep its raw output.
