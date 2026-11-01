@@ -47,6 +47,8 @@
 - 对同一完整真实 DEX 的 D-C0/normal 使用[常量事件空间计数诊断](artifacts/dex-metadata-trace-20261101/real-dex-count-only.json)，子进程报告 6113916 次选定 reader 读取、命中 28/32 个位点并完整消费 54147 个方法；仅用于该单场景容量参考，不是可回放轨迹或性能。该轮后另补计数工具的截止时间后验检查，不改历史回执。
 - [独立 count-only 工具](consumers/dex_trace/count_profile/README.md)已以诊断 DEX 完成 20 对宿主对照并通过固定状态、溢出和截止检查；[限定证据](artifacts/dex-metadata-trace-20261101/count-profile-host.json)不将计数提升为可回放轨迹或性能结果。
 - [独立 V2 流式采集与回放](consumers/dex_trace/stream_v2/README.md)使用固定缓冲、明确事件及磁盘预算、独立文件回读与合成域寿命；诊断 DEX 的 20 对已通过，磁盘及单轨迹限额负例均为 INCOMPLETE。[宿主证据](artifacts/dex-metadata-trace-20261101/stream-v2-host.json)不代表真实产品、完整查询、设备或性能资格；真实 DEX 轮次另行记录。
+- 流式提交 `709f1d3` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/stream-v2-ci-709f1d3.json) 均通过生成器、采集器、回放、控制器和 recorder 合同；这不替代实际设备与性能验证。
+- 此前授权的真实 DEX 完成一次[宿主 V2 流式采集和合成回放](artifacts/dex-metadata-trace-20261101/real-dex-stream-v2.json)：四种策略与五场景 20/20 对、正常/跨线程场景各 6113916 次选定 reader 读取；100 份私有输出的大小、摘要和记录的子进程退出状态经独立回读。10 个 System/Arena 合成域正常关闭归零，另 10 个普通路径只确认引用清除。该证据不涵盖完整查询、原始并发寿命、Android 设备、BIL 产品集成或性能收益。
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。

@@ -1,0 +1,10 @@
+{
+  "state": "PASS_SCOPED_HOST_CI",
+  "source_commit": "709f1d3c0113af4ddd2267a6fc91fd87970b3cf6",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41299739145",
+  "windows": "PASS_COLLECTOR_GENERATOR_REPLAY_CONTROLLER_AND_RECORDER_CONTRACTS",
+  "linux": "PASS_COLLECTOR_GENERATOR_REPLAY_CONTROLLER_AND_RECORDER_CONTRACTS",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": ["Host CI tests do not establish real-device or performance qualification."]
+}
