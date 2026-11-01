@@ -21,6 +21,7 @@
 - 新增独立 profile 功能验证入口，旧 runner 字节保持不变；[18 项离线合同](artifacts/pressure-close-admission-20261101/arm64-profile-consumer-host.json)、旧入口 13 项及本地制品映射通过。新收据采用独立 scope 并被旧性能冻结器拒绝，尚未在设备运行或接入新性能冻结协议。
 - 该入口随后补足本地传输启动、退出观察和管道收尾跨截止的失败处理，[20 项离线合同](artifacts/pressure-close-admission-20261101/arm64-profile-consumer-deadline-host.json)通过；单次系统调用不保证硬截止，设备端仍按未知处理。
 - 上述 runner 和 profile 提交 `b9ada4c` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/stability-profile-ci-b9ada4c.json) 分别通过 38 项和 10 项离线合同；修复后 runner 的设备运行仍待重新协调验证。
+- 独立 profile 功能入口现持久绑定制品、输入、运行工具和源码；新增[配对性能冻结与采集入口](docs/PROFILE_SUITE_FREEZE_V2.md)，在设备操作前校验功能明细、安全结果、授权、部署及同批身份。[本机离线证据](artifacts/pressure-close-admission-20261101/profile-suite-preparation-host.json)：功能入口 27 项通过，冻结器 15 项通过、1 项因系统不允许符号链接而跳过，采集入口 15 项通过；旧入口回归通过。明细核验不是签名认证，源码闭包不是连续监测，设备与性能均尚未运行或取得资格。
 
 ## 统一验证准备（2026-11-01）
 

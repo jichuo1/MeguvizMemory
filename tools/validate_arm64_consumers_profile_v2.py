@@ -8,6 +8,7 @@ Local ADB timeout leaves remote child state UNKNOWN: no kill or cleanup follows.
 from __future__ import annotations
 
 import argparse
+import copy
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -16,6 +17,7 @@ from pathlib import Path
 import re
 import secrets
 import subprocess
+import sys
 import threading
 import time
 from time import monotonic as transport_clock
@@ -346,6 +348,7 @@ class ConsumerRunner(PairedRunner):
         require((self.input_profile is None) == (self.input_profile_sha256 is None), "profile_and_expected_sha_must_be_paired", Blocked)
         self.profile_snapshot = None
         self.profile_runtime_sources = None
+        self.input_binding = None
         if self.input_profile is not None:
             require(output.is_relative_to(input_profile.build_root()), "profile_receipt_must_be_private_under_build", Blocked)
             self.receipt["scope"] = "ARM64_V2_PROFILE_CONSUMERS_FUNCTIONAL_ONLY_NOT_PERFORMANCE"
@@ -358,9 +361,39 @@ class ConsumerRunner(PairedRunner):
         try:
             selected = input_profile.validate(self.input_profile, self.input_profile_sha256)
             runtime_sources = {}
-            for name in PROFILE_RUNTIME_SOURCES:
-                _, data = input_profile.regular(ROOT / "tools" / name, ROOT)
+            source_names = {"tools/" + name for name in PROFILE_RUNTIME_SOURCES} | set(input_profile.HELPERS)
+            for name in sorted(source_names):
+                _, data = input_profile.regular(ROOT / name, ROOT)
                 runtime_sources[name] = input_profile.record(data)
+            tool_paths = {"adb": self.args.adb.resolve(), "python": Path(sys.executable).resolve()}
+            runtime_tools = {name: input_profile.external_file(path) for name, path in tool_paths.items()}
+            tool_manifest = {"schema_version": 1, "tools": {
+                name: {"path": str(tool_paths[name]), **runtime_tools[name]} for name in sorted(tool_paths)}}
+            manifest_path = self.root_output / "private_runtime_tools.json"
+            if self.input_binding is None:
+                require(not os.path.lexists(manifest_path), "private_tool_manifest_already_exists", Blocked)
+                write_json(manifest_path, tool_manifest)
+            _, manifest_bytes = input_profile.regular(manifest_path, input_profile.build_root())
+            require(strict_json(manifest_bytes.decode("utf-8")) == tool_manifest,
+                    "private_tool_manifest_changed", Blocked)
+            require(re.fullmatch(r"[0-9a-f]{64}", self.input_profile_sha256 or "") is not None and
+                    re.fullmatch(r"[0-9a-f]{32}", selected.get("profile_id", "")) is not None,
+                    "profile_identity_invalid", Blocked)
+            binding = {"schema_version": 1, "profile_sha256": self.input_profile_sha256,
+                       "profile_id": selected["profile_id"], "runtime_sources": runtime_sources,
+                       "runtime_tools": runtime_tools,
+                       "runtime_tools_manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
+                       "profile_toolchain_entries": selected["snapshot"]["toolchain_entries"],
+                       "identity_scope": "PRIVATE_PRE_ADB_AND_PHASE_CHECKPOINTS_NOT_LOADED_IMAGE_ATTESTATION"}
+            require(binding["profile_toolchain_entries"] and all(
+                isinstance(value, dict) and type(value.get("bytes")) is int and value["bytes"] > 0 and
+                isinstance(value.get("sha256"), str) and re.fullmatch(r"[0-9a-f]{64}", value["sha256"])
+                for value in binding["profile_toolchain_entries"].values()), "profile_toolchain_identity_invalid", Blocked)
+            if self.input_binding is None:
+                self.input_binding = copy.deepcopy(binding)
+                self.receipt["input_binding"] = copy.deepcopy(binding)
+            require(binding == self.input_binding and self.receipt.get("input_binding") == self.input_binding,
+                    "profile_runtime_identity_changed", Blocked)
             if self.profile_runtime_sources is None:
                 self.profile_runtime_sources = runtime_sources
             require(runtime_sources == self.profile_runtime_sources, "profile_runtime_source_changed", Blocked)
@@ -379,9 +412,14 @@ class ConsumerRunner(PairedRunner):
             _, data = input_profile.regular(path, input_profile.build_root())
             current = input_profile.record(data)
             require(current == self.profile_role_identities[item["name"]], "profile_role_drift:" + item["name"], Blocked)
+            expected_role = next(role for role, name in input_profile.ROLES.items() if name == item["name"])
+            require(item.get("role") == expected_role, "profile_role_receipt_mismatch:" + item["name"], Blocked)
         else:
-            require(path.is_file(), "profile_asset_missing:" + item["name"], Blocked)
-            current = {"bytes": path.stat().st_size, "sha256": digest(path)}
+            _, data = input_profile.regular(path, input_profile.build_root())
+            current = input_profile.record(data)
+            if item["name"] in ("input.dex", "image-1920x1080.ppm"):
+                require(item.get("private_path") == path.relative_to(ROOT).as_posix(),
+                        "private_input_receipt_mismatch:" + item["name"], Blocked)
         require(current == {"bytes": item["bytes"], "sha256": item["sha256"]},
                 "profile_asset_drift:" + item["name"], Blocked)
 
@@ -507,6 +545,15 @@ class ConsumerRunner(PairedRunner):
         value = self.boot_hash(label)
         require(value == self.receipt["device"]["boot_id_sha256"], "device_rebooted_during_functional_run")
 
+    def snapshot_dex_input(self):
+        _, dex_data = input_profile.regular(self.args.dex_input, ROOT)
+        require(len(dex_data) == 10540184 and hashlib.sha256(dex_data).hexdigest() == INPUT_SHA256,
+                "real_DEX_input_identity_mismatch", Blocked)
+        dex_path = self.cache / "input.dex"
+        with dex_path.open("xb") as stream:
+            stream.write(dex_data)
+        return dex_path
+
     def local_assets(self):
         self.profile_checkpoint()
         paths = dict(FIXED_BINARIES)
@@ -526,9 +573,7 @@ class ConsumerRunner(PairedRunner):
             verify_arm64_elf(path)
             self.assets[name] = path
         self.binary_names = tuple(paths)
-        require(self.args.dex_input.is_file() and digest(self.args.dex_input) == INPUT_SHA256 and
-                self.args.dex_input.stat().st_size == 10540184, "real_DEX_input_identity_mismatch", Blocked)
-        self.assets["input.dex"] = self.args.dex_input
+        self.assets["input.dex"] = self.snapshot_dex_input()
         for width, height in DIMENSIONS:
             name = f"image-{width}x{height}.ppm"
             rgb = rgb_fixture(width, height)
@@ -545,6 +590,12 @@ class ConsumerRunner(PairedRunner):
             self.assets[name] = path
         self.receipt["deployment_manifest"] = [{"name": name, "bytes": path.stat().st_size, "sha256": digest(path)}
                                                  for name, path in self.assets.items()]
+        roles_by_name = {name: role for role, name in input_profile.ROLES.items()}
+        for item in self.receipt["deployment_manifest"]:
+            if item["name"] in roles_by_name:
+                item["role"] = roles_by_name[item["name"]]
+            if item["name"] in ("input.dex", "image-1920x1080.ppm"):
+                item["private_path"] = self.assets[item["name"]].relative_to(ROOT).as_posix()
         self.receipt["oracles"] = self.oracles
         if self.input_profile is not None:
             for item in self.receipt["deployment_manifest"]:
@@ -761,8 +812,11 @@ class ConsumerRunner(PairedRunner):
         self.device_asset_checkpoint()
         self.profile_checkpoint()
         require(self.receipt["completed_cases"] == EXPECTED_CASES, "functional_case_count_incomplete")
+        require(self.input_binding is not None and self.receipt.get("input_binding") == self.input_binding,
+                "profile_runtime_identity_missing_or_changed", Blocked)
         deployment = {"schema_version": 2, "state": "FUNCTIONAL_STAGED_IDENTITY_ONLY", "device_directory": self.remote,
                       "device_serial_sha256": self.receipt["device_serial_sha256"], "profile": self.receipt["device"],
+                      "input_binding": self.input_binding,
                       "artifacts": self.receipt["deployment_manifest"],
                       "reuse_rule": "Performance capture independently stages and hashes its own directory; this is functional provenance only."}
         write_json(self.root_output / "deployment.json", deployment)
@@ -795,7 +849,7 @@ def main():
         output = args.out_dir.resolve()
     require(output.is_relative_to(ROOT) and not output.exists(), "output_must_be_new_directory_inside_workspace", Blocked)
     output.mkdir(parents=True)
-    args.adb, args.admission, args.dex_input = args.adb.resolve(), args.admission.resolve(), args.dex_input.resolve()
+    args.adb, args.admission = args.adb.resolve(), args.admission.resolve()
     runner = ConsumerRunner(args, output)
     code = 1
     try:

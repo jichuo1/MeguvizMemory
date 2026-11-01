@@ -48,6 +48,10 @@ jobs:
         run: python tools/test_validate_arm64_consumers_profile_v2.py
       - name: Device suite freezing checks
         run: python tools/test_freeze_device_suite_v2.py
+      - name: Profile-bound suite freezing checks
+        run: python tools/test_freeze_device_suite_profile_v2.py
+      - name: Profile-bound suite capture checks
+        run: python tools/test_run_device_suite_profile_v2.py
       - name: ARM64 input profile offline contracts
         run: python tools/test_freeze_arm64_input_profile.py
       - name: Windows capture journal regression

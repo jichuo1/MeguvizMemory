@@ -43,6 +43,10 @@ class ProfileRunnerTests(unittest.TestCase):
             input_profile=self.directory / "private-profile.json", input_profile_sha256="a" * 64)
         return runner_module.ConsumerRunner(args, output)
 
+    def selected_profile(self):
+        return {"profile_id": "b" * 32, "snapshot": {"roles": [],
+                "toolchain_entries": {"fake": {"bytes": 1, "sha256": "c" * 64}}}}
+
     def test_status_and_reference_contract_replays_and_rejects_matching_wrong_values(self):
         rows = json.loads((ROOT / "artifacts/research-20261030/dex/functional_receipt.json").read_text())["runs"]
         self.assertEqual(len(rows), 32)
@@ -194,13 +198,132 @@ class ProfileRunnerTests(unittest.TestCase):
 
     def test_runtime_script_drift_is_rejected_at_checkpoint(self):
         runner = self.runner()
-        selected = {"snapshot": {"roles": []}}
+        selected = self.selected_profile()
+        original_regular = runner_module.input_profile.regular
+        changed = [False]
+        def regular(path, boundary, *args, **kwargs):
+            result = original_regular(path, boundary, *args, **kwargs)
+            if changed[0] and Path(path) == ROOT / "tools" / "run_arm64_validation.py":
+                return result[0], result[1] + b"drift"
+            return result
         with patch.object(runner_module.input_profile, "validate", return_value=selected), \
-             patch.object(runner_module.input_profile, "regular", return_value=(Path("fake"), b"before")) as read:
+             patch.object(runner_module.input_profile, "regular", side_effect=regular):
             runner.profile_checkpoint()
-            read.return_value = (Path("fake"), b"after")
-            with self.assertRaisesRegex(Blocked, "profile_runtime_source_changed"):
+            changed[0] = True
+            with self.assertRaisesRegex(Blocked, "profile_runtime_identity_changed"):
                 runner.profile_checkpoint()
+
+    def test_private_binding_persists_identities_and_rejects_forged_receipt(self):
+        runner = self.runner()
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()):
+            runner.profile_checkpoint()
+            binding = runner.receipt["input_binding"]
+            self.assertEqual(binding["profile_sha256"], "a" * 64)
+            self.assertEqual(binding["profile_id"], "b" * 32)
+            expected_sources = {"tools/" + name for name in runner_module.PROFILE_RUNTIME_SOURCES} | set(runner_module.input_profile.HELPERS)
+            self.assertEqual(set(binding["runtime_sources"]), expected_sources)
+            manifest_path = runner.root_output / "private_runtime_tools.json"
+            data = manifest_path.read_bytes()
+            self.assertEqual(binding["runtime_tools_manifest_sha256"], hashlib.sha256(data).hexdigest())
+            manifest = json.loads(data)
+            self.assertEqual(set(manifest["tools"]), {"adb", "python"})
+            for name, record in manifest["tools"].items():
+                self.assertEqual({k: record[k] for k in ("bytes", "sha256")}, binding["runtime_tools"][name])
+            self.assertNotIn(str(Path(sys.executable).resolve()), json.dumps(runner.redact(binding)))
+            runner.receipt["input_binding"]["profile_sha256"] = "0" * 64
+            with self.assertRaisesRegex(Blocked, "profile_runtime_identity_changed"):
+                runner.profile_checkpoint()
+            self.assertIs(runner.receipt["all_passed"], False)
+
+    def test_missing_hash_and_modified_private_manifest_block(self):
+        runner = self.runner()
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()):
+            runner.input_profile_sha256 = ""
+            with self.assertRaises(Blocked):
+                runner.profile_checkpoint()
+        runner.input_profile_sha256 = "a" * 64
+        # A failed first checkpoint left an incomplete private manifest; it cannot be reused.
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()):
+            with self.assertRaises(Blocked):
+                runner.profile_checkpoint()
+        runner2_dir = self.directory / "other"
+        runner2_dir.mkdir()
+        args = runner.args
+        runner2 = runner_module.ConsumerRunner(args, runner2_dir)
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()):
+            runner2.profile_checkpoint()
+            (runner2.root_output / "private_runtime_tools.json").write_text("{}", encoding="utf-8")
+            with self.assertRaisesRegex(Blocked, "private_tool_manifest_changed"):
+                runner2.profile_checkpoint()
+            self.assertIs(runner2.receipt["all_passed"], False)
+
+    def test_missing_runtime_source_blocks_before_adb(self):
+        runner = self.runner()
+        original_regular = runner_module.input_profile.regular
+        def regular(path, boundary, *args, **kwargs):
+            if Path(path) == ROOT / "tools" / "run_arm64_validation.py":
+                raise FileNotFoundError("private path")
+            return original_regular(path, boundary, *args, **kwargs)
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()), \
+             patch.object(runner_module.input_profile, "regular", side_effect=regular), \
+             patch.object(runner_module, "bounded_adb") as adb:
+            with self.assertRaisesRegex(Blocked, "private_input_profile_validation_failed"):
+                runner.run()
+            adb.assert_not_called()
+            self.assertIs(runner.receipt["all_passed"], False)
+
+    def test_runtime_tool_drift_blocks(self):
+        runner = self.runner()
+        actual_external = runner_module.input_profile.external_file
+        changed = [False]
+        def external(path):
+            value = actual_external(path)
+            return {**value, "sha256": "0" * 64} if changed[0] else value
+        with patch.object(runner_module.input_profile, "validate", return_value=self.selected_profile()), \
+             patch.object(runner_module.input_profile, "external_file", side_effect=external):
+            runner.profile_checkpoint()
+            changed[0] = True
+            with self.assertRaisesRegex(Blocked, "private_tool_manifest_changed"):
+                runner.profile_checkpoint()
+
+    def test_dex_source_read_failure_does_not_create_snapshot(self):
+        runner = self.runner()
+        with patch.object(runner_module.input_profile, "regular", side_effect=ValueError("unsafe source")):
+            with self.assertRaises(ValueError):
+                runner.snapshot_dex_input()
+        self.assertFalse((runner.cache / "input.dex").exists())
+
+    def test_dex_snapshot_is_private_exclusive_and_identity_checked(self):
+        runner = self.runner()
+        body = b"x" * 10540184
+        source = self.directory / "source.dex"
+        source.write_bytes(body)
+        runner.args.dex_input = source
+        with patch.object(runner_module, "INPUT_SHA256", hashlib.sha256(body).hexdigest()):
+            snapshot = runner.snapshot_dex_input()
+            self.assertTrue(snapshot.is_relative_to(ROOT / "build"))
+            self.assertEqual(snapshot.read_bytes(), body)
+            with self.assertRaises(FileExistsError):
+                runner.snapshot_dex_input()
+        snapshot.unlink()
+        with self.assertRaisesRegex(Blocked, "real_DEX_input_identity_mismatch"):
+            runner.snapshot_dex_input()
+        self.assertFalse(snapshot.exists())
+
+    def test_private_input_receipt_path_and_bytes_are_bound(self):
+        runner = self.runner()
+        asset = runner.cache / "input.dex"
+        asset.write_bytes(b"dex")
+        runner.assets = {"input.dex": asset}
+        runner.binary_names = ()
+        item = {"name": "input.dex", "private_path": asset.relative_to(ROOT).as_posix(),
+                "bytes": 3, "sha256": hashlib.sha256(b"dex").hexdigest()}
+        runner.check_asset_identity(item)
+        with self.assertRaisesRegex(Blocked, "private_input_receipt_mismatch"):
+            runner.check_asset_identity({**item, "private_path": "build/forged.dex"})
+        asset.write_bytes(b"bad")
+        with self.assertRaisesRegex(Blocked, "profile_asset_drift"):
+            runner.check_asset_identity(item)
 
     def test_stage_rejects_asset_changed_during_fake_push(self):
         runner = self.runner()
@@ -210,7 +333,7 @@ class ProfileRunnerTests(unittest.TestCase):
         runner.assets = {asset.name: asset}
         runner.binary_names = (asset.name,)
         runner.profile_role_identities = {asset.name: identity}
-        runner.receipt["deployment_manifest"] = [{"name": asset.name, **identity}]
+        runner.receipt["deployment_manifest"] = [{"name": asset.name, "role": "core_safety", **identity}]
         names = []
         def checked(name, *_args, **_kwargs):
             names.append(name)
@@ -230,7 +353,7 @@ class ProfileRunnerTests(unittest.TestCase):
         runner.assets = {asset.name: asset}
         runner.binary_names = (asset.name,)
         runner.profile_role_identities = {asset.name: identity}
-        runner.receipt["deployment_manifest"] = [{"name": asset.name, **identity}]
+        runner.receipt["deployment_manifest"] = [{"name": asset.name, "role": "core_safety", **identity}]
         with patch.object(runner, "profile_checkpoint"), \
              patch.object(runner, "checked", return_value={"stdout": "0" * 64}):
             with self.assertRaisesRegex(runner_module.Failed, "remote_stage_hash_mismatch"):
@@ -283,6 +406,8 @@ class ProfileRunnerTests(unittest.TestCase):
 
     def test_fake_run_checkpoints_and_publication_failure_never_mark_pass(self):
         runner = self.runner()
+        runner.input_binding = {"synthetic": True}
+        runner.receipt["input_binding"] = {"synthetic": True}
         events = []
         def local_assets():
             events.append("local")
@@ -319,6 +444,8 @@ class ProfileRunnerTests(unittest.TestCase):
 
     def test_fake_run_success_requires_all_checkpoint_groups(self):
         runner = self.runner()
+        runner.input_binding = {"synthetic": True}
+        runner.receipt["input_binding"] = {"synthetic": True}
         events = []
         def local_assets():
             runner.receipt["deployment_manifest"] = []

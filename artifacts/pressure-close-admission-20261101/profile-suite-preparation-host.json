@@ -1,0 +1,22 @@
+{
+  "state": "PASS_SCOPED_OFFLINE_CONTRACTS_WITH_ONE_SKIP",
+  "scope": "PROFILE_BOUND_FUNCTIONAL_BINDING_AND_SEPARATE_PERFORMANCE_PREPARATION",
+  "offline_tests": {
+    "profile_functional_validator": {"passed": 27, "total": 27},
+    "profile_suite_freezer": {"passed": 15, "skipped": 1, "total": 16},
+    "profile_suite_capture": {"passed": 15, "total": 15},
+    "input_profile": {"passed": 10, "total": 10},
+    "prior_functional_validator": {"passed": 13, "total": 13},
+    "prior_suite_freezer": {"passed": 12, "total": 12}
+  },
+  "skip_reason": "Windows environment did not permit symbolic link creation.",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Synthetic offline fixtures do not establish successful device execution, staging or performance qualification.",
+    "Functional evidence consistency checks are not signatures or replay of every command and every performance field.",
+    "Source closure is checked at capture boundaries, not continuously; tool executables are not rehashed before every command.",
+    "The inherited collector buffers subprocess output without a hard byte limit; local admission and occupancy checks are not a shared device lock.",
+    "Timeout or interruption does not establish remote process exit; hashes are not signed provenance or mapped image attestation."
+  ]
+}
