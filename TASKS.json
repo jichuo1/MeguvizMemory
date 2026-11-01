@@ -1323,14 +1323,18 @@
   },
   "managed_device_preparation_20261101": {
     "parents": ["MM-007", "MM-009", "MM-015", "MM-019"],
-    "state": "R8_BUILD_HOST_STUB_PASS_DEVICE_INSTALL_REJECTED_TEST_NOT_RUN",
+    "state": "R8_MANAGED_ARM64_API33_SHORT_FUNCTIONAL_PASS_POSTFLIGHT_FREEZER_NOT_OBSERVED",
     "diagnostic": "SYSTEM_ARENA_BUDGET_SYNTHETIC_PRESSURE_ASYNC_CLOSE",
     "r8_build": "ARM64_X86_64_BUILD_ONLY_37_JNI_DECLARATIONS",
     "host": "TWO_HOST_STUB_TESTS_PASS_RUNNER_FAKE_ADB_PASS",
-    "device": "INSTALL_FAILED_USER_RESTRICTED_LATER_VISIBLE_PACKAGE_ABSENT_TEST_NOT_RUN",
+    "device": "RETRY_PASS_API33_ARM64_4K_R8_ART_306_CHECKS_3_CASES_SYNTHETIC_PRESSURE_BACKING_ZERO",
+    "first_install": "INSTALL_FAILED_USER_RESTRICTED_TEST_NOT_RUN_HISTORY_PRESERVED",
+    "cgroup_observation": "ZERO_SAMPLES_NOT_OBSERVED_NOT_PROOF_UNFROZEN",
+    "postflight": "PASS_OBSERVATIONAL_NO_SHARED_DEVICE_LOCK",
     "long_stability": "SEPARATE_FOREGROUND_PROTOCOL_NOT_YET_READY",
     "performance": "NOT_MEASURED",
     "evidence": "artifacts/managed-probe-20261101/build-only.json",
+    "device_evidence": "artifacts/managed-probe-20261101/device-short-pass-20261101.json",
     "contract": "docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md"
   },
   "linux_host_candidate_ci_20261101": {

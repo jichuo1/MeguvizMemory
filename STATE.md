@@ -4,23 +4,24 @@
 
 ## 统一验证准备（2026-11-01）
 
-- 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查，但未在 Android 运行。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)
+- 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查；arm64 后续真机短测见下，x86_64 尚无本诊断运行证据。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)
 - 独立 runner 已完成假 ADB 的准入、签名、冻结、超时和后验离线回归；真实冻结计划默认仅写入被忽略的 `build/`。首轮真机安装返回 `INSTALL_FAILED_USER_RESTRICTED`，诊断没有运行；后续只读观察在可见用户中未发现该包，具体取消原因未知。[脱敏记录](artifacts/managed-probe-20261101/device-install-incomplete.json) 设备观察不构成共享锁，短诊断也不能作为 900 秒资格。
+- 随后重试安装并完成 [API33 arm64/4KB 的 R8 真机短诊断](artifacts/managed-probe-20261101/device-short-pass-20261101.json)：3 组、306 项检查通过，覆盖合成压力、预算和关闭，最终 backing 为 0；安装包身份和运行后核验通过。transport 耗时 0.79 秒；进程 cgroup 获得 0 个样本，`NOT_OBSERVED` 不表示未冻结。该结果不证明长稳、真实系统低内存、性能、BIL 或其他 ABI。
 - 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者；runner 的 25 项离线检查通过。[首轮 CI](artifacts/managed-probe-20261101/linux-host-first-attempt.json) 失败且未上传制品，公开输出不足以确定失败子步骤；诊断输出已另行改进，需在新提交单独重试。CI sentinel 不等同用户本机私有标识扫描。
 
 ## 修复后工程候选（2026-11-01）
 
 - 从提交 `2e25092` 的独立源码快照分别生成本地三 ABI Android 候选和 Windows x86_64 宿主候选；两包的 261 项源码记录与该提交一致。包名、SHA-256 和[限定证据](artifacts/delivery-20261101/final-candidates-2e25092.json)已固定，候选仅留本地 `dist/`，不等于正式 Release。
-- Android 的三个 AAR/SDK 内核心与 JNI 字节分别一致；真实图像、压力图像及显式 `android_jni` 目标均完成三 ABI 交叉编译和链接，arm64 AAR 完成 Android SDK 示例源码编译。没有运行 Android 可执行文件、ART 或设备。[安装消费记录](artifacts/delivery-20261101/android-installed-link-2e25092.json)
+- Android 的三个 AAR/SDK 内核心与 JNI 字节分别一致；真实图像、压力图像及显式 `android_jni` 目标均完成三 ABI 交叉编译和链接，arm64 AAR 完成 Android SDK 示例源码编译。该交叉编译环节没有运行 Android 可执行文件、ART 或设备。[安装消费记录](artifacts/delivery-20261101/android-installed-link-2e25092.json)
 - Windows 包从归档回读后运行真实 Java 图像默认 12 组、合成压力 12 组、失败 10 组，以及 pressure v1/v2 消费者；37 个步骤的 74 份私有日志均与 journal 摘要一致。此前 `4aa2874` Windows 旧轮的覆盖记录不被改写。Linux 宿主候选尚未真实构建或运行。
-- [最新源码 Windows/Linux CI](artifacts/delivery-20261101/ci-host-2e25092.json) 均通过；两端候选构建器的 29 项合同检查均全部执行，包括三个真实日志符号链接负例。本机 Windows 因权限跳过三项的原记录保留。设备、R8 运行、16 KB loader、MTE、性能、BIL 和正式发布资格仍独立待验证；项目许可证尚未确定。
+- [最新源码 Windows/Linux CI](artifacts/delivery-20261101/ci-host-2e25092.json) 均通过；两端候选构建器的 29 项合同检查均全部执行，包括三个真实日志符号链接负例。本机 Windows 因权限跳过三项的原记录保留。上述限定 arm64 R8 短测以外的设备和 R8 运行矩阵，以及 16 KB loader、MTE、性能、BIL 和正式发布资格仍独立待验证；项目许可证尚未确定。
 
 ## 压力并发安全与 JNI 安装目标（2026-11-01）
 
 - 修复 Android 回调适配器并发 `close()`：同线程重入继续由外层处理；另一线程遇正在执行的关闭会得到可重试异常，不会把未完成的注销或清理准入误报为成功。`isClosed()` 只表示停止事件准入。[宿主新旧反例](artifacts/pressure-races-20261101/host.json)
 - 修复 pressure v1/v2 控制器并发创建时先取快照、后占附着槽导致的过期预算：现在先预占唯一附着，再读取预算；失败时在锁外归还 owner。四种版本交叉竞争的旧失败与新通过、失败回滚及回调锁序均有限定宿主证据。
 - Android SDK 新增可选的 `MeguvizMemory::android_jni` 安装目标，core-only 包仍可使用；显式组件会校验架构、ELF 和同安装前缀。配置合同 32 项通过；构建器补强日志保护后，本机 26 项离线合同通过、3 项因权限跳过，随后两端 CI 的 29 项全部通过。最终源码制品见上节，运行验证仍待完成。
-- 此前本地 `c45723f` 工程候选早于上述修复与 JNI 目标，不能作为修复后的新版制品。设备、R8 运行、真实低内存和性能资格仍待统一验证。
+- 此前本地 `c45723f` 工程候选早于上述修复与 JNI 目标，不能作为修复后的新版制品。更广设备和 R8 运行范围、真实低内存和性能资格仍待统一验证。
 
 ## 图像访问轨迹工具（2026-11-01）
 
@@ -47,7 +48,7 @@
 
 - 新增纯 Java 可调用的 `ManagedMemoryDomain`、allocation 和受控 lease；自有 System/Arena 域分配时先清零，显式软预算，关闭先停止准入并在后台等待 owner、lease 和相关调用。未知结果进入隔离，不强制释放；该阶段尚未接入同域压力 worker，后续进展见上节。[托管合同](docs/ANDROID_MANAGED_DOMAIN.md)和[压力接入合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
 - Windows 与 Linux CI 均通过真实宿主 JVM 的 46 项受控故障/并发检查及 1 项无注入检查；独立 Java 图像消费者迁移到托管 API 后，两端安装共享核心与宿主 JNI 的 12 组像素对照、8 组拒绝及无诊断 sidecar 普通路径通过。[证据范围](artifacts/managed-domain-20261101/README.md)
-- 新源码已完成三 ABI 交叉构建及独立脱敏候选，arm64 R8 名称/签名静态检查通过；原始 AAR 未脱敏且不可分享。最新接口的 R8 运行、Android ART、真机、性能和正式发布资格均待统一验证。此前预览包不包含托管域和本次消费者迁移。
+- 新源码已完成三 ABI 交叉构建及独立脱敏候选，arm64 R8 名称/签名静态检查通过；原始 AAR 未脱敏且不可分享。当时最新接口的 R8 运行、Android ART、真机、性能和正式发布资格均待统一验证；后续限定 arm64 真机短测见本文件顶部。此前预览包不包含托管域和本次消费者迁移。
 
 ## 后续功能继续开发（2026-11-01）
 

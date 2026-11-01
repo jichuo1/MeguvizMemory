@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "state": "PASS_FUNCTIONAL_POSTFLIGHT_FREEZER_NOT_OBSERVED",
+  "scope": "OWN_R8_MANAGED_SYNTHETIC_PRESSURE_SHORT_DIAGNOSTIC",
+  "device": {
+    "api": 33,
+    "abi": "arm64-v8a",
+    "page_bytes": 4096
+  },
+  "candidate_source_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "apk_sha256": "86983038b5194ddc84ef7cb4423c48293f77e3122921a9939137e08c707e3993",
+  "aar_sha256": "2aa013a14a79773464667afda569a07f8e9202b50b2a66c3bfa5f65d2c988927",
+  "core_sha256": "e53a71b8fc521859ea5d6b46a089a5c42bc2e9af4c9a45ee605854d7e8fbb839",
+  "jni_sha256": "98fece39b3465ee56a61109ec957ec75797ea9222851be4265ba224d3c984e7c",
+  "private_receipt_sha256": "7a8cb6ea6bd026447e386bf8e8dbd168bf48a49c5c160d28772ed824007b21da",
+  "install": "OWN_DIAGNOSTIC_INSTALLED_AND_APK_BYTES_VERIFIED",
+  "postflight": "PASS_APK_BYTES_AND_OBSERVED_IDENTITY_AND_NO_MATCHING_TEST_PROCESS",
+  "instrumentation": {
+    "suite": "android-managed-pressure-v1",
+    "status": "PASS",
+    "checks": 306,
+    "case_count": 3,
+    "final_backing_bytes": 0,
+    "callback_origin": "synthetic",
+    "queued_implies_applied": false,
+    "performance_qualified": false
+  },
+  "transport_elapsed_seconds": 0.79,
+  "cgroup_sample_count": 0,
+  "freezer_observation": "NOT_OBSERVED",
+  "shared_device_lock": false,
+  "long_stability": "NOT_QUALIFIED",
+  "real_system_low_memory": "NOT_TESTED",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "No cgroup sample was captured; NOT_OBSERVED does not mean the process was unfrozen.",
+    "Synthetic callbacks are not real system low-memory delivery.",
+    "The 0.79 second transport duration and short test do not establish long-term stability.",
+    "Device and R8 runtime results apply only to this diagnostic on API 33 arm64 with 4096-byte pages.",
+    "Observed process and instrumentation snapshots are not a shared device lock.",
+    "No performance, other ABI, product integration, or release qualification is claimed.",
+    "The first installation refusal remains in its separate historical record."
+  ]
+}
