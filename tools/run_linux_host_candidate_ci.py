@@ -29,6 +29,9 @@ MAX_SOURCE_FILE = 32 * 1024 * 1024
 MAX_SOURCE_TOTAL = 256 * 1024 * 1024
 MAX_CANDIDATE = 256 * 1024 * 1024
 MAX_LOG = 64 * 1024 * 1024
+MAX_STRIP_STDERR = 64 * 1024
+MAX_STRIP_JOURNAL = 1024 * 1024
+MAX_STRIP_ARCHIVE = 64 * 1024 * 1024
 LLVM_TOOLS = ('llvm-strip', 'llvm-readobj', 'llvm-nm', 'llvm-ar', 'llvm-readelf')
 EXPORT_ARCHIVE = 'MeguvizMemory-Linux-Host-Candidate.tar.gz'
 EXPORT_RECEIPT = 'receipt.json'
@@ -155,10 +158,15 @@ class ChildStageFailure(ValueError):
                       'LOG_WRITE_FAILED': 'PRIVATE_LOG_WRITE_FAILED'}[outcome]
         self.stage, self.outcome, self.reason = stage, outcome, reason
         self.exit_code = exit_code if type(exit_code) is int and -255 <= exit_code <= 255 else None
+        self.pressure_strip_detail = None
 
     def public_record(self):
-        return {'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD', 'stage': self.stage, 'outcome': self.outcome,
-                'reason': self.reason, 'exit_code': self.exit_code}
+        result = {'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD', 'stage': self.stage, 'outcome': self.outcome,
+                  'reason': self.reason, 'exit_code': self.exit_code}
+        if (self.stage == 'host_builder' and self.outcome == 'EXITED_NONZERO' and
+                self.reason == 'tool_failed_pressure-strip' and self.pressure_strip_detail is not None):
+            result['pressure_strip'] = safe_pressure_detail(self.pressure_strip_detail)
+        return result
 
 
 def public_failure(error):
@@ -225,6 +233,187 @@ def read_regular(path, maximum):
         data = stream.read(maximum + 1)
         require(len(data) <= maximum and stream.read(1) == b'', 'input_size_limit')
     return data
+
+
+STRIP_ERROR_PATTERNS = {
+    'FORMAT_UNRECOGNIZED': re.compile(rb'\b(?:file format not recognized|unrecognized file format|not recognized as a valid object file|invalid file type)\b', re.I),
+    'UNSUPPORTED_FORMAT_OR_ARCH': re.compile(rb'\b(?:unsupported archive format|unsupported object file|unsupported architecture|unsupported relocation)\b', re.I),
+    'INVALID_OR_TRUNCATED_ARCHIVE': re.compile(rb'\b(?:malformed archive|truncated archive|invalid archive|invalid bitcode signature)\b', re.I),
+    'UNKNOWN_OPTION': re.compile(rb'\b(?:unknown argument|unknown option|unrecognized option)\b', re.I),
+    'MISSING_FILE': re.compile(rb'\b(?:no such file or directory|cannot open input file)\b', re.I),
+    'PERMISSION_DENIED': re.compile(rb'\bpermission denied\b', re.I),
+    'NO_SPACE': re.compile(rb'\bno space left on device\b', re.I),
+}
+STRIP_CATEGORIES = frozenset(STRIP_ERROR_PATTERNS) | {'UNKNOWN'}
+DIAGNOSTIC_FILE_STATES = frozenset({'OK', 'MISSING', 'OVERSIZE', 'UNTRUSTED', 'UNAVAILABLE'})
+
+
+def classify_strip_stderr(data):
+    """Match fixed tool-error patterns only; the text itself never leaves here."""
+    if not isinstance(data, bytes) or len(data) > MAX_STRIP_STDERR or b'\0' in data:
+        return 'UNKNOWN'
+    matches = set()
+    for line in data.splitlines():
+        if len(line) > 2048:
+            return 'UNKNOWN'
+        marker = re.search(rb'(?:^|[/\\])(?:llvm-strip|llvm-objcopy)(?:-[0-9]+)?(?:\.exe)?:\s*(?:fatal\s+)?error:\s*',
+                           line, re.I)
+        if marker:
+            text = line[marker.end():]
+            matches.update(name for name, pattern in STRIP_ERROR_PATTERNS.items() if pattern.search(text))
+    return next(iter(matches)) if len(matches) == 1 else 'UNKNOWN'
+
+
+def read_private_diagnostic(work, parts, maximum):
+    """Read a fixed private path, rejecting links, changes and oversized data."""
+    try:
+        current = Path(work)
+        if current.is_symlink() or not current.is_dir():
+            return 'UNTRUSTED', None
+        for part in parts[:-1]:
+            current = current / part
+            if not os.path.lexists(current):
+                return 'MISSING', None
+            if current.is_symlink() or not current.is_dir():
+                return 'UNTRUSTED', None
+        path = current / parts[-1]
+        if not os.path.lexists(path):
+            return 'MISSING', None
+        before = path.lstat()
+        if path.is_symlink() or not stat.S_ISREG(before.st_mode) or before.st_nlink != 1:
+            return 'UNTRUSTED', None
+        if not path.resolve(strict=True).is_relative_to(Path(work).resolve(strict=True)):
+            return 'UNTRUSTED', None
+        if before.st_size < 0 or before.st_size > maximum:
+            return 'OVERSIZE', None
+        flags = os.O_RDONLY | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0)
+        fd = os.open(path, flags)
+        with os.fdopen(fd, 'rb') as stream:
+            opened = os.fstat(stream.fileno())
+            if (not stat.S_ISREG(opened.st_mode) or opened.st_nlink != 1 or
+                    (opened.st_dev, opened.st_ino, opened.st_size) != (before.st_dev, before.st_ino, before.st_size)):
+                return 'UNTRUSTED', None
+            data = stream.read(maximum + 1)
+            after = os.fstat(stream.fileno())
+        current_stat = path.lstat()
+        if (len(data) != before.st_size or len(data) > maximum or
+                (after.st_dev, after.st_ino, after.st_size, after.st_mtime_ns) !=
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns) or
+                (current_stat.st_dev, current_stat.st_ino, current_stat.st_size, current_stat.st_mtime_ns) !=
+                (before.st_dev, before.st_ino, before.st_size, before.st_mtime_ns)):
+            return 'UNTRUSTED', None
+        return 'OK', data
+    except (OSError, ValueError):
+        return 'UNAVAILABLE', None
+
+
+def safe_pressure_detail(value):
+    """Copy only bounded, fixed-schema fields into a public failure record."""
+    value = value if isinstance(value, dict) else {}
+    def enum(name, allowed):
+        item = value.get(name)
+        return item if isinstance(item, str) and item in allowed else 'UNKNOWN'
+    def number(name, maximum):
+        item = value.get(name)
+        return item if type(item) is int and 0 <= item <= maximum else None
+    def digest(name):
+        item = value.get(name)
+        return item if isinstance(item, str) and re.fullmatch(r'[0-9a-f]{64}', item) else None
+    code = value.get('tool_exit_code')
+    if type(code) is not int or code == 0 or not -255 <= code <= 255:
+        code = None
+    stderr_verified = (value.get('stderr_status') == 'OK' and number('stderr_bytes', MAX_STRIP_STDERR) is not None and
+                       digest('stderr_sha256') is not None)
+    verified = (value.get('journal_status') == 'VERIFIED' and stderr_verified and
+                value.get('tool_outcome') == 'EXITED_NONZERO' and code is not None)
+    archive_verified = (value.get('archive_status') == 'OK' and
+                        number('archive_bytes', MAX_STRIP_ARCHIVE) is not None and digest('archive_sha256') is not None)
+    return {
+        'journal_status': ('VERIFIED' if verified else
+                           enum('journal_status', {'MISSING', 'OVERSIZE', 'UNTRUSTED', 'UNAVAILABLE', 'INVALID'})),
+        'stderr_status': enum('stderr_status', DIAGNOSTIC_FILE_STATES),
+        'stderr_bytes': number('stderr_bytes', MAX_STRIP_STDERR) if stderr_verified else None,
+        'stderr_sha256': digest('stderr_sha256') if stderr_verified else None,
+        'tool_outcome': enum('tool_outcome', {'EXITED_NONZERO', 'TIMEOUT', 'LAUNCH_ERROR'}) if verified else 'UNKNOWN',
+        'tool_exit_code': code if verified else None,
+        'category': enum('category', STRIP_CATEGORIES) if verified else 'UNKNOWN',
+        'classification_scope': 'FIXED_STDERR_PATTERNS_ONLY_NOT_ROOT_CAUSE',
+        'archive_status': enum('archive_status', DIAGNOSTIC_FILE_STATES),
+        'archive_format': enum('archive_format', {'AR', 'THIN_AR', 'OTHER'}) if archive_verified else 'UNKNOWN',
+        'archive_bytes': number('archive_bytes', MAX_STRIP_ARCHIVE) if archive_verified else None,
+        'archive_sha256': digest('archive_sha256') if archive_verified else None,
+        'archive_scope': 'POST_FAILURE_REQUESTED_FILE_NOT_EXECUTION_ATTESTATION',
+        'llvm_identity': enum('llvm_identity', {'MATCH_PREBUILD', 'CHANGED', 'UNAVAILABLE'}),
+        'llvm_sha256': digest('llvm_sha256'),
+        'llvm_scope': 'REQUESTED_FILE_HASH_NOT_EXECUTED_IMAGE_ATTESTATION',
+    }
+
+
+def collect_pressure_strip_detail(work, tools, tool_identities):
+    """Inspect only fixed private files after this specific builder failure."""
+    detail = {'journal_status': 'UNKNOWN', 'stderr_status': 'UNKNOWN', 'category': 'UNKNOWN',
+              'archive_status': 'UNKNOWN', 'archive_format': 'UNKNOWN', 'llvm_identity': 'UNKNOWN'}
+    status_state, status_data = read_private_diagnostic(work, ('STATUS.json',), 16384)
+    journal_state, journal_data = read_private_diagnostic(work, ('operations.jsonl',), MAX_STRIP_JOURNAL)
+    stderr_state, stderr_data = read_private_diagnostic(work, ('logs', 'pressure-strip.stderr'), MAX_STRIP_STDERR)
+    detail['stderr_status'] = stderr_state
+    if stderr_state == 'OK':
+        detail['stderr_bytes'] = len(stderr_data)
+        detail['stderr_sha256'] = digest_bytes(stderr_data)
+    detail['journal_status'] = journal_state
+    if status_state == journal_state == stderr_state == 'OK':
+        try:
+            status = strict_json(status_data)
+            rows = [strict_json(line) for line in journal_data.splitlines()]
+            labels = [row.get('step') for row in rows if isinstance(row, dict)]
+            matches = [row for row in rows if isinstance(row, dict) and row.get('step') == 'pressure-strip']
+            if (isinstance(status, dict) and status.get('state') == 'FAILED' and
+                    status.get('reason') == 'tool_failed_pressure-strip' and status.get('output_written') is False and
+                    len(labels) == len(rows) and all(isinstance(label, str) for label in labels) and
+                    len({label.casefold() for label in labels}) == len(labels) and
+                    len(matches) == 1 and matches[0].get('state') == 'EXITED' and
+                    type(matches[0].get('exit_code')) is int and matches[0]['exit_code'] != 0 and
+                    -255 <= matches[0]['exit_code'] <= 255 and
+                    matches[0].get('stderr_sha256') == digest_bytes(stderr_data)):
+                detail['journal_status'] = 'VERIFIED'
+                detail['tool_outcome'] = 'EXITED_NONZERO'
+                detail['tool_exit_code'] = matches[0]['exit_code']
+                detail['category'] = classify_strip_stderr(stderr_data)
+            else:
+                detail['journal_status'] = 'INVALID'
+        except (ValueError, TypeError, UnicodeError, json.JSONDecodeError):
+            detail['journal_status'] = 'INVALID'
+    archive_state, archive_data = read_private_diagnostic(
+        work, ('raw-sdk', 'lib', 'libmgmem_pressure.a'), MAX_STRIP_ARCHIVE)
+    detail['archive_status'] = archive_state
+    if archive_state == 'OK':
+        detail['archive_bytes'] = len(archive_data)
+        detail['archive_sha256'] = digest_bytes(archive_data)
+        detail['archive_format'] = ('AR' if archive_data.startswith(b'!<arch>\n') else
+                                    'THIN_AR' if archive_data.startswith(b'!<thin>\n') else 'OTHER')
+    try:
+        before = tool_identities.get('llvm-strip')
+        tool = (tools['llvm'] / 'llvm-strip').resolve(strict=True)
+        if (isinstance(before, dict) and isinstance(before.get('sha256'), str) and
+                re.fullmatch(r'[0-9a-f]{64}', before['sha256'])):
+            detail['llvm_identity'] = 'MATCH_PREBUILD' if common.file_identity(tool) == before else 'CHANGED'
+            detail['llvm_sha256'] = before['sha256']
+        else:
+            detail['llvm_identity'] = 'UNAVAILABLE'
+    except (OSError, ValueError, KeyError, TypeError):
+        detail['llvm_identity'] = 'UNAVAILABLE'
+    return safe_pressure_detail(detail)
+
+
+def attach_pressure_strip_detail(error, work, tools, tool_identities):
+    if (isinstance(error, ChildStageFailure) and error.stage == 'host_builder' and
+            error.outcome == 'EXITED_NONZERO' and error.reason == 'tool_failed_pressure-strip'):
+        # Diagnostics are best effort: malformed private evidence or memory
+        # errors must not replace the already confirmed child-stage failure.
+        try:
+            error.pressure_strip_detail = collect_pressure_strip_detail(work, tools, tool_identities)
+        except Exception:
+            error.pressure_strip_detail = safe_pressure_detail({})
 
 
 def write_new(path, data):
@@ -650,11 +839,15 @@ def run(commit):
     candidate = dist / ('MeguvizMemory-Linux-Candidate-' + commit[:12] + '.tar.gz')
     require(not os.path.lexists(candidate), 'candidate_already_exists')
     builder_work = work / 'builder'
-    stdout = execute([sys.executable, root / 'tools/build_host_candidate.py', '--source-root', snapshot,
-                      '--source-lock', lock, '--jdk', tools['jdk'], '--cmake', tools['cmake'],
-                      '--ninja', tools['ninja'], '--llvm-bin', tools['llvm'], '--private-identifiers-file', marker,
-                      '--work-dir', builder_work, '--output', candidate, '--jobs', '2'], environment,
-                     work / 'builder.stdout', work / 'builder.stderr', 3000, 'host_builder')
+    try:
+        stdout = execute([sys.executable, root / 'tools/build_host_candidate.py', '--source-root', snapshot,
+                          '--source-lock', lock, '--jdk', tools['jdk'], '--cmake', tools['cmake'],
+                          '--ninja', tools['ninja'], '--llvm-bin', tools['llvm'], '--private-identifiers-file', marker,
+                          '--work-dir', builder_work, '--output', candidate, '--jobs', '2'], environment,
+                         work / 'builder.stdout', work / 'builder.stderr', 3000, 'host_builder')
+    except ChildStageFailure as error:
+        attach_pressure_strip_detail(error, builder_work, tools, tool_identities)
+        raise
     outcome = strict_json(stdout)
     status = strict_json(read_regular(builder_work / 'STATUS.json', MAX_LOG))
     payload = read_regular(candidate, MAX_CANDIDATE)

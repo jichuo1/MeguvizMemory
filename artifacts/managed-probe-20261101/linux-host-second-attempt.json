@@ -1,0 +1,17 @@
+{
+  "state": "INCOMPLETE_LINUX_CANDIDATE_NOT_PUBLISHED",
+  "source_commit": "d29e07ec207284da64ae5c45f2c0596044f6b61b",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41287361469",
+  "stage": "host_builder",
+  "outcome": "EXITED_NONZERO",
+  "reason": "tool_failed_pressure-strip",
+  "tool_failure_detail": "UNKNOWN_PRIVATE_LOGS_NOT_AVAILABLE_AFTER_RUN",
+  "uploaded_artifact_count": 0,
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The exact llvm-strip stderr was not retained outside the failed runner; no underlying cause is inferred.",
+    "The prior failed attempt and this separate failed attempt remain unchanged.",
+    "No Linux engineering candidate, Android device or performance qualification was obtained."
+  ]
+}

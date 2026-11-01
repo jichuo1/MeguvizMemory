@@ -22,6 +22,184 @@ import run_linux_host_candidate_ci as subject
 
 
 class RunnerContracts(unittest.TestCase):
+    def test_strip_detail_consumes_real_failed_tool_journal(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / 'raw-sdk/lib').mkdir(parents=True)
+            (root / 'raw-sdk/lib/libmgmem_pressure.a').write_bytes(b'!<arch>\nfixture-data')
+            llvm = root / 'llvm'
+            llvm.mkdir()
+            strip = llvm / 'llvm-strip'
+            strip.write_bytes(b'tool fixture')
+            identities = {'llvm-strip': common.file_identity(strip)}
+            operations = []
+            with self.assertRaisesRegex(ValueError, '^tool_failed_pressure-strip$'):
+                common.run_tool([sys.executable, '-c',
+                    "import sys; sys.stderr.write('llvm-strip: error: no such file or directory\\n'); sys.exit(1)"],
+                    root, operations, 'pressure-strip')
+            (root / 'STATUS.json').write_bytes(common.json_bytes({'state': 'FAILED',
+                'reason': 'tool_failed_pressure-strip', 'output_written': False}))
+            detail = subject.collect_pressure_strip_detail(root, {'llvm': llvm}, identities)
+            self.assertEqual(detail['journal_status'], 'VERIFIED')
+            self.assertEqual(detail['category'], 'MISSING_FILE')
+            self.assertEqual(detail['tool_exit_code'], 1)
+            self.assertEqual(detail['archive_format'], 'AR')
+            self.assertEqual(detail['llvm_identity'], 'MATCH_PREBUILD')
+
+    def strip_fixture(self, root, stderr, code=1):
+        (root / 'logs').mkdir(parents=True)
+        (root / 'raw-sdk/lib').mkdir(parents=True)
+        (root / 'logs/pressure-strip.stderr').write_bytes(stderr)
+        archive = b'!<arch>\nfixture-data'
+        (root / 'raw-sdk/lib/libmgmem_pressure.a').write_bytes(archive)
+        (root / 'STATUS.json').write_bytes(common.json_bytes({'state': 'FAILED',
+            'reason': 'tool_failed_pressure-strip', 'output_written': False}))
+        row = {'step': 'pressure-strip', 'state': 'EXITED', 'exit_code': code,
+               'stderr_sha256': subject.digest_bytes(stderr)}
+        (root / 'operations.jsonl').write_bytes(common.canonical(row) + b'\n')
+        llvm = root / 'llvm'; llvm.mkdir(); tool = llvm / 'llvm-strip'; tool.write_bytes(b'tool fixture')
+        return {'llvm': llvm}, {'llvm-strip': common.file_identity(tool)}, row, archive
+
+    def test_strip_patterns_are_fixed_and_ambiguous_is_unknown(self):
+        cases = (
+            (b"llvm-strip: error: 'PRIVATE_PATH': no such file or directory\n", 'MISSING_FILE'),
+            (b"llvm-strip: error: 'PRIVATE_PATH': permission denied\n", 'PERMISSION_DENIED'),
+            (b"llvm-strip: error: no space left on device\n", 'NO_SPACE'),
+            (b"llvm-strip: error: unknown argument '--PRIVATE_TOKEN'\n", 'UNKNOWN_OPTION'),
+            (b"llvm-strip: error: file format not recognized\n", 'FORMAT_UNRECOGNIZED'),
+            (b"llvm-strip: error: unsupported archive format\n", 'UNSUPPORTED_FORMAT_OR_ARCH'),
+            (b"llvm-strip: error: truncated archive\n", 'INVALID_OR_TRUNCATED_ARCHIVE'),
+            (b"llvm-strip: error: PRIVATE_TOKEN unexpected\n", 'UNKNOWN'),
+            (b"llvm-strip: error: permission denied; no space left on device\n", 'UNKNOWN'),
+            (b"warning: permission denied\n", 'UNKNOWN'),
+            (b"warning: error: permission denied\n", 'UNKNOWN'),
+            (b"unrelated: error: no space left on device\n", 'UNKNOWN'),
+            (b'error: permission denied\0private', 'UNKNOWN'),
+            (b'x' * (subject.MAX_STRIP_STDERR + 1), 'UNKNOWN'),
+        )
+        for data, expected in cases:
+            with self.subTest(expected=expected):
+                self.assertEqual(subject.classify_strip_stderr(data), expected)
+
+    def test_strip_detail_is_bound_to_private_journal_without_text_leak(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            stderr = b"llvm-strip: error: 'PRIVATE_TOKEN_123': no such file or directory\n"
+            tools, identities, _row, archive = self.strip_fixture(root, stderr)
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['journal_status'], 'VERIFIED')
+            self.assertEqual(detail['stderr_status'], 'OK')
+            self.assertEqual(detail['stderr_bytes'], len(stderr))
+            self.assertEqual(detail['stderr_sha256'], subject.digest_bytes(stderr))
+            self.assertEqual(detail['tool_outcome'], 'EXITED_NONZERO')
+            self.assertEqual(detail['tool_exit_code'], 1)
+            self.assertEqual(detail['category'], 'MISSING_FILE')
+            self.assertEqual(detail['archive_format'], 'AR')
+            self.assertEqual(detail['archive_sha256'], subject.digest_bytes(archive))
+            self.assertEqual(detail['llvm_identity'], 'MATCH_PREBUILD')
+            self.assertNotIn('PRIVATE_TOKEN_123', json.dumps(detail))
+            self.assertNotIn(str(root), json.dumps(detail))
+            self.assertIn('NOT_ROOT_CAUSE', detail['classification_scope'])
+
+    def test_strip_detail_rejects_missing_oversized_and_mismatched_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); stderr = b'llvm-strip: error: permission denied\n'
+            tools, identities, row, _archive = self.strip_fixture(root, stderr)
+            row['stderr_sha256'] = '0' * 64
+            (root / 'operations.jsonl').write_bytes(common.canonical(row) + b'\n')
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['journal_status'], 'INVALID')
+            self.assertEqual(detail['category'], 'UNKNOWN')
+            self.assertIsNone(detail['tool_exit_code'])
+            (root / 'logs/pressure-strip.stderr').write_bytes(b'x' * (subject.MAX_STRIP_STDERR + 1))
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['stderr_status'], 'OVERSIZE')
+            self.assertIsNone(detail['stderr_bytes'])
+            self.assertIsNone(detail['stderr_sha256'])
+            self.assertEqual(detail['category'], 'UNKNOWN')
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); tools = {'llvm': root}; identities = {}
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['journal_status'], 'MISSING')
+            self.assertEqual(detail['stderr_status'], 'MISSING')
+            self.assertEqual(detail['category'], 'UNKNOWN')
+            self.assertEqual(detail['archive_status'], 'MISSING')
+
+    def test_strip_detail_rejects_duplicate_or_failed_status(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); stderr = b'llvm-strip: error: no space left on device\n'
+            tools, identities, row, _archive = self.strip_fixture(root, stderr)
+            (root / 'operations.jsonl').write_bytes(common.canonical(row) + b'\n' + common.canonical(row) + b'\n')
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['journal_status'], 'INVALID')
+            self.assertEqual(detail['category'], 'UNKNOWN')
+            (root / 'operations.jsonl').write_bytes(common.canonical(row) + b'\n')
+            (root / 'STATUS.json').write_bytes(common.json_bytes({'state': 'FAILED',
+                'reason': 'tool_failed_pressure-strip', 'output_written': True}))
+            detail = subject.collect_pressure_strip_detail(root, tools, identities)
+            self.assertEqual(detail['journal_status'], 'INVALID')
+            self.assertEqual(detail['category'], 'UNKNOWN')
+
+    def test_strip_diagnostic_reads_only_for_exact_failure(self):
+        with patch.object(subject, 'collect_pressure_strip_detail', return_value={'category': 'UNKNOWN'}) as collect:
+            others = (
+                subject.ChildStageFailure('source_lock', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2),
+                subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_core-build', 2),
+                subject.ChildStageFailure('host_builder', 'TIMEOUT', 'anything', None),
+            )
+            for error in others:
+                subject.attach_pressure_strip_detail(error, Path('.'), {}, {})
+            collect.assert_not_called()
+            exact = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2)
+            subject.attach_pressure_strip_detail(exact, Path('.'), {}, {})
+            collect.assert_called_once()
+            self.assertIn('pressure_strip', exact.public_record())
+
+    def test_strip_diagnostic_errors_cannot_mask_original_failure(self):
+        for failure in (ValueError('PRIVATE_TOKEN_123'), RecursionError('PRIVATE_TOKEN_123'),
+                        MemoryError('PRIVATE_TOKEN_123')):
+            with self.subTest(kind=type(failure).__name__), \
+                 patch.object(subject, 'collect_pressure_strip_detail', side_effect=failure):
+                error = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2)
+                subject.attach_pressure_strip_detail(error, Path('.'), {}, {})
+                record = subject.public_failure(error)
+                self.assertEqual((record['stage'], record['outcome'], record['reason'], record['exit_code']),
+                                 ('host_builder', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2))
+                self.assertEqual(record['pressure_strip']['category'], 'UNKNOWN')
+                self.assertEqual(record['pressure_strip']['journal_status'], 'UNKNOWN')
+                self.assertNotIn('PRIVATE_TOKEN_123', json.dumps(record))
+
+    def test_deep_private_journal_cannot_replace_original_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); stderr = b'llvm-strip: error: permission denied\n'
+            tools, identities, _row, _archive = self.strip_fixture(root, stderr)
+            (root / 'operations.jsonl').write_bytes(b'[' * 4000 + b']' * 4000 + b'\n')
+            error = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2)
+            subject.attach_pressure_strip_detail(error, root, tools, identities)
+            record = subject.public_failure(error)
+            self.assertEqual(record['reason'], 'tool_failed_pressure-strip')
+            self.assertEqual(record['pressure_strip']['category'], 'UNKNOWN')
+
+    def test_strip_detail_is_only_exposed_for_exact_failure_and_is_allowlisted(self):
+        dirty = {'journal_status': 'VERIFIED', 'stderr_status': 'OK', 'stderr_bytes': 3,
+                 'stderr_sha256': 'a' * 64, 'tool_outcome': 'EXITED_NONZERO', 'tool_exit_code': 1,
+                 'category': 'PRIVATE_TOKEN_123', 'archive_status': 'OK', 'archive_format': 'SECRET',
+                 'archive_bytes': 9999999999, 'archive_sha256': 'PRIVATE_TOKEN_123',
+                 'llvm_identity': 'PRIVATE_TOKEN_123', 'llvm_sha256': 'PRIVATE_TOKEN_123',
+                 'path': 'PRIVATE_TOKEN_123'}
+        error = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2)
+        error.pressure_strip_detail = dirty
+        record = error.public_record()
+        self.assertEqual(record['pressure_strip']['category'], 'UNKNOWN')
+        self.assertEqual(record['pressure_strip']['archive_format'], 'UNKNOWN')
+        self.assertNotIn('PRIVATE_TOKEN_123', json.dumps(record))
+        other = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'tool_failed_core-build', 2)
+        other.pressure_strip_detail = dirty
+        self.assertNotIn('pressure_strip', other.public_record())
+        source = subject.ChildStageFailure('source_lock', 'EXITED_NONZERO', 'tool_failed_pressure-strip', 2)
+        source.pressure_strip_detail = dirty
+        self.assertNotIn('pressure_strip', source.public_record())
+
     def test_builder_diagnostics_only_allow_fixed_codes(self):
         cases = (
             (b'{"state":"FAILED","reason":"host_jni_core_dependency"}', 'host_jni_core_dependency'),

@@ -1339,10 +1339,11 @@
   },
   "linux_host_candidate_ci_20261101": {
     "parent": "MM-001",
-    "state": "FIRST_CI_ATTEMPT_FAILED_NO_ARTIFACT_REASON_UNKNOWN_NEW_RUN_REQUIRED",
-    "runner_offline": "TWENTY_FIVE_PASS_WITH_BOUNDED_ERROR_DIAGNOSIS",
+    "state": "SECOND_CI_ATTEMPT_FAILED_PRESSURE_STRIP_REASON_UNKNOWN_NEW_RUN_REQUIRED",
+    "runner_offline": "THIRTY_FOUR_PASS_WITH_BOUNDED_STRIP_DIAGNOSIS",
     "sentinel": "CI_ONLY_NOT_LOCAL_PRIVATE_IDENTIFIERS",
     "runtime": "NOT_RUN",
-    "contract": "docs/LINUX_HOST_CANDIDATE_CI.md"
+    "contract": "docs/LINUX_HOST_CANDIDATE_CI.md",
+    "second_attempt": "artifacts/managed-probe-20261101/linux-host-second-attempt.json"
   }
 }
