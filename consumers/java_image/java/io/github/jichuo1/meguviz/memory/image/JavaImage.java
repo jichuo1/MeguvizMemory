@@ -31,24 +31,41 @@ public final class JavaImage {
     private static IllegalStateException status(String action, long code) {
         return new IllegalStateException(action + " failed: " + code);
     }
+    interface PressureSubmitter { long submit(); }
+    static long submitPressureWithRetry(PressureSubmitter submitter, Runnable busy, long deadline) throws InterruptedException {
+        while (System.nanoTime()-deadline<0) {
+            long ticket=submitter.submit();
+            if(ticket>0) return ticket;
+            if(ticket!=-6) throw status("submit pressure",-ticket);
+            busy.run();
+            if(System.nanoTime()-deadline<0) Thread.sleep(2);
+        }
+        throw new IllegalStateException("pressure admission not confirmed before deadline");
+    }
     private static final class Session implements AutoCloseable {
         private ManagedMemoryDomain domain;
         private ManagedMemoryDomain.Allocation owner;
         private ManagedMemoryDomain.Lease lease;
+        private ManagedMemoryDomain.Pressure pressure;
         private long peak;
-        static Session open(long bytes, long budget, boolean system) {
+        private long pressureSnapshots, ticketQueries, domainSnapshots, pressureBusyRejections;
+        private long pressureSnapshotLongs, ticketResultLongs, domainSnapshotLongs;
+        private long deferredBusyDelta, trimSuccessDelta, postReleaseBacking;
+        static Session open(long bytes, long budget, boolean system, boolean livePressure) {
             Session result = new Session();
             cleanupObservation="UNKNOWN_CREATION";
             try {
                 result.domain=system?ManagedMemoryDomain.system(budget):ManagedMemoryDomain.arena(budget,65536);
                 cleanupObservation="NOT_CONFIRMED";
+                if(livePressure) result.pressure=result.domain.attachPressure(budget/2,0);
                 result.owner=result.domain.allocate(bytes,64);
                 result.lease=result.owner.borrowWrite(0,bytes);
                 result.releaseOwnerOnce();
-                result.domain.beginClose();
+                if(!livePressure) result.domain.beginClose();
                 long[] held=result.domain.snapshot();
-                if(result.domain.state()!=ManagedMemoryDomain.CLOSING || held==null || held.length!=10 ||
-                    held[0]!=ManagedMemoryDomain.CLOSING || (held[1]!=0 && held[1]!=1) ||
+                int expectedState=livePressure?ManagedMemoryDomain.OPEN:ManagedMemoryDomain.CLOSING;
+                if(result.domain.state()!=expectedState || held==null || held.length!=10 ||
+                    held[0]!=expectedState || (livePressure?held[1]!=0:(held[1]!=0 && held[1]!=1)) ||
                     held[7]!=bytes || held[8]!=1 || held[9]!=1)
                     throw new IllegalStateException("closing domain did not retain the image lease");
                 return result;
@@ -56,6 +73,108 @@ public final class JavaImage {
                 try { result.close(); } catch (RuntimeException | Error cleanup) { error.addSuppressed(cleanup); }
                 throw error;
             }
+        }
+        private long[] pressureSnapshot() {
+            ++pressureSnapshots;
+            long[] value=pressure.snapshot();
+            if(value==null || value.length<18) throw new IllegalStateException("pressure snapshot unavailable");
+            pressureSnapshotLongs+=value.length;
+            return value;
+        }
+        private long[] domainSnapshot() {
+            ++domainSnapshots;
+            long[] value=domain.snapshot();
+            if(value==null || value.length!=10) throw new IllegalStateException("domain snapshot unavailable");
+            domainSnapshotLongs+=value.length;
+            return value;
+        }
+        private void awaitApplied(int level) throws InterruptedException {
+            long deadline=System.nanoTime()+10_000_000_000L;
+            long ticket=submitPressureWithRetry(()->pressure.submit(level),()->++pressureBusyRejections,deadline);
+            while(System.nanoTime()-deadline<0) {
+                ++ticketQueries;
+                long[] result=pressure.eventResult(ticket);
+                if(result==null || result.length!=4 || result[2]!=ticket)
+                    throw new IllegalStateException("pressure event result unavailable");
+                ticketResultLongs+=result.length;
+                if(result[0]==ManagedMemoryDomain.Pressure.EVENT_APPLIED) {
+                    if(result[1]!=0 || result[3]<=0) throw new IllegalStateException("inconsistent applied pressure event");
+                    return;
+                }
+                if(result[0]!=ManagedMemoryDomain.Pressure.EVENT_QUEUED)
+                    throw new IllegalStateException("pressure event did not apply: "+result[0]+" status="+result[1]);
+                Thread.sleep(2);
+            }
+            throw new IllegalStateException("pressure event application not confirmed");
+        }
+        private void applyCritical() throws InterruptedException {
+            long[] before=pressureSnapshot();
+            awaitApplied(ManagedMemoryDomain.Pressure.CRITICAL);
+            long deadline=System.nanoTime()+10_000_000_000L;
+            long[] observed;
+            do {
+                observed=pressureSnapshot();
+                if(observed[17]>before[17]) throw new IllegalStateException("pressure trim failed");
+                if(observed[16]>before[16]) break;
+                Thread.sleep(2);
+            } while(System.nanoTime()-deadline<0);
+            deferredBusyDelta=observed[16]-before[16];
+            if(deferredBusyDelta<=0 || observed[7]!=0 || domainSnapshot()[2]!=0)
+                throw new IllegalStateException("critical pressure or busy trim not observed");
+            ManagedMemoryDomain.Allocation unexpected;
+            try { unexpected=domain.allocate(1,1); }
+            catch(ManagedMemoryDomain.ManagedException error) {
+                if(error.status()!=4) throw error;
+                return;
+            }
+            owner=unexpected;
+            releaseOwnerOnce();
+            throw new IllegalStateException("zero budget admitted allocation");
+        }
+        private void releaseLeaseForPressure() throws InterruptedException {
+            long deadline=System.nanoTime()+10_000_000_000L;
+            while(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED && System.nanoTime()-deadline<0) {
+                int state=lease.closeState();
+                if(state==NativeMemoryLease.CLOSE_FAILED) throw status("lease close",lease.closeFailureStatus());
+                if(state==NativeMemoryLease.CLOSE_OPEN) {
+                    try { lease.close(); }
+                    catch(ManagedMemoryDomain.ManagedException error) {
+                        if(lease.closeState()!=NativeMemoryLease.CLOSE_OPEN ||
+                                (error.status()!=ManagedMemoryDomain.STATUS_CLOSE_GUARD_LIMIT && error.status()!=3)) throw error;
+                    }
+                }
+                if(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED) Thread.sleep(2);
+            }
+            if(lease.closeState()!=NativeMemoryLease.CLOSE_RELEASED)
+                throw new IllegalStateException("lease close not confirmed");
+            lease=null;
+        }
+        private void finishPressure(boolean system) throws InterruptedException {
+            long[] before=pressureSnapshot();
+            releaseLeaseForPressure();
+            long deadline=System.nanoTime()+10_000_000_000L;
+            long[] observed,domainValue;
+            do {
+                observed=pressureSnapshot(); domainValue=domainSnapshot();
+                if(observed[17]>before[17]) throw new IllegalStateException("pressure trim failed");
+                if(domainValue[3]==0 && (system || observed[15]>before[15])) break;
+                Thread.sleep(2);
+            } while(System.nanoTime()-deadline<0);
+            trimSuccessDelta=observed[15]-before[15]; postReleaseBacking=domainValue[3];
+            if(postReleaseBacking!=0 || (!system && trimSuccessDelta<=0))
+                throw new IllegalStateException("quiet release not confirmed");
+            awaitApplied(ManagedMemoryDomain.Pressure.NORMAL);
+            long[] restored=pressureSnapshot();
+            if(restored[7]!=restored[6] || domainSnapshot()[2]!=restored[6])
+                throw new IllegalStateException("normal budget restore not confirmed");
+            pressure.beginClose();
+            deadline=System.nanoTime()+10_000_000_000L;
+            int state=pressure.state();
+            while(state==ManagedMemoryDomain.CLOSING && System.nanoTime()-deadline<0) {
+                Thread.sleep(2); state=pressure.state();
+            }
+            if(state!=ManagedMemoryDomain.CLOSED) throw new IllegalStateException("pressure close not confirmed: "+state);
+            pressure=null;
         }
         private void releaseOwnerOnce() {
             if(owner==null) return;
@@ -297,13 +416,14 @@ public final class JavaImage {
         return new Identity(hashFile(core),hashFile(jni),hashFile(jar),leaseClass,managedClass);
     }
     private static void execute(String[] args) throws Exception {
-        if (args.length<2) throw new IllegalArgumentException("usage: JavaImage input.ppm output.pgm [--system] [--budget bytes]");
+        if (args.length<2) throw new IllegalArgumentException("usage: JavaImage input.ppm output.pgm [--system] [--budget bytes] [--live-domain-pressure]");
         Path inputPath=Paths.get(args[0]),outputPath=Paths.get(args[1]);
-        boolean system=false;long budget=MAX_BUDGET;
+        boolean system=false,livePressure=false;long budget=MAX_BUDGET;
         Path expectedCore=null,expectedJni=null,expectedJar=null;
         for (int i=2;i<args.length;++i) {
             String option=args[i];
             if ("--system".equals(option)) {system=true;continue;}
+            if ("--live-domain-pressure".equals(option)) {livePressure=true;continue;}
             if (i+1>=args.length) throw new IllegalArgumentException("unknown or incomplete option");
             if ("--budget".equals(option)) budget=number(args[++i]);
             else if ("--attest-core".equals(option)) expectedCore=Paths.get(args[++i]);
@@ -324,10 +444,12 @@ public final class JavaImage {
                 throw new IOException("unsupported dimensions or pixel format");
             long pixels=w*h;rgbBytes=pixels*3;
             width=(int)w;height=(int)h;
-            session=Session.open(rgbBytes,budget,system);
+            session=Session.open(rgbBytes,budget,system,livePressure);
             try (Session ignored=session) {
                 loadInput(input,session,rgbBytes,transfer);
+                if(livePressure) session.applyCritical();
                 result=onWorker(session.lease,width,height,transfer);
+                if(livePressure) session.finishPressure(system);
             }
         }
         if(!"CLOSED_AND_FORGOTTEN".equals(cleanupObservation)) throw new IllegalStateException("managed image domain cleanup not confirmed");
@@ -343,6 +465,15 @@ public final class JavaImage {
             ",\"java_to_native_staging_bytes\":"+rgbBytes+",\"staging_to_native_backing_bytes\":"+rgbBytes+
             ",\"native_to_java_bytes\":"+rgbBytes+",\"java_luma_and_output_bytes\":"+(2L*width*height)+
             ",\"transfer_buffer_bytes\":"+TRANSFER_BYTES+",\"lease_before_enqueue\":true,\"managed_cleanup\":\""+cleanupObservation+"\",\"identity_probe_loaded\":"+identityProbeLoaded+
+            (livePressure?",\"pressure_mode\":\"LIVE_SYNTHETIC\",\"pressure_critical\":\"APPLIED\",\"pressure_restore\":\"APPLIED\",\"pressure_budget_after_critical\":0,\"pressure_denied\":true"+
+                ",\"pressure_deferred_busy_delta\":"+session.deferredBusyDelta+",\"pressure_trim_success_delta\":"+session.trimSuccessDelta+
+                ",\"pressure_post_release_backing\":"+session.postReleaseBacking+",\"pressure_arena_reclaimed\":"+(!system)+
+                ",\"pressure_snapshot_calls\":"+session.pressureSnapshots+",\"pressure_ticket_query_calls\":"+session.ticketQueries+
+                ",\"pressure_submit_busy_rejections\":"+session.pressureBusyRejections+
+                ",\"pressure_domain_snapshot_calls\":"+session.domainSnapshots+",\"pressure_snapshot_long_elements\":"+session.pressureSnapshotLongs+
+                ",\"pressure_ticket_long_elements\":"+session.ticketResultLongs+",\"pressure_domain_long_elements\":"+session.domainSnapshotLongs+
+                ",\"pressure_observation_java_long_payload_bytes\":"+
+                    (8L*(session.pressureSnapshotLongs+session.ticketResultLongs+session.domainSnapshotLongs)):"")+
             (identity==null?",\"identity_scope\":\"NOT_CHECKED\"":",\"identity_scope\":\"OS_MODULE_PATH_AND_CURRENT_FILE_HASH\",\"core_sha256\":\""+
                 identity.core+"\",\"jni_sha256\":\""+identity.jni+"\",\"java_jar_sha256\":\""+identity.jar+"\",\"java_class_sha256\":\""+identity.javaClass+
                 "\",\"managed_class_sha256\":\""+identity.managedClass+"\"")+

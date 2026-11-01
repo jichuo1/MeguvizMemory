@@ -71,13 +71,22 @@ def main() -> int:
     if len(cores) != 1:
         parser.error('Expected exactly one installed shared Memory core')
     core = cores[0].resolve()
+    pressure_names = ('mgmem_pressure.lib', 'libmgmem_pressure.a')
+    pressures = [directory / name for directory in (sdk / 'lib', sdk / 'lib64')
+                 for name in pressure_names if (directory / name).is_file()]
+    if len(pressures) != 1:
+        parser.error('Expected exactly one installed static pressure library')
+    pressure_library = pressures[0].resolve()
+    pressure_before = digest(pressure_library)
     source_paths = [ADAPTER_SOURCE, MANAGED_SOURCE, root / 'src/mgmem.cpp', root / 'include/mgmem/mgmem.h',
         root / 'include/mgmem/pressure.h', root / 'include/mgmem/android_borrow_jni.h',
         root / 'include/mgmem/android_pressure_jni.h', root / 'adapters/android/native/borrow_jni.cpp',
+        root / 'adapters/android/native/pressure.cpp',
         root / 'adapters/android/native/pressure_jni.cpp', root / 'adapters/android/native/workspace_jni.cpp',
         CONSUMER / 'runtime/CMakeLists.txt',
         CONSUMER / 'CMakeLists.txt', CONSUMER / 'native/image_jni.cpp',
         CONSUMER / 'java/io/github/jichuo1/meguviz/memory/image/JavaImage.java',
+        CONSUMER / 'tests/PressureRetryJvmTest.java',
         CONSUMER / 'verify_host.py', CONSUMER / 'run_host_ci.py',
         root / 'consumers/image/CMakeLists.txt', root / 'consumers/image/main.cpp']
     before = {path.relative_to(root).as_posix(): digest(path) for path in source_paths}
@@ -165,17 +174,21 @@ def main() -> int:
         '--plain-classes', plain_build / 'classes', '--adapter-jar', adapter_jar, '--out-dir', verification])
     report = json.loads((verification / 'receipt.json').read_text(encoding='utf-8'))
     if (report.get('state') != 'PASS_HOST_FUNCTIONAL_DEVELOPMENT' or report.get('plain_without_sidecar') != 'PASS' or len(report.get('cases', [])) != 12 or
-            len(report.get('negative_cases', [])) != 8 or report.get('identities', {}).get('core_sha256') != core_before or
+            len(report.get('pressure_cases', [])) != 12 or
+            report.get('pressure_retry_contract') != 'PASS_JVM_ADMISSION_ONLY' or
+            len(report.get('negative_cases', [])) != 10 or report.get('identities', {}).get('core_sha256') != core_before or
             report.get('identities', {}).get('jni_sha256') != digest(jni) or
             report.get('identities', {}).get('java_jar_sha256') != digest(adapter_jar)):
         raise RuntimeError('consumer_verification_scope_or_identity_mismatch')
-    if digest(core) != core_before or any(digest(path) != before[path.relative_to(root).as_posix()] for path in source_paths):
+    if digest(core) != core_before or digest(pressure_library) != pressure_before or any(digest(path) != before[path.relative_to(root).as_posix()] for path in source_paths):
         raise RuntimeError('source_or_installed_core_changed_during_run')
     result = {'schema_version': 1, 'state': 'PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE',
         'scope': 'HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE', 'host': 'windows' if os.name == 'nt' else 'linux',
-        'functional_cases': len(report['cases']), 'plain_without_sidecar': report['plain_without_sidecar'],
+        'functional_cases': len(report['cases']), 'synthetic_pressure_cases': len(report['pressure_cases']),
+        'pressure_retry_contract': report['pressure_retry_contract'],
+        'plain_without_sidecar': report['plain_without_sidecar'],
         'negative_cases': len(report['negative_cases']),
-        'installed_core_sha256': core_before, 'installed_jni_sha256': digest(jni),
+        'installed_core_sha256': core_before, 'installed_pressure_library_sha256': pressure_before, 'installed_jni_sha256': digest(jni),
         'adapter_jar_sha256': digest(adapter_jar), 'adapter_class_sha256': report['identities']['java_class_sha256'],
         'managed_class_sha256': report['identities']['managed_class_sha256'],
         'consumer_jni_sha256': digest(consumer_jni), 'reference_sha256': digest(references[0]),
@@ -189,7 +202,8 @@ def main() -> int:
         json.dump(result, stream, ensure_ascii=False, indent=2)
         stream.write('\n')
     print(json.dumps({'state': result['state'], 'host': result['host'],
-                      'functional_cases': result['functional_cases'], 'negative_cases': result['negative_cases']}))
+                      'functional_cases': result['functional_cases'], 'synthetic_pressure_cases': result['synthetic_pressure_cases'],
+                      'negative_cases': result['negative_cases']}))
     return 0
 
 

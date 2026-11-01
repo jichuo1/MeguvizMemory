@@ -1,10 +1,10 @@
 # 可选 Android 托管内存域
 
-`ManagedMemoryDomain` 是现有共享 Memory 核心上的可选 Java owner/lease 包装，不提供原始地址或直接 ByteBuffer。`system(budgetBytes)` 和 `arena(budgetBytes, chunkBytes)` 分别使用默认 System 和 arena provider；不接管全局分配，也不支持通用外部内存导入。当前实现独立于同域压力 worker：`setBudget` 是手动设置软准入预算，不会自动接收 Android 内存压力；已核实的潜在接入边界见[压力合同草案](ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
+`ManagedMemoryDomain` 是现有共享 Memory 核心上的可选 Java owner/lease 包装，不提供原始地址或直接 ByteBuffer。`system(budgetBytes)` 和 `arena(budgetBytes, chunkBytes)` 分别使用默认 System 和 arena provider；不接管全局分配，也不支持通用外部内存导入。`attachPressure` 可显式启用同域压力控制；单独附着不会注册 Android 回调，需由宿主组合 `ManagedPressureBackend` 与 `MemoryPressureAdapter`。使用方法、预算仲裁及结果窗口见[同域压力合同](ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
 
 `allocate` 同步分配并对全部字节清零后交付；所有尺寸、对齐和范围必须合法。预算限制核心 backing 准入，不是 RSS 或进程总内存上限；降低预算不会撤销已有 owner 和 lease。元数据、Java 对象和清理线程不计入该预算。分配、清零、owner/lease 关闭可能耗时，安排在工作线程。应在将任务入队前取得 lease，任务完成后关闭 lease；owner 关闭不会使已取得的 lease 失效。不要依赖 GC 释放资源。
 
-`beginClose()` 停止新操作准入并安排清理，不等待 owner 或 lease；已有准入操作可能在其返回后完成并交付结果。关闭期间最后的 owner 和 lease 必须显式关闭。线程或槽位不足时域保持 CLOSING，可以重试 `beginClose`；工作线程可自行限时轮询 `state`，超时不会强制销毁。`state`、`beginClose`、`forgetClosed` 和观测方法仍可能取短锁、创建线程或受调度影响，不承诺无锁或硬实时。重复 lease.close 在另一调用 RELEASING 时可能提前返回，必须看 `closeState` 判断完成。`forgetClosed` 仅删除已关闭域的观察令牌；并发重复调用可能提前返回，失败后可重试，不会重试核心 destroy。
+`beginClose()` 停止新操作准入并安排清理，不等待 owner 或 lease；已有准入操作可能在其返回后完成并交付结果。如已附着压力控制器，后台先封闭压力入场并销毁 controller、归还其 owner pin，再关闭核心域。关闭期间最后的 owner 和 lease 必须显式关闭；如果注册了系统回调，宿主还须关闭 adapter 以注销回调。线程或槽位不足时域保持 CLOSING，可以重试 `beginClose`；工作线程可自行限时轮询 `state`，超时不会强制销毁。`state`、`beginClose`、`forgetClosed` 和观测方法仍可能取短锁、创建线程或受调度影响，不承诺无锁或硬实时。重复 lease.close 在另一调用 RELEASING 时可能提前返回，必须看 `closeState` 判断完成。`forgetClosed` 仅删除已关闭域的观察令牌和保留的压力结果；并发重复调用可能提前返回，失败后可重试，不会重试核心 destroy。
 
 当全部访问 raw domain 的核心 C 调用均已返回，owner、lease pin、注册取消/关闭 guard 均已清空后，后台 worker 才执行 collect、drain 和 destroy。借用适配器的 lifetime 回调返回后可能仍有适配器自身 registry/JNI 栈，wrapper guard 将 lease 关闭及取消结果纳入等待。Java 操作报告期内即使 native 已 CLOSED，`state` 保守报告 CLOSING，且 `forgetClosed` 拒绝；QUARANTINED 始终优先。`pendingManagedOperations()` 只是此 Java wrapper 正在报告的变更操作计数，不是 native 栈计数。
 

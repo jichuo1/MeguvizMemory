@@ -45,6 +45,7 @@ def main():
         'workspace_jni':'adapters/android/native/workspace_jni.cpp',
         'host_jni_cmake':'consumers/java_image/runtime/CMakeLists.txt',
         'consumer_cmake':'consumers/java_image/CMakeLists.txt',
+        'pressure_retry_test':'consumers/java_image/tests/PressureRetryJvmTest.java',
         'verification_script':'consumers/java_image/verify_host.py'}
     source_hashes={name:sha((ROOT/path).read_bytes()) for name,path in source_paths.items()}
     compiled=out/'compiled-adapter';compiled.mkdir()
@@ -88,11 +89,21 @@ def main():
     java=[a.java,'-Djava.library.path='+os.pathsep.join(dirs),'-cp',
           str(a.classes.resolve())+os.pathsep+str(a.adapter_jar.resolve()),
           'io.github.jichuo1.meguviz.memory.image.JavaImage']
+    retry_classes=out/'compiled-retry-test';retry_classes.mkdir()
+    retry_source=ROOT/'consumers/java_image/tests/PressureRetryJvmTest.java'
+    retry_classpath=str(a.classes.resolve())+os.pathsep+str(a.adapter_jar.resolve())
+    run('compile-pressure-retry',[a.javac,'--release','8','-classpath',retry_classpath,
+        '-d',retry_classes,retry_source],env,True)
+    retry_run=run('pressure-retry-contract',[a.java,'-cp',str(retry_classes)+os.pathsep+retry_classpath,
+        'io.github.jichuo1.meguviz.memory.image.PressureRetryJvmTest'],env,True)
+    if retry_run.stdout.strip()!=b'PASS_PRESSURE_RETRY_ADMISSION_ONLY':
+        raise RuntimeError('pressure retry admission contract mismatch')
     identity=['--attest-core',a.core.resolve(),'--attest-jni',a.jni.resolve(),'--attest-jar',a.adapter_jar.resolve()]
     expected_hashes={'core_sha256':sha(a.core.read_bytes()),'jni_sha256':sha(a.jni.read_bytes()),
                      'java_jar_sha256':sha(a.adapter_jar.read_bytes()),'java_class_sha256':class_sha,
                      'managed_class_sha256':managed_class_sha}
     cases=[]
+    pressure_cases=[]
     for index,(w,h,style) in enumerate([(1,1,'plain'),(1,8,'comment'),(8,1,'crlf'),(3,3,'plain'),
                                          (5,7,'comment'),(101,101,'crlf')]):
         rgb=bytearray(((i*73+index*19)&255) for i in range(w*h*3))
@@ -123,6 +134,44 @@ def main():
             if report.get('checksum')!=sum(expected[expected.index(b'255\n')+4:]):raise RuntimeError('checksum mismatch')
             cases.append({'width':w,'height':h,'header':style,'mode':mode,'output_sha256':sha(expected),
                           'checks':'PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY'})
+            target=out/('pressure-%d-%s.pgm'%(index,mode))
+            pressure_cmd=java+[source_file,target]+identity+['--live-domain-pressure']
+            if mode=='system':pressure_cmd+=['--system']
+            pressure_result=run('java-pressure-%d-%s'%(index,mode),pressure_cmd,env,True)
+            pressure_report=json.loads(pressure_result.stdout.decode('utf-8'))
+            if target.read_bytes()!=expected or pressure_report.get('success') is not True or pressure_report.get('mode')!=mode:
+                raise RuntimeError('live pressure image differs from the independent oracle')
+            if any(pressure_report.get(k)!=v for k,v in expected_counts.items()) or \
+                    any(pressure_report.get(k)!=v for k,v in expected_hashes.items()) or \
+                    pressure_report.get('lease_before_enqueue') is not True or \
+                    pressure_report.get('identity_scope')!='OS_MODULE_PATH_AND_CURRENT_FILE_HASH' or \
+                    pressure_report.get('pressure_mode')!='LIVE_SYNTHETIC' or \
+                    pressure_report.get('pressure_critical')!='APPLIED' or \
+                    pressure_report.get('pressure_restore')!='APPLIED' or \
+                    pressure_report.get('pressure_budget_after_critical')!=0 or \
+                    pressure_report.get('pressure_denied') is not True or \
+                    pressure_report.get('pressure_submit_busy_rejections',-1)<0 or \
+                    pressure_report.get('pressure_deferred_busy_delta',0)<1 or \
+                    pressure_report.get('pressure_post_release_backing')!=0:
+                raise RuntimeError('live pressure budget, lease, accounting or identity mismatch')
+            if mode=='arena' and (pressure_report.get('pressure_trim_success_delta',0)<1 or
+                                  pressure_report.get('pressure_arena_reclaimed') is not True):
+                raise RuntimeError('arena did not show a quiet trim after the image lease was released')
+            if mode=='system' and pressure_report.get('pressure_arena_reclaimed') is not False:
+                raise RuntimeError('system release was incorrectly attributed to arena trim')
+            snapshot_calls=pressure_report.get('pressure_snapshot_calls',0)
+            ticket_calls=pressure_report.get('pressure_ticket_query_calls',0)
+            domain_calls=pressure_report.get('pressure_domain_snapshot_calls',0)
+            snapshot_longs=pressure_report.get('pressure_snapshot_long_elements',0)
+            ticket_longs=pressure_report.get('pressure_ticket_long_elements',0)
+            domain_longs=pressure_report.get('pressure_domain_long_elements',0)
+            if min(snapshot_calls,ticket_calls,domain_calls)<=0 or \
+                    snapshot_longs<18*snapshot_calls or ticket_longs!=4*ticket_calls or domain_longs!=10*domain_calls or \
+                    pressure_report.get('pressure_observation_java_long_payload_bytes')!=8*(snapshot_longs+ticket_longs+domain_longs) or \
+                    pressure_report.get('checksum')!=report['checksum']:
+                raise RuntimeError('live pressure observation accounting or checksum mismatch')
+            pressure_cases.append({'width':w,'height':h,'header':style,'mode':mode,
+                                   'output_sha256':sha(expected),'scope':'HOST_SYNTHETIC_PRESSURE_FUNCTIONAL'})
     good=out/'input-0.ppm';original=good.read_bytes()
     # Exclude the identity sidecar from both Java and OS library search paths.
     # A normal Java-only caller must not require a consumer-native owner/probe.
@@ -147,7 +196,9 @@ def main():
             plain_report.get('managed_cleanup')!='CLOSED_AND_FORGOTTEN':
         raise RuntimeError('plain managed consumer unexpectedly required identity sidecar')
     failures=[('short',original[:-1],[]),('trailing',original+b'x',[]),
-              ('budget-system',original,['--system','--budget','1']),('budget-arena',original,['--budget','1'])]
+              ('budget-system',original,['--system','--budget','1']),('budget-arena',original,['--budget','1']),
+              ('pressure-short',original[:-1],['--live-domain-pressure']),
+              ('pressure-budget',original,['--live-domain-pressure','--budget','1'])]
     for name,data,extra in failures:
         inp=out/(name+'.ppm');inp.write_bytes(data);target=out/(name+'.pgm')
         r=run('reject-'+name,java+[inp,target]+identity+extra,env,False)
@@ -173,7 +224,8 @@ def main():
             sha((ROOT/path).read_bytes())!=source_hashes[name] for name,path in source_paths.items()):
         raise RuntimeError('source changed during host checks')
     receipt={'state':'PASS_HOST_FUNCTIONAL_DEVELOPMENT','scope':'INSTALLED_SHARED_CORE_AND_HOST_JNI_NO_ANDROID_NO_PERFORMANCE',
-             'cases':cases,'plain_without_sidecar':'PASS','negative_cases':['truncated','trailing','budget_system','budget_arena',
+             'cases':cases,'pressure_cases':pressure_cases,'pressure_retry_contract':'PASS_JVM_ADMISSION_ONLY',
+             'plain_without_sidecar':'PASS','negative_cases':['truncated','trailing','budget_system','budget_arena','pressure_short','pressure_budget',
                  'existing_output_preserved','wrong_loaded_jar','wrong_loaded_core','missing_option'],
              'identities':expected_hashes,'adapter_java_source_sha256':source_before,'managed_java_source_sha256':managed_before,
              'consumer_source_sha256':consumer_before,

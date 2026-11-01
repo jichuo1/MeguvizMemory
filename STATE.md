@@ -1,10 +1,16 @@
 # MeguvizMemory 工程状态
 
-更新：2026-10-30。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
+最近补充：2026-11-01。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
-## Java 托管域继续开发（2026-11-01）
+## 托管域同域压力继续开发（2026-11-01）
 
-- 新增纯 Java 可调用的 `ManagedMemoryDomain`、allocation 和受控 lease；自有 System/Arena 域分配时先清零，显式软预算，关闭先停止准入并在后台等待 owner、lease 和相关调用。未知结果进入隔离，不强制释放；未接入同域自动压力 worker。[托管合同](docs/ANDROID_MANAGED_DOMAIN.md)和[待实现的压力接入合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
+- 新增显式选用的同域压力绑定：手动预算和压力事件由同一控制器仲裁；事件排队、应用、失败、取消与过期分开观察。关闭先结束压力控制器，再清理托管域；已有租约不被强制释放。Android 回调桥提供拒绝计数和最近状态，但回调路径会取短锁，不承诺硬实时。见[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
+- Windows 宿主验证覆盖核心压力合同、托管绑定并发和关闭、确定性取消，以及图像消费者的 System/Arena 合成压力场景；详细版本及范围见[本次记录](artifacts/managed-pressure-20261101/host.json)。这些结果不证明 Android ART、R8 运行、真实系统低内存、设备长稳或性能收益。
+- 该新版尚未生成可分发的匹配制品，之前的预览包和历史设备证据均不包含本次绑定。设备和性能资格留待功能阶段结束后统一验证；BIL 保持未接入。
+
+## Java 托管域上一开发阶段（2026-11-01）
+
+- 新增纯 Java 可调用的 `ManagedMemoryDomain`、allocation 和受控 lease；自有 System/Arena 域分配时先清零，显式软预算，关闭先停止准入并在后台等待 owner、lease 和相关调用。未知结果进入隔离，不强制释放；该阶段尚未接入同域压力 worker，后续进展见上节。[托管合同](docs/ANDROID_MANAGED_DOMAIN.md)和[压力接入合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
 - Windows 与 Linux CI 均通过真实宿主 JVM 的 46 项受控故障/并发检查及 1 项无注入检查；独立 Java 图像消费者迁移到托管 API 后，两端安装共享核心与宿主 JNI 的 12 组像素对照、8 组拒绝及无诊断 sidecar 普通路径通过。[证据范围](artifacts/managed-domain-20261101/README.md)
 - 新源码已完成三 ABI 交叉构建及独立脱敏候选，arm64 R8 名称/签名静态检查通过；原始 AAR 未脱敏且不可分享。最新接口的 R8 运行、Android ART、真机、性能和正式发布资格均待统一验证。此前预览包不包含托管域和本次消费者迁移。
 

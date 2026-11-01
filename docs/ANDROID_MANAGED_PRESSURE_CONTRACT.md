@@ -1,38 +1,39 @@
-# 托管域的可选压力接入：合同草案
+# Android 托管域的可选压力接入
 
-状态：**设计草案，未实现、未接线、未进行设备或性能验证**。本文件依据当前工作树核对已有接口，供后续有真实需求时选择；它不改变 Memory、BIL、Lumen 或其他库的依赖，也不要求新生产依赖。托管域当前只有显式 `setBudget`，并没有同域自动压力控制。[托管域合同](ANDROID_MANAGED_DOMAIN.md)和[现有压力适配](ANDROID_PRESSURE.md)分别描述已实现范围。
+`ManagedMemoryDomain` 已提供显式选用的同域压力控制器。它使用同一 Memory 核心，不接管全局分配器，也不接管 Bitmap、HWUI、GPU 或其他库的 owner。本合同描述当前源码；宿主功能检查不证明 Android 真机、R8、性能或发布资格。[托管域合同](ANDROID_MANAGED_DOMAIN.md)说明基础生命周期；既有独立压力适配器见[Android 压力适配](ANDROID_PRESSURE.md)。
 
-## 当前代码与实际需求
+## 选用与事件
 
-- `workspace_jni.cpp` 中的托管关闭 worker 先对核心域调用 `begin_close`，随后等待自己的 in-flight、owner 和 lease pin 归零，最后 collect/destroy。它没有持有或关闭 pressure controller 的步骤。
-- `mgmem_pressure_create_v1` 会 retain 原 domain owner；controller 的 worker 做 quiet-only trim，只有 controller 关闭、drain、join/destroy 以后才归还 owner。`mgmem_pressure_notify_v1` 在 controller 锁内同步调用 core `set_budget`，并不是单纯排队；它不在通知线程调用 trim/free/drain，但也没有严格的无锁或墙钟上界。
-- 现有 `NativePressureBackend.fromNativeRegistration` 包装的外部注册只负责关闭 controller，不拥有或关闭外部 domain。`MemoryPressureAdapter` 接到系统事件后会调用 backend；其 `forwardedEvents` 是 backend 返回成功的计数，不证明系统真实低内存或内存已回收。
-- 已有的 `consumers/image/pressure_stability.cpp` 是使用真实原生压力控制器的图像工作区；它不验证新 Java 托管域。当前 Java 图像 CLI 在工作前进入域关闭，并非持续接收 Android 压力的产品场景。因此本草案的直接价值是补齐可复用能力，**不是已经证实存在产品净收益**。
+在工作线程创建域后，调用 `domain.attachPressure(moderateBytes, criticalBytes)`；两个值必须非负且 `criticalBytes <= moderateBytes`。每个域同时最多一个活动控制器。附着可能分配内存或创建线程；与预算切换或关闭竞争、资源不足时可能失败，应根据返回状态在工作线程处理，不应假定已附着。构造域时预算须为正，之后可通过 `setBudget(0)` 设置零软预算；v2 可在零预算附着，不会为了附着临时抬高预算。
 
-本次所审关键源码 SHA-256：`workspace_jni.cpp` `c700332b5a8e1140939e808f0b93eb83acb6690748314819ac08f7a017c5f6f8`；`ManagedMemoryDomain.java` `bb24edad0ea8637c66586c04d47d5117d9c12c76521241a99956eaf314175441`；`pressure.cpp` `428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5`；`pressure_jni.cpp` `7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e`。这是当时观察到的源码字节，不单独证明构建或运行来源。
+`pressure.submit(level)` 接受 `NORMAL`、`MODERATE`、`CRITICAL`，正数是已排队的 ticket，负数是 native 状态码的相反数，例如 `-6` 表示 BUSY。受理是 QUEUED，并不表示预算已应用或 trim 完成；应在工作线程用 `eventResult(ticket)` 查询 `[state, status, ticket, applySequence]`，并按 QUEUED、APPLIED、FAILED、CANCELLED、EXPIRED 分别处理。null 表示结果不可用，不表示成功；无效票据也可能返回 null。事件不去重，每个受理事件分别计数。
 
-## 所有权与关闭次序
+队列使用固定容量，争用或队列满时 submit 返回 BUSY，包含 CRITICAL 在内的拒绝都不能当成已处理。事件在 worker 上按队列顺序处理；与并发的手动预算变更按实际应用顺序线性化，入队顺序不承诺优先于手动调用。等待结果或关闭应有调用方自己的期限；超时不会取消已受理事件，也不允许强制释放。
 
-1. 只允许显式 opt-in、只在同一已加载共享 Memory runtime 的自有 System/Arena 域上附着一个 controller；不返回 raw domain 指针，不接管外部 owner。attach 可能分配或启动线程，安排在工作线程；在调用 controller create 前预留稳定的 no-throw owner pin，直至调用完整返回。创建、绑定或 Java 认领失败须有明确的取消或未知隔离路径。
-2. 为 controller 引入独立的通知/观测入场计数与唯一 detach claim。关闭 pressure binding 与关闭 domain 竞争时，只有一个清理执行者负责 begin-close、drain、join/destroy；其余调用只观察状态，不重复销毁。已入场调用完整返回前不得释放 controller。
-3. `ManagedMemoryDomain.beginClose` 先关闭新 owner、lease 和压力事件的准入，再由清理工作线程**先请求并完成 pressure controller 的关闭与销毁**，然后才让域进入 core `begin_close`，等待其他 owner、lease pin、guard 和相关 core 调用返回，再 collect/drain/snapshot/destroy。不能先等待全部 domain pin、再等待 controller 自行归还 pin，否则形成循环；也不能让占满配额的 domain 清理线程等待一个尚未获得线程配额的 pressure 清理任务。
-4. 如果 controller worker 或 provider 回调未完成，域保持 CLOSING；超时只影响等待者，不强制释放。创建、线程准入、bind、detach 或 destroy 返回未知/可能已消费的错误时保留必要记录和 pin，报告 QUARANTINED/UNKNOWN，不盲目重试、不宣称 backing 归零。`CLOSED` 仅在相关已确认调用完成后发布，仍不证明所有 Java/JNI 栈、系统线程或 GPU retirement 已结束，不能据此卸载 DSO。
-5. `MemoryPressureAdapter.close()` 的既有含义是注销自己的 framework callback 并关闭 backend；不能悄悄将其改成关闭整个 managed domain。域关闭时必须能封闭并请求本 attachment 清理；framework callback 的注销由明确的组合 owner 或调用方负责。忘记注销时须可观测，不能假定 Android Context 已丢弃引用。
+同一 binding 完成关闭后，可查询最近 128 个受理 ticket 的终态，包括 CANCELLED；更早的有效 ticket 显示 EXPIRED。关闭处理期间可能暂时返回 null；下一次附着尝试一旦进入 ATTACHING 阶段，旧 generation 的结果即不可查询，即使该次附着随后失败也不会恢复。`forgetClosed` 后同样不再提供旧结果。窗口有限，调用方需要在结果仍可用时及时读取，不得把 EXPIRED 或 null 当作 APPLIED。
 
-任何涉及 controller 的 C 调用都应先取得必要的寿命/in-flight pin，释放 managed domain、registry 和 Java monitor 后再进入 controller；不能持 managed domain 锁再取 controller 锁。现有 controller 在自身锁内进入 core 预算/快照路径，违反这一顺序可能形成锁环。生命周期回调不抛异常、不在 UI 路径执行 trim/free/join；短锁也不意味着硬实时。
+## Android 回调组合
 
-## 手动预算、事件与观测
+如需注册系统回调，显式创建 `ManagedPressureBackend(pressure)`，再将它交给 `new MemoryPressureAdapter(context, backend)`；仅调用 `attachPressure` 不会注册 Android 回调。adapter 负责注册与注销自己的 `ComponentCallbacks2`，其 `close()` 注销回调并请求关闭 backend，不关闭整个托管域。域先关闭时宿主仍须关闭 adapter，完成 framework callback 注销。
 
-建议托管域与 pressure controller 使用**同一预算仲裁者**，不允许两个独立写入者相互覆盖。附着成功时记录当前手动目标 `M`；`M` 可由既有 `setBudget` 显式修改，允许为零。压力等级为 NORMAL 时有效目标为 `M`；MODERATE/CRITICAL 分别为 `min(M, moderateTarget)` / `min(M, criticalTarget)`。恢复 NORMAL 必须是明确请求，不能从一段时间没有回调推断；降低预算不撤销已有 owner、lease 或已持有 reservation。每次变更只对 core 施加一次已计算的有效目标，不能先暂时抬高预算再 clamp，否则可能放行超预算的新申请。
+framework 回调只做事件投递，不同步执行 trim、free 或等待清理；Java monitor、JNI registry 和域准入仍可能使用短锁，无法保证严格无等待或硬实时。`MemoryPressureAdapter.forwardedEvents()` 在该 backend 下表示入队成功，不表示预算已应用；`ManagedPressureBackend.rejectedEvents()` 是饱和累计的拒绝数，`lastNotificationStatus()` 提供最近状态，零表示已排队。系统回调没有返回值，调用方应结合这些观测处理拒绝。`awaitClosed` 的正超时只能在工作线程调用。
 
-现有 controller 使用固定 normal/moderate/critical 写预算，**没有动态手动目标的现成接口**。现有 `mgmem_pressure_create_v1` 还要求 `normal_budget_bytes > 0`，而托管域的软预算可以合法为零：零预算域不能直接按现有合同附着，不能为了通过创建校验而临时抬高预算或绕过手动上限。后续需要设计兼容此情况的新接口或安全拒绝附着，不默认改变旧接口语义。因此简单把现有 backend 和 `ManagedMemoryDomain.setBudget` 同时连到域是不完整的；需要扩展或封装 controller，使手动变更与压力应用按同一序列和锁序线性化，同时保持未附着时旧 API 的同步语义。不能在 Java 里只做“通知后再次降低”的补丁来掩盖竞争。
+Android API 34 起，系统不再向应用递送若干旧的 RUNNING/MODERATE/COMPLETE 等级，`onLowMemory` 也不再调用；不要假设一定收到系统回调。NORMAL 恢复必须显式提交，不能把没有回调推断为恢复。[Android ComponentCallbacks2](https://developer.android.com/reference/android/content/ComponentCallbacks2)
 
-若要求 framework 回调不等待 native controller，则应使用有界异步投递：回调只做有限准入/投递，不调用 trim/free/drain；入队成功是 **ACCEPTED/QUEUED**，不是预算已应用。队列满或争用显式记录 BUSY/拒绝，不静默丢弃 critical；记录已接收、已应用、失败、合并和各自序号。仅当等级、手动预算代次和策略代次相同且先前应用已成功时，才可合并重复事件；失败、重试、明确 NORMAL restore 或预算变更不能被误去重。若应用要求压力事件受理后立即禁止超新预算申请，必须另行设计与 core reservation 原子衔接的准入机制，不能把异步排队结果假称即时预算生效。
+## 预算与观测
 
-domain 逻辑预算/backing 账目、pressure 入队与 trim 结果、进程 RSS/PSS 分栏记录；不相加为物理内存，也不从 trim 回执推断系统低内存或收益。worker、队列和 registration 有独立上限及失败原因，不计入 domain backing。Android 自 API 34 起不再向应用递送多种旧的 RUNNING/MODERATE/COMPLETE 级别，`onLowMemory` 也不再调用；显式请求与恢复仍需保留，不能假设一定收到自动事件。[Android ComponentCallbacks2](https://developer.android.com/reference/android/content/ComponentCallbacks2)
+附着时以域当前有效预算作为手动目标 `M`；附着期间 `domain.setBudget(bytes)` 与压力事件经同一仲裁点更新。NORMAL 的有效预算为 `M`，MODERATE 为 `min(M, moderateBytes)`，CRITICAL 为 `min(M, criticalBytes)`。每次应用只向核心提交一次最终预算，成功后才发布新状态；降低预算不撤销已有 owner、lease 或已准入 reservation。`setBudget` 同步完成本次预算应用，可能取锁，应安排在工作线程。已有待执行 trim 不因手动预算变更或 NORMAL 恢复而被撤销。
 
-## 实施与验收前置
+单独关闭压力 binding 不会自动恢复原手动目标，域保留关闭时的有效预算。再次附着以届时的核心预算作为新的 `M`；例如原目标 1000、关闭时有效预算 128，则重绑从 128 开始，若需要更高目标须由调用方显式 `setBudget`。域仍可能有已有 backing 超过新预算，预算不是 RSS 上限。
 
-- 先实现可独立关闭的同域绑定和预算仲裁，并保持默认未启用；不要修改 BIL 或接管 Lumen/Bitmap/HWUI/GPU owner。明确 API 版本、现有 C/Java 行为和系统库加载闭包。
-- 宿主受控测试应覆盖手动预算为零、压力/restore 与新申请的并发、重复事件与队列拒绝、attach/关闭竞争、worker 配额耗尽、已持 lease 的 BUSY trim、controller 已消费错误和 owner pin 完整释放；故障隔离不计正常归零。
-- 真实 Android 仅在设备明确空闲并冻结同版本制品/协议后验证 callback 注册与注销、同域预算、活动 lease、压力、关闭和异步清理的组合；模拟分发/AMS 注入与真实系统低内存分开记录。R8、API 版本、16 KB、MTE、长期稳定与性能分别资格，不把宿主或构建结果转授设备。
+`pressure.snapshot()` 的字段依次是 `[state, appliedPressure, trimPending, lastTrimStatus, queueDepth, countersSaturated, manualBudget, effectiveBudget, applySequence, eventsAccepted, eventsApplied, eventsFailed, eventsCancelled, eventsBusy, trimAttempts, trimSuccesses, trimBusy, trimFailures, eventsCriticalBusy, resultsEvicted]`。null 表示不可用，`-1` 表示对应无符号值超出 Java long 范围；计数饱和标志置位后计数仅为下界。逻辑预算、backing、事件/trim 和进程 RSS/PSS 分别观察，trim 成功或预算降低都不证明系统低内存、物理回收或性能收益。
+
+## 关闭、限制与隔离
+
+`pressure.beginClose()` 请求异步关闭本 binding；`domain.beginClose()` 也会先停止压力事件准入，等待已入场调用，并完成 controller 的 begin-close、drain、销毁和 owner pin 归还，再关闭核心域。之后仍需等待其他 owner、lease、guard 和在途操作，才能完成核心清理。并发关闭只由一个清理执行者负责；资源准入失败可在工作线程重试，不会强制释放阻塞中的 provider 或 lease。
+
+未知结果、销毁可能已消费或最终快照失败/不一致时保守隔离，保留必要记录及可保留的 pin，不重试可能已消费的指针，也不将 QUARANTINED 视为成功关闭。CLOSED 不是所有 Java/JNI 栈、系统线程或 GPU retirement 已退出的证明，不能据此卸载 DSO。
+
+Java 绑定每个 controller 的事件队列为 32、结果窗口为 128，BUSY trim 重试间隔为 10 ms；底层 v2 API 限定队列 1–256、结果窗口 1–1024、重试间隔 1–60000 ms，每个压力 adapter runtime 最多 32 个 v2 worker。托管域清理另有每 JNI runtime 32 个 worker 的准入限制。它们是独立资源限制，并非核心 backing 预算或 OS 线程退出证明。
+
+C v2 提供 `mgmem_pressure_create_v2`、`submit_v2`、`set_manual_budget_v2`、结果/快照和关闭接口；直接 C 调用者须经同一 controller 串行仲裁域预算，禁止在附着期间绕过它直接写核心预算，且须自行序列化 destroy 与其他原始调用。旧 v1 API 和 ABI 的同步通知语义保持不变；v1 初始 normal budget 仍须大于零。v1/v2 在同一 adapter runtime 共用单域附着互斥，不得同时附着。

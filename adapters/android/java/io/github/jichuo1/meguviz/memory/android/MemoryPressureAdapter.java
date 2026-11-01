@@ -6,9 +6,10 @@ import android.content.res.Configuration;
 import android.os.Looper;
 import java.util.concurrent.atomic.AtomicLong;
 
-/** Framework callback registration. Notification methods must be nonwaiting;
- * observation and awaitClosed belong on a caller-selected worker. No UI buffer,
- * Bitmap, HWUI or another library's resource is reclaimed by this adapter. */
+/** Framework callback registration. Notifications must not perform cleanup or
+ * wait for it; short admission locks may still contend and have no hard timing
+ * bound. Observation and awaitClosed belong on a caller-selected worker. No UI
+ * buffer, Bitmap, HWUI or another library's resource is reclaimed by this adapter. */
 public final class MemoryPressureAdapter implements ComponentCallbacks2, AutoCloseable {
     public static final int NORMAL = 0, MODERATE = 1, CRITICAL = 2;
     public interface Backend {

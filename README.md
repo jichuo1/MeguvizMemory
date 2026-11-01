@@ -6,7 +6,7 @@
 
 后续源码还补充了 C++ checked 导入、Java 关闭状态与独立 Java 图像消费者；此前预览包不包含这些改动。[当前证据](artifacts/continuation-next-20261101/README.md)。
 
-最新源码另提供可选 Java 托管 System/Arena 域，图像消费者已迁移；宿主检查通过，当前本地 Android 原始构建未脱敏、不可分发，统一验证与新制品仍待完成。[托管域合同](docs/ANDROID_MANAGED_DOMAIN.md)。
+最新源码提供可选 Java 托管 System/Arena 域及同域压力绑定，图像消费者已迁移并增加显式压力场景；宿主检查通过，匹配新版的 Android 制品及运行验证仍待完成。[托管域合同](docs/ANDROID_MANAGED_DOMAIN.md)、[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
 
 首个0.2功能阶段收尾：packed reader、外部CPU内存安全导入、Android压力与自身RSS/PSS观测适配已实现。Host Release/ASan各10项、Java packed32/真实oracle288、Android原生9/ART32/压力20功能通过；家族仅合同审计，BIL不接入，性能与正式发布仍未资格。见[阶段收尾](docs/FEATURE_STAGE_20261030.md)。
 上一消费者阶段（closefix1）完成DEX外部导入、图像压力/预算/异步关闭及原生900秒循环；当时JNI可重入锁修复后的API33 Android长稳未获资格。旧阶段结果见[交付与阻塞](docs/CONSUMER_CLOSEOUT_20261030.md)，不覆盖下述新版验证。

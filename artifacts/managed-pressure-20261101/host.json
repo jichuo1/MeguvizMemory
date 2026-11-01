@@ -1,0 +1,57 @@
+{
+  "state": "PASS_SCOPED_WINDOWS_HOST",
+  "scope": "DEVELOPMENT_FUNCTIONAL_NOT_ANDROID_OR_PERFORMANCE",
+  "core_ctest": 39,
+  "managed_host_ctest": 49,
+  "framework_stub_checks": 38,
+  "java_image": {
+    "default_cases": 12,
+    "synthetic_pressure_cases": 12,
+    "negative_cases": 10,
+    "retry_contract": "PASS",
+    "consumer_receipt_sha256": "2cc7ad881b89468d8dca7f870149ccbba66cc368613cb8ec1c53586f626c6fdc",
+    "installed_core_sha256": "3e10c673185dfa8e817e4f3adf143fefe0c992aa1f6b867c4ad1bff7d68e6d46",
+    "installed_pressure_sha256": "6e58ac6b421634e9a77a52cb7ac3a6bb90cb5f75ed674085b794d24d786eafdb",
+    "host_jni_sha256": "ba3a6595eb484bc9b60077be17126063e5e675982888659b06ab07aea85947f3"
+  },
+  "source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomain.java": "db3c3a45fe29a67243cf68c0722136430b0c2349b9fc43c4e90b36a55b790b53",
+    "src/mgmem.cpp": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+    "include/mgmem/mgmem.h": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+    "include/mgmem/pressure.h": "2447cd0c8004a58325fccff271210ba80a29da4c80abce2fee6e20d70eba840d",
+    "include/mgmem/android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+    "include/mgmem/android_pressure_jni.h": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54",
+    "adapters/android/native/borrow_jni.cpp": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+    "adapters/android/native/pressure.cpp": "5639b7fb010486e112cae1d4ff6b3d3c9a41a42e7cac796ce36bf8dc23b3808b",
+    "adapters/android/native/pressure_jni.cpp": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+    "adapters/android/native/workspace_jni.cpp": "6daeb1e3e896d6aeb9f023e410d9ba359b6c758b13da63fec9f8f651ec01ec7e",
+    "consumers/java_image/runtime/CMakeLists.txt": "f0c39b071cdcffad841d3d755eb157454da03eb4ee9393fe5f93e99bd283f0d6",
+    "consumers/java_image/CMakeLists.txt": "2daf969dc2c8dadaa2bff9cb05b21fa79214d7809e18f46804a6c873ce48815a",
+    "consumers/java_image/native/image_jni.cpp": "c15eebcaebcfd817967b0f8af5caf7256cd2a4090b6d3aefd99fe6261a03ac31",
+    "consumers/java_image/java/io/github/jichuo1/meguviz/memory/image/JavaImage.java": "b9c0cb82548f2a901e00567ebefd1338c32aaef13d0c4bdf320341e71be42b40",
+    "consumers/java_image/tests/PressureRetryJvmTest.java": "dea446204f9ae12d9bbd991f9bd2a0a56797dcdfcda0452ca51060b039f9d82c",
+    "consumers/java_image/verify_host.py": "e561b6ae2156d976b72478011f0c2c18de6a642dab3499f93b66007548def808",
+    "consumers/java_image/run_host_ci.py": "9031cf111aa89714f8164aafea4c596df83482953746ecb6682e86bcb81429f3",
+    "consumers/image/CMakeLists.txt": "8128f030073881080f01722e968f550ba83a9bbb211a4108bd42c2468690bd6e",
+    "consumers/image/main.cpp": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd"
+  },
+  "test_source_sha256": {
+    "CMakeLists.txt": "bcf726ca2ae043aadc9afb0e86a2e50b41966958a4f061e7b549bc93a94e6504",
+    "tests/managed_pressure_v2.cpp": "330939c8da5b1b66669729cbb0d6a805a692c8dc77f1f0ba13a16ebc545d80ff",
+    "tests/managed_host/CMakeLists.txt": "489657fd8154eb032099a6aed6b4db744e8a9bdf48f94a36850aceecc4111bc9",
+    "tests/managed_host/ManagedPressureBindingJvmTest.java": "588d97203d104240afdd5ec923cf89309676b9f07504adc911c0fc9f839c0673",
+    "tests/managed_host/ManagedPressureBackendJvmTest.java": "f67a6ec3d7e474f8b7861138b95fb0cb659b10af63e7df7b82cf4b665affa9fe",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ManagedPressureBackend.java": "004622d57560ce1dbb60cda02b826a0753f032eb4fb2d33e6f64b8379d23961b"
+  },
+  "local_log_sha256": {
+    "core": "346a6b919fa8a5af4b5db8f59790e3b76b49241c2809e6c20b5b3aa0f6946d7b",
+    "managed": "0f87db6d0999c9d85745cad00f3d54fd7a6c7796364bc8b71b4a43dc9fd78f6b"
+  },
+  "limits": [
+    "Host JNI and framework stubs do not establish Android ART, R8 runtime, real framework delivery or device qualification.",
+    "Synthetic pressure and logical backing are not system low-memory, RSS/PSS, energy or performance evidence.",
+    "Fault-injected unknown ownership is quarantined and not counted as normal reclamation.",
+    "Prior Android packages and device evidence do not contain this binding."
+  ]
+}

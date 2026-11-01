@@ -1,7 +1,9 @@
 #include <mgmem/android_borrow_jni.h>
+#include <mgmem/pressure.h>
 #include <jni.h>
 
 #include <atomic>
+#include <array>
 #include <condition_variable>
 #include <cstdint>
 #include <cstring>
@@ -23,6 +25,7 @@ constexpr size_t max_owners = 65536;
 constexpr unsigned max_pins = 65536;
 constexpr unsigned max_workers = 32;
 constexpr size_t max_close_guards = 65536;
+constexpr size_t managed_pressure_results = 128;
 // Java managed-adapter admission statuses; these do not change the C ABI.
 constexpr mgmem_status managed_domain_limit = 256;
 constexpr mgmem_status managed_owner_limit = 257;
@@ -30,6 +33,7 @@ constexpr mgmem_status managed_pin_limit = 258;
 constexpr mgmem_status managed_worker_limit = 259;
 constexpr mgmem_status managed_guard_limit = 260;
 enum State : jint { OPEN = 0, CLOSING = 1, CLOSED = 2, QUARANTINED = 3 };
+enum PressurePhase { PRESSURE_NONE, PRESSURE_ATTACHING, PRESSURE_OPEN, PRESSURE_CLOSING, PRESSURE_CLOSED };
 
 struct Domain {
     std::mutex mutex;
@@ -44,6 +48,15 @@ struct Domain {
     std::atomic<bool> emergency{false};
     mgmem_snapshot_v1 final_snapshot{};
     std::thread worker;
+    mgmem_pressure_controller *pressure = nullptr;
+    PressurePhase pressure_phase = PRESSURE_NONE;
+    u64 pressure_generation = 0, pressure_calls = 0, direct_budget_calls = 0;
+    bool pressure_worker_started = false, pressure_cleanup_owned = false, pressure_final_valid = false;
+    mgmem_pressure_snapshot_v2 pressure_final{};
+    std::array<mgmem_pressure_event_result_v2, managed_pressure_results> pressure_results{};
+    u64 pressure_result_first = 0;
+    size_t pressure_result_count = 0;
+    std::thread pressure_worker;
 };
 
 struct Owner {
@@ -81,6 +94,7 @@ struct TestGate {
 };
 TestGate allocate_gate, borrow_gate, pin_gate, state_gate, begin_gate, drop_gate, failure_gate, publish_gate;
 TestGate guard_exit_gate, guard_post_exit_gate;
+TestGate pressure_attach_gate, pressure_budget_gate, pressure_submit_tail_gate;
 std::atomic<bool> fail_worker{false}, throw_after_create{false}, throw_after_allocate{false},
     throw_after_borrow{false}, fail_drop{false}, throw_after_drop{false},
     fail_after_destroy{false}, fail_registration_unknown{false}, fail_quarantine{false},
@@ -88,7 +102,7 @@ std::atomic<bool> fail_worker{false}, throw_after_create{false}, throw_after_all
     checked_after_borrow{false}, checked_after_release{false}, checked_quarantine{false},
     fail_guard_admission{false}, throw_after_guard{false}, fail_guard_exit{false}, force_guard_underflow{false},
     fail_guard_before_quarantine{false}, fail_quarantine_always{false},
-    checked_after_guard_exit{false};
+    checked_after_guard_exit{false}, checked_after_pressure_submit{false};
 
 TestGate *test_gate(jint kind) noexcept {
     switch (kind) {
@@ -102,6 +116,9 @@ TestGate *test_gate(jint kind) noexcept {
     case 8: return &publish_gate;
     case 9: return &guard_exit_gate;
     case 10: return &guard_post_exit_gate;
+    case 11: return &pressure_attach_gate;
+    case 12: return &pressure_budget_gate;
+    case 13: return &pressure_submit_tail_gate;
     default: return nullptr;
     }
 }
@@ -260,10 +277,141 @@ void release_pin(void *context) noexcept {
     drop_pin(pin);
 }
 
+// Admission is decided under the domain lock; controller and core calls are
+// always made after releasing it. The guard outlives the complete API call.
+struct BudgetCall {
+    std::shared_ptr<Domain> d;
+    mgmem_pressure_controller *controller = nullptr;
+    mgmem_status status = MGMEM_PROVIDER_ERROR;
+    bool admitted = false, direct = false;
+    explicit BudgetCall(std::shared_ptr<Domain> value) : d(std::move(value)) {
+        if (!d) { status = MGMEM_STALE_HANDLE; return; }
+        std::lock_guard<std::mutex> lock(d->mutex);
+        if (!d->ready || !d->claimed.load()) { status = MGMEM_BUSY; return; }
+        if (d->emergency.load() || d->state == QUARANTINED) return;
+        if (d->state != OPEN) { status = MGMEM_IS_CLOSED; return; }
+        if (d->pressure_phase == PRESSURE_ATTACHING || d->pressure_phase == PRESSURE_CLOSING) {
+            status = MGMEM_BUSY; return;
+        }
+        direct = d->pressure_phase != PRESSURE_OPEN;
+        auto &count = direct ? d->direct_budget_calls : d->pressure_calls;
+        if (count == max_id || d->inflight == max_id) { status = MGMEM_OVERFLOW; return; }
+        ++count; ++d->inflight;
+        controller = d->pressure; admitted = true; status = MGMEM_OK;
+    }
+    ~BudgetCall() {
+        if (!admitted) return;
+        try {
+            std::lock_guard<std::mutex> lock(d->mutex);
+            --(direct ? d->direct_budget_calls : d->pressure_calls); --d->inflight;
+        } catch (...) { d->emergency.store(true); }
+        d->changed.notify_all();
+    }
+};
+
+struct PressureCall {
+    std::shared_ptr<Domain> d;
+    mgmem_pressure_controller *controller = nullptr;
+    mgmem_status status = MGMEM_PROVIDER_ERROR;
+    bool admitted = false;
+    PressureCall(std::shared_ptr<Domain> value, u64 generation) : d(std::move(value)) {
+        if (!d) { status = MGMEM_STALE_HANDLE; return; }
+        std::lock_guard<std::mutex> lock(d->mutex);
+        if (d->emergency.load() || d->state == QUARANTINED) return;
+        if (generation != d->pressure_generation || d->pressure_phase != PRESSURE_OPEN || d->state != OPEN) {
+            status = MGMEM_IS_CLOSED; return;
+        }
+        if (d->pressure_calls == max_id) { status = MGMEM_OVERFLOW; return; }
+        ++d->pressure_calls; admitted = true; controller = d->pressure; status = MGMEM_OK;
+    }
+    ~PressureCall() {
+        if (!admitted) return;
+        try { std::lock_guard<std::mutex> lock(d->mutex); --d->pressure_calls; }
+        catch (...) { d->emergency.store(true); }
+        d->changed.notify_all();
+    }
+};
+
+mgmem_status finish_pressure_cleanup(const std::shared_ptr<Domain> &d, bool own_thread) {
+    mgmem_pressure_controller *controller;
+    {
+        std::unique_lock<std::mutex> lock(d->mutex);
+        d->changed.wait(lock, [&] { return d->emergency.load() || d->pressure_calls == 0; });
+        if (d->emergency.load()) return MGMEM_PROVIDER_ERROR;
+        controller = d->pressure;
+    }
+    auto status = mgmem_pressure_begin_close_v2(controller);
+    if (status == MGMEM_OK) {
+        do { status = mgmem_pressure_drain_v2(controller, 1000); } while (status == MGMEM_TIMEOUT);
+    }
+    mgmem_pressure_snapshot_v2 final{};
+    if (status == MGMEM_OK) status = mgmem_pressure_snapshot_v2_get(controller, &final, sizeof(final));
+    if (status == MGMEM_OK && (final.struct_size < sizeof(final) || final.version != 2 ||
+            final.state != MGMEM_CLOSED || final.applied_pressure > MGMEM_PRESSURE_CRITICAL ||
+            final.trim_pending != 0 || final.queue_depth != 0 || final.counters_saturated > 1 ||
+            final.effective_budget_bytes > final.manual_budget_bytes)) status = MGMEM_PROVIDER_ERROR;
+    std::array<mgmem_pressure_event_result_v2, managed_pressure_results> results{};
+    const size_t result_count = final.events_accepted < managed_pressure_results ?
+        static_cast<size_t>(final.events_accepted) : managed_pressure_results;
+    const u64 result_first = result_count ? final.events_accepted - result_count + 1 : 0;
+    for (size_t i = 0; status == MGMEM_OK && i < result_count; ++i) {
+        const auto ticket = result_first + i;
+        auto &result = results[i];
+        status = mgmem_pressure_event_result_v2_get(controller, ticket, &result, sizeof(result));
+        if (status == MGMEM_OK && (result.struct_size < sizeof(result) || result.version != 2 ||
+                result.ticket != ticket || result.state < MGMEM_PRESSURE_EVENT_APPLIED ||
+                result.state > MGMEM_PRESSURE_EVENT_EXPIRED ||
+                (result.state == MGMEM_PRESSURE_EVENT_APPLIED && (result.status != MGMEM_OK || !result.apply_sequence)) ||
+                (result.state == MGMEM_PRESSURE_EVENT_FAILED && result.status == MGMEM_OK) ||
+                (result.state == MGMEM_PRESSURE_EVENT_CANCELLED && result.status != MGMEM_IS_CLOSED)))
+            status = MGMEM_PROVIDER_ERROR;
+    }
+    if (status == MGMEM_OK) status = mgmem_pressure_destroy_v2(controller);
+    if (status != MGMEM_OK) return status;
+    {
+        std::lock_guard<std::mutex> lock(d->mutex);
+        d->pressure = nullptr; d->pressure_final = final; d->pressure_final_valid = true;
+        d->pressure_results = results; d->pressure_result_first = result_first; d->pressure_result_count = result_count;
+        if (own_thread) d->pressure_worker.detach();
+        d->pressure_phase = PRESSURE_CLOSED;
+        d->pressure_cleanup_owned = false;
+    }
+    d->changed.notify_all();
+    return MGMEM_OK;
+}
+
+void pressure_close_worker(std::shared_ptr<Domain> d) noexcept {
+    struct WorkerSlot { ~WorkerSlot() { registry().workers.fetch_sub(1, std::memory_order_release); } } slot;
+    try {
+        auto status = finish_pressure_cleanup(d, true);
+        if (status == MGMEM_OK) return;
+        { std::lock_guard<std::mutex> lock(d->mutex); if (d->pressure_worker.joinable()) d->pressure_worker.detach(); }
+        quarantine(d, status);
+    } catch (...) {
+        try { std::lock_guard<std::mutex> lock(d->mutex); if (d->pressure_worker.joinable()) d->pressure_worker.detach(); } catch (...) {}
+        quarantine(d, MGMEM_PROVIDER_ERROR);
+    }
+}
+
 void close_worker(std::shared_ptr<Domain> d) noexcept {
     struct WorkerSlot { ~WorkerSlot() { registry().workers.fetch_sub(1, std::memory_order_release); } } slot;
     try {
-        auto status = mgmem_domain_begin_close_v1(d->native);
+        bool own_pressure_cleanup = false;
+        {
+            std::unique_lock<std::mutex> lock(d->mutex);
+            d->changed.wait(lock, [&] { return d->emergency.load() || d->pressure_phase != PRESSURE_ATTACHING; });
+            if (d->emergency.load()) return;
+            if (d->pressure_phase == PRESSURE_OPEN) d->pressure_phase = PRESSURE_CLOSING;
+            if (d->pressure_phase == PRESSURE_CLOSING) {
+                if (!d->pressure_cleanup_owned) { d->pressure_cleanup_owned = true; own_pressure_cleanup = true; }
+                else {
+                    d->changed.wait(lock, [&] { return d->emergency.load() || d->pressure_phase == PRESSURE_CLOSED; });
+                    if (d->emergency.load()) return;
+                }
+            }
+        }
+        auto status = own_pressure_cleanup ? finish_pressure_cleanup(d, false) : MGMEM_OK;
+        if (status == MGMEM_OK) status = mgmem_domain_begin_close_v1(d->native);
         if (status != MGMEM_OK) { quarantine(d, status); return; }
         {
             std::unique_lock<std::mutex> lock(d->mutex);
@@ -459,10 +607,196 @@ extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativeSetBudget)(JNIEnv *, jclass, jl
     if (bytes < 0) return MGMEM_INVALID_ARGUMENT;
     std::shared_ptr<Domain> d;
     try {
-        d = domain_for(id); Operation op(d, false); if (!op.admitted) return op.status;
-        const auto status = mgmem_domain_set_budget_v1(d->native, static_cast<u64>(bytes));
+        d = domain_for(id); BudgetCall op(d); if (!op.admitted) return op.status;
+#if defined(MGMEM_MANAGED_TESTING)
+        wait_test_gate(pressure_budget_gate);
+#endif
+        u64 sequence = 0;
+        const auto status = op.direct ? mgmem_domain_set_budget_v1(d->native, static_cast<u64>(bytes)) :
+            mgmem_pressure_set_manual_budget_v2(op.controller, static_cast<u64>(bytes), &sequence);
         if (status == MGMEM_PROVIDER_ERROR) quarantine(d, status);
         return status;
+    } catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); return MGMEM_PROVIDER_ERROR; }
+}
+
+extern "C" JNIEXPORT jlong JNICALL JNI_NAME(nativeAttachPressure)(JNIEnv *, jclass, jlong id, jlong moderate, jlong critical) {
+    if (moderate < 0 || critical < 0 || critical > moderate) return failed(MGMEM_INVALID_ARGUMENT);
+    std::shared_ptr<Domain> d;
+    LeasePin *pin = nullptr;
+    u64 generation = 0;
+    bool attaching = false, entered = false;
+    try {
+        d = domain_for(id); Operation op(d, false); if (!op.admitted) return failed(op.status);
+        {
+            std::lock_guard<std::mutex> lock(d->mutex);
+            if (d->state != OPEN) return failed(MGMEM_IS_CLOSED);
+            if ((d->pressure_phase != PRESSURE_NONE && d->pressure_phase != PRESSURE_CLOSED) || d->direct_budget_calls)
+                return failed(MGMEM_BUSY);
+            if (d->pressure_generation == max_id) return failed(MGMEM_OVERFLOW);
+            generation = ++d->pressure_generation;
+            d->pressure_phase = PRESSURE_ATTACHING; attaching = true;
+        }
+#if defined(MGMEM_MANAGED_TESTING)
+        wait_test_gate(pressure_attach_gate);
+#endif
+        pin = new LeasePin(d);
+        if (!reserve(registry().pins, max_pins)) {
+            delete pin; pin = nullptr;
+            { std::lock_guard<std::mutex> lock(d->mutex); d->pressure_phase = PRESSURE_NONE; }
+            d->changed.notify_all(); return failed(managed_pin_limit);
+        }
+        { std::lock_guard<std::mutex> lock(d->mutex); ++d->pins; }
+        const mgmem_domain_lifetime_v1 lifetime{sizeof(lifetime), 1, pin, retain_pin, release_pin};
+        const mgmem_pressure_options_v2 options{sizeof(options), 2, static_cast<u64>(moderate),
+            static_cast<u64>(critical), 10, 32, 128, 0};
+        mgmem_pressure_controller *controller = nullptr;
+        entered = true;
+        const auto status = mgmem_pressure_create_v2(d->native, &lifetime, &options, &controller);
+        const bool retained = pin->retained.load(), released = pin->released.load();
+        if (status == MGMEM_PROVIDER_ERROR || (released && !retained) ||
+            (status == MGMEM_OK && (!controller || !retained || released)) ||
+            (status != MGMEM_OK && (controller || (retained && !released)))) {
+            quarantine(d, MGMEM_PROVIDER_ERROR); pin = nullptr; return failed(MGMEM_PROVIDER_ERROR);
+        }
+        if (!retained) drop_pin(pin);
+        drop_pin(pin); pin = nullptr;
+        bool closing = false;
+        {
+            std::lock_guard<std::mutex> lock(d->mutex);
+            if (status == MGMEM_OK) {
+                d->pressure = controller;
+                d->pressure_final_valid = false;
+                closing = d->state != OPEN || d->emergency.load();
+                d->pressure_phase = closing ? PRESSURE_CLOSING : PRESSURE_OPEN;
+            } else d->pressure_phase = PRESSURE_NONE;
+        }
+        d->changed.notify_all();
+        return status != MGMEM_OK ? failed(status) : closing ? failed(MGMEM_IS_CLOSED) : static_cast<jlong>(generation);
+    } catch (...) {
+        if (entered || pin) quarantine(d, MGMEM_PROVIDER_ERROR);
+        else if (attaching && d) {
+            try { std::lock_guard<std::mutex> lock(d->mutex); d->pressure_phase = PRESSURE_NONE; }
+            catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); }
+            d->changed.notify_all();
+        }
+        return failed(MGMEM_PROVIDER_ERROR);
+    }
+}
+
+extern "C" JNIEXPORT jlong JNICALL JNI_NAME(nativePressureSubmit)(JNIEnv *env, jclass, jlong id, jlong generation, jint level) {
+    std::shared_ptr<Domain> d;
+    try {
+        u64 ticket = 0;
+        {
+            d = domain_for(id); PressureCall call(d, static_cast<u64>(generation));
+            if (!call.admitted) return failed(call.status);
+            const auto status = mgmem_pressure_submit_v2(call.controller, static_cast<uint32_t>(level), &ticket);
+            if (status == MGMEM_PROVIDER_ERROR) quarantine(d, status);
+            if (status != MGMEM_OK) return failed(status);
+            if (!ticket || ticket > max_id) { quarantine(d, MGMEM_PROVIDER_ERROR); return failed(MGMEM_PROVIDER_ERROR); }
+        }
+#if defined(MGMEM_MANAGED_TESTING)
+        wait_test_gate(pressure_submit_tail_gate);
+        if (checked_after_pressure_submit.exchange(false)) test_pending_exception(env, true);
+#else
+        (void)env;
+#endif
+        return static_cast<jlong>(ticket);
+    } catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); return failed(MGMEM_PROVIDER_ERROR); }
+}
+
+extern "C" JNIEXPORT jlongArray JNICALL JNI_NAME(nativePressureResult)(JNIEnv *env, jclass, jlong id, jlong generation, jlong ticket) {
+    if (ticket <= 0) return nullptr;
+    std::shared_ptr<Domain> d;
+    try {
+        mgmem_pressure_event_result_v2 result{};
+        d = domain_for(id); if (!d) return nullptr;
+        bool final = false;
+        {
+            std::lock_guard<std::mutex> lock(d->mutex);
+            if (d->pressure_generation != static_cast<u64>(generation)) return nullptr;
+            if (d->pressure_phase == PRESSURE_CLOSED && d->pressure_final_valid) {
+                const auto value = static_cast<u64>(ticket);
+                if (value > d->pressure_final.events_accepted) return nullptr;
+                if (value < d->pressure_result_first) {
+                    result = {sizeof(result), 2, MGMEM_PRESSURE_EVENT_EXPIRED, MGMEM_OK, value, 0};
+                } else {
+                    const u64 index = value - d->pressure_result_first;
+                    if (index >= d->pressure_result_count) return nullptr;
+                    result = d->pressure_results[static_cast<size_t>(index)];
+                }
+                final = true;
+            }
+        }
+        if (!final) {
+            PressureCall call(d, static_cast<u64>(generation)); if (!call.admitted) return nullptr;
+            const auto status = mgmem_pressure_event_result_v2_get(call.controller, static_cast<u64>(ticket), &result, sizeof(result));
+            if (status != MGMEM_OK) { if (status == MGMEM_PROVIDER_ERROR) quarantine(d, status); return nullptr; }
+        }
+        jlong values[]{result.state, result.status, signed_value(result.ticket), signed_value(result.apply_sequence)};
+        jlongArray array = env->NewLongArray(4); if (array) env->SetLongArrayRegion(array, 0, 4, values); return array;
+    } catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); return nullptr; }
+}
+
+extern "C" JNIEXPORT jlongArray JNICALL JNI_NAME(nativePressureSnapshot)(JNIEnv *env, jclass, jlong id, jlong generation) {
+    std::shared_ptr<Domain> d;
+    try {
+        d = domain_for(id); if (!d) return nullptr;
+        mgmem_pressure_snapshot_v2 snap{};
+        bool final = false;
+        {
+            std::lock_guard<std::mutex> lock(d->mutex);
+            if (d->pressure_generation != static_cast<u64>(generation)) return nullptr;
+            if (d->pressure_phase == PRESSURE_CLOSED && d->pressure_final_valid) { snap = d->pressure_final; final = true; }
+        }
+        if (!final) {
+            PressureCall call(d, static_cast<u64>(generation)); if (!call.admitted) return nullptr;
+            auto status = mgmem_pressure_snapshot_v2_get(call.controller, &snap, sizeof(snap));
+            if (status != MGMEM_OK) { if (status == MGMEM_PROVIDER_ERROR) quarantine(d, status); return nullptr; }
+        }
+        jlong values[]{snap.state,snap.applied_pressure,snap.trim_pending,snap.last_trim_status,snap.queue_depth,
+            snap.counters_saturated,signed_value(snap.manual_budget_bytes),signed_value(snap.effective_budget_bytes),
+            signed_value(snap.apply_sequence),signed_value(snap.events_accepted),signed_value(snap.events_applied),
+            signed_value(snap.events_failed),signed_value(snap.events_cancelled),signed_value(snap.events_busy),
+            signed_value(snap.trim_attempts),signed_value(snap.trim_successes),signed_value(snap.trim_busy),signed_value(snap.trim_failures),
+            signed_value(snap.events_critical_busy),signed_value(snap.results_evicted)};
+        jlongArray array = env->NewLongArray(20); if (array) env->SetLongArrayRegion(array, 0, 20, values); return array;
+    } catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); return nullptr; }
+}
+
+extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativePressureState)(JNIEnv *, jclass, jlong id, jlong generation) {
+    try {
+        auto d = domain_for(id); if (!d) return CLOSED;
+        std::lock_guard<std::mutex> lock(d->mutex);
+        if (d->emergency.load() || d->state == QUARANTINED) return QUARANTINED;
+        if (d->pressure_generation != static_cast<u64>(generation) || d->pressure_phase == PRESSURE_CLOSED) return CLOSED;
+        return d->pressure_phase == PRESSURE_OPEN && d->state == OPEN ? OPEN : CLOSING;
+    } catch (...) { return QUARANTINED; }
+}
+
+extern "C" JNIEXPORT jint JNICALL JNI_NAME(nativePressureBeginClose)(JNIEnv *, jclass, jlong id, jlong generation) {
+    std::shared_ptr<Domain> d;
+    try {
+        d = domain_for(id); if (!d) return MGMEM_OK;
+        std::lock_guard<std::mutex> lock(d->mutex);
+        if (d->emergency.load() || d->state == QUARANTINED) return MGMEM_PROVIDER_ERROR;
+        if (d->pressure_generation != static_cast<u64>(generation) || d->pressure_phase == PRESSURE_CLOSED) return MGMEM_OK;
+        if (d->pressure_phase == PRESSURE_OPEN) d->pressure_phase = PRESSURE_CLOSING;
+        if (d->pressure_phase != PRESSURE_CLOSING) return MGMEM_BUSY;
+        if (d->pressure_cleanup_owned) return MGMEM_OK;
+        if (d->state == CLOSING && d->worker_started) return MGMEM_OK;
+        if (!reserve(registry().workers, max_workers)) return managed_worker_limit;
+#if defined(MGMEM_MANAGED_TESTING)
+        if (fail_worker.exchange(false)) {
+            registry().workers.fetch_sub(1, std::memory_order_release);
+            return MGMEM_OUT_OF_MEMORY;
+        }
+#endif
+        d->pressure_cleanup_owned = true;
+        try { d->pressure_worker = std::thread(pressure_close_worker, d); }
+        catch (...) { d->pressure_cleanup_owned = false; registry().workers.fetch_sub(1); return MGMEM_OUT_OF_MEMORY; }
+        d->pressure_worker_started = true;
+        return MGMEM_OK;
     } catch (...) { quarantine(d, MGMEM_PROVIDER_ERROR); return MGMEM_PROVIDER_ERROR; }
 }
 
@@ -812,6 +1146,19 @@ extern "C" JNIEXPORT jlongArray JNICALL JNI_NAME(nativeRuntimeCounts)(JNIEnv *en
 
 #if defined(MGMEM_MANAGED_TESTING)
 #define TEST_NAME(method) Java_io_github_jichuo1_meguviz_memory_android_ManagedMemoryDomainJvmTest_##method
+extern "C" void mgmem_managed_test_pressure_gate_arm();
+extern "C" int mgmem_managed_test_pressure_gate_wait_entered();
+extern "C" int mgmem_managed_test_pressure_gate_wait_close();
+extern "C" int mgmem_managed_test_pressure_gate_release();
+extern "C" JNIEXPORT jint JNICALL Java_io_github_jichuo1_meguviz_memory_android_ManagedPressureBindingJvmTest_nativePressureGate(JNIEnv *, jclass, jint action) {
+    switch (action) {
+    case 0: mgmem_managed_test_pressure_gate_arm(); return 1;
+    case 1: return mgmem_managed_test_pressure_gate_wait_entered();
+    case 2: return mgmem_managed_test_pressure_gate_wait_close();
+    case 3: return mgmem_managed_test_pressure_gate_release();
+    default: return 0;
+    }
+}
 extern "C" JNIEXPORT void JNICALL TEST_NAME(nativeArmGate)(JNIEnv *, jclass, jint kind) {
     try {
         auto *gate = test_gate(kind); if (!gate) return;
@@ -857,6 +1204,7 @@ extern "C" JNIEXPORT void JNICALL TEST_NAME(nativeInject)(JNIEnv *, jclass, jint
     case 19: force_guard_underflow.store(true); break;
     case 20: checked_after_guard_exit.store(true); break;
     case 21: fail_guard_before_quarantine.store(true); fail_quarantine_always.store(true); break;
+    case 22: checked_after_pressure_submit.store(true); break;
     default: break;
     }
 }

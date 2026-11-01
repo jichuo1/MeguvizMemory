@@ -180,6 +180,116 @@ public final class ManagedMemoryDomain implements AutoCloseable {
         } finally { leaveJavaReport(); }
     }
 
+    /** Opt in to pressure handling on this same domain. Attachment and budget
+     * transitions may return BUSY; retry on a worker. A zero manual budget is
+     * supported and is never raised by a pressure restoration event. Rebinding
+     * starts from the domain's current budget, not the detached binding's former
+     * manual target; explicitly setBudget to restore a higher target. */
+    public Pressure attachPressure(long moderateBytes, long criticalBytes) {
+        if (moderateBytes < 0 || criticalBytes < 0 || criticalBytes > moderateBytes)
+            throw new IllegalArgumentException("invalid pressure budgets");
+        Pressure pressure = new Pressure(this);
+        enterJavaReport();
+        try {
+            final long generation;
+            try { generation = nativeAttachPressure(token, moderateBytes, criticalBytes); }
+            catch (Throwable error) { quarantineAfterUnknown(-1); throw propagate(error); }
+            if (generation <= 0) {
+                if (generation == -9) quarantineAfterUnknown(9);
+                throw failure("attach pressure", -generation);
+            }
+            pressure.generation = generation;
+            return pressure;
+        } finally { leaveJavaReport(); }
+    }
+
+    /** Optional pressure controller bound to its existing managed domain.
+     * Pressure close never closes the domain. A domain close also detaches the
+     * controller before closing its core. Polling and snapshots belong on a
+     * worker; framework notifications only submit events. */
+    public static final class Pressure implements AutoCloseable {
+        public static final int NORMAL = 0, MODERATE = 1, CRITICAL = 2;
+        public static final int EVENT_QUEUED = 0, EVENT_APPLIED = 1, EVENT_FAILED = 2,
+            EVENT_CANCELLED = 3, EVENT_EXPIRED = 4;
+        private final ManagedMemoryDomain domain;
+        private long generation;
+        private Pressure(ManagedMemoryDomain domain) { this.domain = domain; }
+
+        /** Positive ticket means queued, not applied; negative is -native status. */
+        public long submit(int level) {
+            if (level < NORMAL || level > CRITICAL) throw new IllegalArgumentException("invalid pressure level");
+            try { domain.enterJavaReport(); }
+            catch (IllegalStateException error) {
+                synchronized (domain) {
+                    if ((domain.forgotten || domain.javaObservedClosed) && !domain.javaQuarantined) return -7;
+                }
+                throw error;
+            }
+            try {
+                long result = nativePressureSubmit(domain.token, generation, level);
+                if (result == 0 || result == -9) {
+                    domain.quarantineAfterUnknown(9);
+                    return -9;
+                }
+                return result;
+            } catch (Throwable error) { domain.quarantineAfterUnknown(-1); throw propagate(error); }
+            finally { domain.leaveJavaReport(); }
+        }
+        /** [state,status,ticket,applySequence], or null if unavailable. Results
+         * are bounded and may be EVENT_EXPIRED. During cleanup they may be
+         * unavailable; after cleanup the last 128 results remain observable
+         * until the next attach attempt enters ATTACHING, even if that attempt
+         * fails, or until the domain is forgotten. Earlier valid tickets report
+         * EXPIRED. An old binding cannot query a later generation. */
+        public long[] eventResult(long ticket) {
+            if (ticket <= 0) throw new IllegalArgumentException("positive ticket required");
+            return nativePressureResult(domain.token, generation, ticket);
+        }
+        /** [state,appliedPressure,trimPending,lastTrimStatus,queueDepth,
+         * countersSaturated,manualBudget,effectiveBudget,applySequence,
+         * eventsAccepted,eventsApplied,eventsFailed,eventsCancelled,eventsBusy,
+         * trimAttempts,trimSuccesses,trimBusy,trimFailures,eventsCriticalBusy,
+         * resultsEvicted]; null if unavailable,
+         * -1 for an unsigned field outside Java long's range. */
+        public long[] snapshot() { return nativePressureSnapshot(domain.token, generation); }
+        public int state() {
+            synchronized (domain) {
+                if (domain.javaQuarantined) return QUARANTINED;
+                if (domain.forgotten) return CLOSED;
+            }
+            int value = nativePressureState(domain.token, generation);
+            synchronized (domain) {
+                if (domain.javaQuarantined) return QUARANTINED;
+                if (domain.forgotten) return CLOSED;
+                return value == CLOSED && domain.javaReportsInFlight != 0 ? CLOSING : value;
+            }
+        }
+        /** Schedules one cleanup owner. A failure is retryable; no callback or
+         * worker join occurs on the calling thread. */
+        public void beginClose() {
+            synchronized (domain) {
+                if (domain.forgotten || domain.javaObservedClosed) return;
+            }
+            try { domain.enterJavaReport(); }
+            catch (IllegalStateException error) {
+                synchronized (domain) {
+                    if ((domain.forgotten || domain.javaObservedClosed) && !domain.javaQuarantined) return;
+                }
+                throw error;
+            }
+            try {
+            final int status;
+            try { status = nativePressureBeginClose(domain.token, generation); }
+            catch (Throwable error) { domain.quarantineAfterUnknown(-1); throw propagate(error); }
+            if (status != 0) {
+                if (status == 9) domain.quarantineAfterUnknown(status);
+                throw failure("pressure close", status);
+            }
+            } finally { domain.leaveJavaReport(); }
+        }
+        @Override public void close() { beginClose(); }
+    }
+
     /** Stops admission and schedules quiet cleanup, without waiting for leases.
      * If worker admission fails, the domain stays CLOSING; call again to retry. */
     public void beginClose() {
@@ -493,6 +603,12 @@ public final class ManagedMemoryDomain implements AutoCloseable {
     private static native int nativeClaimDomain(long domain);
     private static native long nativeAllocate(long domain, long bytes, long alignment);
     private static native int nativeSetBudget(long domain, long bytes);
+    private static native long nativeAttachPressure(long domain, long moderate, long critical);
+    private static native long nativePressureSubmit(long domain, long generation, int level);
+    private static native long[] nativePressureResult(long domain, long generation, long ticket);
+    private static native long[] nativePressureSnapshot(long domain, long generation);
+    private static native int nativePressureState(long domain, long generation);
+    private static native int nativePressureBeginClose(long domain, long generation);
     private static native long nativeBorrow(long owner, long offset, long bytes, boolean writable);
     private static native int nativeCancel(long registration);
     private static native long nativeGuardEnter(long domain);

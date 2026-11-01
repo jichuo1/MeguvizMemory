@@ -7,7 +7,7 @@ get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 
 # Test-only single DLL. Production must link the existing shared core instead.
 add_library(mgmem_pressure_jni SHARED
-  "${ROOT}/src/mgmem.cpp" "${ROOT}/tests/managed_host/borrow_test_wrapped.cpp"
+  "${ROOT}/src/mgmem.cpp" "${ROOT}/adapters/android/native/pressure.cpp" "${ROOT}/tests/managed_host/borrow_test_wrapped.cpp"
   "${ROOT}/tests/managed_host/borrow_release_wrap.cpp"
   "${ROOT}/tests/managed_host/workspace_test_wrapped.cpp")
 target_compile_features(mgmem_pressure_jni PRIVATE cxx_std_17)
@@ -48,7 +48,7 @@ endforeach()
 
 # Separate host JNI build with no fault hooks. Production still links its shared core.
 add_library(mgmem_managed_plain SHARED "${ROOT}/src/mgmem.cpp"
-  "${ROOT}/adapters/android/native/borrow_jni.cpp" "${ROOT}/adapters/android/native/workspace_jni.cpp")
+  "${ROOT}/adapters/android/native/pressure.cpp" "${ROOT}/adapters/android/native/borrow_jni.cpp" "${ROOT}/adapters/android/native/workspace_jni.cpp")
 target_compile_features(mgmem_managed_plain PRIVATE cxx_std_17)
 target_include_directories(mgmem_managed_plain PRIVATE "${ROOT}/include" ${JNI_INCLUDE_DIRS})
 target_link_libraries(mgmem_managed_plain PRIVATE Threads::Threads)
@@ -57,9 +57,39 @@ set_target_properties(mgmem_managed_plain PROPERTIES OUTPUT_NAME mgmem_pressure_
 set(PLAIN_JAVA "${ROOT}/tests/managed_host/ManagedMemoryDomainPlainJvmTest.java")
 add_custom_command(OUTPUT "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomainPlainJvmTest.class"
   COMMAND ${Java_JAVAC_EXECUTABLE} --release 8 -cp "${JAVA_CLASSES}" -d "${JAVA_CLASSES}" "${PLAIN_JAVA}"
-  DEPENDS managed_java_classes "${PLAIN_JAVA}" VERBATIM)
+  DEPENDS managed_java_classes "${JAVA_SOURCE}/NativeMemoryLease.java" "${JAVA_SOURCE}/ManagedMemoryDomain.java" "${PLAIN_JAVA}" VERBATIM)
 add_custom_target(managed_plain_classes ALL DEPENDS "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedMemoryDomainPlainJvmTest.class")
 add_test(NAME managed_plain COMMAND ${Java_JAVA_EXECUTABLE}
   "-Djava.library.path=$<TARGET_FILE_DIR:mgmem_managed_plain>" -cp "${JAVA_CLASSES}"
   io.github.jichuo1.meguviz.memory.android.ManagedMemoryDomainPlainJvmTest)
 set_tests_properties(managed_plain PROPERTIES TIMEOUT 30)
+
+set(PRESSURE_JAVA "${ROOT}/tests/managed_host/ManagedPressureBindingJvmTest.java")
+add_custom_command(OUTPUT "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedPressureBindingJvmTest.class"
+  COMMAND ${Java_JAVAC_EXECUTABLE} --release 8 -cp "${JAVA_CLASSES}" -d "${JAVA_CLASSES}" "${PRESSURE_JAVA}"
+  DEPENDS managed_java_classes "${JAVA_SOURCE}/NativeMemoryLease.java" "${JAVA_SOURCE}/ManagedMemoryDomain.java" "${PRESSURE_JAVA}" VERBATIM)
+add_custom_target(managed_pressure_classes ALL DEPENDS "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedPressureBindingJvmTest.class")
+add_test(NAME managed_pressure_binding COMMAND ${Java_JAVA_EXECUTABLE}
+  "-Djava.library.path=$<TARGET_FILE_DIR:mgmem_pressure_jni>" -cp "${JAVA_CLASSES}"
+  io.github.jichuo1.meguviz.memory.android.ManagedPressureBindingJvmTest)
+set_tests_properties(managed_pressure_binding PROPERTIES TIMEOUT 60)
+
+set(PRESSURE_BACKEND_TEST "${ROOT}/tests/managed_host/ManagedPressureBackendJvmTest.java")
+set(PRESSURE_STUBS "${ROOT}/tests/managed_host/android_stub")
+set(PRESSURE_LOOPER "${ROOT}/tests/android_borrow/host_stub/android/os/Looper.java")
+set(PRESSURE_BACKEND_SOURCES
+  "${JAVA_SOURCE}/MemoryPressureAdapter.java" "${JAVA_SOURCE}/ManagedPressureBackend.java"
+  "${PRESSURE_STUBS}/android/content/ComponentCallbacks2.java"
+  "${PRESSURE_STUBS}/android/content/Context.java"
+  "${PRESSURE_STUBS}/android/content/res/Configuration.java" "${PRESSURE_LOOPER}")
+add_custom_command(OUTPUT "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedPressureBackendJvmTest.class"
+  COMMAND ${Java_JAVAC_EXECUTABLE} --release 8 -cp "${JAVA_CLASSES}" -d "${JAVA_CLASSES}"
+    ${PRESSURE_BACKEND_SOURCES} "${PRESSURE_BACKEND_TEST}"
+  DEPENDS managed_java_classes "${JAVA_SOURCE}/NativeMemoryLease.java" "${JAVA_SOURCE}/ManagedMemoryDomain.java"
+    ${PRESSURE_BACKEND_SOURCES} "${PRESSURE_BACKEND_TEST}" VERBATIM)
+add_custom_target(managed_pressure_backend_classes ALL DEPENDS
+  "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/android/ManagedPressureBackendJvmTest.class")
+add_test(NAME managed_pressure_backend_stub COMMAND ${Java_JAVA_EXECUTABLE}
+  "-Djava.library.path=$<TARGET_FILE_DIR:mgmem_pressure_jni>" -cp "${JAVA_CLASSES}"
+  io.github.jichuo1.meguviz.memory.android.ManagedPressureBackendJvmTest)
+set_tests_properties(managed_pressure_backend_stub PROPERTIES TIMEOUT 30)
