@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_HOST_CI",
+  "source_commit": "f109a8a1517d6d791d3ebcfc7e906016e4676e65",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41293389071",
+  "windows": "PASS_HOST_STUBS_BUILDER_AND_RUNNER_CONTRACTS",
+  "linux": "PASS_HOST_STUBS_BUILDER_AND_RUNNER_CONTRACTS",
+  "android_runtime": "NOT_RUN",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host CI does not establish Android ART or physical-device behavior.",
+    "A short diagnostic does not guarantee hitting a particular race window or qualify long stability."
+  ]
+}

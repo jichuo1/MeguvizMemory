@@ -10,6 +10,7 @@
 - 修复提交已生成[新 Android 三 ABI 和 Windows 宿主工程候选](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2-corrected.json)，源码锁各含 306 项；Android 的 SDK/AAR 对应原生库一致并通过同 ABI 编译链接，Windows 安装消费者通过限定功能检查。原摘要混用了源码锁记录数组与包内源码字典的哈希口径，保留[原记录](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json)并以更正记录供诊断工具核验；逐项源码及候选包未变。
 - 随后 `182cc7c` [Linux 宿主候选](artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json)已通过 CI 安装消费者及下载回读；修复版 arm64 托管短测和长稳诊断 APK 已[R8 构建并完成无设备冻结检查](artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json)，但这两个托管诊断不直接覆盖本次修复的 NativePressureBackend。修复版 Android ART、设备和性能仍未验证。
 - 新增独立 [NativePressureBackend 关闭真机诊断](docs/ANDROID_NATIVE_PRESSURE_DEVICE_PROTOCOL.md)，覆盖合成压力、双线程关闭和持有借用后的归零，但不保证命中特定竞态。宿主 2 项、构建器 10 项、运行器 20 项离线检查通过；arm64/x86_64 诊断 APK 完成 R8 构建及虚拟目标冻结。[准备证据](artifacts/pressure-close-admission-20261101/native-probe-preparation.json)不代表设备执行或长稳资格。
+- 诊断提交 `f109a8a` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/native-probe-ci-f109a8a.json) 均通过构建器、运行器及宿主桩检查；未进行设备操作。
 
 ## 统一验证准备（2026-11-01）
 
