@@ -1,0 +1,28 @@
+{
+  "state": "PASS_SCOPED_LINUX_HOST_ENGINEERING_CANDIDATE",
+  "source_commit": "085cc13eae095cfdb8a8a82a2f12c863b190f6a7",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41290558303",
+  "platform": "linux-x86_64",
+  "candidate_sha256": "3799f301ed05ec1e05e6f195f162260ca8d7ac563cb0cbe8a2f73459d30fe404",
+  "candidate_bytes": 161210,
+  "download_readback": "PASS_SHA256_AND_SIZE_MATCH_CI_RECEIPT",
+  "host_consumer": {
+    "default_cases": 12,
+    "synthetic_pressure_cases": 12,
+    "negative_cases": 10,
+    "packaged_pressure_v1_v2": "PASS"
+  },
+  "builder_journal": {"steps": 43, "verified_streams": 86},
+  "ci_artifact_retention_days": 7,
+  "ci_marker_scope": "CI_ONLY_NOT_USER_PRIVATE_IDENTIFIER_LIST",
+  "device": "NOT_RUN",
+  "android_runtime": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "formal_release": "NOT_QUALIFIED",
+  "limits": [
+    "This result covers the specified CI Linux host, fixed source and consumers only.",
+    "The download readback checks archive bytes, not execution on this Windows host.",
+    "CI sentinel scanning is not a scan with the user's local private identifier list.",
+    "This is an unsigned engineering candidate, not a formal release or signed provenance."
+  ]
+}
