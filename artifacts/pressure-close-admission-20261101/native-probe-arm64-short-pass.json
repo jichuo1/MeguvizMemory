@@ -1,0 +1,36 @@
+{
+  "state": "PASS_FUNCTIONAL_POSTFLIGHT_FREEZER_NOT_OBSERVED",
+  "scope": "OWN_R8_NATIVE_PRESSURE_SYNTHETIC_SHORT_DIAGNOSTIC",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "device": {"api": 33, "abi": "arm64-v8a", "page_bytes": 4096},
+  "apk_sha256": "80399bfdf515490a45c4137d4be75bdd64266a647e0742eb988b94ec271a549f",
+  "private_receipt_sha256": "2d2038c0096c02c6f4fd1eea8a659f744d4b8f79e087aa2a20d22b5352e32331",
+  "instrumentation": {
+    "suite": "android-native-pressure-close-v1",
+    "status": "PASS",
+    "checks": 53,
+    "case_count": 4,
+    "final_backing_bytes": 0,
+    "callback_origin": "synthetic",
+    "race_window_guaranteed": false,
+    "performance_qualified": false
+  },
+  "transport_exit_code": 0,
+  "transport_elapsed_seconds": 0.64,
+  "cgroup_sample_count": 0,
+  "freezer_observation": "NOT_OBSERVED",
+  "postflight": "PASS_APK_IDENTITY_BOOT_USER_AND_NO_MATCHING_TEST_OBSERVED",
+  "shared_device_lock": false,
+  "long_stability": "NOT_QUALIFIED",
+  "real_system_low_memory": "NOT_TESTED",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "No cgroup sample was captured; NOT_OBSERVED does not mean the process was unfrozen.",
+    "Concurrent callers do not guarantee a particular race window or reproduce injected thread failures.",
+    "Synthetic callbacks are not real system low-memory delivery.",
+    "This short test does not establish long stability, other ABI or performance qualification.",
+    "Observed processes and instrumentation are point-in-time checks, not a shared device lock.",
+    "The earlier installation refusal remains a separate historical record."
+  ]
+}

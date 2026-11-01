@@ -8,9 +8,11 @@
 - [宿主旧新对照](artifacts/pressure-close-admission-20261101/host.json)复现两层旧版误报；修复后 Java fake-JNI 26 项断言、native JNI 22 项用例、完整核心 42 项及 framework stub 38 项通过，真实宿主 JVM/JNI 组合验证 24 周期、264 项检查，真实 Android SDK 源码编译通过。此前 `2e25092` Android 候选、`085cc13` Linux 候选和真机短测均早于本修复，不能作为修复后制品或设备资格。
 - 修复提交 `ce2a5b2` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/ci-ce2a5b2.json) 均通过，Windows 本机 JNI 相关 ASan 22 项通过；这些仍不是 Android 设备验证。
 - 修复提交已生成[新 Android 三 ABI 和 Windows 宿主工程候选](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2-corrected.json)，源码锁各含 306 项；Android 的 SDK/AAR 对应原生库一致并通过同 ABI 编译链接，Windows 安装消费者通过限定功能检查。原摘要混用了源码锁记录数组与包内源码字典的哈希口径，保留[原记录](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json)并以更正记录供诊断工具核验；逐项源码及候选包未变。
-- 随后 `182cc7c` [Linux 宿主候选](artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json)已通过 CI 安装消费者及下载回读；修复版 arm64 托管短测和长稳诊断 APK 已[R8 构建并完成无设备冻结检查](artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json)，但这两个托管诊断不直接覆盖本次修复的 NativePressureBackend。修复版 Android ART、设备和性能仍未验证。
+- 随后 `182cc7c` [Linux 宿主候选](artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json)已通过 CI 安装消费者及下载回读；修复版 arm64 托管短测和长稳诊断 APK 已[R8 构建并完成无设备冻结检查](artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json)，但这两个托管诊断不直接覆盖本次修复的 NativePressureBackend；专用真机短测见下，其他设备和性能仍待验证。
 - 新增独立 [NativePressureBackend 关闭真机诊断](docs/ANDROID_NATIVE_PRESSURE_DEVICE_PROTOCOL.md)，覆盖合成压力、双线程关闭和持有借用后的归零，但不保证命中特定竞态。宿主 2 项、构建器 10 项、运行器 20 项离线检查通过；arm64/x86_64 诊断 APK 完成 R8 构建及虚拟目标冻结。[准备证据](artifacts/pressure-close-admission-20261101/native-probe-preparation.json)不代表设备执行或长稳资格。
 - 诊断提交 `f109a8a` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/native-probe-ci-f109a8a.json) 均通过构建器、运行器及宿主桩检查；未进行设备操作。
+- 随后确认其他会话释放设备后，修复版 NativePressure 独立诊断的[首次安装](artifacts/pressure-close-admission-20261101/native-probe-first-install.json)返回系统安装受限及取消，instrumentation 未启动；后续只读观察两名可见用户中无该包。具体取消原因未知，该轮没有取得设备结论。
+- 用户确认后重新协调窗口并重试，修复版 [NativePressure API33 arm64/4KB R8 真机短诊断](artifacts/pressure-close-admission-20261101/native-probe-arm64-short-pass.json) 4 周期、53 检查通过，持借用关闭后最终账目归零，安装与后验通过。0 个 cgroup 样本只表示未观察，不能证明无冻结；并发不保证命中特定窗口，长稳、真实系统压力和性能仍未资格。
 
 ## 统一验证准备（2026-11-01）
 

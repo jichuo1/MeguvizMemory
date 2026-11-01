@@ -1,0 +1,22 @@
+{
+  "state": "INSTALL_REJECTED_TEST_NOT_RUN",
+  "scope": "OWN_NATIVE_PRESSURE_R8_SHORT_DIAGNOSTIC",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "apk_sha256": "80399bfdf515490a45c4137d4be75bdd64266a647e0742eb988b94ec271a549f",
+  "private_receipt_sha256": "31973162af238ef198895072bbccaca6e53c4db6c44af0066d49510863e1df3d",
+  "install_error": "INSTALL_FAILED_USER_RESTRICTED",
+  "system_message": "INSTALL_CANCELED_BY_USER",
+  "initial_install_outcome": "UNKNOWN_AT_RETURN",
+  "subsequent_read_only_observation": "PACKAGE_ABSENT_IN_TWO_VISIBLE_USERS",
+  "matching_probe_processes": 0,
+  "active_instrumentation": 0,
+  "shared_device_lock": false,
+  "instrumentation": "NOT_RUN",
+  "android_runtime_result": "NOT_ESTABLISHED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The system reports cancellation; it does not establish who or what caused it.",
+    "Later absence is a point observation over visible users, not a shared device lock.",
+    "No data clearing, uninstall or forced process stop was performed."
+  ]
+}
