@@ -28,4 +28,4 @@ token 是只在当前已加载 JNI runtime 内有效、单调且不复用的标�
 
 独立宿主测试 `tests/borrow_host` 以真实 core 加 fake JNI 覆盖初始化标志、重复认领、权限/边界、owner 先释放、domain 关闭后访问、访问与关闭竞争、pending JNI 异常及失败回调隔离；另一项使用真实宿主 JVM、真实 JNI 和 core 进行字节读写、关闭与域清理。该测试组合的宿主 JVM fixture 将 core 编入测试 DLL，仅用于单进程测试，不是 Android 发布库链接方式。
 
-独立 [Java 图像消费者](../consumers/java_image/README.md)已迁移到 ManagedMemoryDomain，并在宿主通过安装后的共享核心和单独构建的 host JNI 使用受控借用；它不是 Android 生产消费者。此前 arm64 R8 诊断仅覆盖托管域加入前的版本，见[历史构建证据](../artifacts/continuation-next-20261101/android-build/r8_build.json)；最新托管版本尚需统一验证 R8 后设备 ART 运行、压力与生命周期组合、长期稳定性和真实 Android 消费者接入。宿主及构建结果不替代这些设备和交付资格。BIL 未接入，也无性能或零拷贝收益声明。
+独立 [Java 图像消费者](../consumers/java_image/README.md)已迁移到 ManagedMemoryDomain，并在宿主通过安装后的共享核心和单独构建的 host JNI 使用受控借用；它不是 Android 生产消费者。此前 arm64 R8 构建覆盖托管域加入前的版本，见[历史构建证据](../artifacts/continuation-next-20261101/android-build/r8_build.json)；后续托管域和合成压力在 API33 arm64/4KB 已完成限定的 [R8 真机短测](../artifacts/managed-probe-20261101/device-short-pass-20261101.json)。该短测早于后续压力关闭准入修复；修复版 ART、长期稳定性、真实系统压力和真实 Android 消费者接入仍须分别验证。BIL 未接入，也无性能或零拷贝收益声明。

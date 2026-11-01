@@ -1,0 +1,16 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_AND_LOCAL_JNI_ASAN",
+  "source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41292044534",
+  "ci_windows": "PASS_CORE_FAKE_JNI_AND_REAL_HOST_JVM_INTEGRATION",
+  "ci_linux": "PASS_CORE_FAKE_JNI_AND_REAL_HOST_JVM_INTEGRATION",
+  "local_windows_jni_asan": {"passed": 22, "total": 22},
+  "device": "NOT_RUN",
+  "android_runtime": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host JVM integration uses framework stubs and a single host shared library.",
+    "Injected detach failure does not reproduce an actual operating-system detach failure.",
+    "Sanitizer and host CI results do not establish Android device safety or resource qualification."
+  ]
+}

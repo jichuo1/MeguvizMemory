@@ -70,9 +70,9 @@ allocate 必须失败原子：成功返回指定容量和对齐的未初始化�
 
 ## JNI 与家族组合边界
 
-0.2已交付Android压力适配JNI、opaque注册及不逃逸的诊断lease，见[Android合同](ANDROID_PRESSURE.md)。通用Java ByteBuffer借用/批量API和Rust bridge仍未选择，也没有让Java任意持有native DirectByteBuffer的接口。generation检查不能使已逃逸的Java ByteBuffer在底层释放后安全。后续桥需在Java/JNI异步任务接受前取得真实保活关系，并逐条验证取消、结果逃逸和关闭。
+0.2已交付Android压力适配JNI、opaque注册和不逃逸的受控字节lease，支持有边界的 `byte[]` 读写复制；自有托管域也提供此能力，见[压力合同](ANDROID_PRESSURE.md)和[借用合同](ANDROID_NATIVE_BORROW.md)。通用可逃逸Java ByteBuffer借用和Rust bridge仍未选择，也没有让Java任意持有native DirectByteBuffer的接口。generation检查不能使已逃逸的Java ByteBuffer在底层释放后安全。Java/JNI异步任务必须在受理前取得真实保活关系，并逐条验证取消、结果逃逸和关闭。
 
-Compute/Media的真实源码和安装SDK已在相邻MeguvizPack工作区找到，详见[消费者审计](audit/consumers.md)及[当前合同核实](FAMILY_MEMORY_CONTRACTS.md)。Compute管理资源、content lease、submit和GPU retirement；Media管理帧、时间线和背压。本版没有新增它们的CPU provider注入接口，也没有验证它们调用Memory。CPU内存可回收状态不能用GPU已提交、逻辑帧释放或仅持有AHB对象代替。
+Compute/Media的真实源码和安装SDK已在相邻MeguvizPack工作区找到，详见[消费者审计](audit/consumers.md)及[当前合同核实](FAMILY_MEMORY_CONTRACTS.md)。Compute管理资源、content lease、submit和GPU retirement；Media管理帧、时间线和背压。可选的 [Compute CPU READ-map → Memory 导入桥](../adapters/compute/README.md)已有宿主限定验证；Memory-owned backing 注入 Compute 的 provider 接口及 Android/产品运行资格仍未具备。CPU内存可回收状态不能用GPU已提交、逻辑帧释放或仅持有AHB对象代替。
 
 官方 Compute/Media/RIFE 组合有最终单 DSO、单 Compute/ncnn/STL 闭包合同。未来链接 Memory 静态 PIC core 时，必须重新核对最终链接图、导出表、依赖闭包、实际加载模块和 origin-owner：一个最终组合只拥有一份 Memory core，不附带第二套 GPU pool/ncnn/runtime。独立 Memory JNI DSO 不能与该组合重复实现后混用句柄。双独立 runtime 拒绝交叉 handle 的宿主测试是防误用证据，不能替代这项最终产物资格。
 

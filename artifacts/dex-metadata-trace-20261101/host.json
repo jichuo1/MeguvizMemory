@@ -1,0 +1,24 @@
+{
+  "state": "PASS_SCOPED_HOST_METADATA_READER_DIAGNOSTIC",
+  "scope": "LOCKED_DEX_METADATA_READER_ONLY",
+  "input_origin": "ANDROID_DIAGNOSTIC_APK_CLASSES_DEX_NOT_PRODUCT",
+  "input_bytes": 29480,
+  "static_sites": 32,
+  "dynamic_sites_hit": 23,
+  "actual_byte_read_events": 19401,
+  "baseline_instrumented_facts_digest": "MATCH",
+  "malformed_magic": "BOTH_REJECTED_SAME_STATUS",
+  "event_limit": "INCOMPLETE_NO_PASS_RECEIPT",
+  "offline_contract_tests": {"passed": 13, "total": 13},
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "product_trace": "NOT_CAPTURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "This diagnostic invokes the frozen metadata reader directly, not a Memory-backed SDK consumer or DEX query.",
+    "It excludes SHA, query execution, instructions, allocator, libc and hardware behavior.",
+    "Only instrumented source-level reads are recorded; event order is not a hardware access trace.",
+    "The selected input is a diagnostic APK DEX, not a product workload.",
+    "Input, event data and raw execution outputs remain private."
+  ]
+}

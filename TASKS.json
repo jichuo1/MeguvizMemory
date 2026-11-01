@@ -1285,8 +1285,10 @@
     "native_host": "FAKE_JNI_22_CASES_3_ADMISSION_OLD_FALSE_ACCEPTANCE_REPRODUCED",
     "real_jvm_jni_host": "TWENTY_FOUR_CYCLES_264_CHECKS_ANDROID_FRAMEWORK_STUBS",
     "android": "NOT_RUN_FOR_FIX",
-    "candidates": "PREVIOUS_ANDROID_AND_HOST_CANDIDATES_PREDATE_FIX",
+    "candidates": "ANDROID_THREE_ABI_AND_WINDOWS_CE2A5B2_BUILT_LINUX_OLD",
     "contract": "docs/ANDROID_PRESSURE.md",
+    "host_ci": "artifacts/pressure-close-admission-20261101/ci-ce2a5b2.json",
+    "candidate_evidence": "artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },
   "pressure_races_20261101": {
@@ -1308,6 +1310,16 @@
     "android_runtime": "NOT_RUN",
     "previous_candidate": "C45723F_PREDATES_TARGET_FINAL_2E25092_BUILT_CROSS_LINK_ONLY",
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
+  },
+  "dex_metadata_trace_20261101": {
+    "parent": "MM-022",
+    "state": "SCOPED_METADATA_READER_CAPTURE_IMPLEMENTED_PRODUCT_QUERY_TRACE_PENDING",
+    "host": "DIAGNOSTIC_APK_DEX_19401_EVENTS_23_OF_32_SITES_BASELINE_MATCH",
+    "offline": "THIRTEEN_PASS",
+    "device": "NOT_RUN",
+    "performance": "NOT_MEASURED",
+    "contract": "consumers/dex_trace/README.md",
+    "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },
   "image_trace_20261101": {
     "parent": "MM-022",
