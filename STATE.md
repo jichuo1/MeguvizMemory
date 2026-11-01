@@ -14,7 +14,10 @@
 - 随后确认其他会话释放设备后，修复版 NativePressure 独立诊断的[首次安装](artifacts/pressure-close-admission-20261101/native-probe-first-install.json)返回系统安装受限及取消，instrumentation 未启动；后续只读观察两名可见用户中无该包。具体取消原因未知，该轮没有取得设备结论。
 - 用户确认后重新协调窗口并重试，修复版 [NativePressure API33 arm64/4KB R8 真机短诊断](artifacts/pressure-close-admission-20261101/native-probe-arm64-short-pass.json) 4 周期、53 检查通过，持借用关闭后最终账目归零，安装与后验通过。0 个 cgroup 样本只表示未观察，不能证明无冻结；并发不保证命中特定窗口，长稳、真实系统压力和性能仍未资格。
 - 修复版托管域[长稳首次安装](artifacts/pressure-close-admission-20261101/managed-stability-first-install.json)被系统取消，前台 Activity 和 instrumentation 均未启动；只读观察两名可见用户均无该包。该轮没有长稳结果，具体取消原因未知。
+- 用户确认后重试托管域长稳，本地 runner 将该轮自身启动器误判为其他测试并中断传输；设备端进度自报 900.098 秒/3007 周期，但终态同次采样观察到进程冻结，先后顺序未知。Activity 与 instrumentation 已结束，冻结进程仍存在；[只读观察](artifacts/pressure-close-admission-20261101/managed-stability-interrupted-observation.json)不能补足原协议终态，整轮 INCOMPLETE。用户已说明手机安装有冻结模块；该次采样未独立识别触发者。
 - 修复版 [arm64 安全、DEX 和图像目标](artifacts/pressure-close-admission-20261101/arm64-consumer-cross-build.json)已完成 10 个目标交叉构建及安装核心链接回读；首次后验检查因辅助正则误匹配失败，修正后重跑通过，原始失败 stdout 未保存。交叉构建不构成设备或性能验证。
+- 长稳 runner 的自身启动器误判和 PID/UID 跨快照身份检查已修复，[38 项离线合同](artifacts/pressure-close-admission-20261101/stability-launcher-fix-host.json)通过；真实设备 `/proc` 可读性及修复后新轮仍未验证，原中断轮不因修复升级。
+- 新增[私有 ARM64 输入 profile](docs/ARM64_INPUT_PROFILE.md)，绑定选定修复版制品、源码和工具入口；[10 项宿主合同及本地自一致检查](artifacts/pressure-close-admission-20261101/arm64-profile-host.json)通过。它尚未接入旧设备 runner，也不冻结完整环境或证明加载/性能。
 
 ## 统一验证准备（2026-11-01）
 

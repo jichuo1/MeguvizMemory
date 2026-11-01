@@ -168,6 +168,126 @@ class CoverageTests(unittest.TestCase):
             subject.verify_observations(records, 0, 901, DURATION)
 
 
+class OwnLauncherGateTests(unittest.TestCase):
+    """Offline reproduction of the app_process self-occupancy false positive."""
+    def setUp(self):
+        self.plan = {'run_id': RUN_ID, 'duration_ms': DURATION, 'max_rounds': 10000,
+                     'interval_ms': 250, 'phase_timeout_ms': 30000}
+        self.argv = ['app_process', '/system/bin', 'com.android.commands.am.Am',
+                     *subject.instrumentation_arguments(self.plan, PID, '0')]
+        self.own_line = '4321 app_process ' + ' '.join(self.argv)
+        self.ps = ('PID NAME ARGS\n1 init init\n2 system_server system_server\n'
+                   '3 zygote zygote\n4 surfaceflinger surfaceflinger\n' +
+                   str(PID) + ' ' + PACKAGE + ' ' + PACKAGE + '\n' + self.own_line + '\n')
+        self.activity = ('ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)\n'
+                         'ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)\n'
+                         '  Instrumentation #0: ActiveInstrumentation{abc123 {' + subject.COMPONENT + '} 1 procs}\n')
+        self.uid_status = 'Name:\tapp_process\nUid:\t2000\t2000\t2000\t2000\n'
+        self.stat_before = '4321 (app_process) S ' + ' '.join(['0'] * 18 + ['777'])
+        self.stat_after = self.stat_before
+        self.cmdline = '\x00'.join(self.argv) + '\x00'
+        self.device = object.__new__(subject.Device)
+        self.device.receipt = {'gates': []}
+        self.device.launcher_context = (str(PID), tuple(self.argv), '2000')
+        self.device.command = mock.Mock(side_effect=self.command)
+
+    def command(self, label, args, **kwargs):
+        if label.endswith('-processes'): return 0, self.ps, ''
+        if label.endswith('-activity'): return 0, self.activity, ''
+        if label == 'own-launcher-status': return 0, self.uid_status, ''
+        if label == 'own-launcher-stat-before': return 0, self.stat_before, ''
+        if label == 'own-launcher-stat-after': return 0, self.stat_after, ''
+        if label == 'own-launcher-cmdline': return 0, self.cmdline, ''
+        raise AssertionError('unexpected command')
+
+    def gate(self):
+        self.device.gate('during-instrumentation', own_pid=PID, own_instrument=True)
+
+    def test_exact_single_own_launcher_passes(self):
+        self.gate()
+        result = self.device.receipt['gates'][-1]
+        self.assertEqual(result['result'], 'PASS_OBSERVATIONAL_ONLY')
+        self.assertEqual(result['own_launcher_count'], 1)
+        self.assertEqual(result['matching_other_tests'], 0)
+        calls = [call.args[0] for call in self.device.command.call_args_list]
+        self.assertLess(calls.index('own-launcher-stat-before'), calls.index('own-launcher-status'))
+        self.assertLess(calls.index('own-launcher-status'), calls.index('own-launcher-stat-after'))
+
+    def test_unexpected_or_forged_arguments_block(self):
+        substitutions = [
+            ('--user 0', '--user 1'), (RUN_ID, '1111111111111111'),
+            ('expected_pid ' + str(PID), 'expected_pid 4322'),
+            ('duration_ms 900000', 'duration_ms 900001'),
+            ('max_rounds 10000', 'max_rounds 9999'),
+            ('interval_ms 250', 'interval_ms 251'),
+            ('phase_timeout_ms 30000', 'phase_timeout_ms 30001'),
+            (subject.COMPONENT, subject.COMPONENT + 'Impostor'),
+            ('--no-restart', '--no-restart --extra'),
+            ('4321 app_process ', '4321 spoof_app_process '),
+        ]
+        for before, after in substitutions:
+            with self.subTest(before=before):
+                self.setUp()
+                self.ps = self.ps.replace(self.own_line, self.own_line.replace(before, after))
+                with self.assertRaises(subject.Blocked): self.gate()
+
+    def test_duplicate_own_launchers_block(self):
+        self.ps += self.own_line.replace('4321 ', '4322 ', 1) + '\n'
+        with self.assertRaisesRegex(subject.Blocked, 'own_launcher_ambiguous'): self.gate()
+
+    def test_wrong_uid_proc_cmdline_or_reused_pid_blocks(self):
+        for attribute, value in (
+            ('uid_status', 'Uid:\t2001\t2001\t2001\t2001\n'),
+            ('cmdline', '\x00'.join(self.argv[:-1]) + '\x00'),
+            ('stat_after', self.stat_before.rsplit(' ', 1)[0] + ' 778'),
+        ):
+            with self.subTest(attribute=attribute):
+                self.setUp()
+                setattr(self, attribute, value)
+                with self.assertRaises(subject.Blocked): self.gate()
+
+    def test_other_or_spoofed_instrumentation_blocks(self):
+        for extra in (
+            '  Instrumentation #1: ActiveInstrumentation{def123 {other.app/other.Runner} 1 procs}\n',
+            '  Instrumentation #1: ActiveInstrumentation{def123 {' + subject.COMPONENT + 'Fake} 1 procs}\n',
+            '  Instrumentation #1: ActiveInstrumentation{def123 {' + subject.COMPONENT + '} 1 procs}\n',
+        ):
+            with self.subTest(extra=extra):
+                self.setUp(); self.activity += extra
+                with self.assertRaises(subject.Blocked): self.gate()
+
+    def test_context_is_required_and_not_valid_for_other_gate(self):
+        del self.device.launcher_context
+        with self.assertRaisesRegex(subject.Blocked, 'own_launcher_context_invalid'): self.gate()
+        self.setUp()
+        with self.assertRaisesRegex(subject.Blocked, 'own_launcher_context_invalid'):
+            self.device.gate('before-instrumentation', own_pid=PID, own_instrument=True)
+
+    def test_missing_launcher_is_not_assumed_to_be_a_lock(self):
+        self.ps = self.ps.replace(self.own_line + '\n', '')
+        # A component-only activity record is not enough to identify this run.
+        with self.assertRaises(subject.Blocked): self.gate()
+        self.activity = ('ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)\n'
+                         'ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)\n')
+        self.gate()
+        self.assertEqual(self.device.receipt['gates'][-1]['own_launcher_count'], 0)
+
+    def test_target_identity_fences_uid_between_start_time_reads(self):
+        before = str(PID) + ' (' + PACKAGE + ') S ' + ' '.join(['0'] * 18 + ['777'])
+        after = before.rsplit(' ', 1)[0] + ' 778'
+        labels = []
+        def command(label, args, **kwargs):
+            labels.append(label)
+            if label == 'own-process-stat-before': return 0, before, ''
+            if label == 'own-process-status': return 0, 'Uid:\t10001\t10001\t10001\t10001\n', ''
+            if label == 'own-process-stat-after': return 0, after, ''
+            raise AssertionError('unexpected command')
+        self.device.command = mock.Mock(side_effect=command)
+        with self.assertRaisesRegex(subject.Blocked, 'own_process_identity_unavailable'):
+            self.device.process_identity(str(PID), '10001')
+        self.assertEqual(labels, ['own-process-stat-before', 'own-process-status', 'own-process-stat-after'])
+
+
 class DeviceObservationTests(unittest.TestCase):
     def setUp(self):
         self.device = mock.Mock()
@@ -310,6 +430,7 @@ class EndToEndFakeTests(unittest.TestCase):
     def fake_device(self, args, out, private, receipt):
         self.receipt = receipt
         device = mock.Mock()
+        self.device_instance = device
         device.receipt = receipt
         device.pid.return_value = str(PID)
         device.process_identity.return_value = 'identity'
@@ -318,6 +439,7 @@ class EndToEndFakeTests(unittest.TestCase):
         def command(label, args, **kwargs):
             outputs = {
                 'api': '33', 'abi': 'arm64-v8a', 'page': '4096',
+                'transport-shell-uid': '2000',
                 'start-own-activity': 'Status: ok\n',
                 'own-activity-resumed': 'mResumedActivity: ActivityRecord{abc u0 ' + COMPONENT + ' t7}\n',
                 'postflight-resumed': 'mResumedActivity: ActivityRecord{abc u0 other.app/.Activity t7}\n',
@@ -335,6 +457,7 @@ class EndToEndFakeTests(unittest.TestCase):
         child.returncode = 0
         self.child = child
         def popen(command, stdout, stderr):
+            self.spawned_command = command
             stdout.write(instrumentation(self.terminal, 0).encode('utf-8'))
             stdout.flush()
             return child
@@ -360,6 +483,11 @@ class EndToEndFakeTests(unittest.TestCase):
         self.assertEqual(receipt['observation']['count'], 180)
         self.assertFalse(receipt['shared_device_lock'])
         self.assertEqual(receipt['foreground_window_state'], 'OWN_PROCESS_PRESENT_ACTIVITY_NOT_RESUMED_MAY_REMAIN')
+        expected_args = subject.instrumentation_arguments(self.plan, PID, '0')
+        self.assertEqual(self.spawned_command[5:], expected_args)
+        self.assertEqual(self.device_instance.launcher_context,
+                         (str(PID), tuple(['app_process', '/system/bin',
+                          'com.android.commands.am.Am', *expected_args]), '2000'))
 
     def test_own_foreground_window_remaining_cannot_pass(self):
         old = self.fake_device

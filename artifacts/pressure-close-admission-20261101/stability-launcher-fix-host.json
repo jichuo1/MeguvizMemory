@@ -1,0 +1,16 @@
+{
+  "state": "PASS_OFFLINE_RUNNER_CONTRACTS_DEVICE_NOT_RETESTED",
+  "scope": "OWN_INSTRUMENTATION_LAUNCHER_AND_PROCESS_IDENTITY",
+  "old_runner": "MISCLASSIFIED_OWN_LAUNCHER_ON_SAVED_DEVICE_PROCESS_LIST",
+  "new_runner": "EXACT_FROZEN_ARGUMENTS_AND_PROC_IDENTITY_REQUIRED",
+  "offline_tests": {"passed": 38, "total": 38},
+  "saved_device_list_test": "PASS_WITH_SYNTHETIC_PROC_DATA_ONLY",
+  "device": "NOT_RETESTED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Actual proc readability and launcher timing on the target device remain unverified for the modified runner.",
+    "Process, UID, start time and command observations are not atomic and cannot exclude a same-UID adversary deliberately copying the complete context.",
+    "The earlier interrupted run remains INCOMPLETE and cannot be upgraded by this fix.",
+    "A fresh plan and a newly confirmed idle device are required for any retry."
+  ]
+}

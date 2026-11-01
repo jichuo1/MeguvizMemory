@@ -1,0 +1,42 @@
+{
+  "state": "INCOMPLETE_TRANSPORT_INTERRUPTED_TERMINAL_FREEZE_OBSERVED",
+  "scope": "OWN_MANAGED_STABILITY_DIAGNOSTIC_API33_ARM64_4K",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "private_runner_receipt_sha256": "8844ecc5bbf44566bd4b9286e259ae163de4a09609ec20b3eeeefeb576d01425",
+  "runner_interruption": "OWN_APP_PROCESS_MISCLASSIFIED_AS_OTHER_TEST_LOCAL_TRANSPORT_TERMINATED",
+  "device_report_observation": {"status": "PASS", "workload_elapsed_ms": 900098, "iterations": 3007},
+  "terminal_observation": {
+    "frozen": true,
+    "active_instrumentation": 0,
+    "activity_resumed": false,
+    "activity_record_observed": false,
+    "own_process_present": true
+  },
+  "primary_observer": {
+    "records": 109,
+    "observed_records": 108,
+    "terminal_frozen_records": 1,
+    "workload_range_ms": [253365, 900098],
+    "identity_limit": "NO_START_TIME_RECHECK_AFTER_UID",
+    "private_log_sha256": "e055b77a3e960b014d34e9140cb9c079fb56b61a09899eb2766dbb518d1c3e2"
+  },
+  "fenced_observer": {
+    "records": 8,
+    "observed_records": 7,
+    "terminal_frozen_records": 1,
+    "workload_range_ms": [721975, 900098],
+    "identity": "START_TIME_CHECKED_BEFORE_AND_AFTER_UID_AND_AT_SAMPLE_END",
+    "private_log_sha256": "3a15a7903391f7d89a82b5439f000738cd9793a492b93e1ef1883fbc72771202"
+  },
+  "long_stability": "NOT_QUALIFIED",
+  "performance": "NOT_MEASURED",
+  "shared_device_lock": false,
+  "limits": [
+    "The original transport ended early; the device progress file alone cannot satisfy the frozen protocol.",
+    "Terminal frozen state and self-reported completion were observed in the same sample; their temporal order is unknown.",
+    "The primary observer did not recheck process start time after reading UID; only the later fenced samples did.",
+    "All samples are discrete and do not cover the complete workload or prove absence of freezing between samples.",
+    "The user reported a phone freezing module; the observation did not independently identify its trigger.",
+    "No force-stop, uninstall, data clearing or change to another application was performed."
+  ]
+}

@@ -214,7 +214,48 @@ def validate_plan(plan,args):
     return paths,tools
 
 
+def instrumentation_arguments(plan, pid, user):
+    """Exact arguments issued for this frozen plan and observed Android user."""
+    require(isinstance(plan, dict) and isinstance(user, str) and user.isdigit() and
+            str(pid).isdigit() and isinstance(plan.get('run_id'), str) and
+            re.fullmatch(r'[0-9a-f]{16}', plan['run_id']) is not None and
+            all(type(plan.get(k)) is int and plan[k] > 0 for k in
+                ('duration_ms', 'max_rounds', 'interval_ms', 'phase_timeout_ms')),
+            'own_launcher_context_invalid')
+    values = ['instrument', '-w', '-r', '--no-restart', '--user', user,
+              '-e', 'run_id', plan['run_id'], '-e', 'expected_pid', str(pid)]
+    for key in ('duration_ms', 'max_rounds', 'interval_ms', 'phase_timeout_ms'):
+        values.extend(['-e', key, str(plan[key])])
+    return values + [COMPONENT]
+
+
 class Device(common.Device):
+    def verify_launcher(self, pid, expected, shell_uid):
+        """Cross-check one ps candidate against its live proc identity.
+
+        This rejects drift and partial command spoofing; a same-UID adversary
+        that deliberately duplicates every value remains outside the shared-lock
+        guarantee, so the independent device coordination is still required.
+        """
+        require(pid.isdigit() and isinstance(shell_uid, str) and shell_uid.isdigit(),
+                'own_launcher_identity_invalid')
+        _, before, _ = self.command('own-launcher-stat-before', ['shell', 'cat', '/proc/' + pid + '/stat'], timeout=4)
+        _, status, _ = self.command('own-launcher-status', ['shell', 'cat', '/proc/' + pid + '/status'], timeout=4)
+        match = re.search(r'(?m)^Uid:\s*(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\s*$', status)
+        require(match is not None and all(value == shell_uid for value in match.groups()),
+                'own_launcher_uid_mismatch')
+        _, command, _ = self.command('own-launcher-cmdline', ['shell', 'cat', '/proc/' + pid + '/cmdline'], timeout=4)
+        _, after, _ = self.command('own-launcher-stat-after', ['shell', 'cat', '/proc/' + pid + '/stat'], timeout=4)
+        def start_time(value):
+            end = value.rfind(')')
+            fields = value[end + 1:].split() if end >= 0 else []
+            require(value.startswith(pid + ' (') and len(fields) >= 20 and fields[19].isdigit(),
+                    'own_launcher_stat_unavailable')
+            return fields[19]
+        require(start_time(before) == start_time(after), 'own_launcher_process_changed')
+        require(command.endswith('\x00') and command.split('\x00')[:-1] == list(expected),
+                'own_launcher_cmdline_mismatch')
+
     def gate(self,label,own_pid=None,own_instrument=False):
         _,ps,_=self.command(label+'-processes',['shell','ps','-A','-o','PID,NAME,ARGS'])
         _,activity,_=self.command(label+'-activity',['shell','dumpsys','activity'])
@@ -226,16 +267,36 @@ class Device(common.Device):
         require('ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)' in activity and
                 'ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)' in activity and
                 not re.search(r'(?i)permission\s+denial|permission\s+denied|can.t find service|error dumping service',activity),'activity_inventory_unparseable')
+        launch = getattr(self, 'launcher_context', None)
+        if own_instrument:
+            require(label == 'during-instrumentation' and isinstance(launch, tuple) and len(launch) == 3 and
+                    launch[0] == str(own_pid) and isinstance(launch[1], tuple) and
+                    isinstance(launch[2], str) and launch[2].isdigit(),
+                    'own_launcher_context_invalid')
+        candidates = [x for x in rows if own_instrument and x[0] != str(own_pid) and x[1] == 'app_process' and
+                      len(x) == 3 and x[2].split() == list(launch[1])]
+        require(len(candidates) <= 1, 'own_launcher_ambiguous')
+        if candidates:
+            self.verify_launcher(candidates[0][0], launch[1], launch[2])
         busy=[x for x in rows if (BUSY.search(' '.join(x[1:])) or PACKAGE in ' '.join(x[1:])) and
-              not (own_pid is not None and x[0]==str(own_pid) and x[1]==PACKAGE)]
+              not (own_pid is not None and x[0]==str(own_pid) and x[1]==PACKAGE) and
+              not (candidates and x is candidates[0])]
         active=[]
         for line in activity.splitlines():
             if not re.search('activeinstrumentation',line,re.I):continue
             if re.search(r'\bmActiveInstrumentation\s*[:=]\s*(?:null|None|\[\]|\{\}|0)\s*$',line):continue
             active.append(line)
-        bad=[line for line in active if not (own_instrument and PACKAGE in line and INSTRUMENT in line)]
+        own_pattern = re.compile(r'^\s*Instrumentation #\d+: ActiveInstrumentation\{[0-9a-fA-F]+ \{' +
+                                 re.escape(COMPONENT) + r'\} 1 procs\}\s*$')
+        matched = [line for line in active if own_instrument and own_pattern.fullmatch(line)]
+        bad = [line for line in active if line not in matched]
+        if len(matched) > 1: bad.extend(matched)
+        # A matching component alone does not establish which run owns it.
+        # Require the unique, separately verified launcher while it is active.
+        if matched and not candidates: bad.extend(matched)
         result={'name':label,'parsed_processes':len(rows),'matching_other_tests':len(busy),
-                'other_or_unknown_instrumentation':len(bad),'result':'BLOCKED' if busy or bad else 'PASS_OBSERVATIONAL_ONLY'}
+                'other_or_unknown_instrumentation':len(bad), 'own_launcher_count':len(candidates),
+                'result':'BLOCKED' if busy or bad else 'PASS_OBSERVATIONAL_ONLY'}
         self.receipt['gates'].append(result)
         require(result['result']=='PASS_OBSERVATIONAL_ONLY',label+'_device_busy_or_unknown')
     def pid(self):
@@ -243,12 +304,17 @@ class Device(common.Device):
         parts=text.split();require(code in (0,1) and all(x.isdigit() for x in parts) and len(parts)<=1,'own_pid_unparseable')
         return parts[0] if parts else None
     def process_identity(self,pid,uid):
-        _,stat,_=self.command('own-process-stat',['shell','run-as',PACKAGE,'cat','/proc/'+pid+'/stat'],timeout=4)
+        _,before,_=self.command('own-process-stat-before',['shell','run-as',PACKAGE,'cat','/proc/'+pid+'/stat'],timeout=4)
         _,status,_=self.command('own-process-status',['shell','run-as',PACKAGE,'cat','/proc/'+pid+'/status'],timeout=4)
-        end=stat.rfind(')');fields=stat[end+1:].split() if end>=0 else []
+        _,after,_=self.command('own-process-stat-after',['shell','run-as',PACKAGE,'cat','/proc/'+pid+'/stat'],timeout=4)
+        def start_time(value):
+            end=value.rfind(')');fields=value[end+1:].split() if end>=0 else []
+            require(value.startswith(pid+' (') and len(fields)>=20 and fields[19].isdigit(),'own_process_identity_unavailable')
+            return fields[19]
         match=re.search(r'(?m)^Uid:\s*(\d+)(?:\s|$)',status)
-        require(stat.startswith(pid+' (') and len(fields)>=20 and fields[19].isdigit() and match and match.group(1)==uid,'own_process_identity_unavailable')
-        return sha((pid+':'+uid+':'+fields[19]).encode())
+        first=start_time(before); second=start_time(after)
+        require(first==second and match and match.group(1)==uid,'own_process_identity_unavailable')
+        return sha((pid+':'+uid+':'+first).encode())
     def freeze_sample(self,pid,uid):
         started = time.monotonic()
         expected='/uid_'+uid+'/pid_'+pid
@@ -495,11 +561,13 @@ def run(args):
                 'run_id_already_present')
         stdout_file = (private / 'instrumentation.stdout').open('xb')
         stderr_file = (private / 'instrumentation.stderr').open('xb')
-        command = [str(args.adb), '-s', args.serial, 'shell', 'am', 'instrument', '-w', '-r', '--no-restart',
-                   '--user', user, '-e', 'run_id', plan['run_id'], '-e', 'expected_pid', pid]
-        for key in ('duration_ms', 'max_rounds', 'interval_ms', 'phase_timeout_ms'):
-            command.extend(['-e', key, str(plan[key])])
-        command.append(COMPONENT)
+        _, shell_uid, _ = device.command('transport-shell-uid', ['shell', 'id', '-u'], timeout=4)
+        shell_uid = shell_uid.strip()
+        require(shell_uid.isdigit(), 'transport_shell_uid_unavailable')
+        instrument_args = instrumentation_arguments(plan, pid, user)
+        device.launcher_context = (str(pid), tuple(['app_process', '/system/bin',
+            'com.android.commands.am.Am', *instrument_args]), shell_uid)
+        command = [str(args.adb), '-s', args.serial, 'shell', 'am', *instrument_args]
         receipt['state'] = 'INSTRUMENTATION_IN_FLIGHT_OUTCOME_UNKNOWN'; save()
         started = time.monotonic()
         child = subprocess.Popen(command, stdout=stdout_file, stderr=stderr_file)

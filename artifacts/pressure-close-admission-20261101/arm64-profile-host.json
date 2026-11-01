@@ -1,0 +1,17 @@
+{
+  "state": "PASS_LOCAL_PROFILE_IDENTITY_ONLY",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "scope": "PRIVATE_ARM64_INPUT_PROFILE_STATIC_FIELDS_ONLY",
+  "required_roles": 8,
+  "additional_roles": 3,
+  "offline_contract_tests": {"passed": 10, "total": 10},
+  "candidate_freeze_and_validate": "PASS_LOCAL_SELF_CONSISTENCY_ONLY",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The verification shown here reads the expected profile hash from the same local profile and is not an independent trust root.",
+    "ELF checks are limited static field screening, not full ABI or loader proof.",
+    "Historical tool identities, the full NDK/sysroot/environment, real inputs and device state are not fully attested.",
+    "The old device runner has not been migrated to consume this profile."
+  ]
+}
