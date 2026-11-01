@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "tested_commit": "4aa28743291c68dcaaa90c2182a35fa11051890c",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41283832369",
+  "profiles": [
+    {"name": "verify (ubuntu-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "android_jni_cmake_contracts": 32, "android_builder_contracts": 19, "host_builder_contracts": 21, "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_symlink_rejection": "PASS", "trace_replay_positive": 12, "trace_replay_negative": 53},
+    {"name": "verify (windows-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "android_jni_cmake_contracts": 32, "android_builder_contracts": 19, "host_builder_contracts": 21, "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_symlink_rejection": "PASS", "trace_replay_positive": 12, "trace_replay_negative": 53}
+  ],
+  "limits": [
+    "This run tests host behavior and offline package contracts, not an Android device or a Linux release package.",
+    "Image trace uses synthetic inputs and source-level semantics, not production, performance or TLB evidence.",
+    "The later journal-preservation fix is not contained in this tested commit."
+  ]
+}

@@ -667,7 +667,7 @@ def build_host(args, work, source, lock_path, records, markers, is_windows):
     if is_windows:
         left = coff_archive_contract(tools, pressure, work, operations, 'pressure-original')
         right = coff_archive_contract(tools, clean, work, operations, 'pressure-clean')
-        sections = common.run_tool([tools['llvm-readobj'], '--sections', clean], work, operations, 'pressure-clean-sections')
+        sections = common.run_tool([tools['llvm-readobj'], '--sections', clean], work, operations, 'pressure-clean-debug-sections')
         require(not re.search(r'(?m)^    Name: \.debug', sections), 'host_static_debug_remains')
     else:
         for label, archive in (('pressure-original', pressure), ('pressure-clean', clean)):
@@ -680,7 +680,7 @@ def build_host(args, work, source, lock_path, records, markers, is_windows):
                                       work, operations, 'pressure-original')
         right = common.static_contract(tools['llvm-readobj'], tools['llvm-nm'], tools['llvm-ar'], clean,
                                        work, operations, 'pressure-clean')
-        sections = common.run_tool([tools['llvm-readobj'], '--sections', clean], work, operations, 'pressure-clean-sections')
+        sections = common.run_tool([tools['llvm-readobj'], '--sections', clean], work, operations, 'pressure-clean-debug-sections')
         require(not re.search(r'(?m)^    Name: \.(?:debug|zdebug)', sections), 'host_static_debug_remains')
     require(left == right, 'host_static_contract_changed')
     require(pressure.read_bytes() == pressure_raw and clean.read_bytes() == pressure_clean, 'host_static_changed_during_validation')
@@ -718,6 +718,7 @@ def build_host(args, work, source, lock_path, records, markers, is_windows):
     common.verify_snapshot(source, records)
     require(all(common.file_identity(path) == tool_hashes[name] for name, path in tools.items()) and
             common.file_identity(compiler) == compiler_hash, 'host_toolchain_changed')
+    common.verify_tool_log_integrity(work, operations)
     source_info = {'local_source_set_sha256': common.sha(common.canonical(records)),
                    'local_source_count': len(records), 'local_source_records': records,
                    'source_lock_sha256': common.file_identity(lock_path)['sha256']}
@@ -731,6 +732,7 @@ def build_host(args, work, source, lock_path, records, markers, is_windows):
               'static_pressure': {'original': common.ident(pressure_raw), 'candidate': common.ident(pressure_clean), **right},
               'pressure_header_declaration_count': pressure_export_count,
               'jni_signature_check': 'JAVAC_HEADERS_FORCED_INTO_HOST_JNI_TRANSLATION_UNITS_FOR_PACKAGED_JAVA_CLASSES',
+              'tool_logs': 'UNIQUE_EXCLUSIVE_AND_HASH_VERIFIED_IN_PRIVATE_WORK_DIRECTORY',
               'consumer': consumer, 'android_runtime': 'NOT_RUN', 'device_execution': 'NOT_RUN',
               'performance': 'NOT_MEASURED', 'formal_release': 'NOT_QUALIFIED',
               'limits': ['Host JNI is not an Android AAR or ART qualification.',

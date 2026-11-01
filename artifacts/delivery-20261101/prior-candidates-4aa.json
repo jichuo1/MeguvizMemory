@@ -1,0 +1,27 @@
+{
+  "state": "HISTORICAL_ENGINEERING_CANDIDATE_EVIDENCE",
+  "source_commit": "4aa28743291c68dcaaa90c2182a35fa11051890c",
+  "android": {
+    "candidate_sha256": "e1628d5e405f8f5fbedde3d1960a3be9b105c499f1c439e4177c2118e628527b",
+    "source_records_verified_against_commit": 261,
+    "abis": ["arm64-v8a", "x86_64", "armeabi-v7a"],
+    "source_sdk_aar_core_jni_identity": "PASS_SCOPED_STATIC_AND_CROSS_LINK_READBACK",
+    "build_steps": 148,
+    "unique_logs_and_recorded_hashes": "PASS_296_STREAMS",
+    "device_execution": "NOT_RUN"
+  },
+  "windows_host": {
+    "candidate_sha256": "025b3acf0a0485d401ba6efb3597e455aaff8ff042f3c483b39d54d5967fe23c",
+    "source_records_verified_against_commit": 261,
+    "installed_consumers": "PASS_SCOPED_HOST_IMAGE_AND_PRESSURE_V1_V2",
+    "journal_issue": "TWO_STEPS_SHARED_ONE_LOG_NAME_FIRST_STDOUT_OVERWRITTEN",
+    "log_chain": "INCOMPLETE_36_OF_37_READABLE_AS_RECORDED",
+    "independent_binary_comparison": "PASS_RECALCULATED_FROM_RETAINED_FILES",
+    "disposition": "HISTORICAL_ONLY_DO_NOT_CLAIM_COMPLETE_RAW_LOG_CHAIN"
+  },
+  "limits": [
+    "Local raw logs and original binaries remain private and are not included here.",
+    "The Android checks do not establish ART, device, 16 KiB loader, performance or release qualification.",
+    "The Windows candidate's overwritten log is not reconstructed or reclassified as complete."
+  ]
+}

@@ -39,7 +39,7 @@ core 的 `IMPORTED_LINK_INTERFACE_LIBRARIES` 通用及适用配置属性也必�
 - 静态 pressure 库去掉调试和 `.comment` 段前后，对比其已分配段、ARM attributes、非调试重定位及公开定义；除不占文件数据的 `SHT_NOBITS` 外，所选段须读到完整声明长度的数据。候选 SDK 中包含同一次构建的 pressure 库。AAR 的 JNI 只依赖该 ABI 的单一共享 Memory core 和允许的系统库。
 - 校验 Java/JNI 名称、生成头、关键类、keep 规则、LLVM notice、AAR/SDK 成员与 core 身份。随后对 ZIP、嵌套 AAR/JAR、成员名、元数据和内容进行有界递归路径与私有标识扫描；它不能证明不存在所有秘密。
 - 对每个解包后的脱敏 SDK，使用 Android NDK 的 `find_package(... COMPONENTS android_jni)` 编译并链接独立 native 测试组件，检查导入目标的文件路径和动态依赖。另检查 core-only SDK 的原有查找行为，以及缺 JNI、错误 ABI、错误 ELF 和重复引入不同前缀时的拒绝；这些只是编译和静态检查。
-- 所有原始二进制、快照、标准输出、标准错误和逐步记录留在 `build/` 的工作目录；命令超时或失败时保留已有日志和失败状态。完成所有检查后以无替换原子移动写入 `dist/`，不存在与工作临时文件共享的硬链接。Windows 使用不覆盖现有文件的原子移动；Linux 需要支持 `renameat2(RENAME_NOREPLACE)` 且工作目录与 `dist/` 在同一文件系统，否则安全失败。不要分享整个工作目录。
+- 所有原始二进制、快照、标准输出、标准错误和逐步记录留在 `build/` 的工作目录；首步执行前独占创建 journal，后续检查其文件身份；步骤名必须唯一，日志文件以独占方式创建，发布前逐项核对日志哈希与记录。命令超时或失败时保留已有日志和失败状态。完成所有检查后以无替换原子移动写入 `dist/`，不存在与工作临时文件共享的硬链接。Windows 使用不覆盖现有文件的原子移动；Linux 需要支持 `renameat2(RENAME_NOREPLACE)` 且工作目录与 `dist/` 在同一文件系统，否则安全失败。不要分享整个工作目录。
 
 候选中的 `SOURCE.json` 包含全部本项目源码记录及其可重算哈希；`MANIFEST.json` 记录工具哈希、逐步结果摘要、类、二进制和三个 ABI 的检查。哈希不是签名的完整构建来源证明；加载段与符号对照也不构成行为证明。尚未由本工具执行 R8 运行、Android ART、真实设备、MTE、能耗、性能或 BIL 验证。
 

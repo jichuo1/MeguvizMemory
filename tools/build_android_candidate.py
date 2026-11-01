@@ -16,6 +16,7 @@ import os
 from pathlib import Path, PurePosixPath
 import re
 import shutil
+import stat
 import struct
 import subprocess
 import sys
@@ -193,22 +194,83 @@ def verify_stripped_sections(before, after, abi):
     return original
 
 
-def run_tool(command, work, operations, label, timeout=600, expected_error=None):
-    log = work / 'logs'; log.mkdir(exist_ok=True)
+_TOOL_JOURNAL_IDENTITIES = {}
+
+
+def _journal_file_identity(info):
+    require(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_ino != 0,
+            'tool_journal_not_private_regular_file')
+    return info.st_dev, info.st_ino
+
+
+def _reserve_tool_journal(work, operations):
+    """Create once for this run; never append to another run's journal."""
+    key = work.resolve()
+    journal = work / 'operations.jsonl'
+    if not operations:
+        require(key not in _TOOL_JOURNAL_IDENTITIES, 'tool_journal_already_started')
+        try:
+            with journal.open('xb') as stream:
+                identity = _journal_file_identity(os.fstat(stream.fileno()))
+                stream.flush(); os.fsync(stream.fileno())
+        except FileExistsError as error:
+            raise ValueError('tool_journal_exists') from error
+        require(not journal.is_symlink() and _journal_file_identity(journal.lstat()) == identity,
+                'tool_journal_identity_changed')
+        _TOOL_JOURNAL_IDENTITIES[key] = identity
+    else:
+        require(key in _TOOL_JOURNAL_IDENTITIES and not journal.is_symlink() and journal.is_file() and
+                _journal_file_identity(journal.lstat()) == _TOOL_JOURNAL_IDENTITIES[key],
+                'tool_journal_identity_changed')
+    return journal, _TOOL_JOURNAL_IDENTITIES[key]
+
+
+def _append_tool_journal(journal, identity, record):
+    require(not journal.is_symlink() and journal.is_file() and _journal_file_identity(journal.lstat()) == identity,
+            'tool_journal_identity_changed')
+    flags = os.O_WRONLY | os.O_APPEND | getattr(os, 'O_BINARY', 0) | getattr(os, 'O_NOFOLLOW', 0)
     try:
-        completed = subprocess.run([str(x) for x in command], capture_output=True, timeout=timeout, check=False)
-        stdout, stderr, code, state = completed.stdout, completed.stderr, completed.returncode, 'EXITED'
-    except subprocess.TimeoutExpired as error:
-        stdout, stderr, code, state = error.stdout or b'', error.stderr or b'', None, 'TIMEOUT'
-    except OSError:
-        stdout, stderr, code, state = b'', b'', None, 'LAUNCH_ERROR'
-    (log / (label + '.stdout')).write_bytes(stdout)
-    (log / (label + '.stderr')).write_bytes(stderr)
+        fd = os.open(journal, flags)
+    except OSError as error:
+        raise ValueError('tool_journal_open_failed') from error
+    with os.fdopen(fd, 'ab', buffering=0) as stream:
+        require(_journal_file_identity(os.fstat(stream.fileno())) == identity and not journal.is_symlink() and
+                _journal_file_identity(journal.lstat()) == identity, 'tool_journal_identity_changed')
+        stream.write(canonical(record) + b'\n'); os.fsync(stream.fileno())
+
+
+def run_tool(command, work, operations, label, timeout=600, expected_error=None):
+    require(isinstance(label, str) and re.fullmatch(r'[A-Za-z0-9_-]{1,160}', label) is not None,
+            'invalid_tool_step')
+    require(not any(record.get('step', '').casefold() == label.casefold() for record in operations),
+            'duplicate_tool_step_' + label)
+    require(work.is_dir() and not work.is_symlink(), 'tool_work_dir_invalid')
+    log = work / 'logs'
+    if os.path.lexists(log):
+        require(log.is_dir() and not log.is_symlink() and log.resolve().parent == work.resolve(), 'tool_log_dir_invalid')
+    stdout_path, stderr_path = log / (label + '.stdout'), log / (label + '.stderr')
+    names = {entry.name.casefold() for entry in log.iterdir()} if log.is_dir() else set()
+    require(stdout_path.name.casefold() not in names and stderr_path.name.casefold() not in names,
+            'tool_log_exists_' + label)
+    journal, journal_identity = _reserve_tool_journal(work, operations)
+    log.mkdir(exist_ok=True)
+    require(log.is_dir() and not log.is_symlink() and log.resolve().parent == work.resolve(), 'tool_log_dir_invalid')
+    # Reserve both names exclusively before executing the step. A collision or
+    # write failure never overwrites evidence and never reports a successful run.
+    with stdout_path.open('xb') as stdout_file, stderr_path.open('xb') as stderr_file:
+        try:
+            completed = subprocess.run([str(x) for x in command], capture_output=True, timeout=timeout, check=False)
+            stdout, stderr, code, state = completed.stdout, completed.stderr, completed.returncode, 'EXITED'
+        except subprocess.TimeoutExpired as error:
+            stdout, stderr, code, state = error.stdout or b'', error.stderr or b'', None, 'TIMEOUT'
+        except OSError:
+            stdout, stderr, code, state = b'', b'', None, 'LAUNCH_ERROR'
+        stdout_file.write(stdout); stdout_file.flush(); os.fsync(stdout_file.fileno())
+        stderr_file.write(stderr); stderr_file.flush(); os.fsync(stderr_file.fileno())
     record = {'step': label, 'state': state, 'exit_code': code,
               'stdout_sha256': sha(stdout), 'stderr_sha256': sha(stderr)}
     operations.append(record)
-    with (work / 'operations.jsonl').open('ab') as journal:
-        journal.write(canonical(record) + b'\n'); journal.flush(); os.fsync(journal.fileno())
+    _append_tool_journal(journal, journal_identity, record)
     require(state != 'TIMEOUT', 'tool_timeout_' + label)
     require(state != 'LAUNCH_ERROR', 'tool_launch_error_' + label)
     if expected_error is None:
@@ -217,6 +279,30 @@ def run_tool(command, work, operations, label, timeout=600, expected_error=None)
         require(code != 0 and expected_error.encode('utf-8') in stdout + stderr,
                 'expected_rejection_missing_' + label)
     return stdout.decode('utf-8', 'strict')
+
+
+def verify_tool_log_integrity(work, operations):
+    """Verify the private journal and every step log before publication."""
+    require(operations, 'tool_journal_empty')
+    labels = [record.get('step') for record in operations]
+    require(all(isinstance(label, str) and re.fullmatch(r'[A-Za-z0-9_-]{1,160}', label)
+                for label in labels) and len({label.casefold() for label in labels}) == len(labels),
+            'tool_journal_duplicate_or_invalid_step')
+    journal = work / 'operations.jsonl'
+    require(work.resolve() in _TOOL_JOURNAL_IDENTITIES and journal.is_file() and not journal.is_symlink() and
+            _journal_file_identity(journal.lstat()) == _TOOL_JOURNAL_IDENTITIES[work.resolve()], 'tool_journal_missing')
+    rows = [json.loads(line) for line in journal.read_text(encoding='utf-8').splitlines()]
+    require(rows == operations, 'tool_journal_record_mismatch')
+    log = work / 'logs'
+    require(log.is_dir() and not log.is_symlink() and log.resolve().parent == work.resolve(), 'tool_log_dir_invalid')
+    expected = {label + '.' + stream for label in labels for stream in ('stdout', 'stderr')}
+    actual = {path.name for path in log.iterdir()}
+    require(actual == expected, 'tool_log_set_mismatch')
+    for record in operations:
+        for stream in ('stdout', 'stderr'):
+            path = log / (record['step'] + '.' + stream)
+            require(path.is_file() and not path.is_symlink() and sha(path.read_bytes()) == record[stream + '_sha256'],
+                    'tool_log_hash_mismatch_' + record['step'])
 
 
 def dynamic_contract(readelf, path, work, operations, label):
@@ -733,6 +819,7 @@ def build_candidate(args, work, source, lock_bytes, records, markers):
     verify_snapshot(source, records)
     require(all(file_identity(path) == tool_hashes[name] for name, path in tools.items()), 'toolchain_changed')
     require(all(file_identity(path) == generator_hashes[name] for name, path in generator_files.items()), 'generator_changed')
+    verify_tool_log_integrity(work, operations)
     source_info = {'source_lock_sha256': sha(lock_bytes), 'local_source_set_sha256': sha(canonical(records)),
                    'local_source_count': len(records), 'source_root': 'VERIFIED_PRIVATE_SNAPSHOT',
                    'local_source_records': records,
@@ -742,6 +829,7 @@ def build_candidate(args, work, source, lock_bytes, records, markers):
               'scope': 'SOURCE_SNAPSHOT_BUILD_SANITIZATION_AND_PACKAGE_ONLY', 'profiles': results,
               'toolchain': tool_hashes, 'generator': generator_hashes, 'operations': operations, 'classes_jar': ident(classes_jar),
               'jni_signature_check': 'JAVAC_GENERATED_HEADERS_FORCED_INTO_EACH_JNI_TRANSLATION_UNIT',
+              'tool_logs': 'UNIQUE_EXCLUSIVE_AND_HASH_VERIFIED_IN_PRIVATE_WORK_DIRECTORY',
               'source': source_info, 'device_execution': 'NOT_RUN', 'r8_runtime': 'NOT_RUN',
               'performance': 'NOT_MEASURED', 'formal_release': 'NOT_QUALIFIED',
               'limits': ['No claim of Android ART behavior, 16 KiB loading, MTE or performance.',

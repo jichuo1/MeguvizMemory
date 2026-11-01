@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import struct
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -251,6 +252,145 @@ class CandidateContracts(unittest.TestCase):
             self.assertEqual((root / 'logs/step.stderr').read_bytes(), b'incomplete')
             self.assertEqual(operations[0]['state'], 'TIMEOUT')
             self.assertEqual(json.loads((root / 'operations.jsonl').read_text(encoding='utf-8'))['state'], 'TIMEOUT')
+
+    def test_tool_step_duplicate_does_not_rerun_or_overwrite_logs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); operations = []
+            result = subprocess.CompletedProcess(['fake'], 0, stdout=b'first-output', stderr=b'first-error')
+            with patch.object(subject.subprocess, 'run', return_value=result) as run:
+                subject.run_tool(['fake'], root, operations, 'step')
+                before = {name: (root / 'logs' / ('step.' + name)).read_bytes() for name in ('stdout', 'stderr')}
+                journal = (root / 'operations.jsonl').read_bytes()
+                with self.assertRaisesRegex(ValueError, 'duplicate_tool_step'):
+                    subject.run_tool(['fake'], root, operations, 'step')
+                with self.assertRaisesRegex(ValueError, 'duplicate_tool_step'):
+                    subject.run_tool(['fake'], root, operations, 'STEP')
+                self.assertEqual(run.call_count, 1)
+                self.assertEqual(before, {name: (root / 'logs' / ('step.' + name)).read_bytes()
+                                          for name in ('stdout', 'stderr')})
+                self.assertEqual((root / 'operations.jsonl').read_bytes(), journal)
+
+    def test_tool_step_preexisting_log_is_never_overwritten(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); log = root / 'logs'; log.mkdir()
+            (log / 'step.stderr').write_bytes(b'previous')
+            with patch.object(subject.subprocess, 'run') as run:
+                with self.assertRaisesRegex(ValueError, 'tool_log_exists'):
+                    subject.run_tool(['fake'], root, [], 'step')
+                run.assert_not_called()
+            self.assertEqual((log / 'step.stderr').read_bytes(), b'previous')
+            self.assertFalse((log / 'step.stdout').exists())
+
+    def create_real_symlink_or_report_unavailable(self, link, target, directory=False):
+        try:
+            link.symlink_to(target, target_is_directory=directory)
+        except (OSError, NotImplementedError) as error:
+            detail = {'state': 'UNAVAILABLE', 'scope': 'REAL_SYMLINK_CREATION',
+                      'error_type': type(error).__name__, 'errno': getattr(error, 'errno', None),
+                      'winerror': getattr(error, 'winerror', None)}
+            print(json.dumps(detail), file=sys.stderr)
+            self.skipTest('UNAVAILABLE_REAL_SYMLINK_CREATION')
+        self.assertTrue(link.is_symlink(), 'real symlink required; no mock fallback')
+
+    def test_tool_step_rejects_real_logs_directory_symlink(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); target = root / 'existing-log-target'; target.mkdir()
+            sentinel = target / 'keep.txt'; sentinel.write_bytes(b'unchanged')
+            link = root / 'logs'
+            self.create_real_symlink_or_report_unavailable(link, target, directory=True)
+            with patch.object(subject.subprocess, 'run') as run:
+                with self.assertRaisesRegex(ValueError, 'tool_log_dir_invalid'):
+                    subject.run_tool(['fake'], root, [], 'step')
+                run.assert_not_called()
+            self.assertEqual(sentinel.read_bytes(), b'unchanged')
+            self.assertEqual(sorted(p.name for p in target.iterdir()), ['keep.txt'])
+            self.assertTrue(link.is_symlink())
+            self.assertFalse((root / 'operations.jsonl').exists())
+
+    def assert_dangling_step_log_rejected(self, stream):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); log = root / 'logs'; log.mkdir()
+            target = root / ('uncreated-' + stream)
+            link = log / ('step.' + stream)
+            self.create_real_symlink_or_report_unavailable(link, target)
+            self.assertFalse(target.exists())
+            with patch.object(subject.subprocess, 'run') as run:
+                with self.assertRaisesRegex(ValueError, 'tool_log_exists'):
+                    subject.run_tool(['fake'], root, [], 'step')
+                run.assert_not_called()
+            self.assertTrue(link.is_symlink())
+            self.assertFalse(target.exists())
+            self.assertEqual(sorted(p.name for p in log.iterdir()), ['step.' + stream])
+            self.assertFalse((root / 'operations.jsonl').exists())
+
+    def test_tool_step_rejects_real_dangling_stdout_link(self):
+        self.assert_dangling_step_log_rejected('stdout')
+
+    def test_tool_step_rejects_real_dangling_stderr_link(self):
+        self.assert_dangling_step_log_rejected('stderr')
+
+    def test_tool_step_rejects_unsafe_label_before_execution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with patch.object(subject.subprocess, 'run') as run:
+                with self.assertRaisesRegex(ValueError, 'invalid_tool_step'):
+                    subject.run_tool(['fake'], Path(tmp), [], '../outside')
+                run.assert_not_called()
+
+    def test_preexisting_journal_is_rejected_before_process_start(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); journal = root / 'operations.jsonl'; journal.write_bytes(b'previous')
+            with patch.object(subject.subprocess, 'run') as run:
+                with self.assertRaisesRegex(ValueError, 'tool_journal_exists'):
+                    subject.run_tool(['fake'], root, [], 'step')
+                run.assert_not_called()
+            self.assertEqual(journal.read_bytes(), b'previous')
+            self.assertFalse((root / 'logs').exists())
+
+    def test_dangling_journal_name_is_rejected_before_process_start(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); journal = root / 'operations.jsonl'
+            if os.name != 'nt':
+                journal.symlink_to(root / 'missing-journal')
+                with patch.object(subject.subprocess, 'run') as run:
+                    with self.assertRaisesRegex(ValueError, 'tool_journal_exists'):
+                        subject.run_tool(['fake'], root, [], 'step')
+                    run.assert_not_called()
+                self.assertTrue(journal.is_symlink())
+            else:
+                original_open = Path.open
+                def simulate_dangling(path, *args, **kwargs):
+                    if path == journal and args and args[0] == 'xb':
+                        raise FileExistsError('occupied')
+                    return original_open(path, *args, **kwargs)
+                with patch.object(Path, 'open', simulate_dangling), patch.object(subject.subprocess, 'run') as run:
+                    with self.assertRaisesRegex(ValueError, 'tool_journal_exists'):
+                        subject.run_tool(['fake'], root, [], 'step')
+                    run.assert_not_called()
+
+    def test_replaced_journal_is_rejected_before_next_process(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); operations = []
+            result = subprocess.CompletedProcess(['fake'], 0, stdout=b'first', stderr=b'')
+            with patch.object(subject.subprocess, 'run', return_value=result) as run:
+                subject.run_tool(['fake'], root, operations, 'first')
+                journal = root / 'operations.jsonl'; original = journal.read_bytes()
+                journal.rename(root / 'retained-original.jsonl')
+                journal.write_bytes(original)
+                with self.assertRaisesRegex(ValueError, 'tool_journal_identity_changed'):
+                    subject.run_tool(['fake'], root, operations, 'second')
+                self.assertEqual(run.call_count, 1)
+                self.assertEqual((root / 'retained-original.jsonl').read_bytes(), original)
+
+    def test_tool_journal_and_logs_must_match_before_publication(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); operations = []
+            result = subprocess.CompletedProcess(['fake'], 0, stdout=b'known', stderr=b'')
+            with patch.object(subject.subprocess, 'run', return_value=result):
+                subject.run_tool(['fake'], root, operations, 'step')
+            subject.verify_tool_log_integrity(root, operations)
+            (root / 'logs/step.stdout').write_bytes(b'changed')
+            with self.assertRaisesRegex(ValueError, 'tool_log_hash_mismatch'):
+                subject.verify_tool_log_integrity(root, operations)
 
     def test_workspace_roots_created_inside_and_external_link_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
