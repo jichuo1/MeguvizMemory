@@ -95,6 +95,7 @@ struct Backing {
     uint32_t access = MGMEM_WRITE;
     void *external_context = nullptr;
     void (*external_release)(void *) = nullptr;
+    mgmem_status (*external_release_checked)(void *) = nullptr;
 };
 
 struct Allocation {
@@ -117,7 +118,10 @@ struct Lease {
 // neither lock held. Owned allocations may be legitimately recycled by malloc
 // before an old deallocation callback has returned, so their claims may overlap
 // transiently only while the old callback has no owner/lease. Imports reject
-// overlap with every claim, even those callbacks' still-charged ranges.
+// overlap with every claim, even those callbacks' still-charged ranges. A
+// checked external release may report failure or leave ownership uncertain;
+// its claim never becomes reusable until the callback has succeeded. The legacy
+// void callback retains its historical provider-reuse behavior.
 struct RangeClaim { uintptr_t begin; uintptr_t end; u64 external_id; u64 token; bool releasing; };
 std::mutex range_mutex;
 std::list<RangeClaim> range_claims;
@@ -248,9 +252,16 @@ mgmem_status allocate_backing(mgmem_domain &domain, u64 bytes, u64 alignment,
 
 bool deallocate_backing(mgmem_domain &domain, const Backing &backing) noexcept {
     if (!backing.address) { drop_claim(backing.claim); return true; }
-    releasing_claim(backing.claim, true);
+    if (!backing.external || !backing.external_release_checked)
+        releasing_claim(backing.claim, true);
     if (backing.external) {
-        try { backing.external_release(backing.external_context); }
+        try {
+            if (backing.external_release_checked) {
+                if (backing.external_release_checked(backing.external_context) != MGMEM_OK) return false;
+            } else {
+                backing.external_release(backing.external_context);
+            }
+        }
         catch (...) { releasing_claim(backing.claim, false); return false; }
     } else if (domain.custom_provider) {
         try {
@@ -374,7 +385,8 @@ uint32_t mgmem_abi_version_v1(void) { return (MGMEM_ABI_MAJOR << 16) | MGMEM_ABI
 uint64_t mgmem_capabilities_v1(void) {
     return MGMEM_CAP_SYSTEM | MGMEM_CAP_ARENA | MGMEM_CAP_CUSTOM_PROVIDER |
            MGMEM_CAP_RW_LEASE | MGMEM_CAP_EXPLICIT_COLLECTION |
-           MGMEM_CAP_EXTERNAL_IMPORT | MGMEM_CAP_SOFT_BUDGET;
+           MGMEM_CAP_EXTERNAL_IMPORT | MGMEM_CAP_SOFT_BUDGET |
+           MGMEM_CAP_CHECKED_EXTERNAL_RELEASE;
 }
 uint64_t mgmem_runtime_origin_v1(void) { return runtime_origin(); }
 
@@ -543,8 +555,9 @@ mgmem_status mgmem_allocate_v1(mgmem_domain *domain, u64 bytes, u64 alignment,
     });
 }
 
-mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
-    const mgmem_external_buffer_v1 *buffer, mgmem_handle_v1 *out) {
+static mgmem_status import_external_impl(mgmem_domain *domain,
+    const mgmem_external_buffer_v1 *buffer,
+    mgmem_status (*release_checked)(void *), mgmem_handle_v1 *out) {
     if (!out) return MGMEM_INVALID_ARGUMENT;
     *out = {};
     if (!domain || !buffer || buffer->struct_size < sizeof(*buffer)) return MGMEM_INVALID_ARGUMENT;
@@ -552,7 +565,8 @@ mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
     if (input.abi_major != MGMEM_ABI_MAJOR || input.abi_minor > MGMEM_ABI_MINOR ||
         input.required_flags != 0) return MGMEM_UNSUPPORTED;
     if (input.managing_runtime_origin != runtime_origin()) return MGMEM_STALE_HANDLE;
-    if (!input.data || !input.capacity_bytes || !input.external_id || !input.retain || !input.release ||
+    if (!input.data || !input.capacity_bytes || !input.external_id || !input.retain ||
+        (!input.release && !release_checked) || (input.release && release_checked) ||
         input.reserved || input.access > MGMEM_WRITE || !power_of_two(input.alignment))
         return MGMEM_INVALID_ARGUMENT;
     const auto base = reinterpret_cast<uintptr_t>(input.data);
@@ -576,7 +590,8 @@ mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
         u64 id = 0;
         if (!take_id(*domain, id)) return MGMEM_OVERFLOW;
         domain->backing.emplace_back(Backing{const_cast<void *>(input.data), input.capacity_bytes,
-            input.alignment, input.capacity_bytes, true, 0, true, input.access, input.context, input.release});
+            input.alignment, input.capacity_bytes, true, 0, true, input.access, input.context, input.release,
+            release_checked});
         auto backing_it = std::prev(domain->backing.end());
         try {
             domain->allocations.emplace(id,
@@ -642,6 +657,25 @@ mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
         domain->changed.notify_all();
         return status;
     });
+}
+
+mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
+    const mgmem_external_buffer_v1 *buffer, mgmem_handle_v1 *out) {
+    return import_external_impl(domain, buffer, nullptr, out);
+}
+
+mgmem_status mgmem_import_external_checked_v1(mgmem_domain *domain,
+    const mgmem_external_buffer_checked_v1 *buffer, mgmem_handle_v1 *out) {
+    if (!out) return MGMEM_INVALID_ARGUMENT;
+    *out = {};
+    if (!domain || !buffer || buffer->struct_size < sizeof(*buffer)) return MGMEM_INVALID_ARGUMENT;
+    const auto input = *buffer;
+    if (!input.release_checked) return MGMEM_INVALID_ARGUMENT;
+    const mgmem_external_buffer_v1 legacy{
+        sizeof(mgmem_external_buffer_v1), input.abi_major, input.abi_minor, input.required_flags,
+        input.data, input.capacity_bytes, input.alignment, input.external_id, input.access,
+        input.reserved, input.context, input.retain, nullptr, input.managing_runtime_origin};
+    return import_external_impl(domain, &legacy, input.release_checked, out);
 }
 
 mgmem_status mgmem_domain_set_budget_v1(mgmem_domain *domain, u64 bytes) {

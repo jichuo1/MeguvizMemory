@@ -396,5 +396,20 @@
     "manifest": "artifacts/android-close-investigation-20261030/ARTIFACTS.json",
     "source_lock": "artifacts/android-close-investigation-20261030/SOURCE_LOCK.json",
     "performance": "NOT_MEASURED"
+  },
+  "feature_development_20261101": {
+    "state": "ENGINEERING_PREVIEW_NOT_FORMAL_RELEASE",
+    "package": {
+      "path": "dist/MeguvizMemory-0.2.0-Feature-Preview-20261101.zip",
+      "bytes": 940385,
+      "sha256": "c846deda6c70d9ada5be5bdf1ee19b2db00ff4fbc631960186b5891977e9a2b7"
+    },
+    "evidence": "artifacts/feature-development-20261101/host-receipt-v2.json",
+    "android_r8_build": "artifacts/feature-development-20261101/android-borrow-r8-build.json",
+    "source_commit_binding": "NOT_ESTABLISHED",
+    "device_execution": "NOT_QUALIFIED",
+    "performance": "NOT_MEASURED",
+    "BIL": "NOT_INTEGRATED",
+    "source_lock": "artifacts/feature-development-20261101/SOURCE_LOCK.json"
   }
 }

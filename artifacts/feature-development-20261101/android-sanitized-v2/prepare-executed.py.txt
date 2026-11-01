@@ -1,0 +1,197 @@
+"""Copy three local AAR/SDK pairs, strip debug, compare binary contracts, scan.
+
+Inputs are read-only; output is confined below this new build directory. This
+is a binary-contract/privacy check, not Android execution or release evidence.
+"""
+from __future__ import annotations
+from pathlib import Path
+import hashlib, io, json, re, shutil, struct, subprocess, sys, zipfile
+
+ROOT = Path.cwd().resolve()
+OUT = ROOT / 'build/feature-20261101-sanitized-v2'
+LLVM = Path.home() / 'AppData/Local/Android/Sdk/ndk/30.0.16248370/toolchains/llvm/prebuilt/windows-x86_64/bin'
+STRIP, READELF, READOBJ, NM, AR = [LLVM / (name + '.exe') for name in
+    ('llvm-strip', 'llvm-readelf', 'llvm-readobj', 'llvm-nm', 'llvm-ar')]
+ABIS = {'arm64-v8a': (2,183), 'x86_64': (2,62), 'armeabi-v7a': (1,40)}
+ids = [s.strip() for s in (ROOT/'build/android-close-private-identifiers.txt').read_text(encoding='utf-8').splitlines() if s.strip()]
+markers = set()
+for value in ids:
+    for x in (value, value.replace('\\','/'), value.replace('/','\\')):
+        for encoding in ('utf-8','utf-16le'):
+            markers.add(x.lower().encode(encoding))
+
+def require(ok, why):
+    if not ok: raise RuntimeError(why)
+def sha(data): return hashlib.sha256(data).hexdigest()
+def fh(path): return sha(path.read_bytes())
+def run(*args):
+    p = subprocess.run([str(x) for x in args],capture_output=True,timeout=60)
+    require(p.returncode == 0, 'tool_failed:' + Path(args[0]).name)
+    return p.stdout
+def scan(data, path, found):
+    if any(m in data.lower() for m in markers): found.append(path)
+    if data[:4] == b'PK\x03\x04':
+        try:
+            with zipfile.ZipFile(io.BytesIO(data)) as z:
+                require(len(z.namelist()) == len(set(z.namelist())), 'duplicate_zip_members')
+                require(z.testzip() is None, 'corrupt_zip')
+                for n in z.namelist(): scan(z.read(n), path+'!'+n, found)
+        except zipfile.BadZipFile: raise RuntimeError('invalid_nested_zip')
+def elf(data, expected_class, expected_machine):
+    require(data[:4] == b'\x7fELF' and data[4] == expected_class and data[5] == 1, 'wrong_elf_class_or_endian')
+    machine = struct.unpack_from('<H',data,18)[0]
+    require(machine == expected_machine and struct.unpack_from('<H',data,16)[0] == 3, 'wrong_machine_or_type')
+    if expected_class == 2:
+        phoff = struct.unpack_from('<Q',data,32)[0]; entsize,num = struct.unpack_from('<HH',data,54)
+        fmt, need, mask = '<IIQQQQQQ', 56, ((40,48),(58,64))
+    else:
+        phoff = struct.unpack_from('<I',data,28)[0]; entsize,num = struct.unpack_from('<HH',data,42)
+        fmt, need, mask = '<IIIIIIII', 32, ((32,36),(46,52))
+    require(entsize == need and 0 < num < 256 and phoff + entsize*num <= len(data), 'bad_program_header_table')
+    headers, hashes = [], []
+    for i in range(num):
+        fields = struct.unpack_from(fmt, data, phoff+i*entsize)
+        if fields[0] != 1: continue
+        if expected_class == 2:
+            _,flags,off,va,pa,filesz,memsz,align = fields
+        else:
+            _,off,va,pa,filesz,memsz,flags,align = fields
+        require(off+filesz <= len(data) and filesz <= memsz, 'bad_load_bounds')
+        content=bytearray(data[off:off+filesz])
+        for a,b in mask:
+            for pos in range(max(a,off), min(b,off+filesz)): content[pos-off]=0
+        headers.append([flags,off,va,pa,filesz,memsz,align]); hashes.append(sha(content))
+    require(bool(headers), 'no_load_segments')
+    return {'class':expected_class,'machine':machine,'load_headers':headers,'masked_load_sha256':hashes}
+def dynamic(path):
+    lines = run(READELF,'--dyn-syms','--wide',path).decode('utf-8','strict').splitlines()
+    lines = sorted(x.strip() for x in lines if x.strip() and not x.startswith(('File:','Archive:')))
+    text = run(READELF,'--dynamic','--wide',path).decode('utf-8','strict')
+    needed = re.findall(r'\(NEEDED\).*?\[([^\]]+)\]',text)
+    soname = re.findall(r'\(SONAME\).*?\[([^\]]+)\]',text)
+    require(bool(lines) and all('/' not in x and '\\' not in x for x in needed), 'bad_dynamic_metadata')
+    return {'dynsym_sha256':sha('\n'.join(lines).encode()),'needed':needed,'soname':soname}
+def elf_compare(original,candidate,abi):
+    cls,machine=ABIS[abi]
+    a,b=elf(original.read_bytes(),cls,machine),elf(candidate.read_bytes(),cls,machine)
+    require(a==b,'load_mismatch:'+abi+':'+original.name)
+    x,y=dynamic(original),dynamic(candidate)
+    require(x==y,'dynamic_mismatch:'+abi+':'+original.name)
+    return {'original_sha256':fh(original),'candidate_sha256':fh(candidate),'PT_LOAD':a,**x}
+def archive_symbols(p):
+    lines=run(NM,'--defined-only','--extern-only','--format=posix',p).decode('utf-8','strict').splitlines()
+    return sorted(x.strip() for x in lines if x.strip() and not x.rstrip().endswith(':'))
+def archive_sections(p):
+    source=run(READOBJ,'--sections','--section-data',p).decode('utf-8','strict')
+    blocks=re.findall(r'(?ms)^  Section \{\n(.*?)^  \}',source); rows=[]
+    for block in blocks:
+        match=re.search(r'(?m)^    Name: (\S+)',block)
+        if not match:continue
+        name=match.group(1)
+        if 'SHF_ALLOC' not in block and name != '.ARM.attributes':continue
+        size=int(re.search(r'(?m)^    Size: (\d+)',block).group(1))
+        data=re.search(r'(?ms)^    SectionData \(\n(.*?)^    \)',block)
+        pieces=[''.join(re.findall(r'\b[0-9A-F]{2,8}\b',line.split('|')[0].split(':',1)[1]))
+                for line in data.group(1).splitlines() if ':' in line] if data else []
+        payload=bytes.fromhex(''.join(pieces)); require(not payload or len(payload)==size,'archive_section_size')
+        typ=re.search(r'(?m)^    Type: (\S+)',block).group(1)
+        flags=re.search(r'(?m)^    Flags \[ \((0x[0-9A-Fa-f]+)\)',block).group(1)
+        align=int(re.search(r'(?m)^    AddressAlignment: (\d+)',block).group(1))
+        rows.append([name,typ,flags,size,align,sha(payload)])
+    require(bool(rows),'archive_sections_missing');return rows
+def archive_relocations(p):
+    source=run(READOBJ,'--relocations',p).decode('utf-8','strict')
+    groups=re.findall(r'(?ms)^  Section \(\d+\) (\S+) \{\n(.*?)^  \}',source)
+    rows=[[name,[x.strip() for x in data.splitlines() if x.strip()]] for name,data in groups if '.debug' not in name]
+    require(bool(rows),'archive_relocations_missing');return rows
+def archive_compare(original,candidate,abi):
+    members_a=run(AR,'t',original).decode().splitlines(); members_b=run(AR,'t',candidate).decode().splitlines()
+    require(members_a==members_b and len(members_a)==1,'archive_members_changed')
+    sa,sb=archive_sections(original),archive_sections(candidate)
+    ra,rb=archive_relocations(original),archive_relocations(candidate)
+    na,nb=archive_symbols(original),archive_symbols(candidate)
+    require(sa==sb and ra==rb and na==nb,'archive_contract_mismatch:'+abi)
+    canon=lambda v:sha(json.dumps(v,separators=(',',':')).encode())
+    return {'original_sha256':fh(original),'candidate_sha256':fh(candidate),'member_count':len(members_a),
+            'allocated_and_arm_attributes_sections':len(sa),'section_sha256':canon(sa),
+            'nondebug_relocation_groups':len(ra),'nondebug_relocation_sha256':canon(ra),
+            'defined_externals_sha256':canon(na)}
+
+def main():
+    require(OUT.resolve().is_relative_to((ROOT/'build').resolve()),'out_not_in_build')
+    require(not (OUT/'manifest.json').exists(), 'output_already_exists')
+    result={'state':'RUNNING','scope':'SANITIZED_CANDIDATES_NOT_ANDROID_RUNTIME_QUALIFIED',
+        'private_marker_count':len(ids),'tools':{x.name:fh(x) for x in (STRIP,READELF,READOBJ,NM,AR)},
+        'mask':{'ELF64':'e_shoff bytes 40..47 and e_shentsize/e_shnum/e_shstrndx bytes 58..63',
+                'ELF32':'e_shoff bytes 32..35 and e_shentsize/e_shnum/e_shstrndx bytes 46..51'},
+        'profiles':{},'limitations':['PT_LOAD data and dynamic metadata comparison is not runtime verification.',
+        'Archive comparison covers allocated sections, ARM attributes, non-debug relocations and external definitions; behavior not executed.',
+        'Only selected literal identifiers checked; no claim that all possible sensitive information was detected.']}
+    initial={}
+    for abi in ABIS:
+        source=ROOT/f'build/feature-20261101/sdk-{abi}'
+        aar=ROOT/f'build/feature-20261101/aar-{abi}/MeguvizMemory-Android-Pressure-0.2.0.aar'
+        require(source.is_dir() and aar.is_file(),'input_missing')
+        for p in source.rglob('*'):
+            require(not p.is_symlink(),'symlink_in_sdk')
+            if p.is_file(): initial[p]=fh(p)
+        initial[aar]=fh(aar)
+    try:
+        for abi in ABIS:
+            src=ROOT/f'build/feature-20261101/sdk-{abi}'
+            aar=ROOT/f'build/feature-20261101/aar-{abi}/MeguvizMemory-Android-Pressure-0.2.0.aar'
+            dst=OUT/'sdk'/abi; candidate=OUT/'aar'/abi/'MeguvizMemory-Android-Pressure-0.2.0.aar'
+            require(not dst.exists() and not candidate.exists(),'refuse_existing_candidate')
+            with zipfile.ZipFile(aar) as z:
+                require(z.testzip() is None and len(z.namelist())==len(set(z.namelist())),'bad_aar')
+                core_name=f'jni/{abi}/libmgmem.so'; jni_name=f'jni/{abi}/libmgmem_pressure_jni.so'
+                require(sorted(x for x in z.namelist() if x.endswith('.so'))==sorted([core_name,jni_name]),'wrong_aar_native_closure')
+                core=z.read(core_name); jni=z.read(jni_name)
+            require(core==(src/'lib/libmgmem.so').read_bytes(),'aar_sdk_original_core_mismatch')
+            shutil.copytree(src,dst); candidate.parent.mkdir(parents=True)
+            scratch=OUT/'elf'/abi; scratch.mkdir(parents=True)
+            old_core=scratch/'source-core.so'; old_jni=scratch/'source-jni.so'; new_jni=scratch/'candidate-jni.so'
+            old_core.write_bytes(core); old_jni.write_bytes(jni); new_jni.write_bytes(jni)
+            for p in (dst/'lib/libmgmem.so',dst/'lib/libmgmem_pressure.a',new_jni):
+                if p.suffix == '.so': run(STRIP,'--strip-debug','--remove-section=.comment',p)
+                else: run(STRIP,'--strip-debug',p)
+            core_e=elf_compare(old_core,dst/'lib/libmgmem.so',abi)
+            jni_e=elf_compare(old_jni,new_jni,abi)
+            require('libmgmem.so' in jni_e['needed'],'jni_does_not_depend_on_core')
+            archive_e=archive_compare(src/'lib/libmgmem_pressure.a',dst/'lib/libmgmem_pressure.a',abi)
+            with zipfile.ZipFile(aar) as old, zipfile.ZipFile(candidate,'x') as new:
+                for info in old.infolist():
+                    raw=old.read(info.filename)
+                    if info.filename==core_name:raw=(dst/'lib/libmgmem.so').read_bytes()
+                    elif info.filename==jni_name:raw=new_jni.read_bytes()
+                    new.writestr(info,raw)
+            with zipfile.ZipFile(aar) as old,zipfile.ZipFile(candidate) as new:
+                require(new.testzip() is None and old.namelist()==new.namelist(),'aar_closure_changed')
+                for n in old.namelist():
+                    if n in (core_name,jni_name):continue
+                    require(old.read(n)==new.read(n),'aar_non_native_changed:'+n)
+                require(any('NOTICE' in n.upper() for n in new.namelist()),'aar_notice_missing')
+                require(new.read(core_name)==(dst/'lib/libmgmem.so').read_bytes(),'aar_sdk_candidate_core_mismatch')
+            hits=[];scan(candidate.read_bytes(),'aar',hits)
+            for p in sorted(dst.rglob('*')):
+                if p.is_file():scan(p.read_bytes(),'sdk/'+p.relative_to(dst).as_posix(),hits)
+            require(not hits,'private_identifier_remains:'+','.join(hits))
+            unchanged=[p.relative_to(src).as_posix() for p in src.rglob('*') if p.is_file() and p.name not in ('libmgmem.so','libmgmem_pressure.a')]
+            require(all((src/x).read_bytes()==(dst/x).read_bytes() for x in unchanged),'sdk_non_native_changed')
+            result['profiles'][abi]={'AAR_original_sha256':initial[aar],'AAR_candidate_sha256':fh(candidate),
+                'AAR_candidate_bytes':candidate.stat().st_size,'AAR_candidate':candidate.relative_to(ROOT).as_posix(),
+                'SDK_candidate':dst.relative_to(ROOT).as_posix(),'AAR_non_native_entries_unchanged':True,
+                'SDK_non_native_entries_unchanged':True,'privacy_scan':'NO_MATCH','core':core_e,'jni':jni_e,'static_pressure':archive_e}
+        require(all(fh(p)==v for p,v in initial.items()),'input_changed_during_process')
+        result['state']='PASS_BINARY_CONTRACTS_PRIVACY_SCAN_NOT_DEVICE_EXECUTED'
+        result['inputs_unchanged']=True
+    except Exception as e:
+        result['state']='FAILED_OR_BLOCKED';result['reason']=str(e)
+        result['inputs_unchanged']=all(p.is_file() and fh(p)==v for p,v in initial.items())
+    (OUT/'manifest.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
+    print(json.dumps({'state':result['state'],'profiles':{k:{'AAR_sha256':v['AAR_candidate_sha256'],
+        'core_sha256':v['core']['candidate_sha256'],'jni_sha256':v['jni']['candidate_sha256'],
+        'static_sha256':v['static_pressure']['candidate_sha256']} for k,v in result['profiles'].items()},
+        'inputs_unchanged':result['inputs_unchanged'],'reason':result.get('reason')}))
+    sys.exit(0 if result['state'].startswith('PASS') else 1)
+if __name__ == '__main__':main()

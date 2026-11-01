@@ -1,0 +1,449 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_LOCAL_FEATURE_EVIDENCE",
+  "scope": "HOST_TESTS_INSTALLED_HOST_CONSUMER_AND_ANDROID_BUILD_ONLY",
+  "suites": {
+    "host": {
+      "status": "PASS",
+      "total": 37,
+      "passed": 37,
+      "test_names": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "checked_external_normal",
+        "checked_external_failure-owner",
+        "checked_external_failure-lease",
+        "checked_external_exception",
+        "checked_external_rollback",
+        "checked_external_race-checked",
+        "checked_external_race-legacy",
+        "checked_external_c_consumer",
+        "pressure_budget_close",
+        "jni_lock_callback-reentry",
+        "jni_lock_single-publisher",
+        "jni_lock_attach-retry",
+        "jni_lock_java-exception-retry",
+        "jni_lock_error-quarantine",
+        "jni_lock_foreign-release",
+        "jni_lock_foreign-release-bind",
+        "jni_lock_foreign-release-snapshot",
+        "jni_lock_auto-attach-recovery",
+        "jni_lock_auto-java-recovery",
+        "jni_lock_auto-concurrent-poll",
+        "jni_lock_auto-error-quarantine",
+        "jni_lock_binding-exception-matrix",
+        "jni_lock_snapshot-error-external",
+        "jni_lock_snapshot-error-owned",
+        "jni_lock_snapshot-state-external",
+        "jni_lock_snapshot-state-owned",
+        "jni_lock_snapshot-header-external",
+        "jni_lock_snapshot-header-owned",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "log_sha256": "ad2dd9cb37bebe300a90ff2f89f9a8bcddb2d52e53ec0156472f4a4c70723b31",
+      "current_test_binary_fingerprints": {
+        "mgmem_core_tests.exe": {
+          "bytes": 63488,
+          "sha256": "91a692d03d56d19a0b8448442ed32137a809ad507c3fb2120b71a7e0ecdae68b"
+        },
+        "mgmem_c_consumer.exe": {
+          "bytes": 11776,
+          "sha256": "a4d48c886a3ffeeb8237814c1deaf846135928069b4546dd1247cb0542e5dd1a"
+        },
+        "mgmem_cpp_consumer.exe": {
+          "bytes": 29696,
+          "sha256": "5101472ef3313be180c269cb5e5ef80986b4fc317e53f4fd63d32f0a9ac8c9d7"
+        },
+        "mgmem_import_tests.exe": {
+          "bytes": 51712,
+          "sha256": "9cfa3411a93007b9f19a06ab963bf7106b2c210f21bc3d61cea29dfceb80058c"
+        },
+        "mgmem_checked_import_tests.exe": {
+          "bytes": 31232,
+          "sha256": "0ce7f0d5dac8d52c97c749f1c970f76d337aba8ed1db28adf13fb31aff779d52"
+        },
+        "mgmem_checked_import_c.exe": {
+          "bytes": 11776,
+          "sha256": "eb43822e30ce676844701e316f332d61eedefbb43b3e348d2489398753e55dc1"
+        },
+        "mgmem_pressure_tests.exe": {
+          "bytes": 37376,
+          "sha256": "8183f2069fa33eed30e45175b85d6aaaae3cbecd61e0dafd2b6e670ad034e15e"
+        },
+        "mgmem_jni_lock_tests.exe": {
+          "bytes": 80896,
+          "sha256": "3760442f6d2d1afedaa8bd3e06f0b3e7747e5bafc4cfa23582b1e776bce848e4"
+        },
+        "mgmem_abi10_consumer.exe": {
+          "bytes": 11776,
+          "sha256": "6ff98210cee7852e7aefe6d5156afe14ff076bee65fea3c03722bf8e0354af0c"
+        },
+        "mgmem_runtime_tests.exe": {
+          "bytes": 13312,
+          "sha256": "ccd05ab2c74db0aee4e1ec4d1eec8b773755092dc70763da9f3923dc38729ee7"
+        }
+      }
+    },
+    "host-asan": {
+      "status": "PASS",
+      "total": 37,
+      "passed": 37,
+      "test_names": [
+        "ownership_budget_close",
+        "c_abi_consumer",
+        "cpp_raii_consumer",
+        "external_import",
+        "external_import_poison_retain",
+        "external_import_poison_release",
+        "external_import_poison_alias",
+        "checked_external_normal",
+        "checked_external_failure-owner",
+        "checked_external_failure-lease",
+        "checked_external_exception",
+        "checked_external_rollback",
+        "checked_external_race-checked",
+        "checked_external_race-legacy",
+        "checked_external_c_consumer",
+        "pressure_budget_close",
+        "jni_lock_callback-reentry",
+        "jni_lock_single-publisher",
+        "jni_lock_attach-retry",
+        "jni_lock_java-exception-retry",
+        "jni_lock_error-quarantine",
+        "jni_lock_foreign-release",
+        "jni_lock_foreign-release-bind",
+        "jni_lock_foreign-release-snapshot",
+        "jni_lock_auto-attach-recovery",
+        "jni_lock_auto-java-recovery",
+        "jni_lock_auto-concurrent-poll",
+        "jni_lock_auto-error-quarantine",
+        "jni_lock_binding-exception-matrix",
+        "jni_lock_snapshot-error-external",
+        "jni_lock_snapshot-error-owned",
+        "jni_lock_snapshot-state-external",
+        "jni_lock_snapshot-state-owned",
+        "jni_lock_snapshot-header-external",
+        "jni_lock_snapshot-header-owned",
+        "original_abi10_consumer",
+        "runtime_origin"
+      ],
+      "log_sha256": "9418824baf409adceba6bb4a466103a48fbb5f69b9932bce77c9b3fb17401c13",
+      "current_test_binary_fingerprints": {
+        "mgmem_core_tests.exe": {
+          "bytes": 186880,
+          "sha256": "307c4e8f23c5a5fa1a3bbb5fc35f149d773ced13e037be2b5e54450875224248"
+        },
+        "mgmem_c_consumer.exe": {
+          "bytes": 42496,
+          "sha256": "023604971d60ed2847ea51dc64720fa7d110644333aa36a6cdce8ffa34aa3855"
+        },
+        "mgmem_cpp_consumer.exe": {
+          "bytes": 88064,
+          "sha256": "8687c53c45982a61cb49ae732a498485a8f2dede854570e43d1a458419a5bd53"
+        },
+        "mgmem_import_tests.exe": {
+          "bytes": 156672,
+          "sha256": "e0f215c76252d85ccfb7fdc3cc9473778c9a70febe32b9c2e54c516754bf4e59"
+        },
+        "mgmem_checked_import_tests.exe": {
+          "bytes": 102912,
+          "sha256": "68f4bcf0373d602893cfe6352c7681398c6715f5e1d984436592c166e439c73e"
+        },
+        "mgmem_checked_import_c.exe": {
+          "bytes": 40960,
+          "sha256": "fce6aee5d104b1b7bd1d74387cf13c2108e4395a74bf7ab132a4d7fdccf139e8"
+        },
+        "mgmem_pressure_tests.exe": {
+          "bytes": 137728,
+          "sha256": "a8f768b964ac34bbd87cd55ed62883100fc75314e060b697ab01923e881dd6df"
+        },
+        "mgmem_jni_lock_tests.exe": {
+          "bytes": 514560,
+          "sha256": "1dc475dde804dad2852aa1d111963966a0d76d6ba0c8e74485e6e6e0d343a25e"
+        },
+        "mgmem_abi10_consumer.exe": {
+          "bytes": 42496,
+          "sha256": "bf018fa90f570b8f550452291289a8411dbd6001bfdd9b8afdf2e622cc15467d"
+        },
+        "mgmem_runtime_tests.exe": {
+          "bytes": 43008,
+          "sha256": "c40fd23f619d3172d70fb275b575926f39e8de665f6efa52c6ca61eba0748460"
+        }
+      }
+    },
+    "borrow-host": {
+      "status": "PASS",
+      "total": 2,
+      "passed": 2,
+      "test_names": [
+        "borrow_jni_host",
+        "borrow_jni_real_jvm"
+      ],
+      "log_sha256": "d7415e824988fa8f2d700c5a13b6f03043d475f3c01bd5a712e247874cf05c17",
+      "current_test_binary_fingerprints": {
+        "mgmem_borrow_jni_host_tests.exe": {
+          "bytes": 64512,
+          "sha256": "980982f06b1f574e898fd6f7208bc0ee095ce4aa341ea3452bbd5848aeda3c47"
+        },
+        "java.exe": {
+          "bytes": 49976,
+          "sha256": "6db7759259dc79800c5c6014f0ec68961a1fe69c36bb9b2a15a42c3b0c413f6a"
+        }
+      }
+    },
+    "bridge-host": {
+      "status": "PASS",
+      "total": 4,
+      "passed": 4,
+      "test_names": [
+        "compute_read_bridge",
+        "compute_read_bridge_unmap_violation",
+        "compute_read_bridge_fake_pre_admission",
+        "compute_read_bridge_fake_close_race"
+      ],
+      "log_sha256": "4ea7739adb635028ff3e324bec1e4e6ccaf5a908e6390fd9504158aac830de80",
+      "current_test_binary_fingerprints": {
+        "mgmem_compute_read_bridge_tests.exe": {
+          "bytes": 204288,
+          "sha256": "a843ca970485ca9768ed43f4ea950f97187a3ebf8074e4ed5d5741309b052ffb"
+        },
+        "mgmem_compute_fake_pre_admission.exe": {
+          "bytes": 159744,
+          "sha256": "1c705199717ecfd0f2ebefa34bd8b7618260d0fde4cb6a127356e95a56c48187"
+        },
+        "mgmem_compute_fake_close_race.exe": {
+          "bytes": 174592,
+          "sha256": "4fa2fe17d4a12cd66602809480d424f5d2b27c2cb4c1f4a0dc4fd4ea3967c3f4"
+        }
+      }
+    }
+  },
+  "host_asan_configuration": {
+    "MGMEM_SANITIZE": "ON"
+  },
+  "source_fingerprints_observed_at_recording": {
+    "core_c_header": {
+      "bytes": 11361,
+      "sha256": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84"
+    },
+    "core_implementation": {
+      "bytes": 39032,
+      "sha256": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c"
+    },
+    "checked_import_tests": {
+      "bytes": 12395,
+      "sha256": "14c66608c7a7feef71b28c5ff547c5ad43f55ede78a0056dcee5cf13908e9ef5"
+    },
+    "checked_import_c_consumer": {
+      "bytes": 1863,
+      "sha256": "ef1fd2d14b55ce5d9bb64eb8ec0837b212c358d31b2896e22880630588ca9139"
+    },
+    "borrow_header": {
+      "bytes": 2462,
+      "sha256": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34"
+    },
+    "borrow_jni": {
+      "bytes": 9070,
+      "sha256": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571"
+    },
+    "borrow_java": {
+      "bytes": 4394,
+      "sha256": "38878c8135c1685b93690e64d356cf330e4e892701ce32b0d8c070d6e68227f5"
+    },
+    "borrow_jni_host_tests": {
+      "bytes": 14310,
+      "sha256": "8c3bcd8cf07c67c6db071e2299b903e254d8ba0575a5e290efc528eb9a98ccb6"
+    },
+    "borrow_java_test": {
+      "bytes": 2229,
+      "sha256": "ab9b780bfc4e01e100d530f58b25107f2a6137a14c39ed7bcdeb894c838a9e04"
+    },
+    "borrow_java_fixture": {
+      "bytes": 1716,
+      "sha256": "5c8cc0fff6890e7a139ea802a3c81e4c9beb64bf0c3cbf3c60b6c98864399e55"
+    },
+    "bridge_header": {
+      "bytes": 3393,
+      "sha256": "19946f214324221fb710d977b465835d896b3fada7916cbb62347b48b7267d80"
+    },
+    "bridge_source": {
+      "bytes": 5289,
+      "sha256": "4142dfebea4404b4e9fa6f265bd00ecc06c5fd2fe3edde8724773a9e33d2175d"
+    },
+    "bridge_tests": {
+      "bytes": 8669,
+      "sha256": "7a1ebb66d77cd054433ab3dd36abfb26af92cde269c797c5fdd59bb1c048b168"
+    },
+    "bridge_fake_pre_admission": {
+      "bytes": 2841,
+      "sha256": "4b175adcedbb46d6d188905e1b26d473b823c29abd379aaa3b1444081a2a689a"
+    },
+    "bridge_fake_close_race": {
+      "bytes": 4862,
+      "sha256": "bbd0a5405bb8daa147fcb8fe5d6fc5df2595b4e15777aa2211c584ce15df8aae"
+    },
+    "core_cmake": {
+      "bytes": 10970,
+      "sha256": "ca7751f3d638c77b7d843c128310425f37f95029fd089d2520fd7519f80bb55c"
+    },
+    "android_cmake": {
+      "bytes": 1102,
+      "sha256": "6aeed930e68b4fcead652f6c10882e11de1d09caaa0896dff34898f43afb1cf3"
+    },
+    "bridge_cmake": {
+      "bytes": 4957,
+      "sha256": "16bd41b54a2c4d4ed72235e5d6f97ba3118c27b3c81a768026167c7dda351e0a"
+    },
+    "android_keep_rules": {
+      "bytes": 160,
+      "sha256": "7f19183f328ead6f68ac56b1c1cb40ea7f240f5857f089a092623e1c5070a2fa"
+    },
+    "android_packager": {
+      "bytes": 8875,
+      "sha256": "6aad3e8b438fdc0fbdc936f14d504f55bf16e681a6bde189fe83ca15ba73215b"
+    },
+    "receipt_generator": {
+      "bytes": 14534,
+      "sha256": "f6e1b0b731125637bc3a71551ee258e1c9ca8f74db6adff59698919632f6e09c"
+    }
+  },
+  "binary_fingerprints_observed_at_recording": {
+    "host_core": {
+      "bytes": 39936,
+      "sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425"
+    },
+    "host_asan_core": {
+      "bytes": 176640,
+      "sha256": "a9f078d8c49a6d53b15e11972e96658ae0162bf6ecc93f8384f17823c87b35ed"
+    },
+    "host_installed_core": {
+      "bytes": 39936,
+      "sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425"
+    },
+    "borrow_host_jni": {
+      "bytes": 40448,
+      "sha256": "f6a66b58264b89ea1c4c90ca8c03062e7b5e6e58f64f2ed08c7df457baa65ed4"
+    },
+    "installed_bridge": {
+      "bytes": 16988,
+      "sha256": "481ef412de4cd99486483937d62f99dc030cb6f28fa2e6a69b842510fca9ac8b"
+    },
+    "compute_cpu_sdk": {
+      "bytes": 3827094,
+      "sha256": "8f489bdfb42ef10cba25856756ed461ce96f0f7e001af36ea2f94956ff63ef71"
+    },
+    "compute_sdk_header": {
+      "bytes": 13478,
+      "sha256": "e568bc9012104df8560f7785a7f02b5f7a308a8c66e9bb16188f2b6bb48e1ff1"
+    }
+  },
+  "android_aar_build_only": {
+    "arm64-v8a": {
+      "aar": {
+        "bytes": 709585,
+        "sha256": "32f84f0b9299f20b69ee5bf21b251d7e9384906fda5753c789aa925094c7e33d"
+      },
+      "jni": {
+        "bytes": 739320,
+        "sha256": "b9bcdd0d660e6c69e8a6e10d0655e501fc4b69dfa93110e0c19a8015baabe504"
+      },
+      "core": {
+        "bytes": 1725800,
+        "sha256": "5fc04c98b3bf4688d8357dedd863a4e49402baf6af8b165d06869d95e54acc3c"
+      },
+      "packaging_receipt_sha256": "105739a0088674f80daba54c644bc22f488322c65b571344ea84964549d9e200",
+      "checked": [
+        "abi_headers",
+        "native_members",
+        "borrow_class",
+        "keep_rules",
+        "llvm_notice"
+      ],
+      "scope": "BUILD_AND_PACKAGING_ONLY_NOT_DEVICE_EXECUTION"
+    },
+    "armeabi-v7a": {
+      "aar": {
+        "bytes": 670846,
+        "sha256": "9fe3bb789ef1b1c13a0be3ff4c4063b4bd950d09109f43efaecf3f7f1867ad98"
+      },
+      "jni": {
+        "bytes": 657712,
+        "sha256": "c8d8a198caf76c65bb619cc5a8ccb9fbbb09547a6155e19889a5b8bd151cef0d"
+      },
+      "core": {
+        "bytes": 1445348,
+        "sha256": "808043b0c14bb41ae72428d738d64a49951ba6140f94d1996fea2d4c719b4740"
+      },
+      "packaging_receipt_sha256": "6a33ec13817d31a65027012f2a2d7ce69939a91683f9e6144fd354b79d54c9af",
+      "checked": [
+        "abi_headers",
+        "native_members",
+        "borrow_class",
+        "keep_rules",
+        "llvm_notice"
+      ],
+      "scope": "BUILD_AND_PACKAGING_ONLY_NOT_DEVICE_EXECUTION"
+    },
+    "x86_64": {
+      "aar": {
+        "bytes": 705045,
+        "sha256": "75123cdd2707c9be5530bb005fd746a47205fcaad2b0f3e17f1098ca987a0e25"
+      },
+      "jni": {
+        "bytes": 717544,
+        "sha256": "28df804d80998a71dd9889c952f88c16b0cb2302dc053e7d8d5f24b43fbfd5e5"
+      },
+      "core": {
+        "bytes": 1694672,
+        "sha256": "f4e3cde57447f1d6dadbaa4b9dad9854f7596a923f28c4f40c218d03a69b294f"
+      },
+      "packaging_receipt_sha256": "c15bae29873095340da4f78c5f4d08b7e942d69a3109f31c439f8d5bb02128fd",
+      "checked": [
+        "abi_headers",
+        "native_members",
+        "borrow_class",
+        "keep_rules",
+        "llvm_notice"
+      ],
+      "scope": "BUILD_AND_PACKAGING_ONLY_NOT_DEVICE_EXECUTION"
+    }
+  },
+  "installed_consumer": {
+    "status": "PASS_SCOPED_LOCAL_INSTALLED_CONSUMER",
+    "binary": {
+      "bytes": 203776,
+      "sha256": "edaa78d5560ec91bb7b5d08f16a83c2071c09dbbf116b4318f554e1e3d2e223d"
+    },
+    "cases": {
+      "normal": {
+        "status": "PASS",
+        "exit_code": 0,
+        "stdout_sha256": "e37fa4da09f78e993101342101367d030cbebf9b0f0f55dea701a13c91de9aca",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "unmap_violation": {
+        "status": "PASS",
+        "exit_code": 0,
+        "stdout_sha256": "cd3b925d4ff337bf1a338264ef9663784376b940142eb4552e50209582a5b05d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "quarantine_case": "ISOLATED_PROCESS_NOT_NORMAL_RESOURCE_ZERO"
+  },
+  "device_execution": "NOT_EXECUTED",
+  "performance_qualification": "NOT_MEASURED",
+  "formal_release": "NOT_QUALIFIED",
+  "BIL": "NOT_INTEGRATED",
+  "provenance_limit": "Current fingerprints and log digests identify observed files only; a hash alone does not establish build or execution provenance.",
+  "other_limits": [
+    "Fake-origin tests are not real Compute runtime tests.",
+    "Quarantined violation fixtures do not prove normal resource reclamation.",
+    "The three AARs are separate single-ABI build artifacts; no Android runtime qualification is implied."
+  ]
+}

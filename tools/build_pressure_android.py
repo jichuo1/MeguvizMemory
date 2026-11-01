@@ -10,10 +10,20 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import struct
 import subprocess
 import zipfile
 
 ROOT=Path(__file__).resolve().parents[1]
+
+
+def verify_elf_abi(path,abi):
+    expected={'arm64-v8a':(2,183),'x86_64':(2,62),'armeabi-v7a':(1,40)}[abi]
+    with path.open('rb') as source:
+        header=source.read(20)
+    if (len(header)<20 or header[:4]!=b'\x7fELF' or header[5]!=1 or
+            (header[4],struct.unpack_from('<H',header,18)[0])!=expected):
+        raise ValueError('Native input ELF does not match selected Android ABI')
 
 
 def main():
@@ -27,6 +37,7 @@ def main():
     parser.add_argument('--diagnostic-keystore',type=Path,default=ROOT/'build/features-signing/diagnostic.keystore')
     parser.add_argument('--build-tools',default='37.0.0')
     parser.add_argument('--platform',default='android-37.0')
+    parser.add_argument('--abi',choices=('arm64-v8a','x86_64','armeabi-v7a'),default='arm64-v8a')
     args=parser.parse_args()
     out=args.out_dir.resolve()
     if not out.is_relative_to(ROOT/'build') or out.exists():parser.error('Use a new output directory below build/')
@@ -38,6 +49,7 @@ def main():
     required=[java,javac,jar,keytool,android,tools/('aapt2'+suffix),tools/('zipalign'+suffix),
               tools/'lib/d8.jar',tools/'lib/apksigner.jar',native,memory]
     if not all(p.is_file() for p in required):parser.error('Existing compiler/SDK/shared JNI and Memory inputs are required')
+    for library in (native,memory):verify_elf_abi(library,args.abi)
     operations=[]
     def run(label,command):
         done=subprocess.run([str(x) for x in command],capture_output=True,text=True,check=False)
@@ -66,8 +78,8 @@ def main():
                       '--min-sdk-version','27','--target-sdk-version','33','-o',unsigned])
     with zipfile.ZipFile(unsigned,'a',compression=zipfile.ZIP_STORED) as package:
         package.write(dex/'classes.dex','classes.dex')
-        package.write(native,'lib/arm64-v8a/libmgmem_pressure_jni.so')
-        package.write(memory,'lib/arm64-v8a/libmgmem.so')
+        package.write(native,f'lib/{args.abi}/libmgmem_pressure_jni.so')
+        package.write(memory,f'lib/{args.abi}/libmgmem.so')
     aligned=out/'pressure-aligned.apk'
     run('zipalign',[tools/('zipalign'+suffix),'-P','16','-f','4',unsigned,aligned])
     key=args.diagnostic_keystore.resolve()
@@ -89,16 +101,18 @@ def main():
     manifest=b'<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="io.github.jichuo1.meguviz.memory.android"><uses-sdk android:minSdkVersion="27" /></manifest>\n'
     with zipfile.ZipFile(aar,'x',compression=zipfile.ZIP_DEFLATED) as package:
         package.writestr('AndroidManifest.xml',manifest);package.write(library_jar,'classes.jar')
-        package.write(native,'jni/arm64-v8a/libmgmem_pressure_jni.so');package.write(memory,'jni/arm64-v8a/libmgmem.so')
-        package.write(ROOT/'adapters/android/consumer-rules.pro','proguard.txt');package.writestr('R.txt','')
+        package.write(native,f'jni/{args.abi}/libmgmem_pressure_jni.so');package.write(memory,f'jni/{args.abi}/libmgmem.so')
+        package.write(ROOT/'adapters/android/consumer-rules.pro','proguard.txt')
+        package.write(ROOT/'third_party_notices/llvm-NOTICE.txt','META-INF/NOTICE-LLVM.txt')
+        package.writestr('R.txt','')
     sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
     relative=lambda p:p.resolve().relative_to(ROOT).as_posix()
-    sources=library_sources+[sample,ROOT/'adapters/android/sample/AndroidManifest.xml',
-              ROOT/'adapters/android/native/pressure_jni.cpp',ROOT/'adapters/android/native/pressure.cpp',
-              ROOT/'include/mgmem/pressure.h',ROOT/'include/mgmem/android_pressure_jni.h',Path(__file__).resolve()]
+    sources=library_sources+sorted((ROOT/'adapters/android/native').glob('*.cpp'))+sorted((ROOT/'include/mgmem').glob('*.h'))+[
+              sample,ROOT/'adapters/android/sample/AndroidManifest.xml',ROOT/'adapters/android/CMakeLists.txt',
+              ROOT/'adapters/android/consumer-rules.pro',ROOT/'third_party_notices/llvm-NOTICE.txt',Path(__file__).resolve()]
     receipt={'schema_version':1,'scope':'ANDROID_PRESSURE_BUILD_AND_DIAGNOSTIC_SIGNING_ONLY',
         'status':'PASS','device_executed':False,'performance_qualified':False,'minimum_api':27,
-        'compile_platform':args.platform,'build_tools':args.build_tools,'target_api':33,'abi':'arm64-v8a',
+        'compile_platform':args.platform,'build_tools':args.build_tools,'target_api':33,'abi':args.abi,
         'package_name':'io.github.jichuo1.meguviz.memory.pressureprobe',
         'instrumentation':'io.github.jichuo1.meguviz.memory.android.PressureInstrumentation',
         'certificate_sha256':certificate[0].lower(),'signing':'ISOLATED_DIAGNOSTIC_KEY_NOT_PRODUCTION_SIGNING',
@@ -106,6 +120,7 @@ def main():
         'sources':[{'path':relative(p),'sha256':sha(p)} for p in sources],'operations':operations,
         'runtime_closure':'Exactly one installed shared libmgmem.so; pressure helper is linked into JNI, not a second Memory core',
         'limitations':['APK framework dispatch test is synthetic; no real low-RAM event or energy gain is claimed.',
+                       'JNI and Memory binaries are prebuilt inputs; source hashes alone do not prove how they were compiled.',
                        'AAR includes keep rules, but no product R8/BIL/Lumen qualification was performed.']}
     args.receipt.parent.mkdir(parents=True,exist_ok=True);args.receipt.write_text(json.dumps(receipt,ensure_ascii=False,indent=2)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({'status':'PASS','apk':relative(apk),'aar':relative(aar),'device_executed':False}))

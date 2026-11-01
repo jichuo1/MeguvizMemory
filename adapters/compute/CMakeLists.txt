@@ -1,0 +1,69 @@
+cmake_minimum_required(VERSION 3.25)
+project(MeguvizMemoryComputeReadBridge LANGUAGES CXX)
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
+
+# This separate opt-in project does not change the Memory core dependency graph.
+find_package(MeguvizMemory CONFIG REQUIRED)
+find_package(MeguvizCompute CONFIG REQUIRED)
+add_library(mgmem_compute_read_bridge STATIC src/compute_read_bridge.cpp)
+target_compile_features(mgmem_compute_read_bridge PUBLIC cxx_std_17)
+target_include_directories(mgmem_compute_read_bridge PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_link_libraries(mgmem_compute_read_bridge PUBLIC MeguvizMemory::mgmem MeguvizCompute::core)
+set_target_properties(mgmem_compute_read_bridge PROPERTIES EXPORT_NAME read_bridge CXX_EXTENSIONS OFF POSITION_INDEPENDENT_CODE ON)
+add_library(MeguvizMemoryComputeReadBridge::read_bridge ALIAS mgmem_compute_read_bridge)
+
+install(TARGETS mgmem_compute_read_bridge EXPORT MeguvizMemoryComputeReadBridgeTargets ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+install(EXPORT MeguvizMemoryComputeReadBridgeTargets NAMESPACE MeguvizMemoryComputeReadBridge::
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MeguvizMemoryComputeReadBridge)
+configure_package_config_file(cmake/MeguvizMemoryComputeReadBridgeConfig.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/MeguvizMemoryComputeReadBridgeConfig.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MeguvizMemoryComputeReadBridge)
+write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/MeguvizMemoryComputeReadBridgeConfigVersion.cmake
+  VERSION 0.1.0 COMPATIBILITY SameMajorVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/MeguvizMemoryComputeReadBridgeConfig.cmake
+  ${CMAKE_CURRENT_BINARY_DIR}/MeguvizMemoryComputeReadBridgeConfigVersion.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/MeguvizMemoryComputeReadBridge)
+
+option(MGMEM_COMPUTE_BRIDGE_BUILD_TESTS "Build scoped real-SDK bridge tests" ON)
+if(MGMEM_COMPUTE_BRIDGE_BUILD_TESTS)
+  enable_testing()
+  find_package(Threads REQUIRED)
+  include(CheckCXXSourceCompiles)
+  get_target_property(_mgc_include MeguvizCompute::core INTERFACE_INCLUDE_DIRECTORIES)
+  set(_mgc_saved_required_includes "${CMAKE_REQUIRED_INCLUDES}")
+  set(CMAKE_REQUIRED_INCLUDES "${_mgc_include}")
+  unset(_mgc_has_content_lifetime CACHE)
+  check_cxx_source_compiles("#include <meguviz/compute.h>
+int main() { MgcLeaseDesc d{}; d.content_context = nullptr; d.retain_content = nullptr; d.release_content = nullptr; return 0; }" _mgc_has_content_lifetime)
+  set(CMAKE_REQUIRED_INCLUDES "${_mgc_saved_required_includes}")
+  option(MGMEM_COMPUTE_BRIDGE_REQUIRE_CONTENT_LIFETIME_TEST "Require real SDK content-lifetime fields" OFF)
+  if(MGMEM_COMPUTE_BRIDGE_REQUIRE_CONTENT_LIFETIME_TEST AND NOT _mgc_has_content_lifetime)
+    message(FATAL_ERROR "The selected Compute SDK has no content-lifetime fields")
+  endif()
+  add_executable(mgmem_compute_read_bridge_tests tests/read_bridge_tests.cpp)
+  target_compile_features(mgmem_compute_read_bridge_tests PRIVATE cxx_std_17)
+  target_link_libraries(mgmem_compute_read_bridge_tests PRIVATE mgmem_compute_read_bridge Threads::Threads)
+  if(_mgc_has_content_lifetime)
+    target_compile_definitions(mgmem_compute_read_bridge_tests PRIVATE MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+  endif()
+  add_test(NAME compute_read_bridge COMMAND mgmem_compute_read_bridge_tests)
+  add_test(NAME compute_read_bridge_unmap_violation COMMAND mgmem_compute_read_bridge_tests --violate-unmap)
+  # Fake origin isolates an error that the real Compute contract cannot induce
+  # deterministically before Memory admission without a violating concurrent caller.
+  add_executable(mgmem_compute_fake_pre_admission tests/fake_pre_admission.cpp src/compute_read_bridge.cpp)
+  target_compile_features(mgmem_compute_fake_pre_admission PRIVATE cxx_std_17)
+  target_include_directories(mgmem_compute_fake_pre_admission PRIVATE include ${_mgc_include})
+  target_link_libraries(mgmem_compute_fake_pre_admission PRIVATE MeguvizMemory::mgmem)
+  add_test(NAME compute_read_bridge_fake_pre_admission COMMAND mgmem_compute_fake_pre_admission)
+  add_executable(mgmem_compute_fake_close_race tests/fake_close_race.cpp src/compute_read_bridge.cpp)
+  target_compile_features(mgmem_compute_fake_close_race PRIVATE cxx_std_17)
+  target_compile_definitions(mgmem_compute_fake_close_race PRIVATE MGMEM_COMPUTE_BRIDGE_TESTING)
+  target_include_directories(mgmem_compute_fake_close_race PRIVATE include ${_mgc_include})
+  target_link_libraries(mgmem_compute_fake_close_race PRIVATE MeguvizMemory::mgmem Threads::Threads)
+  add_test(NAME compute_read_bridge_fake_close_race COMMAND mgmem_compute_fake_close_race)
+  set_tests_properties(compute_read_bridge compute_read_bridge_unmap_violation compute_read_bridge_fake_pre_admission compute_read_bridge_fake_close_race PROPERTIES TIMEOUT 30)
+endif()

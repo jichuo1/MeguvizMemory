@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_SANITIZED_INSTALLED_CONSUMERS",
+  "scope": "WINDOWS_X64_SDK_CANDIDATE_NO_DEVICE_PERFORMANCE_OR_FORMAL_RELEASE",
+  "sdk_zip": {
+    "filename": "MeguvizMemory-0.2.0-windows-x64-feature-preview.zip",
+    "sha256": "cabcdadd951ec563327a375353f7f497b4d5a8776a51d431f22a82049a10fde9",
+    "bytes": 95125,
+    "entries": 13
+  },
+  "privacy_scan": "PASS_DECOMPRESSED_MEMBERS_ASCII_UTF16LE",
+  "binary_comparison_receipt_sha256": "efae909a556a79f5c1038072ddc02c0ee29017df46d1394c0a1dfdc09a869c2f",
+  "original_sdk_unchanged": true,
+  "image_pressure_consumer": {
+    "status": "PASS",
+    "providers": [
+      "system",
+      "arena"
+    ],
+    "cycles_each": 2,
+    "frames_each": 4,
+    "private_receipt_sha256": "d0ad81add5f731b7f5757d59315ccd1272c1137940411b40f3a9d5a384d33834",
+    "exe_sha256": "f057ddee814a4f3ceb0905c509f790a7a095e28a78f018456a51e3ae507c292c",
+    "runtime_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425"
+  },
+  "checked_c_consumer": {
+    "status": "PASS",
+    "exe_sha256": "248e439f73cb1986d8702e882e7d61a78f40fd27e2fbc48aed9f06de932c4911",
+    "runtime_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425"
+  },
+  "limitations": [
+    "The checked C and image consumers exercised only the selected host paths.",
+    "Pressure archive code, section attributes, normalized relocations and defined exports were compared; DLL, EXE and import library remain byte-identical.",
+    "No device, R8, performance, energy, BIL or formal release claim."
+  ]
+}

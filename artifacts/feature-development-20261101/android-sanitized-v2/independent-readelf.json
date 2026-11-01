@@ -1,0 +1,25 @@
+{
+  "state": "PASS_INDEPENDENT_READELF",
+  "tool_sha256": "1db5adc13b69502b1f76406014943ef2d326aedeee3397b228d0e66347ab1c63",
+  "profiles": {
+    "arm64-v8a": {
+      "program_headers": "IDENTICAL",
+      "needed_soname": "IDENTICAL",
+      "aar_sdk_core": "BYTE_IDENTICAL",
+      "aar_jni": "BYTE_IDENTICAL"
+    },
+    "x86_64": {
+      "program_headers": "IDENTICAL",
+      "needed_soname": "IDENTICAL",
+      "aar_sdk_core": "BYTE_IDENTICAL",
+      "aar_jni": "BYTE_IDENTICAL"
+    },
+    "armeabi-v7a": {
+      "program_headers": "IDENTICAL",
+      "needed_soname": "IDENTICAL",
+      "aar_sdk_core": "BYTE_IDENTICAL",
+      "aar_jni": "BYTE_IDENTICAL"
+    }
+  },
+  "scope": "READ_ONLY_DIFFERENT_TOOL_PROGRAM_HEADERS_AND_DYNAMIC_NOT_DEVICE_EXECUTION"
+}

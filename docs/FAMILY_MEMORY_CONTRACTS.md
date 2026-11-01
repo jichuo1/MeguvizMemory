@@ -1,5 +1,7 @@
 # 家族CPU内存合同核实
 
+后续进展（2026-11-01）：下文保留当时的只读合同核实；反向完整 CPU READ-map 的独立可选桥现已实现并取得限定宿主证据，实际边界见[桥合同](../adapters/compute/README.md)。Memory-owned 指针向 Compute 注入仍无公开入口。
+
 2026-10-30，只读审计；本批不修改Compute/Media/BIL，也不把当前源码或既有identity SDK当作新桥接运行资格。具体逐文件身份见 `artifacts/features-20261030/family-contracts.json`。Compute HEAD为7581256f、Media为4ebbfcd4，两工作树均有其他会话未提交修改；HEAD不足以标识所见文件内容。
 
 ## 已确认的真实接口

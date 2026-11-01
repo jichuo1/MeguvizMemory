@@ -1,0 +1,393 @@
+{
+  "state": "PASS_BINARY_CONTRACTS_PRIVACY_SCAN_NOT_DEVICE_EXECUTED",
+  "scope": "SANITIZED_CANDIDATES_NOT_ANDROID_RUNTIME_QUALIFIED",
+  "private_marker_count": 17,
+  "tools": {
+    "llvm-strip.exe": "218dbc5dfed2ae740e46c84f039ed7f35973a0ce8832ae2f348a2cfe70af345b",
+    "llvm-readelf.exe": "1db5adc13b69502b1f76406014943ef2d326aedeee3397b228d0e66347ab1c63",
+    "llvm-readobj.exe": "d24b456477ce343b085006e76692e60cc5297f261a2fcc19eb32cacffc31a2a1",
+    "llvm-nm.exe": "5638dd0187719347d76855a34331ac163eab6f7eaff5a9b87aa291a2fec798d2",
+    "llvm-ar.exe": "9234e6efbaf6a43da39f7febab3013be141d3e428be083ad7584c2df922e621e"
+  },
+  "mask": {
+    "ELF64": "e_shoff bytes 40..47 and e_shentsize/e_shnum/e_shstrndx bytes 58..63",
+    "ELF32": "e_shoff bytes 32..35 and e_shentsize/e_shnum/e_shstrndx bytes 46..51"
+  },
+  "profiles": {
+    "arm64-v8a": {
+      "AAR_original_sha256": "32f84f0b9299f20b69ee5bf21b251d7e9384906fda5753c789aa925094c7e33d",
+      "AAR_candidate_sha256": "7514720b8212141ad42d968029dfd12a6ec1b588ee75419a245791b837e2b0d1",
+      "AAR_candidate_bytes": 158220,
+      "AAR_candidate": "build/feature-20261101-sanitized-v2/aar/arm64-v8a/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "SDK_candidate": "build/feature-20261101-sanitized-v2/sdk/arm64-v8a",
+      "AAR_non_native_entries_unchanged": true,
+      "SDK_non_native_entries_unchanged": true,
+      "privacy_scan": "NO_MATCH",
+      "core": {
+        "original_sha256": "5fc04c98b3bf4688d8357dedd863a4e49402baf6af8b165d06869d95e54acc3c",
+        "candidate_sha256": "bfab5d3f653d9516b46a6f82a0d325145691d73b66b66029de0c3e04df9fb410",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 183,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              221152,
+              221152,
+              16384
+            ],
+            [
+              6,
+              221152,
+              237536,
+              237536,
+              7424,
+              8224,
+              16384
+            ],
+            [
+              6,
+              228576,
+              261344,
+              261344,
+              392,
+              4656,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "c077cc66b721832d6f0e7b434bd3f1e09e4ae03084151cfa89c3b42d12c5d3fb",
+            "f74db20af44203bac1ef7f278c46bd76ceef978c819b1859cdcf6ba4cc694d62",
+            "7a604d7ccd63432f67be3ff5f63b9f20e176b9b18e2d6b38d808f06e734ebbc4"
+          ]
+        },
+        "dynsym_sha256": "c1470d8e9b335b87c785ddfe9d03129a162f5bbcf5c69c6927aed20e24a2ef17",
+        "needed": [
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem.so"
+        ]
+      },
+      "jni": {
+        "original_sha256": "b9bcdd0d660e6c69e8a6e10d0655e501fc4b69dfa93110e0c19a8015baabe504",
+        "candidate_sha256": "928bc107358608c44bd5477fd02c38517a07e317b9a0c4847d810655855dd725",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 183,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              65504,
+              65504,
+              16384
+            ],
+            [
+              6,
+              65504,
+              81888,
+              81888,
+              1632,
+              4128,
+              16384
+            ],
+            [
+              6,
+              67136,
+              99904,
+              99904,
+              80,
+              2432,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "19de470e8d4b7baed63525e5097d78e4a0e981bdfa49bad8a076ae80ccdc5e11",
+            "ce68a72481898d869e828b1ca74099bc69e11b228ed67f8ab307c710ca370f21",
+            "4225e618d22262c8aab2e2cd747617b48cc756d20c4a5083ca7f79a317437357"
+          ]
+        },
+        "dynsym_sha256": "86cb1472cca167452a646eb16b2c84d833b33834998f4733db058201c827c23f",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "static_pressure": {
+        "original_sha256": "ad302aceabd1d20676c1ab8bd34b2c04b1f5a49cf59650128d52edb80f3f9041",
+        "candidate_sha256": "aec6882699b034bb43b1e15c8e45312c5f117935950320af6c6f2b8e130feb36",
+        "member_count": 1,
+        "allocated_and_arm_attributes_sections": 38,
+        "section_sha256": "e5199322053be791dd33d0cf394c6787febfe121d3859625cf834ccf676ff239",
+        "nondebug_relocation_groups": 24,
+        "nondebug_relocation_sha256": "32f083f79ffeffa62edbfb5208fe0d22969c286b786b37ce6e1e72da89a832e3",
+        "defined_externals_sha256": "6ec010e5d85929d8a91aa7312eddef370b32e58be0a11be7b93232c1c62a5de3"
+      }
+    },
+    "x86_64": {
+      "AAR_original_sha256": "75123cdd2707c9be5530bb005fd746a47205fcaad2b0f3e17f1098ca987a0e25",
+      "AAR_candidate_sha256": "c282fb5df2ef1c1029fce3655c3be85a3a9f65ef52682b050bee4853bbfaa2f1",
+      "AAR_candidate_bytes": 150231,
+      "AAR_candidate": "build/feature-20261101-sanitized-v2/aar/x86_64/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "SDK_candidate": "build/feature-20261101-sanitized-v2/sdk/x86_64",
+      "AAR_non_native_entries_unchanged": true,
+      "SDK_non_native_entries_unchanged": true,
+      "privacy_scan": "NO_MATCH",
+      "core": {
+        "original_sha256": "f4e3cde57447f1d6dadbaa4b9dad9854f7596a923f28c4f40c218d03a69b294f",
+        "candidate_sha256": "df3409765e740d033b228a878efa12d93ada67a28b83652ddbac80855d33a7f8",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 62,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              208304,
+              208304,
+              16384
+            ],
+            [
+              6,
+              208304,
+              224688,
+              224688,
+              7288,
+              8784,
+              16384
+            ],
+            [
+              6,
+              215600,
+              248368,
+              248368,
+              400,
+              4640,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "e4784a207b5c2237461c0c707d081dd83810511f832d4a6b6ca0058b80ce6421",
+            "a921455fe4a0818dddf67c16ff0ce49c0dfe209e4cb5001313e7110e9f944b6c",
+            "efe2364c4c2ecbbda6e4f088e4f07180996f78b39d71d3302bc6868fb4b350b0"
+          ]
+        },
+        "dynsym_sha256": "2cb041711e5bad9c2d3b7767939112980ccf882b975c584ff0e9281ee75a8ec0",
+        "needed": [
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem.so"
+        ]
+      },
+      "jni": {
+        "original_sha256": "28df804d80998a71dd9889c952f88c16b0cb2302dc053e7d8d5f24b43fbfd5e5",
+        "candidate_sha256": "33068665866319cfb16a537664f9cb0582939539b48a9b95f9478e0a3c98cb1b",
+        "PT_LOAD": {
+          "class": 2,
+          "machine": 62,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              60560,
+              60560,
+              16384
+            ],
+            [
+              6,
+              60560,
+              76944,
+              76944,
+              1560,
+              4976,
+              16384
+            ],
+            [
+              6,
+              62120,
+              94888,
+              94888,
+              80,
+              2424,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "4f40806ed3c7defbd27e3b6e6ac189677716ae217b5574a0aa7ff2f788a3e84b",
+            "72993444797d2855dfdb32e433a6328bfc01bb2d13954159e0655b0125fc9f34",
+            "4225e618d22262c8aab2e2cd747617b48cc756d20c4a5083ca7f79a317437357"
+          ]
+        },
+        "dynsym_sha256": "fbb68cfdefdbd72045303849b9f42afdbf449225fcb578c15196c82f1525080b",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "static_pressure": {
+        "original_sha256": "5957ffce8214fb8cd478c3a9777cec9a820fcf7fad1d282b20fbd164761ea904",
+        "candidate_sha256": "42fb59273169a47dd92b6be89923bed6c3c1485cae799993305aa38594023b70",
+        "member_count": 1,
+        "allocated_and_arm_attributes_sections": 38,
+        "section_sha256": "aea545e974aba68329830e28154a169a19d572c3024e46854c30d6a69abfc33f",
+        "nondebug_relocation_groups": 24,
+        "nondebug_relocation_sha256": "47e11a65dbaaea2ac3bff7feb8e726d6c17bef85b9a8baa42152e841050dbdd9",
+        "defined_externals_sha256": "4fc43d89c1c0a0592f9242ddb545e16ca9de2affbc019d06f0c3e38f0b5befa3"
+      }
+    },
+    "armeabi-v7a": {
+      "AAR_original_sha256": "9fe3bb789ef1b1c13a0be3ff4c4063b4bd950d09109f43efaecf3f7f1867ad98",
+      "AAR_candidate_sha256": "bbb0806fe94a96a99006fe395fde70a0fd799cdf17fa24b4642bcef736d0a274",
+      "AAR_candidate_bytes": 128042,
+      "AAR_candidate": "build/feature-20261101-sanitized-v2/aar/armeabi-v7a/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "SDK_candidate": "build/feature-20261101-sanitized-v2/sdk/armeabi-v7a",
+      "AAR_non_native_entries_unchanged": true,
+      "SDK_non_native_entries_unchanged": true,
+      "privacy_scan": "NO_MATCH",
+      "core": {
+        "original_sha256": "808043b0c14bb41ae72428d738d64a49951ba6140f94d1996fea2d4c719b4740",
+        "candidate_sha256": "b82c7dc893297eb73276dbeb219364448fa74bdbd12600af04454b6b0d68fa9f",
+        "PT_LOAD": {
+          "class": 1,
+          "machine": 40,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              142960,
+              142960,
+              16384
+            ],
+            [
+              6,
+              142960,
+              159344,
+              159344,
+              3704,
+              4496,
+              16384
+            ],
+            [
+              6,
+              146664,
+              179432,
+              179432,
+              184,
+              909,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "08c2fdd8150c609969a0814e005156e5c4773aa65cf673528e23f125cd1ad773",
+            "87594102ede114ac7c116fb5d6845d4b62a6aadb086c54e105e1363026802cd0",
+            "b0b10ed9adf35dd24f1a466ac4b60f2a5669f889413a8881d38e98fcd98d596a"
+          ]
+        },
+        "dynsym_sha256": "627a1876d6b9e04051ae4ee102e4ec2d53b93848165a6ea5377724c73d9f74e9",
+        "needed": [
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem.so"
+        ]
+      },
+      "jni": {
+        "original_sha256": "c8d8a198caf76c65bb619cc5a8ccb9fbbb09547a6155e19889a5b8bd151cef0d",
+        "candidate_sha256": "8c2e6a4f4106b22f0817f8e70a7ea628b386f7e76018fb6177da5f4b1cc0cd87",
+        "PT_LOAD": {
+          "class": 1,
+          "machine": 40,
+          "load_headers": [
+            [
+              5,
+              0,
+              0,
+              0,
+              29488,
+              29488,
+              16384
+            ],
+            [
+              6,
+              29488,
+              45872,
+              45872,
+              680,
+              3280,
+              16384
+            ],
+            [
+              6,
+              30168,
+              62936,
+              62936,
+              24,
+              88,
+              16384
+            ]
+          ],
+          "masked_load_sha256": [
+            "cd9356496057b3c40b2c7fa9074efe24cf334b80bdd5d63087f84d9f70be6bfb",
+            "cb0249172f7b7a8513ec24f988572d77e6fe1ef1b5c50f47bbc7c9ba97e9cf04",
+            "605390e5a369ee568b19ead1733af824c7c1d286d7d24b86283238fc44a99334"
+          ]
+        },
+        "dynsym_sha256": "7fb01bb49b292641618aba876ea5c16a8f76ddfcdc1919195da72ad74b0fbd8b",
+        "needed": [
+          "libmgmem.so",
+          "libm.so",
+          "libdl.so",
+          "libc.so"
+        ],
+        "soname": [
+          "libmgmem_pressure_jni.so"
+        ]
+      },
+      "static_pressure": {
+        "original_sha256": "346dc3cd71c30a81adc349214f46d1404f28bdf7a6b35b578997bfdb7b11b470",
+        "candidate_sha256": "23e9e8580d3744eaad39f296cf3f23658258738cf5fde9471a5586596fe245ba",
+        "member_count": 1,
+        "allocated_and_arm_attributes_sections": 67,
+        "section_sha256": "e0ba6b1988b87157abe2ef495d21fcb0092fb4ddfb6feaeb8aa11aeb3dc826ef",
+        "nondebug_relocation_groups": 50,
+        "nondebug_relocation_sha256": "7da542fe189af0d1250dcd1dd25278778979b9dfebe22515eecafc8247df6af2",
+        "defined_externals_sha256": "dac0a457c16ad15c515158fe4886945db799187cec58298fe3540f63eb0de05a"
+      }
+    }
+  },
+  "limitations": [
+    "PT_LOAD data and dynamic metadata comparison is not runtime verification.",
+    "Archive comparison covers allocated sections, ARM attributes, non-debug relocations and external definitions; behavior not executed.",
+    "Only selected literal identifiers checked; no claim that all possible sensitive information was detected."
+  ],
+  "inputs_unchanged": true
+}

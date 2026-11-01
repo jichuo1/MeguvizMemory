@@ -22,6 +22,12 @@ registry锁序固定为domain→registry，或不持domain时单独取得registr
 
 retain抛异常时是否已加引用不可知；release抛异常时是否已释放不可知。因此核心poison域、保留不确定容量和claim，不重试、不强行释放。它不是可继续使用的正常关闭路径。普通使用必须满足thread-safe/no-throw/failure-atomic回调合同。
 
+## 可报告失败的外部释放扩展
+
+`mgmem_import_external_checked_v1` 使用独立的 `mgmem_external_buffer_checked_v1`，保留完整region、runtime、预算和lease规则，区别是origin的 `release_checked` 返回状态。仅 `MGMEM_OK` 表示释放成功；其他状态表示资源状态未知，核心返回 `MGMEM_PROVIDER_ERROR`，保留该范围claim及计费、隔离域，不重试回调，也不把域标记为正常关闭。最后owner或lease已被消费，不能重试同一handle。导入retain成功后遇到并发close而需要回滚时，同样遵循此规则。回调仍必须线程安全、不可抛异常，且不能重入同一domain；对违约异常的捕获只用于保守隔离。
+
+旧 `mgmem_import_external_v1` 和ABI 1.0/1.1的数据结构、版本值及原有地址复用行为不变。新接口是可选扩展，**ABI minor为1并不保证扩展存在**：需对选定的同一运行库先解析新符号，再确认 `MGMEM_CAP_CHECKED_EXTERNAL_RELEASE`；直接链接新符号的消费者必须确保部署的运行库包含扩展。checked release回调执行期间，该范围claim保持有效，以免在回调报告失败时错误放行；若origin在回调返回前已经释放地址，正常provider恰好复用该地址也会被保守视为冲突并隔离，因此可能发生误拒绝，调用方应避免在回调未返回时复用。回调失败永久保留不确定claim和费用，不能当作可重试的正常资源，也不承诺跨runtime或不同虚拟地址的同一物理页去重。
+
 ## 软预算与观测
 
 `set_budget` 在OPEN域上设置新的准入上限，允许0和低于当前backing+reservation。已有资源及已经拥有reservation的allocate/import继续完成；后续新准入在当前charge超上限时拒绝，arena已有空隙也不能绕过。恢复预算必须显式调用，不隐式close、移动或free现存资源。

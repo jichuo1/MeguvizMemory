@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_SANITIZED_INSTALLED_BRIDGE",
+  "scope": "WINDOWS_X64_OPT_IN_COMPUTE_CPU_READ_BRIDGE_NO_DEVICE_PERFORMANCE_OR_FORMAL_RELEASE",
+  "sdk_zip": {
+    "filename": "MeguvizMemory-ComputeReadBridge-windows-x64-feature-preview.zip",
+    "sha256": "385b0a0e9d60e0e7b2eeb337a0a771c6c31d96186b5204d4371a2e270c447cb3",
+    "bytes": 10846,
+    "entries": 6
+  },
+  "privacy_scan": "PASS_DECOMPRESSED_MEMBERS_ASCII_UTF16LE",
+  "binary_comparison_receipt_sha256": "30c7f6b456512377ac4abc73b7cc9bb7b72c3e476a52177a480c4cc2e60fd927",
+  "path_scan_receipt_sha256": "186fe55868755fd3ffa9d679b67882eb7bb7d43821598a140e557259158e9aaa",
+  "original_sdk_unchanged": true,
+  "installed_consumer": {
+    "status": "PASS",
+    "cases": {
+      "normal": {
+        "status": "PASS",
+        "exit_code": 0,
+        "stdout_sha256": "e37fa4da09f78e993101342101367d030cbebf9b0f0f55dea701a13c91de9aca",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "contract_violation_quarantine": {
+        "status": "PASS",
+        "exit_code": 0,
+        "stdout_sha256": "cd3b925d4ff337bf1a338264ef9663784376b940142eb4552e50209582a5b05d",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "exe_sha256": "9c982c56814d0b996526a5e22ebdf828d94d9bcb58583972aec4b6f5baa4e4fe",
+    "core_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425",
+    "runtime": "APPLICATION_LOCAL_IDENTICAL_TO_SANITIZED_CORE",
+    "quarantine_case": "ISOLATED_PROCESS_NOT_NORMAL_RESOURCE_ZERO"
+  },
+  "limits": [
+    "Compute CPU and matching Memory SDK must be supplied separately; those SDKs are not bundled here.",
+    "Normal and violation fixture results are separate; violation retains uncertain origin and is not normal resource reclamation.",
+    "Checks cover the selected installed consumer and static archive properties, not all behavior, Android/GPU, performance or release qualification.",
+    "Application-local DLL byte identity verified; no OS module path capture."
+  ]
+}

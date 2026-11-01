@@ -1,0 +1,19 @@
+{
+  "state": "PASS_SCOPED_PATH_PATTERN_SCAN",
+  "scope": "DECOMPRESSED_BRIDGE_SDK_ZIP_MEMBERS_ONLY",
+  "archive_sha256": "385b0a0e9d60e0e7b2eeb337a0a771c6c31d96186b5204d4371a2e270c447cb3",
+  "members": 6,
+  "finding_counts": {
+    "drive_ascii": 0,
+    "drive_utf16le": 0,
+    "unix_ascii": 0,
+    "unix_utf16le": 0
+  },
+  "ascii_and_utf16le": true,
+  "generic_system_path_findings": 0,
+  "machine_or_personal_path_findings": 0,
+  "raw_matched_paths_published": false,
+  "limits": [
+    "Heuristic patterns cover drive-absolute paths and specified common Unix home/workspace roots, not every possible encoding or secret."
+  ]
+}

@@ -35,6 +35,8 @@ extern "C" {
 #define MGMEM_CAP_EXPLICIT_COLLECTION 16ull
 #define MGMEM_CAP_EXTERNAL_IMPORT 32ull
 #define MGMEM_CAP_SOFT_BUDGET 64ull
+/* Optional additive extension; availability is not implied by ABI minor 1. */
+#define MGMEM_CAP_CHECKED_EXTERNAL_RELEASE 128ull
 
 typedef uint32_t mgmem_status;
 #define MGMEM_OK 0u
@@ -153,6 +155,38 @@ typedef struct mgmem_external_buffer_v1 {
     uint64_t managing_runtime_origin;
 } mgmem_external_buffer_v1;
 
+/* Optional extension to external import. The region, identity, runtime and
+ * retain rules are identical to mgmem_external_buffer_v1. release_checked is
+ * called once outside core locks. Only MGMEM_OK confirms that the retained
+ * origin reference was safely released. Any other result or exception means
+ * ownership is uncertain: the domain is poisoned, the backing remains charged
+ * and its claim is retained, and release is never retried by Memory. The caller
+ * must keep callback code loaded and not reenter the same domain. A failed final
+ * release consumes the owner/lease handle: retrying it is invalid. The status
+ * from release or the last lease release is MGMEM_PROVIDER_ERROR; collect/drain
+ * cannot claim normal completion and destroy remains BUSY.
+ *
+ * This is an optional additive ABI 1.1 extension: first resolve
+ * mgmem_import_external_checked_v1 in the chosen loaded runtime, then verify
+ * MGMEM_CAP_CHECKED_EXTERNAL_RELEASE via that same runtime's capabilities.
+ * Older 1.1 libraries do not necessarily provide this symbol or capability. */
+typedef struct mgmem_external_buffer_checked_v1 {
+    uint32_t struct_size;
+    uint32_t abi_major;
+    uint32_t abi_minor;
+    uint32_t required_flags;
+    const void *data;
+    uint64_t capacity_bytes;
+    uint64_t alignment;
+    uint64_t external_id;
+    uint32_t access;
+    uint32_t reserved;
+    void *context;
+    mgmem_status (*retain)(void *context);
+    mgmem_status (*release_checked)(void *context);
+    uint64_t managing_runtime_origin;
+} mgmem_external_buffer_checked_v1;
+
 /* Subset of the old snapshot, not additional bytes to add to backing_bytes.
  * Charged imports with a violating callback remain visible even if publication
  * failed; import_count counts successfully published imports only. */
@@ -177,6 +211,8 @@ MGMEM_API mgmem_status mgmem_domain_create_v1(const mgmem_domain_options_v1 *opt
 MGMEM_API mgmem_status mgmem_allocate_v1(mgmem_domain *domain, uint64_t bytes, uint64_t alignment, mgmem_handle_v1 *out);
 MGMEM_API mgmem_status mgmem_import_external_v1(mgmem_domain *domain,
     const mgmem_external_buffer_v1 *buffer, mgmem_handle_v1 *out);
+MGMEM_API mgmem_status mgmem_import_external_checked_v1(mgmem_domain *domain,
+    const mgmem_external_buffer_checked_v1 *buffer, mgmem_handle_v1 *out);
 /* A soft admission limit, including zero. Existing owners/leases and operations
  * with an existing reservation remain valid; no forced reclamation or implicit
  * close. New admission must fit the new limit. Snapshot may temporarily show

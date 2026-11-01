@@ -1,0 +1,54 @@
+{
+  "state": "PASS_NONALLOC_COMMENT_OUTSIDE_LOAD_REMOVED_ON_COPY",
+  "profiles": {
+    "arm64-v8a": {
+      "core": {
+        "original_sha256": "5fc04c98b3bf4688d8357dedd863a4e49402baf6af8b165d06869d95e54acc3c",
+        "candidate_sha256": "bfab5d3f653d9516b46a6f82a0d325145691d73b66b66029de0c3e04df9fb410",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      },
+      "jni": {
+        "original_sha256": "b9bcdd0d660e6c69e8a6e10d0655e501fc4b69dfa93110e0c19a8015baabe504",
+        "candidate_sha256": "928bc107358608c44bd5477fd02c38517a07e317b9a0c4847d810655855dd725",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      }
+    },
+    "x86_64": {
+      "core": {
+        "original_sha256": "f4e3cde57447f1d6dadbaa4b9dad9854f7596a923f28c4f40c218d03a69b294f",
+        "candidate_sha256": "df3409765e740d033b228a878efa12d93ada67a28b83652ddbac80855d33a7f8",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      },
+      "jni": {
+        "original_sha256": "28df804d80998a71dd9889c952f88c16b0cb2302dc053e7d8d5f24b43fbfd5e5",
+        "candidate_sha256": "33068665866319cfb16a537664f9cb0582939539b48a9b95f9478e0a3c98cb1b",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      }
+    },
+    "armeabi-v7a": {
+      "core": {
+        "original_sha256": "808043b0c14bb41ae72428d738d64a49951ba6140f94d1996fea2d4c719b4740",
+        "candidate_sha256": "b82c7dc893297eb73276dbeb219364448fa74bdbd12600af04454b6b0d68fa9f",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      },
+      "jni": {
+        "original_sha256": "c8d8a198caf76c65bb619cc5a8ccb9fbbb09547a6155e19889a5b8bd151cef0d",
+        "candidate_sha256": "8c2e6a4f4106b22f0817f8e70a7ea628b386f7e76018fb6177da5f4b1cc0cd87",
+        "comment_section_flags_alloc": false,
+        "comment_intersects_PT_LOAD": false,
+        "candidate_comment_absent": true
+      }
+    }
+  },
+  "scope": "COMPILER_METADATA_NOT_RUNTIME_CONSTANT; LOAD_BYTES_AND_DYNSYMS_VERIFIED_SEPARATELY"
+}

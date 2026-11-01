@@ -1,0 +1,24 @@
+{
+  "state": "PASS",
+  "recursive_members_examined": 144,
+  "hits": [],
+  "scope": "KNOWN_IDENTIFIERS_AND_GENERIC_PATHS_DECOMPRESSED_MEMBERS_ZIP_METADATA_ASCII_UTF16_BOTH_ALIGNMENTS",
+  "outputs": {
+    "arm64-v8a": {
+      "aar_sha256": "7514720b8212141ad42d968029dfd12a6ec1b588ee75419a245791b837e2b0d1",
+      "sdk_zip_sha256": "e596b6fad131ee1b1d6273378c0cde9a19563d0cb02356c245ba930092173379"
+    },
+    "x86_64": {
+      "aar_sha256": "c282fb5df2ef1c1029fce3655c3be85a3a9f65ef52682b050bee4853bbfaa2f1",
+      "sdk_zip_sha256": "86b9f9d08534636c0f0df048e3a4c8429f94ddb1f97e7e23306d61da633ea208"
+    },
+    "armeabi-v7a": {
+      "aar_sha256": "bbb0806fe94a96a99006fe395fde70a0fd799cdf17fa24b4642bcef736d0a274",
+      "sdk_zip_sha256": "2d0e88a4de7df7d855f7530e2a5ce621670063ec4ca7f630351f1827c911bca3"
+    }
+  },
+  "limits": [
+    "ZIP compressed bytes are not interpreted as paths; unpacked content and metadata are scanned.",
+    "Pattern matching is not proof that every sensitive value was found."
+  ]
+}

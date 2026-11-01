@@ -30,6 +30,18 @@ jobs:
         run: python tools/verify_packed_reader.py --java-only --build-dir build/packed-java-ci --receipt artifacts/ci-packed/receipt.json
       - name: Android pressure Java lifecycle contracts
         run: python tools/verify_android_pressure.py --out-dir build/pressure-java-ci --receipt artifacts/ci-pressure/receipt.json
+      - name: Android packaging ABI checks
+        run: python tools/test_build_pressure_abi.py
+      - name: Feature preview privacy scanner checks
+        run: python tools/test_package_feature_preview.py
+      - name: Android borrow diagnostic protocol checks
+        run: python tools/test_android_borrow_round.py
+      - name: Configure host JNI borrowing fixture
+        run: cmake -S tests/borrow_host -B build/borrow-jni-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build host JNI borrowing fixture
+        run: cmake --build build/borrow-jni-ci --config Release --parallel 2
+      - name: Verify host JNI borrowing fixture
+        run: ctest --test-dir build/borrow-jni-ci -C Release --output-on-failure
       - name: Continuation capture validation regressions (offline real fixtures)
         run: python tools/test_continuation_validation.py
       - name: Diagnostic debugger identity and detach regressions

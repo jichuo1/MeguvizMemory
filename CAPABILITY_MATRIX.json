@@ -44,7 +44,7 @@
     "external_import_consumer": "PASS_HOST_AND_REAL_ARM64_NO_COPY_AND_900_SECONDS",
     "image_pressure_composition": "PASS_HOST_SYSTEM_ARENA_AND_ARM64_ARENA_900_SECONDS",
     "BIL": "AUDITED_NOT_MODIFIED_NOT_INTEGRATED",
-    "Compute_Media": "REAL_CONTRACT_AUDITED_NO_CPU_PROVIDER_INJECTION_NO_BRIDGE"
+    "Compute_Media": "OPTIONAL_COMPUTE_CPU_READ_MAP_HOST_PASS_MEDIA_NOT_INTEGRATED"
   },
   "research": {
     "pmu": "UNAVAILABLE",
@@ -114,10 +114,12 @@
     "observations": "OWN_PROCESS_RSS_PSS_PRIVATE_DIRTY_AVAILABLE_WITH_UNAVAILABLE_REASONS",
     "energy": "UNAVAILABLE",
     "Android_API33_arm64_4K": "PASS_NATIVE9_PACKED32_ANDROID20",
-    "family_bridge": "CONTRACT_AUDIT_ONLY",
+    "family_bridge": "OPTIONAL_COMPUTE_CPU_READ_HOST_PASS_MEDIA_NOT_INTEGRATED",
     "BIL": "NOT_INTEGRATED",
     "performance": "NO_NEW_QUALIFICATION",
-    "jni_close_fix": "AUTO_RETRY_AND_EXCEPTION_ISOLATION_HOST29_ASAN29_API33_FINAL_15M_API34_FINAL_SHORT"
+    "jni_close_fix": "AUTO_RETRY_AND_EXCEPTION_ISOLATION_HOST29_ASAN29_API33_FINAL_15M_API34_FINAL_SHORT",
+    "checked_external_release": "IMPLEMENTED_OPTIONAL_CAPABILITY_HOST_RELEASE_ASAN_PASS",
+    "jni_controlled_borrow": "IMPLEMENTED_HOST_JVM_FAKE_JNI_AND_ARM64_R8_BUILD_PASS_ANDROID_RUNTIME_PENDING"
   },
   "scope_note": "Top-level current fields describe 0.2; historical_0_1_and_draft fields are superseded snapshots, not current missing implementation.",
   "historical_0_1_and_draft": {
@@ -237,5 +239,17 @@
     ],
     "evidence": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md",
     "manifest": "artifacts/android-close-investigation-20261030/ARTIFACTS.json"
+  },
+  "feature_development_20261101": {
+    "state": "IN_PROGRESS_FUNCTIONS_FIRST_VERIFICATION_PENDING",
+    "native_abi": "1.1_WITH_OPTIONAL_CHECKED_EXTERNAL_RELEASE_CAPABILITY",
+    "host": "RELEASE_37_ASAN_37_BORROW_2_BRIDGE_4_INSTALLED_CONSUMER_PASS",
+    "compute": "CPU_READ_BRIDGE_OPT_IN_HOST_ONLY",
+    "android": "ARM64_X86_64_ARMV7_SINGLE_ABI_AAR_CROSS_BUILT_NOT_DEVICE_TESTED",
+    "BIL": "NOT_INTEGRATED",
+    "performance": "NOT_MEASURED",
+    "formal_release": "NOT_QUALIFIED",
+    "evidence": "artifacts/feature-development-20261101/host-receipt-v2.json",
+    "android_borrow_r8": "SANITIZED_ARM64_REAL_R8_BUILD_PASS_ART_DEVICE_NOT_RUN"
   }
 }

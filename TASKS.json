@@ -334,10 +334,11 @@
         "artifacts/verification-20261030/core-tests.txt",
         "artifacts/verification-20261030/consumers/receipt.json",
         "artifacts/arm64-20261030/safety/receipt.json",
-        "artifacts/features-20261030/ARTIFACTS.json"
+        "artifacts/features-20261030/ARTIFACTS.json",
+        "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md"
       ],
       "remaining": [
-        "Android adapter API33 long stability remains unqualified after repeated stall",
+        "Final distribution passed API33 arm64 15-minute repeated-close validation; 24h, single long-lived domain and broader device matrix remain unqualified",
         "15-minute repeated native cycles are not 24h, single long-lived domain or indefinite leak freedom",
         "MTE/HWASan and final release matrix remain separate"
       ]
@@ -378,7 +379,8 @@
       "remaining": [
         "Energy measurement remains unavailable",
         "16KB/MTE and product/release qualification remain separate"
-      ]
+      ],
+      "checked_external_release_extension": "IMPLEMENTED_ADDITIVE_CAPABILITY_OPTIONAL_ABI_1_1_UNIFIED_VERIFICATION_PENDING"
     },
     {
       "id": "MM-008",
@@ -427,15 +429,21 @@
       "required_outputs": [],
       "dependency_contract": "MM 006",
       "acceptance": "Java 引用保活、无逃逸 early-free、批量调用",
-      "status": "NOT_SELECTED",
-      "implementation": "NOT_SELECTED",
-      "functional_validation": "NOT_STARTED",
-      "device_validation": "NOT_STARTED",
+      "status": "PARTIAL",
+      "implementation": "CONTROLLED_COPY_JNI_LEASE_IMPLEMENTED_NO_ESCAPING_POINTER_OR_BYTEBUFFER",
+      "functional_validation": "PASS_HOST_FAKE_JNI_AND_HOST_JVM_DEVELOPMENT_CHECKS",
+      "device_validation": "NOT_RUN_FOR_NEW_BORROW_API",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
-      "release_qualification": "NOT_SELECTED",
+      "release_qualification": "NOT_QUALIFIED",
       "scope": "core_or_qualification",
-      "reason": "General Java ByteBuffer borrowing/batch API not selected; Android pressure JNI with opaque registration and nonescaping probe exists separately under MM-015."
+      "reason": "Native owner registration and bounded Java byte access implemented; sanitized arm64 R8 build passed, ART/device and production consumer qualification remain outstanding",
+      "evidence": [
+        "docs/ANDROID_NATIVE_BORROW.md",
+        "tests/android_borrow/README.md",
+        "artifacts/feature-development-20261101/android-borrow-r8-build.json",
+        "docs/ANDROID_BORROW_DEVICE_PROTOCOL.md"
+      ]
     },
     {
       "id": "MM-010",
@@ -638,8 +646,10 @@
         "docs/ANDROID_PRESSURE.md",
         "artifacts/features-20261030/device-android-final/features-receipt.json",
         "docs/CONSUMER_CLOSEOUT_20261030.md",
-        "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md"
-      ]
+        "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md",
+        "docs/LUMEN_MEMORY_CONTRACTS.md"
+      ],
+      "lumen_contract_20261101": "READ_ONLY_CURRENT_LOCAL_SOURCE_AUDIT_NO_PUBLIC_CPU_ALLOCATOR_INJECTION_NO_INTEGRATION"
     },
     {
       "id": "MM-016",
@@ -651,21 +661,23 @@
       "required_outputs": [],
       "dependency_contract": "MM 008；实际可用的 Compute SDK、固定合同与生命周期资格",
       "acceptance": "不重复 GPU ledger，不破坏 retirement；缺外部制品只交 fixture，真实集成标 BLOCKED",
-      "status": "BLOCKED",
-      "implementation": "REAL_CONTRACT_REAUDITED_NO_FAMILY_BRIDGE_IMPLEMENTATION",
-      "functional_validation": "NOT_STARTED",
-      "device_validation": "NOT_STARTED",
+      "status": "PARTIAL",
+      "implementation": "OPT_IN_COMPUTE_CPU_READ_MAP_TO_MEMORY_CHECKED_IMPORT",
+      "functional_validation": "PASS_FINAL_CORE_SCOPED_HOST_CPU_REFERENCE_4_AND_INSTALLED_CONSUMER",
+      "device_validation": "NOT_RUN_FOR_NEW_BRIDGE",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "BLOCKED",
       "scope": "family_integration",
       "external_sdk_state": "REAL_COMPUTE_AND_MEDIA_SOURCES_AND_INSTALLED_SDK_FOUND_IN_MEGUVIZPACK",
-      "blocking_reason": "Compute host descriptor has no Memory-owned CPU pointer/provider injection; READ-map adapter remains full-range CPU contract candidate, not executed",
+      "blocking_reason": "Compute host descriptor has no Memory-owned CPU pointer/provider injection; optional reverse full-range CPU READ-map adapter is implemented and host-tested, not Android/product qualified",
       "evidence": [
         "docs/audit/consumers.md",
         "docs/INTEGRATION.md",
-        "docs/FAMILY_MEMORY_CONTRACTS.md"
-      ]
+        "docs/FAMILY_MEMORY_CONTRACTS.md",
+        "adapters/compute/README.md"
+      ],
+      "reason": "Independent optional adapter; Android/device/production qualification outstanding; reverse Memory-to-Compute provider injection remains unavailable"
     },
     {
       "id": "MM-017",
@@ -731,7 +743,8 @@
         "Run real 16 KiB loader",
         "Qualify final applicable APK/DSO and dependency closure",
         "Do not turn static ELF alignment or 4 KiB execution into 16 KiB runtime support"
-      ]
+      ],
+      "feature_20261101_build": "ARM64_X86_64_ARMV7_CORE_JNI_SINGLE_ABI_AAR_CROSS_BUILT_NO_NEW_DEVICE_QUALIFICATION"
     },
     {
       "id": "MM-019",
@@ -1172,5 +1185,23 @@
     ],
     "evidence": "docs/ANDROID_CLOSE_INVESTIGATION_20261030.md",
     "manifest": "artifacts/android-close-investigation-20261030/ARTIFACTS.json"
+  },
+  "feature_development_20261101": {
+    "state": "IN_PROGRESS_FUNCTIONS_FIRST_VERIFICATION_PENDING",
+    "checked_external_release": "IMPLEMENTED_OPTIONAL_CAPABILITY_PRESERVES_LEGACY_ABI_VERSION",
+    "java_borrow": "CONTROLLED_COPY_NO_DIRECT_BUFFER_HOST_DEVELOPMENT_CHECKS_ANDROID_TEST_APK_BUILD_ONLY",
+    "compute_read_bridge": "OPT_IN_CPU_ONLY_FINAL_CORE_HOST_4_AND_INSTALLED_CONSUMER_PASS_ANDROID_PENDING",
+    "android_artifacts": "THREE_ABIS_CROSS_BUILT_NOT_DEVICE_QUALIFIED",
+    "BIL": "NOT_MODIFIED_NOT_INTEGRATED",
+    "performance": "NOT_MEASURED",
+    "evidence": [
+      "docs/EXTERNAL_IMPORT.md",
+      "docs/ANDROID_NATIVE_BORROW.md",
+      "adapters/compute/README.md",
+      "tests/android_borrow/README.md"
+    ],
+    "host_functional": "CORE_RELEASE_37_ASAN_37_JNI_BORROW_2_COMPUTE_BRIDGE_4_AND_INSTALLED_CONSUMER_PASS",
+    "android_borrow_r8": "SANITIZED_ARM64_REAL_R8_BUILD_PASS_ART_DEVICE_NOT_RUN",
+    "android_device_runner": "IMPLEMENTED_OFFLINE_SYNTHETIC_TESTS_ONLY_NO_REAL_DEVICE_EXECUTION"
   }
 }

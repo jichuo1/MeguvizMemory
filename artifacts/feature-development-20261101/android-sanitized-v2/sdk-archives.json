@@ -1,0 +1,20 @@
+{
+  "state": "PASS_RECURSIVE_PRIVACY_AND_SDK_MEMBER_IDENTITY",
+  "profiles": {
+    "arm64-v8a": {
+      "path": "build/feature-20261101-sanitized-v2/archives/MeguvizMemory-0.2.0-android-arm64-v8a-sanitized-sdk.zip",
+      "bytes": 131903,
+      "sha256": "e596b6fad131ee1b1d6273378c0cde9a19563d0cb02356c245ba930092173379"
+    },
+    "x86_64": {
+      "path": "build/feature-20261101-sanitized-v2/archives/MeguvizMemory-0.2.0-android-x86_64-sanitized-sdk.zip",
+      "bytes": 126255,
+      "sha256": "86b9f9d08534636c0f0df048e3a4c8429f94ddb1f97e7e23306d61da633ea208"
+    },
+    "armeabi-v7a": {
+      "path": "build/feature-20261101-sanitized-v2/archives/MeguvizMemory-0.2.0-android-armeabi-v7a-sanitized-sdk.zip",
+      "bytes": 117031,
+      "sha256": "2d0e88a4de7df7d855f7530e2a5ce621670063ec4ca7f630351f1827c911bca3"
+    }
+  }
+}

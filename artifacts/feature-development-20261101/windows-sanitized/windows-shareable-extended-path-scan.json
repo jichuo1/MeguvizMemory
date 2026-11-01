@@ -1,0 +1,20 @@
+{
+  "state": "PASS_SCOPED_PATH_PATTERN_SCAN",
+  "scope": "DECOMPRESSED_WINDOWS_SDK_ZIP_MEMBERS_ONLY",
+  "archive_sha256": "cabcdadd951ec563327a375353f7f497b4d5a8776a51d431f22a82049a10fde9",
+  "members": 13,
+  "finding_counts": {
+    "drive_ascii": 0,
+    "drive_utf16le": 0,
+    "unix_ascii": 0,
+    "unix_utf16le": 0
+  },
+  "ascii_and_utf16le": true,
+  "generic_system_path_findings": 0,
+  "machine_or_personal_path_findings": 0,
+  "raw_matched_paths_published": false,
+  "limits": [
+    "Heuristic patterns cover drive-absolute paths and specified common Unix home/workspace roots, not every possible encoding or secret.",
+    "File identity and host consumer verification are separate."
+  ]
+}

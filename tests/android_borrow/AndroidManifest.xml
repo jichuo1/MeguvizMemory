@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.jichuo1.meguviz.memory.borrowprobe">
+  <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="33" />
+  <application android:debuggable="true" android:label="Memory Borrow Probe" android:allowBackup="false" />
+  <instrumentation android:name="io.github.jichuo1.meguviz.memory.android.NativeBorrowInstrumentation"
+      android:targetPackage="io.github.jichuo1.meguviz.memory.borrowprobe" android:functionalTest="true" />
+</manifest>

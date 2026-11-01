@@ -1,0 +1,29 @@
+{
+  "state": "PASS_SANITIZED_BINARY_COMPARISON_CONSUMER_PENDING",
+  "scope": "LOCAL_WINDOWS_X64_SDK_NO_DEVICE_NO_PERFORMANCE_NO_RELEASE",
+  "source_sdk_files": 13,
+  "source_preserved": true,
+  "private_marker_scan": "PASS_ASCII_UTF16LE",
+  "untouched_files_byte_identical": true,
+  "pressure_archive": {
+    "before_sha256": "d79ec26f559d3f7b3e43a23ab17c358ccb0c77b853f1e4e4fab56ae3e94e4b32",
+    "after_sha256": "92bdf22ea732d0a062b5b9b44fcd501c7d6daae73816fa76a8137b2c42fee1e4",
+    "nondebug_sections": 696,
+    "section_bytes_sha256": "535db7e3b38c5ade23508a3efa6ebba3f8b55e59b400e58b7b981c4abcc1df54",
+    "section_metadata_sha256": "374b3bc2d2e85244a8530abdb5a9fc0ab52a36d6ccc38c93ce2da93aa356f963",
+    "relocation_groups": 373,
+    "relocation_count": 956,
+    "relocations_sha256": "f96b33f77f0038529d745fbae505658313be0e048166a8de59cfe447c4eefccd",
+    "defined_external_symbols_sha256": "2d9b4abf96d7f4ac236235182bc1b718f597a2cb73c5682b8865cd406e9a78ca"
+  },
+  "tool_sha256": {
+    "strip": "218dbc5dfed2ae740e46c84f039ed7f35973a0ce8832ae2f348a2cfe70af345b",
+    "readobj": "d24b456477ce343b085006e76692e60cc5297f261a2fcc19eb32cacffc31a2a1",
+    "nm": "5638dd0187719347d76855a34331ac163eab6f7eaff5a9b87aa291a2fec798d2"
+  },
+  "limits": [
+    "Section records compare non-debug bytes, characteristics, sizes and relocation counts; relocations normalize symbol indices.",
+    "Clean PE and import library stay byte-identical; no stripping of executable code was performed.",
+    "Binary comparisons are not an installed-consumer, device, performance or release qualification."
+  ]
+}
