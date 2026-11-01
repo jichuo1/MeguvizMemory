@@ -5,14 +5,15 @@
 ## 多域诊断与 Android 接入示例（2026-11-01）
 
 - 新增 [MM-021 多域 Arena 诊断](bench/TLB_MULTI_ARENA.md)，以相同工作量比较两种访问顺序，检查预算、持有 lease 时关闭及最后归零；Windows 宿主 5 个正例与 8 个拒绝路径通过。它是单线程功能工具，不证明 TLB 机制或性能收益。[限定证据](artifacts/multi-arena-20261101/host.json)
-- 新增[独立 Android 使用示例](consumers/android_managed/README.md)，显式处理后台注册、合成压力票据、注销与关闭；宿主 JNI 和 framework 类型桩通过，真实 Android SDK 的源码编译已完成。新版 AAR 编译、ART、真机和 R8 运行仍须分别验证。
-- 新增[Android 工程候选构建器](docs/ANDROID_CANDIDATE_BUILDER.md)，从独立源码快照构建并检查三 ABI AAR 与 SDK；开发轮和 14 项离线合同检查通过，尚待用最终冻结源码生成本批候选。构建和脱敏检查不替代设备或正式发布资格。
+- 新增[独立 Android 使用示例](consumers/android_managed/README.md)，显式处理后台注册、合成压力票据、注销与关闭；宿主 JNI 和 framework 类型桩通过，并用本批 arm64 AAR 与真实 Android SDK 编译通过。ART、真机和 R8 运行仍须分别验证。
+- 新增[Android 工程候选构建器](docs/ANDROID_CANDIDATE_BUILDER.md)，从提交 `c45723f` 的独立源码快照构建并检查三 ABI AAR 与 SDK；14 项离线合同检查通过。最终候选已生成，独立消费者的三 ABI 交叉编译、链接及 AAR/SDK 身份回读通过；[制品与限定证据](artifacts/android-candidate-20261101/candidate.json)。候选 `dist/MeguvizMemory-Android-Candidate-c45723f.zip` 留在本地、未随仓库发布；未发布正式 Release。构建和脱敏检查不替代设备资格。
+- 本批 [Windows/Linux 公开 CI](artifacts/android-candidate-20261101/ci-host.json) 均通过：各自核心 39 项、托管域 49 项、多域诊断 5 正例和 8 反例，以及候选工具与 Android 示例的宿主检查。
 
 ## 托管域同域压力继续开发（2026-11-01）
 
 - 新增显式选用的同域压力绑定：手动预算和压力事件由同一控制器仲裁；事件排队、应用、失败、取消与过期分开观察。关闭先结束压力控制器，再清理托管域；已有租约不被强制释放。Android 回调桥提供拒绝计数和最近状态，但回调路径会取短锁，不承诺硬实时。见[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)。
 - Windows 宿主验证覆盖核心压力合同、托管绑定并发和关闭、确定性取消，以及图像消费者的 System/Arena 合成压力场景；[公开 CI](artifacts/managed-pressure-20261101/ci-host.json) 的 Windows 与 Linux 均通过核心 39 项、托管域 49 项及图像默认 12／压力 12／失败 10 组。详细源码和范围见[本次记录](artifacts/managed-pressure-20261101/host.json)。这些结果不证明 Android ART、R8 运行、真实系统低内存、设备长稳或性能收益。
-- 该新版尚未生成可分发的匹配制品，之前的预览包和历史设备证据均不包含本次绑定。设备和性能资格留待功能阶段结束后统一验证；BIL 保持未接入。
+- 之前的预览包和历史设备证据均不包含本次绑定；上节的新工程候选包含该绑定，但尚未取得设备或正式发布资格。设备和性能资格留待功能阶段结束后统一验证；BIL 保持未接入。
 
 ## Java 托管域上一开发阶段（2026-11-01）
 

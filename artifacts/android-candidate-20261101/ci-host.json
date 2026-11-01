@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "tested_commit": "c45723fbbd3d68cf3afc7b74313d760fc20cd93b",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41279907901",
+  "profiles": [
+    {"name": "verify (ubuntu-latest)", "conclusion": "success", "core_ctest": 39, "managed_ctest": 49, "multi_arena_positive": 5, "multi_arena_negative": 8, "candidate_builder_contracts": 14, "aar_structure_contracts": 4, "sample_host_stub": "PASS"},
+    {"name": "verify (windows-latest)", "conclusion": "success", "core_ctest": 39, "managed_ctest": 49, "multi_arena_positive": 5, "multi_arena_negative": 8, "candidate_builder_contracts": 14, "aar_structure_contracts": 4, "sample_host_stub": "PASS"}
+  ],
+  "limits": [
+    "Host CI and Android type stubs do not establish Android ART, R8 runtime or device execution.",
+    "Multi-arena functional checks do not establish TLB mechanism or performance.",
+    "The engineering candidate has separate cross-compilation and static identity evidence."
+  ]
+}

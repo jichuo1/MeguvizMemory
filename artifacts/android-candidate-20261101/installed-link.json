@@ -1,0 +1,33 @@
+{
+  "state": "PASS_SCOPED_ANDROID_THREE_ABI_INSTALLED_CONSUMER_LINK",
+  "scope": "CROSS_COMPILE_LINK_AND_STATIC_READBACK_ONLY",
+  "candidate_sha256": "2b58d213c43bb78325123b534bef0a001f36ff19c5225ce79716064ccde7e01b",
+  "abis": [
+    "arm64-v8a",
+    "x86_64",
+    "armeabi-v7a"
+  ],
+  "real_consumers": [
+    "mgmem_image",
+    "mgmem_image_pressure_stability"
+  ],
+  "explicit_v2_consumer": "COMPILE_AND_LINK_PASS",
+  "checks": [
+    "EXTRACTED_SDK_AND_AAR_CORE_JNI_BYTE_IDENTICAL",
+    "STATIC_PRESSURE_MATCHES_VALIDATED_CANDIDATE",
+    "IMPORTED_TARGETS_AND_ACTUAL_LINK_PATHS_MATCH_EXTRACTED_SDK",
+    "IMAGE_BINARY_ABI_AND_CORE_NEEDED_CHECKED",
+    "IMAGE_V1_AND_EXPLICIT_V2_PRESSURE_SYMBOLS_DEFINED",
+    "SDK_AND_SOURCE_UNCHANGED_AFTER_LINK"
+  ],
+  "initial_attempt": "FAILED_DUE_TO_HARNESS_ASSUMING_LLD_MAP_LISTS_SHARED_CORE; RETAINED_SEPARATELY",
+  "base_receipt_sha256": "a86c0a8212435117b058c0e16b22dfad3a3243468ca45e83f42fb50541f7290a",
+  "independent_readback_sha256": "fdce5305963a6d5a4e6d70728f3fa8dd52a642fc293d28d5969d337cc3c8a899",
+  "initial_failed_receipt_sha256": "d3ccf08599e19efd4caf4f03022953136bb5a550bb0e55a8649919e68b9d8bea",
+  "harness_sha256": "45b960f9c9f4818c783b4f3e635dac6d4c62a8c0fdc98efed6be4b8e7ba11d44",
+  "inspector_sha256": "3f837047710d169d85363cbba5c5da47aab42df567cf1156b68b9052ad8ed2d5",
+  "limits": [
+    "No executable was run; no Android ART, R8, device, performance or 16KiB loader qualification.",
+    "Link paths, symbols and hashes are not signed build provenance."
+  ]
+}

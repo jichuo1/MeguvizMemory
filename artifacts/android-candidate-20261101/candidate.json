@@ -1,0 +1,44 @@
+{
+  "state": "PASS_SCOPED_ANDROID_ENGINEERING_CANDIDATE",
+  "scope": "SOURCE_BUILD_SANITIZED_PACKAGE_CROSS_LINK_ONLY",
+  "source_commit": "c45723fbbd3d68cf3afc7b74313d760fc20cd93b",
+  "source_archive_sha256": "8c676fe19bf98cfea784d0adf8186c113dd15b2cd8b75e01b9c03e0cb5760059",
+  "source_lock_sha256": "876d47954bcc0369ea0a79aa4e1eb3f9d54644cc6cbe21ed5ef14b1ff36c6811",
+  "source_record_count": 244,
+  "candidate_sha256": "2b58d213c43bb78325123b534bef0a001f36ff19c5225ce79716064ccde7e01b",
+  "candidate_bytes": 1122474,
+  "profiles": {
+    "arm64-v8a": {
+      "aar_sha256": "6ecf02867142ba58dfc25639b0a58fa8325d814099bbffe00c36b33586d3bd1c",
+      "sdk_sha256": "b5284588d1d5b25bd3aa8ab8c1ccc9967d1fcb528a9258191dc66654f733e7fe",
+      "jni_native_declarations": 37
+    },
+    "x86_64": {
+      "aar_sha256": "1b47a9d6a0cf768a4f32b1e8403a4c968364f71ca289be8b6873d8f679ea5414",
+      "sdk_sha256": "2904985419e7b7dd6f721f9ea8c133fffe4abfca8c56a8672515f5672c401c5f",
+      "jni_native_declarations": 37
+    },
+    "armeabi-v7a": {
+      "aar_sha256": "f4e1b85e4519ba4549198315081ff547f01426a41d34be471a61a5a826dd3c60",
+      "sdk_sha256": "4e1137382a7fffcbe9f609bdc12f3815933518403eb925958f420d4ea41ad257",
+      "jni_native_declarations": 37
+    }
+  },
+  "independent_sdk_consumer": "PASS_THREE_ABI_CROSS_COMPILE_LINK_ONLY",
+  "installed_link_receipt_sha256": "83ae0407f4a1c92942f60c06edda0439fa165ab37d3651ab2f7ae01808405edf",
+  "arm64_aar_sample_compile": "PASS_ANDROID_SDK_COMPILE_ONLY",
+  "sample_receipt_sha256": "55a8b12e1ce14912f9094146f55258d5a3339fb855deb129bd69089833d93661",
+  "device": "NOT_RUN",
+  "android_runtime": "NOT_RUN",
+  "r8_runtime": "NOT_RUN",
+  "real_16k_loader": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "formal_release": "NOT_QUALIFIED_PROJECT_LICENSE_UNSPECIFIED",
+  "limits": [
+    "Only the archive at the recorded hash is the candidate; working build directories are not distributable.",
+    "PT_LOAD and static identity checks do not establish behavior on any loader.",
+    "No ART, device, energy, performance or BIL qualification.",
+    "Bounded path and private-identifier scanning is not a guarantee of absence of all private data.",
+    "The initial independent link check failed due to a harness assumption and was retained separately."
+  ]
+}
