@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.jichuo1.meguviz.memory.managedprobe">
+  <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="33" />
+  <application android:debuggable="true" android:label="Managed Memory Probe" android:allowBackup="false" />
+  <instrumentation android:name="io.github.jichuo1.meguviz.memory.android.ManagedInstrumentation"
+      android:targetPackage="io.github.jichuo1.meguviz.memory.managedprobe" android:functionalTest="true" />
+</manifest>

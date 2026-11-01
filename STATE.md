@@ -2,6 +2,12 @@
 
 最近补充：2026-11-01。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 统一验证准备（2026-11-01）
+
+- 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查，但未在 Android 运行。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)
+- 独立 runner 已完成假 ADB 的准入、签名、冻结、超时和后验离线回归；真实冻结计划默认仅写入被忽略的 `build/`。设备测试前必须再次确认占用，观察不构成共享锁。短诊断没有前台长稳合同，不能作为 900 秒资格。
+- 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者；runner 离线检查 19 项通过。实际 Linux 候选尚未构建或运行，CI sentinel 不等同用户本机私有标识扫描。
+
 ## 修复后工程候选（2026-11-01）
 
 - 从提交 `2e25092` 的独立源码快照分别生成本地三 ABI Android 候选和 Windows x86_64 宿主候选；两包的 261 项源码记录与该提交一致。包名、SHA-256 和[限定证据](artifacts/delivery-20261101/final-candidates-2e25092.json)已固定，候选仅留本地 `dist/`，不等于正式 Release。

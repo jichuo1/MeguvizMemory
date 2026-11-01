@@ -867,7 +867,7 @@
       ],
       "remaining": [
         "Full target-device/core/page/thermal/PMU capability matrix",
-        "Multi-arena and selected additional case profiles",
+        "Single-thread multi-arena functional diagnostic completed; selected subregion/slot and trim/refault profiles remain unselected and unqualified",
         "Functional checksum success alone establishes no mechanism or product-performance gate"
       ]
     },
@@ -1320,5 +1320,24 @@
     "formal_release": "NOT_QUALIFIED",
     "contract": "docs/HOST_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/delivery-20261101/final-candidates-2e25092.json"
+  },
+  "managed_device_preparation_20261101": {
+    "parents": ["MM-007", "MM-009", "MM-015", "MM-019"],
+    "state": "R8_BUILD_AND_HOST_STUB_PASS_DEVICE_NOT_RUN",
+    "diagnostic": "SYSTEM_ARENA_BUDGET_SYNTHETIC_PRESSURE_ASYNC_CLOSE",
+    "r8_build": "ARM64_X86_64_BUILD_ONLY_37_JNI_DECLARATIONS",
+    "host": "TWO_HOST_STUB_TESTS_PASS_RUNNER_FAKE_ADB_PASS",
+    "device": "NOT_RUN",
+    "long_stability": "SEPARATE_FOREGROUND_PROTOCOL_NOT_YET_READY",
+    "performance": "NOT_MEASURED",
+    "evidence": "artifacts/managed-probe-20261101/build-only.json",
+    "contract": "docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md"
+  },
+  "linux_host_candidate_ci_20261101": {
+    "parent": "MM-001",
+    "state": "MANUAL_WORKFLOW_IMPLEMENTED_OFFLINE_TESTS_PASS_NOT_YET_RUN",
+    "sentinel": "CI_ONLY_NOT_LOCAL_PRIVATE_IDENTIFIERS",
+    "runtime": "NOT_RUN",
+    "contract": "docs/LINUX_HOST_CANDIDATE_CI.md"
   }
 }

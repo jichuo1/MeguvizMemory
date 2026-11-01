@@ -1,0 +1,65 @@
+{
+  "state": "PASS_R8_BUILD_AND_HOST_STUB_ONLY",
+  "scope": "MANAGED_DOMAIN_SYNTHETIC_PRESSURE_DIAGNOSTIC",
+  "candidate_sha256": "3ede208a832d0429e8f53044fd7bfb87896354b43412ac02537dbbbc32c24a5f",
+  "candidate_source_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "source_sha256": {
+    "AndroidManifest.xml": "00118c68bd97321b02d55be420fcb1e67f936186ae06cd9740d6e70f5cff0778",
+    "ManagedInstrumentation.java": "596074d78413f184d13e19edbbe331c62a07614929ed18a0675eae2a3f46ff5b",
+    "ManagedShrinkWitness.java": "0069c471c43dd1e2296bfad8e440a1afa0630153e23d02287a345070d447c25b",
+    "build_android_managed_probe.py": "7de6a33bacd0c3c64549f63160e2a651565fd673561e23bc465ca51a6ddc7ffc",
+    "android_managed_round.py": "806c4df6ab2be5ba4111889ea242feb81f1c15301001abc5d82d56eee70a9aef",
+    "build_android_candidate.py": "c6b37dd408c2730fce361ce2f7a080862404ebaee4f01f995292d0edc15d2fe8",
+    "package_feature_preview.py": "609b90c07f6d9903d859818968cc2e04c6812a3adf5fee8e99a6c42046e04040",
+    "source_lock.py": "744a90c739b7918991616ab5a02c4eec06b4cd5c88deb54e55b09476ee755df7"
+  },
+  "profiles": {
+    "arm64-v8a": {
+      "apk_sha256": "86983038b5194ddc84ef7cb4423c48293f77e3122921a9939137e08c707e3993",
+      "apk_bytes": 541230,
+      "aar_sha256": "2aa013a14a79773464667afda569a07f8e9202b50b2a66c3bfa5f65d2c988927",
+      "core_sha256": "e53a71b8fc521859ea5d6b46a089a5c42bc2e9af4c9a45ee605854d7e8fbb839",
+      "jni_sha256": "98fece39b3465ee56a61109ec957ec75797ea9222851be4265ba224d3c984e7c",
+      "dex_sha256": "1d4fef78fe19cb182c06440ab5cfe4360bcca025da20f379d26f9b5a07e645df",
+      "native_methods": 37,
+      "manifest": "PASS",
+      "r8_shrink_witness": "REMOVED",
+      "build_receipt_sha256": "3e99172f067fbd6ba0b972530048d82618c672e7ee2f25d76e4da626eb836605"
+    },
+    "x86_64": {
+      "apk_sha256": "51533d1e1b1c616bceb5f5919df8f207c6197147780e1ce01efc3d31c8cf72f5",
+      "apk_bytes": 475688,
+      "aar_sha256": "f729eff616744f151816fb3d544a9e24b47a8393f2fd1e69dbfd9b8b9fcd41ab",
+      "core_sha256": "82ae7db49c174539540753cc393989570645e4a05847b36e3412d534fc2848b8",
+      "jni_sha256": "c597fc98c4a633199334c3893d13ff384d05fa29bc78cdd5fe4628d5b6e2df3e",
+      "dex_sha256": "1d4fef78fe19cb182c06440ab5cfe4360bcca025da20f379d26f9b5a07e645df",
+      "native_methods": 37,
+      "manifest": "PASS",
+      "r8_shrink_witness": "REMOVED",
+      "build_receipt_sha256": "ab7a38511a9383bb1bf1b1d9c8d984d9747b05539f43009e88d0021fa2e613ad"
+    }
+  },
+  "host_fixture": {
+    "ctest_passed": 2,
+    "instrumentation_checks_observed": 306,
+    "log_sha256": "235018ea422d3e80ac02bbecba8a1d3f4ec47c488fd0b2e18c670f7003bc9b96",
+    "scope": "REAL_HOST_JVM_JNI_WITH_ANDROID_TYPE_STUBS"
+  },
+  "offline_contracts": {
+    "probe_builder": 5,
+    "runner": "PASS_FAKE_ADB_AND_SYNTHETIC_ARTIFACTS",
+    "linux_ci_runner": 19
+  },
+  "device": "NOT_RUN",
+  "android_runtime": "NOT_RUN",
+  "r8_runtime": "NOT_RUN",
+  "long_stability": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Synthetic callbacks are not real system low-memory delivery.",
+    "R8 build and host stubs do not prove Android ART or device behavior.",
+    "Fake-serial frozen plans are offline fixtures and cannot be used for a device.",
+    "Diagnostic APKs, test-only signing keys and raw logs remain private in ignored build directories."
+  ]
+}

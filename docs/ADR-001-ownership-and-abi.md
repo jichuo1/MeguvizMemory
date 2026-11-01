@@ -2,6 +2,8 @@
 
 日期：2026-10-30。状态：首版实现合同，ABI 1.0，产品发布资格另行验收。
 
+本文保留首版历史范围；其中“本版未实现 JNI”等描述只适用于该快照，不代表当前源码状态。后续 JNI 受控借用、托管域和压力适配的实际合同分别见 [JNI 借用](ANDROID_NATIVE_BORROW.md)、[托管域](ANDROID_MANAGED_DOMAIN.md)和[压力适配](ANDROID_MANAGED_PRESSURE_CONTRACT.md)；当前交付与验证范围见[工程状态](../STATE.md)。
+
 核心采用现有消费者可使用的 C++17/CMake；公开头只含 C 类型、固定宽度长度、状态码和 opaque domain。首版没有新增生产依赖。函数和 POD 均以 `_v1` 版本化，配置携带 struct_size / abi_major / abi_minor / required_flags。未知必需 flag、新 major 或不支持的 minor 明确拒绝。新增字段只能追加；旧符号合同不变。模块是 core、可选 C++ RAII、独立安装消费者及 bench，Android 构建仅是平台包装。GPU、帧调度、业务缓存不进入核心。
 
 每个 domain 固定一个 provider，默认 System。创建时复制 vtable 并 retain context；最终 destroy 后 release。每份 backing 必须用原 provider 的相同地址、容量、对齐归还。调用方不 free 借用地址。自定义回调必须线程安全（含多 domain 共享 context）、不得抛异常、重入同一 domain 或在失败时返回半完成分配；回调在核心锁外执行，等待中的申请计入 reserved_bytes，避免并发绕过预算。核心边界捕获 C++ 分配异常并返回状态码；非法 provider 合同不是可安全恢复的任意内存管理协议。deallocate 违约会 poison 域并停止重试该地址；release 回调在 destroy 时违约抛异常，domain 仍被消耗，调用方不得重试已经销毁的指针。

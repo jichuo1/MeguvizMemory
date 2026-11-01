@@ -59,6 +59,8 @@ jobs:
         run: python tools/test_build_android_candidate.py
       - name: Host candidate offline safety contracts
         run: python tools/test_build_host_candidate.py
+      - name: Linux candidate CI runner offline contracts
+        run: python tools/test_run_linux_host_candidate_ci.py
       - name: Android JNI CMake package contracts
         run: python tools/test_android_jni_cmake_config.py
       - name: Feature preview privacy scanner checks
@@ -67,6 +69,10 @@ jobs:
         run: python tools/test_package_followup_preview.py
       - name: Android borrow diagnostic protocol checks
         run: python tools/test_android_borrow_round.py
+      - name: Android managed diagnostic protocol checks
+        run: python tools/test_android_managed_round.py
+      - name: Android managed diagnostic builder contracts
+        run: python tools/test_build_android_managed_probe.py
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture
@@ -81,6 +87,12 @@ jobs:
         run: cmake --build build/managed-host-ci --config Release --parallel 2
       - name: Verify managed domain host contracts
         run: ctest --test-dir build/managed-host-ci -C Release --output-on-failure
+      - name: Configure managed diagnostic host stubs
+        run: cmake -S tests/android_managed/host_stub -B build/android-managed-probe-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build managed diagnostic host stubs
+        run: cmake --build build/android-managed-probe-ci --config Release --parallel 2
+      - name: Verify managed diagnostic host stubs
+        run: ctest --test-dir build/android-managed-probe-ci -C Release --output-on-failure
       - name: Verify managed Android sample with host stubs (Linux)
         if: runner.os == 'Linux'
         run: python consumers/android_managed/verify_host.py --fixture-classes build/managed-host-ci/classes --fixture-jni build/managed-host-ci/plain --out-dir build/android-managed-sample-ci

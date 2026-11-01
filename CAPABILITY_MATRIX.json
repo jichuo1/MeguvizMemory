@@ -347,5 +347,20 @@
     "release": "NOT_QUALIFIED",
     "contract": "docs/HOST_CANDIDATE_BUILDER.md",
     "evidence": "artifacts/delivery-20261101/final-candidates-2e25092.json"
+  },
+  "managed_device_preparation_20261101": {
+    "implementation": "R8_MANAGED_DOMAIN_AND_SYNTHETIC_PRESSURE_DIAGNOSTIC",
+    "host": "TWO_STUB_TESTS_AND_FAKE_ADB_CONTRACTS_PASS",
+    "r8": "ARM64_X86_64_BUILD_ONLY_NOT_RUNTIME",
+    "device": "NOT_RUN",
+    "long_stability": "SEPARATE_FOREGROUND_PROTOCOL_NOT_YET_READY",
+    "performance": "NOT_MEASURED",
+    "evidence": "artifacts/managed-probe-20261101/build-only.json"
+  },
+  "linux_host_candidate_ci_20261101": {
+    "implementation": "MANUAL_EXACT_COMMIT_WORKFLOW_AND_BOUNDED_RUNNER",
+    "host": "NINETEEN_OFFLINE_CONTRACTS_PASS",
+    "linux_candidate_runtime": "NOT_RUN",
+    "contract": "docs/LINUX_HOST_CANDIDATE_CI.md"
   }
 }
