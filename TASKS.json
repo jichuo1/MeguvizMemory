@@ -393,8 +393,8 @@
       "dependency_contract": "MM 006",
       "acceptance": "allocator 配对、容器寿命、fallible 失败路径",
       "status": "PARTIAL",
-      "implementation": "IMPLEMENTED_CPP_SELECTED_SCOPE",
-      "functional_validation": "PASSED_HOST_RELEASE_AND_ASAN_CPP_5_CASES",
+      "implementation": "CPP_RAII_WITH_CHECKED_IMPORT_AND_STICKY_QUARANTINE_RUST_NOT_SELECTED",
+      "functional_validation": "PASS_SCOPED_HOST_CPP_CHECKED_10_INCLUDING_LEGACY_CONSUMER",
       "device_validation": "PASSED_API37_ARM64_PHYSICAL_4K_CORE_C_CPP_CASES_OTHER_MATRIX_PENDING",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
@@ -412,7 +412,8 @@
         "include/mgmem/memory.hpp",
         "docs/INTEGRATION.md",
         "artifacts/arm64-20261030/safety/receipt.json",
-        "artifacts/features-20261030/ARTIFACTS.json"
+        "artifacts/features-20261030/ARTIFACTS.json",
+        "docs/CPP_CHECKED_IMPORT.md"
       ],
       "remaining": [
         "Rust is not required for the selected CPU/C++ profile",
@@ -430,14 +431,14 @@
       "dependency_contract": "MM 006",
       "acceptance": "Java 引用保活、无逃逸 early-free、批量调用",
       "status": "PARTIAL",
-      "implementation": "CONTROLLED_COPY_JNI_LEASE_IMPLEMENTED_NO_ESCAPING_POINTER_OR_BYTEBUFFER",
-      "functional_validation": "PASS_HOST_FAKE_JNI_AND_HOST_JVM_DEVELOPMENT_CHECKS",
-      "device_validation": "NOT_RUN_FOR_NEW_BORROW_API",
+      "implementation": "CONTROLLED_JNI_COPY_LEASE_NONBLOCKING_CLOSE_STATE_AND_CALLBACK_LOCK_FIX",
+      "functional_validation": "PASS_HOST_FAKE_JNI_REAL_JVM_CLOSE_CALLBACK_AND_STATUS",
+      "device_validation": "NOT_RUN_FOR_LATEST_JAVA_BORROW_REVISION",
       "performance_validation": "NOT_STARTED",
       "mechanism_evidence": "NOT_APPLICABLE",
       "release_qualification": "NOT_QUALIFIED",
       "scope": "core_or_qualification",
-      "reason": "Native owner registration and bounded Java byte access implemented; sanitized arm64 R8 build passed, ART/device and production consumer qualification remain outstanding",
+      "reason": "Close admission now releases the Java monitor before native cleanup and exposes non-waiting close state; latest source has no Android ART/R8/device qualification",
       "evidence": [
         "docs/ANDROID_NATIVE_BORROW.md",
         "tests/android_borrow/README.md",
@@ -616,12 +617,14 @@
         "artifacts/verification-20261030/consumers/receipt.json",
         "docs/RESEARCH_EVIDENCE_20261030.md",
         "artifacts/research-20261030/image/image_oracle_receipt.json",
-        "artifacts/device-v2-20261030/new-device-functional/functional-receipt.json"
+        "artifacts/device-v2-20261030/new-device-functional/functional-receipt.json",
+        "consumers/java_image/README.md"
       ],
       "remaining": [
         "Formal performance and device qualification of applicable real consumers",
         "Fixture success is not BIL product integration"
-      ]
+      ],
+      "java_image_consumer": "IMPLEMENTED_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_12_ORACLE_CASES_8_NEGATIVE_CASES"
     },
     {
       "id": "MM-015",
@@ -1203,5 +1206,16 @@
     "host_functional": "CORE_RELEASE_37_ASAN_37_JNI_BORROW_2_COMPUTE_BRIDGE_4_AND_INSTALLED_CONSUMER_PASS",
     "android_borrow_r8": "SANITIZED_ARM64_REAL_R8_BUILD_PASS_ART_DEVICE_NOT_RUN",
     "android_device_runner": "IMPLEMENTED_OFFLINE_SYNTHETIC_TESTS_ONLY_NO_REAL_DEVICE_EXECUTION"
+  },
+  "feature_followup_20261101": {
+    "state": "IN_PROGRESS_FUNCTIONS_FIRST_FINAL_UNIFIED_QUALIFICATION_PENDING",
+    "cpp_checked": "IMPLEMENTED_HOST_10_PASS_QUARANTINE_NOT_NORMAL_RECLAIM",
+    "java_close": "MONITOR_RELEASE_FIX_AND_NONWAITING_STATUS_HOST_FAKE_JNI_JVM_PASS",
+    "java_image": "INSTALLED_SHARED_HOST_CORE_AND_HOST_JNI_12_POSITIVE_8_NEGATIVE_PASS",
+    "older_preview": "PREVIOUS_SOURCE_DOES_NOT_CONTAIN_THIS_FOLLOWUP",
+    "android_latest": "NOT_EXECUTED_NOT_R8_QUALIFIED",
+    "BIL": "NOT_INTEGRATED",
+    "performance": "NOT_MEASURED",
+    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json"
   }
 }

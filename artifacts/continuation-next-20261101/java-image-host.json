@@ -1,0 +1,311 @@
+{
+  "state": "PASS_HOST_FUNCTIONAL_DEVELOPMENT",
+  "scope": "INSTALLED_SHARED_CORE_AND_HOST_JNI_NO_ANDROID_NO_PERFORMANCE",
+  "cases": [
+    {
+      "width": 1,
+      "height": 1,
+      "header": "plain",
+      "mode": "arena",
+      "output_sha256": "c184666f893353a511993c69a7aca1b1457b0cb6c6a141226bbe47f6c6d19ffb",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 1,
+      "height": 1,
+      "header": "plain",
+      "mode": "system",
+      "output_sha256": "c184666f893353a511993c69a7aca1b1457b0cb6c6a141226bbe47f6c6d19ffb",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 1,
+      "height": 8,
+      "header": "comment",
+      "mode": "arena",
+      "output_sha256": "8e419f9d1a26162c5837ab3e498b1dc273813a9b9a785b5d5575c8c66157837f",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 1,
+      "height": 8,
+      "header": "comment",
+      "mode": "system",
+      "output_sha256": "8e419f9d1a26162c5837ab3e498b1dc273813a9b9a785b5d5575c8c66157837f",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 8,
+      "height": 1,
+      "header": "crlf",
+      "mode": "arena",
+      "output_sha256": "b4fb627d4522b5cad204962a5a3427fb63589b16b1708507223b7e3f3c9e0a56",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 8,
+      "height": 1,
+      "header": "crlf",
+      "mode": "system",
+      "output_sha256": "b4fb627d4522b5cad204962a5a3427fb63589b16b1708507223b7e3f3c9e0a56",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 3,
+      "height": 3,
+      "header": "plain",
+      "mode": "arena",
+      "output_sha256": "1b32462c990a80f2ed21ffa5520daece79e1a7583c45750bb4acfddaa88c2165",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 3,
+      "height": 3,
+      "header": "plain",
+      "mode": "system",
+      "output_sha256": "1b32462c990a80f2ed21ffa5520daece79e1a7583c45750bb4acfddaa88c2165",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 5,
+      "height": 7,
+      "header": "comment",
+      "mode": "arena",
+      "output_sha256": "61e39ce4282459edbce9a58b969b7f25f403f5b0316edab238176d33ec32b9ca",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 5,
+      "height": 7,
+      "header": "comment",
+      "mode": "system",
+      "output_sha256": "61e39ce4282459edbce9a58b969b7f25f403f5b0316edab238176d33ec32b9ca",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 101,
+      "height": 101,
+      "header": "crlf",
+      "mode": "arena",
+      "output_sha256": "a77d60823d7645787eb3dfe5ea4ad6084900e5cb473a2643f3b532c8412898cb",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    },
+    {
+      "width": 101,
+      "height": 101,
+      "header": "crlf",
+      "mode": "system",
+      "output_sha256": "a77d60823d7645787eb3dfe5ea4ad6084900e5cb473a2643f3b532c8412898cb",
+      "checks": "PIXEL_ORACLE_AND_REFERENCE_EXACT_LIFECYCLE_COPY_COUNTS_AND_LOADED_MODULE_IDENTITY"
+    }
+  ],
+  "negative_cases": [
+    "truncated",
+    "trailing",
+    "budget_system",
+    "budget_arena",
+    "existing_output_preserved",
+    "wrong_loaded_jar",
+    "wrong_loaded_core",
+    "missing_option"
+  ],
+  "identities": {
+    "core_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425",
+    "jni_sha256": "7cb333fb622f93fa7b4fd283d4316d3b890f437c0bda045c6f6da8cb2578fbf5",
+    "java_jar_sha256": "26c1fc6ccd1791456d777562157cfe9fb525cba832028efa5c190ecdf513bac4",
+    "java_class_sha256": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595"
+  },
+  "adapter_java_source_sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "consumer_source_sha256": "16ccc8bcb069f11d9381e422009006364b95630522f4d95fd8c8a2ec4caa1735",
+  "native_source_sha256": "ae9904b9663ca8f80538ab5cc7baacb0b64a16acd94c879cf6ca4455d881b3d5",
+  "consumer_native_sha256": "8cc78355d46a3e3491987cbf4bf846555fbb3d716a859039a0bc3cdff75e9dfb",
+  "reference_source_sha256": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd",
+  "reference_binary_sha256": "58d4117bb3211d83ca911423226f152ab815c361d21b5645a649a6014ecc4144",
+  "observed_source_sha256": {
+    "memory_core": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+    "memory_header": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+    "pressure_jni": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+    "borrow_jni": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+    "host_jni_cmake": "f143a2546c8406589f267803c6a3282f999464b2ac2ee33dad4cc00388530921",
+    "consumer_cmake": "2330ac706284180e4edcb671eec8c35276d703f0a8131845d72bb0abc5665d8d",
+    "verification_script": "a488389dc75db36b2551666c501d7416db9904c69eea8e882e8e8dfbcfb49726"
+  },
+  "commands": [
+    {
+      "name": "compile-current-adapter",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "compile-current-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-0",
+      "exit_code": 0,
+      "stdout_sha256": "cd409cedc8724ebbbdc44bf8efda07524e4e35683a9444fba300d1e8b5b1dda4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-0-arena",
+      "exit_code": 0,
+      "stdout_sha256": "94ec6a7dd37599eff01cbdbe8b3928aa27a33a5cbf020a5557b591359082ee32",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-0-system",
+      "exit_code": 0,
+      "stdout_sha256": "6ceb14ee7d62968c42edaf4b9a768980095fe9378ff6b88f2bd29f0f6e691d06",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-1",
+      "exit_code": 0,
+      "stdout_sha256": "90941a3ae933464106b4701290aeb975558089079cbef34d07ee07daa0e750d7",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-1-arena",
+      "exit_code": 0,
+      "stdout_sha256": "3ad0a890c1ee445fb9518ae052a3a8456b8fea25533453feb0231ec34c481d7c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-1-system",
+      "exit_code": 0,
+      "stdout_sha256": "a5d37904a83addcc901fa19bc3439b826555403921de71b6ca14b5c2466d919d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-2",
+      "exit_code": 0,
+      "stdout_sha256": "f167d66c7ea6188d679ba2dc4b9d005cf642eb8bb4ebd929c76fb7df26c8e4a4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-2-arena",
+      "exit_code": 0,
+      "stdout_sha256": "71181c29efd0f9c60053302fc4c7b2728c44d50a0626e52e8445218efa7eb701",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-2-system",
+      "exit_code": 0,
+      "stdout_sha256": "9becec340d7624d604dc65f5a17be5305507c70040f9b86d971c4c06133c2b98",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-3",
+      "exit_code": 0,
+      "stdout_sha256": "af3126cb105a1f8135fdb2928b1963a7debab1b3ed0c090a70265249951a2b05",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-3-arena",
+      "exit_code": 0,
+      "stdout_sha256": "b73cdc70a23219f1fb611f24dcbf922f5b7d46c5f098b53b643198a90aa00b20",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-3-system",
+      "exit_code": 0,
+      "stdout_sha256": "17be507644633ee8c8c35d9b07d5f5f13a3648c244b07239266653ed89a64534",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-4",
+      "exit_code": 0,
+      "stdout_sha256": "5ee99d83d7eaf53e96d1e5e15deef535aaedbc9c2146632882f377dc754615f8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-4-arena",
+      "exit_code": 0,
+      "stdout_sha256": "9560d73b0ec29e91c4d1b5c35256237dcc64a7fffbd93d9fb3e9f28ab62d9389",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-4-system",
+      "exit_code": 0,
+      "stdout_sha256": "1571d90ae6c67bf1ed6595421d87da8c527a9c46f98a6d93a2a166dd2197e769",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reference-5",
+      "exit_code": 0,
+      "stdout_sha256": "b9abfb9c55fde607cbaedea93f53b745c6529d0b81c22009e476cddca755769e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-5-arena",
+      "exit_code": 0,
+      "stdout_sha256": "4420d5ce2cb99b7684b148b67206d6afab57acbcf3b94b4563a19e0d6453166d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "java-5-system",
+      "exit_code": 0,
+      "stdout_sha256": "3b4883ea144f2e7ec3414cecfdb4f1b83077290ef827ada6cc06f734f500ee1c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "reject-short",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9cf368a09021f13ef00ef0948d7abc03b2289c81e72d81f561583370f28ed6cc"
+    },
+    {
+      "name": "reject-trailing",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b3bb0965b51e0ee3a81d2ec06f07e66b0ea2e0b37b0a04772ca506fd9575679a"
+    },
+    {
+      "name": "reject-budget-system",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "848d7956efbc7ce47c1d5c21c59e6c2c97d5457d3b6f1baca4850a5255dba849"
+    },
+    {
+      "name": "reject-budget-arena",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "848d7956efbc7ce47c1d5c21c59e6c2c97d5457d3b6f1baca4850a5255dba849"
+    },
+    {
+      "name": "reject-existing-output",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "cd8624720ed5bf8b3d00902c90af08d14148776c0439e934a87ddc7d6cebea39"
+    },
+    {
+      "name": "reject-wrong-loaded-jar",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "3bd02301a573876ec5b4680b596df2dfdb41dce13f107a149160a1eba0f88d20"
+    },
+    {
+      "name": "reject-wrong-loaded-core",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "d18ad89147aad2092c1555002f698db0f9a126f7d456d50fc72d0034a7a06f94"
+    },
+    {
+      "name": "reject-missing-option",
+      "exit_code": 1,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "9f65b1e6b5d23ab6a2783cc378559d0b70a1e1b123ee26c13f0901ff9102e6f8"
+    }
+  ],
+  "limitations": [
+    "Current loaded module paths are compared by the OS and current file bytes are hashed; this is not a hash of mapped memory.",
+    "The host JNI library is separately built from adapter source and is not the Android AAR JNI binary.",
+    "Source and executable hashes identify the observed inputs; hashes alone do not prove the native build provenance.",
+    "Java arrays and JNI staging are extra copies; no runtime, memory, energy or BIL benefit is claimed.",
+    "An I/O failure after a new output file is created may leave a partial file; existing files are never overwritten.",
+    "No Android/ART/device or performance qualification is implied."
+  ]
+}

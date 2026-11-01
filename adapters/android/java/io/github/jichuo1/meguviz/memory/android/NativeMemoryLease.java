@@ -11,9 +11,17 @@ public final class NativeMemoryLease implements AutoCloseable {
     public static final int MAX_WRITE_BYTES = 1024 * 1024;
     /** Aggregate native staging payload limit across this loaded JNI runtime. */
     public static final int MAX_RUNTIME_STAGING_BYTES = 16 * 1024 * 1024;
+    public static final int CLOSE_OPEN = 0;
+    public static final int CLOSE_RELEASING = 1;
+    public static final int CLOSE_RELEASED = 2;
+    public static final int CLOSE_FAILED = 3;
+    /** No native status was returned, or no failed close has completed. */
+    public static final int CLOSE_FAILURE_UNKNOWN = -1;
     private long token;
     private final long length;
     private final boolean writable;
+    private volatile int closeState = CLOSE_OPEN;
+    private int closeFailure = CLOSE_FAILURE_UNKNOWN;
 
     private NativeMemoryLease(long registration) {
         if (registration <= 0) throw new IllegalArgumentException("invalid registration");
@@ -33,6 +41,15 @@ public final class NativeMemoryLease implements AutoCloseable {
 
     public long length() { return length; }
     public boolean isWritable() { return writable; }
+
+    /** A non-waiting observation of this wrapper's registration, not its domain. */
+    public int closeState() { return closeState; }
+
+    /** Meaningful only when closeState() is CLOSE_FAILED. A negative value
+     * means no native status was returned, so the release outcome is unknown. */
+    public int closeFailureStatus() {
+        return closeState == CLOSE_FAILED ? closeFailure : CLOSE_FAILURE_UNKNOWN;
+    }
 
     private void range(long offset, byte[] array, int arrayOffset, int count) {
         Objects.requireNonNull(array, "array");
@@ -64,14 +81,30 @@ public final class NativeMemoryLease implements AutoCloseable {
         if (status != 0) throw new IllegalStateException("native write failed: " + status);
     }
 
-    /** Consumes the lease once. A failure quarantines its native owner; it must
-     * not be retried as if the release callback had not already run. */
-    @Override public synchronized void close() {
-        if (token == 0) return;
-        long previous = token;
-        token = 0;
-        int status = nativeClose(previous);
-        if (status != 0) throw new IllegalStateException("native close quarantined: " + status);
+    /** Stops admission once and releases the lease outside this object's lock.
+     * A concurrent repeated close may return before that release finishes; only
+     * its first caller receives any error. A native failure is quarantined; a
+     * JNI exception may leave the result unknown. Neither permits retry. */
+    @Override public void close() {
+        final long previous;
+        synchronized (this) {
+            if (token == 0) return;
+            previous = token;
+            token = 0;
+            closeState = CLOSE_RELEASING;
+        }
+        int status = CLOSE_FAILURE_UNKNOWN;
+        boolean released = false;
+        try {
+            status = nativeClose(previous);
+            if (status != 0) throw new IllegalStateException("native close failed or unknown: " + status);
+            released = true;
+        } finally {
+            // Publish the failure code before the volatile state transition.
+            // JNI exceptions can arrive after the native handle was consumed.
+            closeFailure = status == 0 ? CLOSE_FAILURE_UNKNOWN : status;
+            closeState = released ? CLOSE_RELEASED : CLOSE_FAILED;
+        }
     }
 
     private static native long nativeClaim(long registration);

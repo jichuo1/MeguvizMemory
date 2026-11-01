@@ -14,6 +14,12 @@ jobs:
         run: cmake --build build/core --config Release --parallel 2
       - name: Core safety verification
         run: ctest --test-dir build/core -C Release --output-on-failure
+      - name: Configure checked C++ adapter contracts
+        run: cmake -S tests/cpp_checked -B build/cpp-checked-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build checked C++ adapter contracts
+        run: cmake --build build/cpp-checked-ci --config Release --parallel 2
+      - name: Verify checked C++ adapter contracts
+        run: ctest --test-dir build/cpp-checked-ci -C Release --output-on-failure
       - name: Historical evidence and offline protocol checks
         run: |
           python tools/test_audit_paired_archive.py

@@ -1,0 +1,17 @@
+{
+  "state": "PASS_OLD_FAIL_NEW_PASS",
+  "scope": "HOST_REAL_JVM_REAL_CORE_JNI_NO_DEVICE",
+  "baseline_java_sha256": "38878c8135c1685b93690e64d356cf330e4e892701ce32b0d8c070d6e68227f5",
+  "current_java_sha256": "a03f9d544a54221cf0baa13a83e7e04b8ee41bfb4770b6f169cc83c1bdc56b2d",
+  "same_test_source_sha256": "0affb96600af8b822825589b5254e90028e434f06ea2f66d169511c1593ef63a",
+  "jni_fixture_sha256": "762888f7a52f513c938935850707296bbd9c6d40b16d2ed27c872a353016e64d",
+  "test_jni_binary_sha256": "953722c8530d6496014c3a96cc518b5f30088b46c65c477c48de6123c66e3051",
+  "baseline_exit_code": 1,
+  "baseline_stderr_sha256": "7ec41db558bdcd43cb96a53dcd5d616a71a9b65c32f34942cc2fa1c42155bbf3",
+  "fixed_exit_code": 0,
+  "fixed_stdout_sha256": "5b349bcc79b3500e0539734a695294d643a6678aa31f490467e09ed66a199b02",
+  "limits": [
+    "Failure case deliberately retains a quarantined domain until its test JVM exits.",
+    "No Android ART, R8, device or production behavior qualification."
+  ]
+}

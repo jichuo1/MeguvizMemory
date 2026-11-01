@@ -2,6 +2,13 @@
 
 更新：2026-10-30。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 后续功能继续开发（2026-11-01）
+
+- C++ RAII 新增 checked 外部导入及粘性隔离；释放结果不确定时不重试或销毁原域，保留的资源不能计为正常归零。[合同](docs/CPP_CHECKED_IMPORT.md)，限定宿主检查10项通过。
+- Java 受控借用的首次关闭不再在 Java monitor 内执行原生释放，并提供非等待的关闭状态观测；宿主 fake-JNI/真实 JVM 检查通过。状态仅描述本注册，不能替代 domain 归零证据。[合同](docs/ANDROID_NATIVE_BORROW.md)
+- 新增独立 Java/JNI P6→P5 图像消费者，使用安装后的共享核心和单独构建的宿主 JNI；12组像素对照及8组失败路径通过。Java 数组和 JNI 复制成本单独记录，不宣称性能收益。[消费者](consumers/java_image/README.md)
+- 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；当前版本尚未重新制作安装包，也未执行新 Android ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，BIL 仍未接入。
+
 ## 功能继续开发（2026-11-01）
 
 - 外部导入增加可报告 origin 释放失败的可选扩展；失败时保留不确定 claim 和账目，旧 ABI 版本值不变。旧接口及新接口各自的地址复用边界见[导入合同](docs/EXTERNAL_IMPORT.md)。

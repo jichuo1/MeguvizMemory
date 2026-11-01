@@ -44,7 +44,8 @@
     "external_import_consumer": "PASS_HOST_AND_REAL_ARM64_NO_COPY_AND_900_SECONDS",
     "image_pressure_composition": "PASS_HOST_SYSTEM_ARENA_AND_ARM64_ARENA_900_SECONDS",
     "BIL": "AUDITED_NOT_MODIFIED_NOT_INTEGRATED",
-    "Compute_Media": "OPTIONAL_COMPUTE_CPU_READ_MAP_HOST_PASS_MEDIA_NOT_INTEGRATED"
+    "Compute_Media": "OPTIONAL_COMPUTE_CPU_READ_MAP_HOST_PASS_MEDIA_NOT_INTEGRATED",
+    "java_image": "REAL_JAVA_P6_TO_P5_INSTALLED_HOST_SHARED_CORE_AND_HOST_JNI_ONLY"
   },
   "research": {
     "pmu": "UNAVAILABLE",
@@ -119,7 +120,8 @@
     "performance": "NO_NEW_QUALIFICATION",
     "jni_close_fix": "AUTO_RETRY_AND_EXCEPTION_ISOLATION_HOST29_ASAN29_API33_FINAL_15M_API34_FINAL_SHORT",
     "checked_external_release": "IMPLEMENTED_OPTIONAL_CAPABILITY_HOST_RELEASE_ASAN_PASS",
-    "jni_controlled_borrow": "IMPLEMENTED_HOST_JVM_FAKE_JNI_AND_ARM64_R8_BUILD_PASS_ANDROID_RUNTIME_PENDING"
+    "jni_controlled_borrow": "JAVA_CLOSE_CALLBACK_LOCK_FIX_AND_NONBLOCKING_STATE_HOST_2_LATEST_ANDROID_PENDING",
+    "cpp_checked_import": "IMPLEMENTED_STICKY_QUARANTINE_HOST_10_LATEST_ANDROID_PENDING"
   },
   "scope_note": "Top-level current fields describe 0.2; historical_0_1_and_draft fields are superseded snapshots, not current missing implementation.",
   "historical_0_1_and_draft": {
@@ -251,5 +253,15 @@
     "formal_release": "NOT_QUALIFIED",
     "evidence": "artifacts/feature-development-20261101/host-receipt-v2.json",
     "android_borrow_r8": "SANITIZED_ARM64_REAL_R8_BUILD_PASS_ART_DEVICE_NOT_RUN"
+  },
+  "feature_followup_20261101": {
+    "state": "IN_PROGRESS_FUNCTIONS_FIRST",
+    "cpp_checked": "HOST_10_PASS_QUARANTINE_NOT_NORMAL_ZERO",
+    "java_borrow": "HOST_FAKE_JNI_AND_REAL_JVM_PASS_LATEST_ANDROID_NOT_RUN",
+    "java_image": "HOST_INSTALLED_CORE_AND_HOST_JNI_12_ORACLE_8_NEGATIVE_PASS",
+    "older_preview": "EXCLUDES_THIS_FOLLOWUP",
+    "performance": "NOT_MEASURED",
+    "BIL": "NOT_INTEGRATED",
+    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json"
   }
 }

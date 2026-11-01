@@ -18,10 +18,14 @@ token 是只在当前已加载 JNI runtime 内有效、单调且不复用的标�
 
 每次 `write` 上限为 1 MiB；该 JNI runtime 内所有注册共享最多 16 MiB 的并发写入暂存 payload 配额。如果多个类加载器或重复装载的 DSO 导致独立的 JNI runtime 副本，各副本不共享这项配额，因此它不是强制的进程总上限。申请配额、分配暂存或 JNI 从 Java 数组复制失败时，native backing 不变；只有复制成功才提交。暂存 payload 不计入 domain 预算，分配器开销和其他进程内内存也不包含在该配额中；额外复制、分配及并发额度拒绝是使用成本。更大写入由调用方显式拆为多次独立提交：前一笔成功后，后一笔失败不会回滚前一笔。该保证针对可恢复错误，不保证崩溃原子，也不保证其他未经同步的原生别名看不到提交过程。
 
-`close` 幂等，但可能在其调用线程同步执行原 provider 和 domain-owner release 回调，应由应用选择合适的清理线程，不能默认在 UI 线程调用。关闭后不再接受访问；现有 Java byte[] 中的副本不受影响。关闭错误时将该注册隔离，不能假定 lease 或回调未被消费，也不能重试或声称资源归零。若 foreign 回调违背 no-throw 合同，则其引用状态可能未知；适配器不能修复违约或保证强制回收。JNI DSO 在注册、调用或隔离项仍存在时不支持卸载。
+首次 `close` 在对象锁内停止新访问，释放该锁后同步执行原生释放；它可能在调用线程执行原 provider 和 domain-owner release 回调，应由应用选择合适的清理线程，不能默认在 UI 线程调用。并发或回调中的重复 `close` 是幂等的，但可在首次释放尚未完成时先返回，不表示清理完成；只有首次调用者获得原生释放错误。关闭后不再接受访问；现有 Java byte[] 中的副本不受影响。原生释放报告错误时适配器保守隔离该注册；若 JNI 没有返回，原生状态可能未知。两种情况都不能假定 lease 或回调未被消费，也不能重试或声称资源归零。若 foreign 回调违背 no-throw 合同，则其引用状态可能未知；适配器不能修复违约或保证强制回收。JNI DSO 在注册、调用或隔离项仍存在时不支持卸载。
+
+`closeState()` 只作不等待清理的状态读取：`CLOSE_OPEN`、`CLOSE_RELEASING`、`CLOSE_RELEASED`、`CLOSE_FAILED`。`CLOSE_RELEASED` 表示本次注册的 `nativeClose` 成功返回，不表示其他 lease、外部 owner、整个 domain 或系统驻留已归零。`CLOSE_FAILED` 表示首次调用失败或结果未知：JNI 异常可能在原生句柄已消费后才到达，不能据此重试，也不能断定资源是否回收。读取到失败后 `closeFailureStatus()` 才提供已知 native 状态；若 JNI 未返回状态则为 `CLOSE_FAILURE_UNKNOWN`。实现先发布错误码、再发布 volatile 失败状态；首次 `close` 仍向调用者抛出原始异常或报告 native 错误。
+
+状态读取不等待释放回调，但不承诺硬实时或免受 VM/系统暂停影响。进程、线程被终止或永久冻结时，`CLOSE_RELEASING` 可能长期保持；不支持通过异步 `Thread.stop` 或运行中卸载 DSO 来强制恢复。此状态不会替代 owner/domain 原有的收尾与观测合同。
 
 ## 当前验证边界
 
 独立宿主测试 `tests/borrow_host` 以真实 core 加 fake JNI 覆盖初始化标志、重复认领、权限/边界、owner 先释放、domain 关闭后访问、访问与关闭竞争、pending JNI 异常及失败回调隔离；另一项使用真实宿主 JVM、真实 JNI 和 core 进行字节读写、关闭与域清理。该测试组合的宿主 JVM fixture 将 core 编入测试 DLL，仅用于单进程测试，不是 Android 发布库链接方式。
 
-尚需统一验证 Android NDK 构建、最终 AAR/R8、设备 ART、压力与生命周期组合、长期稳定性和真实消费者接入；宿主结果不替代这些设备和交付资格。BIL 未接入，也无性能或零拷贝收益声明。
+独立 [Java 图像消费者](../consumers/java_image/README.md)已在宿主通过安装后的共享核心和单独构建的 host JNI 使用此接口；它不是 Android 生产消费者。尚需统一验证最新源码的 Android NDK 构建、最终 AAR/R8、设备 ART、压力与生命周期组合、长期稳定性和真实 Android 消费者接入；宿主结果不替代这些设备和交付资格。BIL 未接入，也无性能或零拷贝收益声明。

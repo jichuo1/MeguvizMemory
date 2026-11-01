@@ -410,6 +410,15 @@
     "device_execution": "NOT_QUALIFIED",
     "performance": "NOT_MEASURED",
     "BIL": "NOT_INTEGRATED",
-    "source_lock": "artifacts/feature-development-20261101/SOURCE_LOCK.json"
+    "source_lock": "artifacts/feature-development-20261101/SOURCE_LOCK.json",
+    "subsequent_source_changes": "EXCLUDES_JAVA_CLOSE_STATE_CPP_CHECKED_WRAPPER_AND_JAVA_IMAGE_CONSUMER"
+  },
+  "feature_followup_20261101": {
+    "state": "SOURCE_AND_SCOPED_HOST_CHECKS_ONLY_NO_NEW_PACKAGE",
+    "host_evidence": "artifacts/continuation-next-20261101/host-dev-checks.json",
+    "android_latest": "NOT_BUILT_OR_DEVICE_QUALIFIED",
+    "performance": "NOT_MEASURED",
+    "formal_release": "NOT_QUALIFIED",
+    "source_lock": "artifacts/continuation-next-20261101/SOURCE_LOCK.json"
   }
 }

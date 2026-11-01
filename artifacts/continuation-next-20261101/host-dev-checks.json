@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_HOST_DEVELOPMENT_CHECKS",
+  "scope": "HOST_CPP_ADAPTER_JNI_JVM_AND_JAVA_IMAGE_ONLY",
+  "suites": {
+    "cpp_checked": {
+      "tests": [
+        "cpp_checked_normal",
+        "cpp_checked_owner-failure",
+        "cpp_checked_borrow-failure",
+        "cpp_checked_destructor-failure",
+        "cpp_checked_borrow-destructor",
+        "cpp_checked_move-assignment",
+        "cpp_checked_rollback-failure",
+        "cpp_checked_concurrent",
+        "cpp_checked_fake_unconsumed",
+        "cpp_legacy_consumer"
+      ],
+      "passed": 10,
+      "log_sha256": "2c581accbb4050ed1f06713404cec360c12f9cee264d23933b09b446085fcaae"
+    },
+    "borrow_host": {
+      "tests": [
+        "borrow_jni_host",
+        "borrow_jni_real_jvm"
+      ],
+      "passed": 2,
+      "log_sha256": "3c67b4c98a10b8aea6d074c2c04c02d58a0a186ab38164ed67dcc3c438508f6b"
+    }
+  },
+  "java_image": {
+    "receipt_sha256": "f6c7ada355db786a47ee484621866ecf40ed3d8c1fc15fdd8f3bfea6f9f4d483",
+    "positive_cases": 12,
+    "negative_cases": 8
+  },
+  "observed_source_sha256": {
+    "cpp_header": "134c3bb39cc715bb0b463f435eab59d703d671dc434f935efa179f4a21ae2f63",
+    "cpp_real_test": "2b2b61aea92c311100c784211ff37b820da5e6f77eaf563173ff618d4f6f8102",
+    "cpp_fake_test": "5717f311646da975a14a3fa119d696561a13684f034faa24c9e95f26560e47dd",
+    "cpp_cmake": "f05c712b52dbccdf94d32c2664f516d016cf94609f002955ecbc2e2fe6ed38b6",
+    "native_lease_java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "borrow_jvm_test": "cff0bdf8e392adad6268fc6e686bb48c13357653c52fab7467688fd13709c885",
+    "borrow_jvm_fixture": "762888f7a52f513c938935850707296bbd9c6d40b16d2ed27c872a353016e64d",
+    "java_image": "16ccc8bcb069f11d9381e422009006364b95630522f4d95fd8c8a2ec4caa1735",
+    "java_image_native": "ae9904b9663ca8f80538ab5cc7baacb0b64a16acd94c879cf6ca4455d881b3d5",
+    "java_image_verify": "a488389dc75db36b2551666c501d7416db9904c69eea8e882e8e8dfbcfb49726"
+  },
+  "old_jvm_red_counterexample": "jni-close/receipt.json",
+  "limitations": [
+    "Source hashes at record time identify observed files but do not independently prove build provenance.",
+    "Quarantined fixture cases are not normal resource reclamation.",
+    "Java image uses separately built host JNI, not Android AAR native binaries.",
+    "No Android, ART, R8 runtime, performance, energy, BIL or formal release qualification."
+  ]
+}
