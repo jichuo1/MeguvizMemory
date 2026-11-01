@@ -10,12 +10,17 @@ from unittest import mock
 import android_borrow_round as runner
 
 
-PASS = {'suite': 'android-native-borrow-v1', 'status': 'PASS', 'checks': 29,
+PASS = {'suite': 'android-native-borrow-v2', 'status': 'PASS', 'checks': 62,
         'read_only_and_write_cases': 2, 'initialization_assertion_and_bytes': 'PASS',
         'owner_release_and_domain_closing_lease_access': 'PASS',
-        'duplicate_claim_and_idempotent_close': 'PASS', 'final_domain_backing_bytes': 0,
-        'performance_qualified': False, 'scope': 'isolated_own_domain_no_BIL_no_actual_low_memory'}
-FAIL = {'suite': 'android-native-borrow-v1', 'status': 'FAIL', 'checks': 7, 'error_type': 'AssertionError'}
+        'duplicate_claim_and_idempotent_close': 'PASS', 'close_state_open_releasing_released': 'PASS',
+        'close_state_pending_java_exception': 'PASS', 'close_state_checked_failure': 'PASS',
+        'pending_java_exception_native_status': -1, 'checked_failure_native_status': 9,
+        'normal_domains_final_backing_bytes': 0, 'quarantined_failure_backing_bytes': 32,
+        'quarantined_failure_owner_pins': 2, 'quarantined_failure_reclaimed': False,
+        'performance_qualified': False,
+        'scope': 'isolated_normal_and_quarantined_domains_no_BIL_no_actual_low_memory'}
+FAIL = {'suite': 'android-native-borrow-v2', 'status': 'FAIL', 'checks': 7, 'error_type': 'AssertionError'}
 ACTIVITY = ('ACTIVITY MANAGER ACTIVITIES (dumpsys activity activities)\n'
             'ACTIVITY MANAGER RUNNING PROCESSES (dumpsys activity processes)\n')
 PROCESSES = ('PID NAME ARGS\n1 init /init\n2 system_server system_server\n'
@@ -43,10 +48,22 @@ def parsers():
     rejects(output(FAIL, 0))
     rejects(output() + output())
     rejects('INSTRUMENTATION_CODE: 0\n' + output())
-    rejects(output().replace('"checks":29', '"checks":true'))
-    rejects(output().replace('"checks":29', '"checks":29,"checks":29'))
-    rejects(output().replace('"checks":29', '"checks":NaN'))
-    rejects(output().replace('"final_domain_backing_bytes":0', '"final_domain_backing_bytes":1'))
+    rejects(output().replace('"checks":62', '"checks":true'))
+    rejects(output().replace('"checks":62', '"checks":62,"checks":62'))
+    rejects(output().replace('"checks":62', '"checks":NaN'))
+    rejects(output().replace('"normal_domains_final_backing_bytes":0', '"normal_domains_final_backing_bytes":1'))
+    rejects(output().replace('"quarantined_failure_backing_bytes":32', '"quarantined_failure_backing_bytes":0'))
+    rejects(output().replace('"quarantined_failure_reclaimed":false', '"quarantined_failure_reclaimed":true'))
+    rejects(output().replace('"checked_failure_native_status":9', '"checked_failure_native_status":0'))
+    rejects(output().replace('"pending_java_exception_native_status":-1', '"pending_java_exception_native_status":0'))
+    rejects(output().replace('"close_state_open_releasing_released":"PASS"', '"close_state_open_releasing_released":"FAIL"'))
+    rejects(output().replace('"quarantined_failure_owner_pins":2', '"quarantined_failure_owner_pins":true'))
+    rejects(output().replace('"suite":"android-native-borrow-v2"', '"suite":"android-native-borrow-v1"'))
+    legacy = {'suite':'android-native-borrow-v1','status':'PASS','checks':29,'read_only_and_write_cases':2,
+              'initialization_assertion_and_bytes':'PASS','owner_release_and_domain_closing_lease_access':'PASS',
+              'duplicate_claim_and_idempotent_close':'PASS','final_domain_backing_bytes':0,
+              'performance_qualified':False,'scope':'isolated_own_domain_no_BIL_no_actual_low_memory'}
+    rejects(output(legacy))  # Historical 29-check result is not v2 qualification.
     rejects(output().replace('"performance_qualified":false', '"performance_qualified":0'))
     rejects(output().replace('INSTRUMENTATION_CODE: 0', 'INSTRUMENTATION_FAILED: crashed\nINSTRUMENTATION_CODE: 0'))
     rejects(output().replace('INSTRUMENTATION_CODE: 0', 'INSTRUMENTATION_RESULT: shortMsg=crashed\nINSTRUMENTATION_CODE: 0'))
@@ -256,6 +273,7 @@ def synthetic_run(work, frozen=False, timeout=False, fail=False, late_exit=False
     else:
         assert result == 0 and value['state'] == 'PASS_FUNCTIONAL_POSTFLIGHT_FREEZER_NOT_OBSERVED'
         assert value['normal_domain_closed_proven'] and value['freezer_observation'] == 'NOT_OBSERVED'
+        assert value['checked_failure_domain'] == 'INTENTIONALLY_QUARANTINED_32_BYTES_2_OWNER_PINS_NOT_NORMAL_RECLAIM'
 
 
 def main():
@@ -266,7 +284,8 @@ def main():
     synthetic_run(work, late_exit=True); synthetic_run(work, frozen=True, other_busy=True); synthetic_run(work, install_timeout=True)
     synthetic_run(work, other_user=True)
     print(json.dumps({'state': 'PASS_OFFLINE_SYNTHETIC_NO_DEVICE', 'coverage': ['strict_report', 'occupancy',
-          'receipt_atomic', 'unobserved_freezer', 'observed_freeze', 'timeout_own_only_cleanup']}))
+          'v2_close_states_and_separate_quarantine', 'v1_not_promoted', 'receipt_atomic',
+          'unobserved_freezer', 'observed_freeze', 'timeout_own_only_cleanup']}))
 
 
 if __name__ == '__main__':

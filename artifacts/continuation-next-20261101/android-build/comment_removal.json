@@ -1,0 +1,60 @@
+{
+  "state": "PASS_COMMENT_SECTION_NOT_LOADED_AND_REMOVED",
+  "scope": "STATIC_SECTION_COMPARISON_NOT_RUNTIME",
+  "profiles": {
+    "arm64-v8a": {
+      "core": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "3aff842e50804541f8aebca01df37748ca49bd8b129aaa83f9bc4e06d86956cf",
+        "candidate_sha256": "b0b16a64a8ce3e8cb4a8f3c41d817f3cc3dfea110018d814ecc3c9090b91710a"
+      },
+      "jni": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "be7bb75368f3a3f8acb4a1cf1a7220e57cdd1d7c985ad62c7299df501b91605e",
+        "candidate_sha256": "0b988c62352ae64b0bdfaabf417764621c9468c7e15427883d8230594697d809"
+      }
+    },
+    "x86_64": {
+      "core": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "714bb749ee7fbec206998ad35fa6b5db00e2e14ae99342be32e0a658f21df3c7",
+        "candidate_sha256": "627e48d9845dd04e890cb5d8830e9b91724018d524dc71e75404fa0944641ed8"
+      },
+      "jni": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "4ba61ac774b6c342d605425f6357eb59510c8e8b0646066fd90fb12fd95d78bb",
+        "candidate_sha256": "f6a427612d713e5e91025b94b3c61970b3b6d2400a4e54ea0f600f8e439bf94c"
+      }
+    },
+    "armeabi-v7a": {
+      "core": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "946de3d52f76fe4a4116e4f40f97df478bd4ad521b5f510cc2d5836ca07b165f",
+        "candidate_sha256": "6d7908797d9ab54456a5ea6aa325bebf9bac63b2de91ec171b9a116b881d350b"
+      },
+      "jni": {
+        "comment_size": 677,
+        "allocated": false,
+        "intersects_load_file_bytes": false,
+        "candidate_comment_absent": true,
+        "original_sha256": "ec45a864fe5757341ce2038493a1c82904c48a8e022d13948a3cd4d45ddb60fa",
+        "candidate_sha256": "d93baaec5054acece16c2d3e084b3dfb04582103178a2f9948a989f5d12268e8"
+      }
+    }
+  }
+}

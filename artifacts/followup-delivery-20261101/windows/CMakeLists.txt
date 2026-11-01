@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.25)
+project(InstalledBridgeAttested LANGUAGES CXX)
+find_package(MeguvizMemoryComputeReadBridge CONFIG REQUIRED)
+find_package(Threads REQUIRED)
+add_executable(bridge_attested read_bridge_attested.cpp)
+target_compile_features(bridge_attested PRIVATE cxx_std_17)
+target_link_libraries(bridge_attested PRIVATE MeguvizMemoryComputeReadBridge::read_bridge Threads::Threads)

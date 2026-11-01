@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "state": "LOCAL_ENGINEERING_PREVIEW_NOT_FORMAL_RELEASE",
+  "package": {
+    "path": "dist/MeguvizMemory-0.2.0-Followup-Preview-20261101.zip",
+    "bytes": 1088325,
+    "sha256": "d0a03f3321b9fc11655298bebf42e5eb3cdab4ee5bf2876b4093ce9719f23287",
+    "entries": 70
+  },
+  "source_lock_sha256": "15c8dcdc190bf34991f81ec09c83e2260b2582ee0b95ea5f12813b774f77c7c9",
+  "source_commit_binding": "NOT_ESTABLISHED",
+  "android_art_r8_runtime": "NOT_QUALIFIED",
+  "device_performance_energy_bil_formal_release": "NOT_QUALIFIED",
+  "project_license": "NOT_SPECIFIED_NO_LICENSE_FILE",
+  "privacy": "BOUNDED_RECURSIVE_IDENTIFIER_AND_PATH_SCAN_NOT_COMPLETE_SECRET_PROOF"
+}

@@ -1213,9 +1213,12 @@
     "java_close": "MONITOR_RELEASE_FIX_AND_NONWAITING_STATUS_HOST_FAKE_JNI_JVM_PASS",
     "java_image": "INSTALLED_SHARED_HOST_CORE_AND_HOST_JNI_12_POSITIVE_8_NEGATIVE_PASS",
     "older_preview": "PREVIOUS_SOURCE_DOES_NOT_CONTAIN_THIS_FOLLOWUP",
-    "android_latest": "NOT_EXECUTED_NOT_R8_QUALIFIED",
+    "android_latest": "THREE_ABI_REBUILT_ARM64_R8_BUILD_ONLY_ART_DEVICE_NOT_RUN",
     "BIL": "NOT_INTEGRATED",
     "performance": "NOT_MEASURED",
-    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json"
+    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json",
+    "windows_latest": "SHARED_SDK_HOST_JNI_REBUILT_INSTALLED_HOST_CHECKS_ONLY",
+    "android_borrow_v2": "HOST_STUB_62_AND_R8_BUILD_ONLY_NO_ART_OR_DEVICE",
+    "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED"
   }
 }

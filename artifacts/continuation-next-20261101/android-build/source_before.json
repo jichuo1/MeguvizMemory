@@ -1,0 +1,22 @@
+{
+  "adapters/android/CMakeLists.txt": "6aeed930e68b4fcead652f6c10882e11de1d09caaa0896dff34898f43afb1cf3",
+  "adapters/android/consumer-rules.pro": "7f19183f328ead6f68ac56b1c1cb40ea7f240f5857f089a092623e1c5070a2fa",
+  "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c",
+  "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java": "324ce30512f07f5dd1f291828d8189ddc6bd4264d4b38f0bcb7a0cc71766cd79",
+  "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c",
+  "adapters/android/native/borrow_jni.cpp": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+  "adapters/android/native/pressure.cpp": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5",
+  "adapters/android/native/pressure_jni.cpp": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+  "adapters/android/sample/AndroidManifest.xml": "99c3589214522e0cb6952d94e78246a3c7fade002a0854b99f547bf2b22b3676",
+  "adapters/android/sample/PressureInstrumentation.java": "68575eeab476460799cdd4e2dc47af2d2e0fd01104e30b2971032bbf9e6f3d37",
+  "CMakeLists.txt": "ca7751f3d638c77b7d843c128310425f37f95029fd089d2520fd7519f80bb55c",
+  "include/mgmem/android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+  "include/mgmem/android_pressure_jni.h": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54",
+  "include/mgmem/memory.hpp": "134c3bb39cc715bb0b463f435eab59d703d671dc434f935efa179f4a21ae2f63",
+  "include/mgmem/mgmem.h": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+  "include/mgmem/pressure.h": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32",
+  "src/mgmem.cpp": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+  "third_party_notices/llvm-NOTICE.txt": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1",
+  "tools/build_pressure_android.py": "6aad3e8b438fdc0fbdc936f14d504f55bf16e681a6bde189fe83ca15ba73215b"
+}

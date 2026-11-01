@@ -7,7 +7,8 @@
 - C++ RAII 新增 checked 外部导入及粘性隔离；释放结果不确定时不重试或销毁原域，保留的资源不能计为正常归零。[合同](docs/CPP_CHECKED_IMPORT.md)，限定宿主检查10项通过。
 - Java 受控借用的首次关闭不再在 Java monitor 内执行原生释放，并提供非等待的关闭状态观测；宿主 fake-JNI/真实 JVM 检查通过。状态仅描述本注册，不能替代 domain 归零证据。[合同](docs/ANDROID_NATIVE_BORROW.md)
 - 新增独立 Java/JNI P6→P5 图像消费者，使用安装后的共享核心和单独构建的宿主 JNI；12组像素对照及8组失败路径通过。Java 数组和 JNI 复制成本单独记录，不宣称性能收益。[消费者](consumers/java_image/README.md)
-- 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；当前版本尚未重新制作安装包，也未执行新 Android ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，BIL 仍未接入。
+- 上一份 `Feature-Preview-20261101.zip` 不包含本节后续源码；最新三 ABI Android 和 Windows 宿主候选已重建。arm64 R8 诊断及关闭状态 v2 用例已有[构建和宿主模拟记录](artifacts/followup-delivery-20261101/android-borrow-v2/host-receipt-final.json)，故障域按合同保留，尚未执行 ART/R8 运行、设备、性能或发布资格。宿主证据见[记录](artifacts/continuation-next-20261101/host-dev-checks.json)，Android 构建身份见[记录](artifacts/continuation-next-20261101/android-build/metadata-index.json)，BIL 仍未接入。
+- 仓库尚未提供项目许可证文件；既有 LLVM notice 已保留，正式发布前的项目授权条款仍需确定。
 
 ## 功能继续开发（2026-11-01）
 

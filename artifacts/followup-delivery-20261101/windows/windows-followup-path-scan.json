@@ -1,0 +1,47 @@
+{
+  "state": "PASS_SCOPED_PATH_AND_PRIVATE_IDENTIFIER_SCAN",
+  "scope": "WINDOWS_SDK_HOST_JNI_AND_PROOF_INPUTS_ONLY",
+  "private_marker_count": 17,
+  "files": {
+    "sdk_zip": {
+      "bytes": 96091,
+      "sha256": "c52ebf7bfaa9d10d0a603a6a05560b08e4cb599af108ed6b4d0659288e7c46a6"
+    },
+    "host_jni_zip": {
+      "bytes": 27713,
+      "sha256": "e827de247ee0f33029456b20386ce57f7a8ed9ad315db1b65f2b50a55dbecb1e"
+    },
+    "sdk_evidence": {
+      "bytes": 3464,
+      "sha256": "c65f8eb5a78165e000155b5631a2cf637d6372483e8d8e47ed551327b268cdfd"
+    },
+    "binary_comparison": {
+      "bytes": 1593,
+      "sha256": "88a2865aa371bc9222c79ad2503ccb2ad644eed28fcc61f70a8b30f86666434e"
+    },
+    "bridge_evidence": {
+      "bytes": 1883,
+      "sha256": "723f5f03c1c8239642cea25e663bd288da3cfe95786398ae72186f8f7a09a92b"
+    },
+    "bridge_test_source": {
+      "bytes": 10184,
+      "sha256": "4d407e9f8dbb94003042d5058ee11369ca93324d6212004ed7e50e50bb072b21"
+    },
+    "bridge_test_cmake": {
+      "bytes": 401,
+      "sha256": "a79c23c07a35fd5be241a2bb5f373a4639f5e6d5e149154ede66496d001931ac"
+    },
+    "jni_test_source": {
+      "bytes": 6902,
+      "sha256": "d4e09a90dca40ab86c76ab827dc03a5a5d8dc8472d6908e12d69907e980e3f38"
+    },
+    "jni_test_cmake": {
+      "bytes": 1635,
+      "sha256": "89ae0421809ab9f6744be807f37d0e77b5403f491d299d2355912d8a3e39bd8f"
+    }
+  },
+  "limits": [
+    "Checks known identifiers and bounded generic path patterns in UTF-8 and UTF-16 plus ZIP members and metadata; cannot prove all secrets absent.",
+    "No device, performance or formal release qualification."
+  ]
+}

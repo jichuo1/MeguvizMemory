@@ -1,0 +1,68 @@
+{
+  "state": "PASS_BOUNDED_PRIVATE_IDENTIFIER_AND_PATH_PATTERNS",
+  "scope": "SANITIZED_METADATA_ONLY",
+  "files": {
+    "sanitizer_manifest": {
+      "path": "build/followup-20261101-android-sanitized-v1/manifest.json",
+      "bytes": 13242,
+      "sha256": "d02df35a3d07516389bc294f0ba8d13ede1c6dcce1461e4f11b4ea9ec9774ddb"
+    },
+    "sanitizer_script": {
+      "path": "build/followup-20261101-android-sanitized-v1/prepare.py",
+      "bytes": 13410,
+      "sha256": "eee3a8fd71c7b9391f8e00e1fc782d4ad8b313817bbb94aecf60984cfd7dd860"
+    },
+    "privacy_and_archives": {
+      "path": "build/followup-20261101-android-sanitized-v1/privacy-and-archives.json",
+      "bytes": 1302,
+      "sha256": "7994799fa6be2e9cfc00d2b6ab35b748df148ae2aa3276726349acc43a9184be"
+    },
+    "class_and_header": {
+      "path": "build/followup-20261101-android-sanitized-v1/current-class-header-proof.json",
+      "bytes": 1119,
+      "sha256": "076ed5e7a4c8ca724380c216cfa9cc8590877b397b8e29dcfa6040f940d011b2"
+    },
+    "comment_removal": {
+      "path": "build/followup-20261101-android-sanitized-v1/comment-removal-proof.json",
+      "bytes": 2358,
+      "sha256": "71c6f1cf97017942eca95faf958ad4c7b616e4e290559132b5aba87e174162ad"
+    },
+    "source_before": {
+      "path": "build/followup-20261101-android-v1/source-before.json",
+      "bytes": 2367,
+      "sha256": "50db20a2e579d16d4d31b69f78b87891ec98df2bed398ab6daca733516b40a28"
+    },
+    "r8_build": {
+      "path": "build/followup-20261101-android-r8-probe-v1/receipt.json",
+      "bytes": 9021,
+      "sha256": "4d2ef872ea566f3789b31882391a03da122c8027c923dfb9d8de40150dcca5c0"
+    },
+    "r8_public_methods": {
+      "path": "build/followup-20261101-android-r8-probe-v1/r8-state-method-proof.json",
+      "bytes": 848,
+      "sha256": "988560775425a6814307289665f133d3011a4a192628e036dcdb2b06d9c38531"
+    },
+    "aar_build_arm64-v8a": {
+      "path": "build/followup-20261101-android-v1/aar-arm64-v8a-receipt.json",
+      "bytes": 7413,
+      "sha256": "bb9c7b604669a467f591ba08490885f0a06633b08e379640cf3acb95759cb420"
+    },
+    "aar_build_x86_64": {
+      "path": "build/followup-20261101-android-v1/aar-x86_64-receipt.json",
+      "bytes": 7395,
+      "sha256": "cdddf53978cee1092871abb229d602c3111f46f905471e6e7c7cc9d93f11cde0"
+    },
+    "aar_build_armeabi-v7a": {
+      "path": "build/followup-20261101-android-v1/aar-armeabi-v7a-receipt.json",
+      "bytes": 7425,
+      "sha256": "609c8f27d126b374c78d06738966406640ace430df687c7cea308f38e8218b1d"
+    }
+  },
+  "limits": [
+    "Pattern scanning is bounded and cannot detect every secret.",
+    "Original ELF files, diagnostic APK and signing keys remain local and are not included.",
+    "Only the sanitizer script was retained exactly; archive/path, section and R8-method checks were performed as one-shot commands.",
+    "Build commands used the checked-in CMake configuration and packager with explicit local tool paths; complete raw command streams were not saved.",
+    "Recorded source hashes cover selected inputs only and do not independently prove full build provenance."
+  ]
+}

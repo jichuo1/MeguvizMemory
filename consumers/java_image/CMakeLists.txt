@@ -35,6 +35,10 @@ else()
   target_compile_options(mgmem_java_image PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 set_target_properties(mgmem_java_image PROPERTIES CXX_EXTENSIONS OFF)
+# Let single- and multi-config build drivers identify the exact target without
+# guessing whether the generator uses a Release subdirectory.
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/java-image-library-$<CONFIG>.txt"
+  CONTENT "$<TARGET_FILE:mgmem_java_image>\n")
 set(JAVA_CLASSES "${CMAKE_CURRENT_BINARY_DIR}/classes")
 add_custom_command(OUTPUT "${JAVA_CLASSES}/io/github/jichuo1/meguviz/memory/image/JavaImage.class"
   COMMAND ${CMAKE_COMMAND} -E make_directory "${JAVA_CLASSES}"

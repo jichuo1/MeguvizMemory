@@ -262,6 +262,10 @@
     "older_preview": "EXCLUDES_THIS_FOLLOWUP",
     "performance": "NOT_MEASURED",
     "BIL": "NOT_INTEGRATED",
-    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json"
+    "evidence": "artifacts/continuation-next-20261101/host-dev-checks.json",
+    "android_latest": "THREE_ABI_REBUILT_ARM64_R8_BUILD_ONLY_ART_DEVICE_NOT_RUN",
+    "windows_latest": "SHARED_SDK_HOST_JNI_REBUILT_INSTALLED_HOST_CHECKS_ONLY",
+    "android_borrow_v2": "HOST_STUB_62_AND_R8_BUILD_ONLY_NO_ART_OR_DEVICE",
+    "license": "PROJECT_LICENSE_NOT_SPECIFIED_FORMAL_RELEASE_NOT_QUALIFIED"
   }
 }

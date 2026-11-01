@@ -1,0 +1,30 @@
+{
+  "state": "PASS_AAR_RULES_NOTICE_CURRENT_CLASS_HEADER",
+  "scope": "BUILD_ONLY_NOT_DEVICE",
+  "java_source_sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "cpp_header_sha256": "134c3bb39cc715bb0b463f435eab59d703d671dc434f935efa179f4a21ae2f63",
+  "class_sha256": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595",
+  "profiles": {
+    "arm64-v8a": {
+      "aar_sha256": "1dc33f0d0e7eaea1e276bea61209f78eece9910856c9f528a1bfaeaf357ad8ff",
+      "current_class_match": true,
+      "cpp_header_match": true,
+      "keep_rules_match": true,
+      "llvm_notice_match": true
+    },
+    "x86_64": {
+      "aar_sha256": "580b74b08725eb1871292b13c1a232ec56efbbd31d1fc280aa623a6a4e8fa0ed",
+      "current_class_match": true,
+      "cpp_header_match": true,
+      "keep_rules_match": true,
+      "llvm_notice_match": true
+    },
+    "armeabi-v7a": {
+      "aar_sha256": "85358e815fd6193a771f7bd47cf7d8ede264e4df707c19df2924ed41d84b2d70",
+      "current_class_match": true,
+      "cpp_header_match": true,
+      "keep_rules_match": true,
+      "llvm_notice_match": true
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "state": "PASS_SCOPED_HOST_FIXTURE_STUB_ANDROID_NOT_DEVICE",
+  "suite": "android-native-borrow-v2",
+  "checks": 62,
+  "normal_domains_final_backing_bytes": 0,
+  "quarantined_failure_backing_bytes": 32,
+  "quarantined_failure_owner_pins": 2,
+  "quarantined_failure_reclaimed": false,
+  "instrumentation_java_sha256": "68fdfda8617cb40bb900fb3a9dfd75ad0a735a929ce3c014207016946542296e",
+  "fixture_cpp_sha256": "5b3e4079038abace58070448efc5d74a449cad307fc5b364590246e5f472d7f0",
+  "lease_java_sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "host_fixture_binary_sha256": "d86cb68f534fcd1d67f75eb927b7ce0a89412cf5bbbd799351afb6b5e9e8e8af",
+  "stdout_sha256": "7e6763e9c86402534083be6a2e62c87cff161b597c2f0d141a46547543bf4177",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "limitations": [
+    "Host-only shared fixture compiles core and adapter in a single test DLL with fake Android classes; not installed Android runtime or device execution.",
+    "Checked-release error fixture intentionally retains its domain and owner until process exit; no normal reclaim claim.",
+    "JNI pending Java exception injection violates normal no-throw callback contract; no C++ exception crosses ABI."
+  ]
+}

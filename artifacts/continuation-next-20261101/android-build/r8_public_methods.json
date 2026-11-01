@@ -1,0 +1,22 @@
+{
+  "state": "PASS_R8_DEX_PUBLIC_METHODS_BUILD_ONLY",
+  "scope": "DEX_INSPECTION_NOT_RUNTIME",
+  "apk_sha256": "416829bdf346565fc6a3031b22b34b3ca4db7b253b094512f99869eab1da7d21",
+  "build_receipt_sha256": "4d2ef872ea566f3789b31882391a03da122c8027c923dfb9d8de40150dcca5c0",
+  "dexdump_sha256": "53373aa9a18c70f3dafcae611ffb7316fd8aaff1f9d699bde35be01391c8f655",
+  "java_source_sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "methods": {
+    "closeState": {
+      "signature": "()I",
+      "access": "0x0001 (PUBLIC)"
+    },
+    "closeFailureStatus": {
+      "signature": "()I",
+      "access": "0x0001 (PUBLIC)"
+    }
+  },
+  "limitations": [
+    "DEX inspection and R8 shrinking do not prove Android/ART execution.",
+    "Class was separately compared with a javac build from the recorded current Java source."
+  ]
+}

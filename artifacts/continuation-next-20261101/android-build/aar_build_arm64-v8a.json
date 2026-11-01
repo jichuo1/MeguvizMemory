@@ -1,0 +1,181 @@
+{
+  "schema_version": 1,
+  "scope": "ANDROID_PRESSURE_BUILD_AND_DIAGNOSTIC_SIGNING_ONLY",
+  "status": "PASS",
+  "device_executed": false,
+  "performance_qualified": false,
+  "minimum_api": 27,
+  "compile_platform": "android-37.0",
+  "build_tools": "37.0.0",
+  "target_api": 33,
+  "abi": "arm64-v8a",
+  "package_name": "io.github.jichuo1.meguviz.memory.pressureprobe",
+  "instrumentation": "io.github.jichuo1.meguviz.memory.android.PressureInstrumentation",
+  "certificate_sha256": "436f3cfc8a8bef104207961838e22bd02a34ec5bcb693534a7f019299063dc47",
+  "signing": "ISOLATED_DIAGNOSTIC_KEY_NOT_PRODUCTION_SIGNING",
+  "artifacts": [
+    {
+      "path": "build/followup-20261101-android-v1/aar-arm64-v8a/MeguvizMemory-Pressure-Probe.apk",
+      "bytes": 2519598,
+      "sha256": "5eb8a75cd29e0158da849c8199181ad54191749a9b02a162081defcb56531e09"
+    },
+    {
+      "path": "build/followup-20261101-android-v1/aar-arm64-v8a/MeguvizMemory-Android-Pressure-0.2.0.aar",
+      "bytes": 709953,
+      "sha256": "dc1b4e8591e7e6ef35b05855805dbca1f324df3157261f136695fe5abef3c578"
+    },
+    {
+      "path": "build/followup-20261101-android-v1/aar-arm64-v8a/classes.jar",
+      "bytes": 12379,
+      "sha256": "81631da26f7c0ea40090328e74d773af9a74dd1b1258f949b36f62bbefbad3cc"
+    },
+    {
+      "path": "build/followup-20261101-android-v1/jni-arm64-v8a/libmgmem_pressure_jni.so",
+      "bytes": 739368,
+      "sha256": "be7bb75368f3a3f8acb4a1cf1a7220e57cdd1d7c985ad62c7299df501b91605e"
+    },
+    {
+      "path": "build/followup-20261101-android-v1/sdk-arm64-v8a/lib/libmgmem.so",
+      "bytes": 1725808,
+      "sha256": "3aff842e50804541f8aebca01df37748ca49bd8b129aaa83f9bc4e06d86956cf"
+    }
+  ],
+  "sources": [
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java",
+      "sha256": "c9d4ff4ba9621f2ecdad324d86406703f35f54d18fa3e5cb37ceccab1220760c"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java",
+      "sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativePressureBackend.java",
+      "sha256": "324ce30512f07f5dd1f291828d8189ddc6bd4264d4b38f0bcb7a0cc71766cd79"
+    },
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/ProcessMemoryObservation.java",
+      "sha256": "8e43e6a079b0952b49374f6cd15d3e386aaaa9f5b787539ea4270c2c9fdaf10c"
+    },
+    {
+      "path": "adapters/android/native/borrow_jni.cpp",
+      "sha256": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571"
+    },
+    {
+      "path": "adapters/android/native/pressure.cpp",
+      "sha256": "428f3bdeb9ef335e7c8dcafa171f571d310c04325b1c6a65c950ff7a5d5c23a5"
+    },
+    {
+      "path": "adapters/android/native/pressure_jni.cpp",
+      "sha256": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e"
+    },
+    {
+      "path": "include/mgmem/android_borrow_jni.h",
+      "sha256": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34"
+    },
+    {
+      "path": "include/mgmem/android_pressure_jni.h",
+      "sha256": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "sha256": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84"
+    },
+    {
+      "path": "include/mgmem/pressure.h",
+      "sha256": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32"
+    },
+    {
+      "path": "adapters/android/sample/PressureInstrumentation.java",
+      "sha256": "68575eeab476460799cdd4e2dc47af2d2e0fd01104e30b2971032bbf9e6f3d37"
+    },
+    {
+      "path": "adapters/android/sample/AndroidManifest.xml",
+      "sha256": "99c3589214522e0cb6952d94e78246a3c7fade002a0854b99f547bf2b22b3676"
+    },
+    {
+      "path": "adapters/android/CMakeLists.txt",
+      "sha256": "6aeed930e68b4fcead652f6c10882e11de1d09caaa0896dff34898f43afb1cf3"
+    },
+    {
+      "path": "adapters/android/consumer-rules.pro",
+      "sha256": "7f19183f328ead6f68ac56b1c1cb40ea7f240f5857f089a092623e1c5070a2fa"
+    },
+    {
+      "path": "third_party_notices/llvm-NOTICE.txt",
+      "sha256": "f96f763beb66a7ba7a667647fc64c0226ace875e590c831fdd9579ec1c1d91e1"
+    },
+    {
+      "path": "tools/build_pressure_android.py",
+      "sha256": "6aad3e8b438fdc0fbdc936f14d504f55bf16e681a6bde189fe83ca15ba73215b"
+    }
+  ],
+  "operations": [
+    {
+      "operation": "javac-library",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "944e253db563e556ab4f852197f88117fa2238bd6d2a7295535d8f01f97569e8"
+    },
+    {
+      "operation": "jar-library",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "javac-sample",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "jar-sample",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "d8",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "aapt2-link",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "zipalign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "diagnostic-key",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "351103e180b71114e40c42aee3f6d035306d84011f7040ad610b1ef3f12843f0"
+    },
+    {
+      "operation": "sign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "verify-signature",
+      "exit_code": 0,
+      "stdout_sha256": "9848109bc46983c988de7535fe77eee3fa8d86610f9b14c39b62b0bf04116055",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "runtime_closure": "Exactly one installed shared libmgmem.so; pressure helper is linked into JNI, not a second Memory core",
+  "limitations": [
+    "APK framework dispatch test is synthetic; no real low-RAM event or energy gain is claimed.",
+    "JNI and Memory binaries are prebuilt inputs; source hashes alone do not prove how they were compiled.",
+    "AAR includes keep rules, but no product R8/BIL/Lumen qualification was performed."
+  ]
+}

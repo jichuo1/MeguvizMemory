@@ -42,3 +42,11 @@ JavaImage input.ppm output.pgm [--system] [--budget bytes]
 不带 `--system` 使用 arena。三个 `--attest-*` 参数必须一起提供：消费者用操作系统模块地址查询 core/JNI 的实际加载文件，并验证其与预期文件是同一文件；同时检查 Java `NativeMemoryLease` 的 CodeSource JAR 与类资源并记录各文件 SHA-256，不输出绝对路径。它采样的是运行时路径与当前磁盘文件，不是对已映射内存的哈希；不用这些参数时明确记 `identity_scope=NOT_CHECKED`。
 
 `verify_host.py --help` 提供隔离宿主检查入口：在新的 `build/` 子目录保存原始输出，以独立像素 oracle 和安装版 C++ 消费者逐字节对照，并测试单像素、边缘、截断、尾随数据、预算、既有输出和加载 JAR 不匹配。它重新编译当前 `NativeMemoryLease.java` 并核对 class 字节，以免把旧 AAR 的类当成新源码。报告仅为限定宿主功能检查，不代替后续统一设备、性能或发布验证。
+
+已有共享 Memory SDK 时，可用统一入口独立构建、安装 host JNI，从当前 Java 源生成 JAR，再构建两个消费者并执行上述检查：
+
+```sh
+python consumers/java_image/run_host_ci.py --memory-sdk "<Memory SDK>" --out-dir build/java-image-ci
+```
+
+入口可选 `--java-home`、`--cmake` 和 `--generator`；要求现有 JDK 与 CMake，不下载依赖。它要求安装 SDK 中相关 C 头与当前源码一致，并拒绝覆盖已有输出。结果和原始构建日志留在所给 `build/` 目录；顶层 `receipt.json` 只含测试范围、数量与哈希。Windows 和 Linux 均有构建入口，某个平台是否通过以该平台的实际运行记录为准。

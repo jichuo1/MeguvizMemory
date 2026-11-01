@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "state": "PASS_INSTALLED_SHARED_HOST_JAVA_IMAGE",
+  "scope": "HOST_FUNCTIONAL_NO_ANDROID_NO_PERFORMANCE",
+  "host": "windows",
+  "functional_cases": 12,
+  "negative_cases": 8,
+  "installed_core_sha256": "96b18ffb5b52b606789752892105f080a63f04a77eb7174c1acdcefd9babd425",
+  "installed_jni_sha256": "c087308c5492aac6e5da7f5379e23fe1aa83073fe59aae07cc5d200e5ae127da",
+  "adapter_jar_sha256": "25b2a798bb78b0fbe69dff63d1e3cc94c4c7fae7743851023fcbc628f3ad7e3f",
+  "adapter_class_sha256": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595",
+  "consumer_jni_sha256": "53e1e0a405c2d7b7ed8fdaf8fcbd54a94264228be1fa90e5ef1d5e6d4d62602f",
+  "reference_sha256": "fccb323f0b508f26ec6498ca7118446dcaeb3a193be4536d483249295d5072f5",
+  "verification_receipt_sha256": "f2dd9b15d3bb27b44fdbe01e9ed18cf14a512d79ec12348f5fe88c16e7a6011c",
+  "source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "src/mgmem.cpp": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+    "include/mgmem/mgmem.h": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+    "include/mgmem/pressure.h": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32",
+    "include/mgmem/android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+    "include/mgmem/android_pressure_jni.h": "380bf586f5d435db92a3e0fea0ea2a938f5c53eb2055fb6ae660620ca63d3b54",
+    "adapters/android/native/borrow_jni.cpp": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+    "adapters/android/native/pressure_jni.cpp": "7c845a730607b1e2df1b5d82b8e435d134e65def8ff530a51a662acdaeca470e",
+    "consumers/java_image/runtime/CMakeLists.txt": "f143a2546c8406589f267803c6a3282f999464b2ac2ee33dad4cc00388530921",
+    "consumers/java_image/CMakeLists.txt": "cb0bd5271d0eff3dcbed133f62e59577d8209790c178b41054c4985a5af64bb1",
+    "consumers/java_image/native/image_jni.cpp": "ae9904b9663ca8f80538ab5cc7baacb0b64a16acd94c879cf6ca4455d881b3d5",
+    "consumers/java_image/java/io/github/jichuo1/meguviz/memory/image/JavaImage.java": "16ccc8bcb069f11d9381e422009006364b95630522f4d95fd8c8a2ec4caa1735",
+    "consumers/java_image/verify_host.py": "a488389dc75db36b2551666c501d7416db9904c69eea8e882e8e8dfbcfb49726",
+    "consumers/java_image/run_host_ci.py": "0ee71fe0eb62cd3810b6f6c08ee88168da4f6f863bf85304e8eda7db4cf32208",
+    "consumers/image/CMakeLists.txt": "8128f030073881080f01722e968f550ba83a9bbb211a4108bd42c2468690bd6e",
+    "consumers/image/main.cpp": "36b4cf4e3159349697887b074ff8504650d91e897cf8939bca641567f5d4b9dd"
+  },
+  "operations": [
+    {
+      "name": "configure-jni",
+      "exit_code": 0,
+      "stdout_sha256": "4cf27a6ce9145e57138c79318f0bed8e2a8d9727d3f632110a74ee76d0f4bf47",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-jni",
+      "exit_code": 0,
+      "stdout_sha256": "d0b832f5f398e5cefb49071908a0b40bc2b4488362d8241273f7000595201ec9",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "install-jni",
+      "exit_code": 0,
+      "stdout_sha256": "fce7285537904e0c45bc9f629b5b9e44e18ce9d3973fa17fce8489b0f9a693dd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "compile-current-adapter",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "package-current-adapter",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "configure-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "dd764c42f3feb23de731f5e6a00096da586a33e340bc89954307594c80b6d254",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "d41225ce6323cfb2533ad58f980440cc7e2f2125e11aeff5a808a911e37ea9e4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "configure-reference",
+      "exit_code": 0,
+      "stdout_sha256": "8d1ffb5bfca104038f266bd18bf19d2fa2f04b31e879867ae71a92a10786e004",
+      "stderr_sha256": "86636419be5f41694021a22214958358dafafd1fce93325b4f8a5c90de622e1c"
+    },
+    {
+      "name": "build-reference",
+      "exit_code": 0,
+      "stdout_sha256": "435bb61b32c8a6c673e71526aa9276a85f264ff375daff489fd5d97de31b5787",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "verify-installed-consumer",
+      "exit_code": 0,
+      "stdout_sha256": "0287e89090ae3adec40f4553abcc9f99ecdf22b5db2294fa537212b8f727ba2f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limitations": [
+    "The host JNI is separately built from the adapter sources; it is not the Android AAR JNI binary.",
+    "Module paths and current file hashes were compared inside the JVM; mapped executable bytes were not hashed.",
+    "Source and file hashes alone are not reproducible-build provenance or a performance claim.",
+    "No device, ART, BIL, energy or formal release qualification is implied."
+  ]
+}

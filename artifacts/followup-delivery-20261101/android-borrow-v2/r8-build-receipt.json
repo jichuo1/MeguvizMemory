@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "state": "PASS_R8_BUILD_ONLY_NOT_DEVICE_EXECUTION",
+  "scope": "ISOLATED_DIAGNOSTIC_APK_NOT_PRODUCTION_AAR",
+  "device_executed": false,
+  "abi": "arm64-v8a",
+  "minimum_api": 27,
+  "package_name": "io.github.jichuo1.meguviz.memory.borrowprobe",
+  "instrumentation": "io.github.jichuo1.meguviz.memory.android.NativeBorrowInstrumentation",
+  "apk_sha256": "135a4bf0c14f8c0e891f087b7b76ba1c712355792eb7df266bd02253679c6457",
+  "apk_bytes": 623236,
+  "certificate_sha256": "5e7d2b8f6eb9280dc5975c71885fc381bf6eee2f52877e862da29f082f4ea8d2",
+  "signing": "PRIVATE_DIAGNOSTIC_ONLY",
+  "inputs": {
+    "aar_sha256": "1dc33f0d0e7eaea1e276bea61209f78eece9910856c9f528a1bfaeaf357ad8ff",
+    "classes_jar_sha256": "81631da26f7c0ea40090328e74d773af9a74dd1b1258f949b36f62bbefbad3cc",
+    "shared_core_sha256": "b0b16a64a8ce3e8cb4a8f3c41d817f3cc3dfea110018d814ecc3c9090b91710a",
+    "shared_jni_sha256": "0b988c62352ae64b0bdfaabf417764621c9468c7e15427883d8230594697d809"
+  },
+  "fixture_sha256": "1e6fbcead8f2510dc275fdcf913971b7a4c05039c4d12c4fcdd6b9821aae422c",
+  "fixture_needed": [
+    "libc.so",
+    "libdl.so",
+    "libm.so",
+    "libmgmem.so",
+    "libmgmem_pressure_jni.so"
+  ],
+  "verified_exports": {
+    "fixture": [
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeCreate",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeBeginClose",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeSnapshot",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeCollectBusy",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeFinish",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeCleanupBestEffort",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeCreateFailedRelease",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeReleaseGate",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeArmJavaException",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeBorrowInstrumentation_nativeFailureQuarantined"
+    ],
+    "jni": [
+      "mgmem_android_borrow_register_v1",
+      "mgmem_android_borrow_cancel_v1",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeClaim",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeCopy",
+      "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeClose"
+    ]
+  },
+  "source_sha256": {
+    "AndroidManifest.xml": "c1b99dcf5a91ecb36c137e425139662a9bb1aadab373cec9372c01b0ec4f5b59",
+    "NativeBorrowInstrumentation.java": "68fdfda8617cb40bb900fb3a9dfd75ad0a735a929ce3c014207016946542296e",
+    "borrow_fixture.cpp": "5b3e4079038abace58070448efc5d74a449cad307fc5b364590246e5f472d7f0",
+    "CMakeLists.txt": "194161e613788790cd2ce705b298c5832acbbb33720dc86d8398f59849fcbbc2",
+    "build_android_borrow_probe.py": "17834cd6437aad562d3ca446cebb73fa16320b8916fbdb69530bd12fc1aaacf5",
+    "android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+    "BorrowShrinkWitness.java": "32c0461c905c71e91b48760bc933a17265feec43972605180bcb9d35c802465f"
+  },
+  "operations": [
+    {
+      "operation": "fixture-configure",
+      "exit_code": 0,
+      "stdout_sha256": "dcbb357b88ca56e51d19f728629c87a00d933114607e62a5f6fec8afa4d84ac2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "fixture-build",
+      "exit_code": 0,
+      "stdout_sha256": "62192380b8ece1a11dc95f8f0ed123c519d31928993e0e5a730e3b89643958fb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-header-core",
+      "exit_code": 0,
+      "stdout_sha256": "c9bbc9803cfa7681bb812edd214d1f6dade7313ec2a350b038d2f516a724458a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-header-jni",
+      "exit_code": 0,
+      "stdout_sha256": "1eaac0de85a095fe0b248bac51425fe89c86dfa394a6333ed902ecb29732d546",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-header-fixture",
+      "exit_code": 0,
+      "stdout_sha256": "b513ad0d62c3ebae3ca084835dec6ffb5dff31dd8881397adfda7cfb67d0727c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-fixture-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "56dffa7a011e97f43c1f58504dba46c008f2aebb16a4855a305db93ce142928c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-exports-fixture",
+      "exit_code": 0,
+      "stdout_sha256": "de9fca6e318a02dafb1f70ab1c069761ce455d1cc7aaea67cc303b26fbafb207",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "readelf-exports-jni",
+      "exit_code": 0,
+      "stdout_sha256": "69bcaeedaae5bd89707fc2c6ef9c4c3de8b90c085391acf4ed3f3a7d54ee9ea8",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "javac-test",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "jar-test",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "r8-version",
+      "exit_code": 0,
+      "stdout_sha256": "507a88a9ea9228de48b471565b046c45bd3088498d95b375943c35948c61f2c1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "r8",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "dexdump-r8",
+      "exit_code": 0,
+      "stdout_sha256": "f83022c4f537105459fa39b0743750f76ae4bfbb26115e2597feff896dcebc11",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "r8-negative-without-aar-rules",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "aapt2-link",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "zipalign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "diagnostic-key",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "7dfe086c61f0e14ce4731c0e3deaec8938bac59f9c9f1f18d9f3df8ef974ead9"
+    },
+    {
+      "operation": "sign",
+      "exit_code": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "operation": "verify-signature",
+      "exit_code": 0,
+      "stdout_sha256": "921eee47cf6b0d9acf6add7264c35c054729a4ace76ff61509215dd567be57db",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "r8_evidence": {
+    "r8_version": "R8 9.2.4-dev (build 084a89126ae0596c599143df57a654646af28313 from go/r8bot (luci-r8-custom-ci-archive-0-4u1w))",
+    "aar_proguard_sha256": "7f19183f328ead6f68ac56b1c1cb40ea7f240f5857f089a092623e1c5070a2fa",
+    "diagnostic_rule_scope": "INSTRUMENTATION_CLASS_ONLY_NO_NATIVE_MEMORY_LEASE_KEEP",
+    "unused_witness_removed": "io.github.jichuo1.meguviz.memory.android.BorrowShrinkWitness",
+    "lease_class_name_and_native_signatures_retained_in_dex": true,
+    "lease_close_observation_methods_retained_in_dex": true,
+    "instrumentation_class_name_and_native_signatures_retained_in_dex": true,
+    "mapping_sha256": "c9b05a8bd87341d5f56449e56f1ac8830d6fb291bb22ac3cddb84ebeba6c8920",
+    "usage_sha256": "94a0ea7ff086126051f82689cd4eb841103c889f9198fc9d2f52f1e832cc4c48",
+    "dex_sha256": "7f81e0619363a12130d0a81873c7d773501691afb2b58a59bc6629285ecd9cbd",
+    "without_aar_rules_control": {
+      "lease_mapped_name": "e",
+      "lease_name_preserved": false,
+      "mapping_sha256": "1553ed5ca4aba2d17ad5e2c0c5756404f4c309cf6474feaf9f6291e8d17d2d9b"
+    },
+    "device_execution": "NOT_RUN"
+  },
+  "limitations": [
+    "Input AAR source provenance must be verified separately.",
+    "Build is not Android/ART/device, production-consumer, performance or release qualification."
+  ]
+}

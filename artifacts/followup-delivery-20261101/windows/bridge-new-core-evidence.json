@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_INSTALLED_BRIDGE_WITH_NEW_CORE",
+  "scope": "HOST_CPU_REFERENCE_ONLY_NO_DEVICE_PERFORMANCE_OR_RELEASE",
+  "installed_consumer": {
+    "loaded_core_identity": "OS_MODULE_PATH_AND_FILE_HASH_MATCH",
+    "core_sha256": "caf7494cc057bbb384d74c1a09852e910ea7b4d8b366193d9d6cd53f4a40cf98",
+    "bridge_sha256": "5a49c1e9e78dd598aa76aa9403fffa56fabdeec56d954215b7f449f1f030454e",
+    "compute_sdk_sha256": "8f489bdfb42ef10cba25856756ed461ce96f0f7e001af36ea2f94956ff63ef71",
+    "test_executable_sha256": "3d2a1bdc1275357fb1f58477b6bf3ab8fc18607a9bca91271c2ac83832db0f96",
+    "test_source_sha256": "4d407e9f8dbb94003042d5058ee11369ca93324d6212004ed7e50e50bb072b21",
+    "cases": {
+      "normal": {
+        "exit_code": 0,
+        "stdout_sha256": "595deb7cf3abda6aacf1c304cdaf12a3bc1ffb6e6ddbfbe3bdc913d497e68a45",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "violation": {
+        "exit_code": 0,
+        "stdout_sha256": "401de8121e30402e294d0ec5897668e74fa4910bb15c9370778c7f7c478c1219",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "wrong_core_control": {
+        "exit_code": 3,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_sha256": "be0d2d4cd884d252dd1eac16e750a4c8f8f654ddcbe3fe4973b629261d0f051f"
+      }
+    },
+    "violation_case": "ISOLATED_PROCESS_QUARANTINE_NOT_NORMAL_RESOURCE_ZERO"
+  },
+  "limits": [
+    "GetModuleHandleExW resolved the module containing the imported core function and OS file identifiers matched the specified SDK DLL.",
+    "The specified file was SHA-256 hashed before and after; this is not a hash of mapped memory.",
+    "Compute SDK is CPU reference only; no Android/GPU/product/performance qualification."
+  ]
+}

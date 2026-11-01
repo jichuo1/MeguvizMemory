@@ -1,0 +1,90 @@
+{
+  "state": "PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART",
+  "scope": "LOCAL_HOST_STUB_SINGLE_TEST_DLL_NO_DEVICE",
+  "report": {
+    "state": "PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART",
+    "suite": "android-native-borrow-v2",
+    "checks": 62,
+    "normal_backing_bytes": 0,
+    "quarantined_backing_bytes": 32,
+    "quarantined_owner_pins": 2,
+    "quarantine_reclaimed": false
+  },
+  "sources": [
+    {
+      "path": "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java",
+      "sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2"
+    },
+    {
+      "path": "adapters/android/native/borrow_jni.cpp",
+      "sha256": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571"
+    },
+    {
+      "path": "include/mgmem/android_borrow_jni.h",
+      "sha256": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34"
+    },
+    {
+      "path": "include/mgmem/mgmem.h",
+      "sha256": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84"
+    },
+    {
+      "path": "src/mgmem.cpp",
+      "sha256": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c"
+    },
+    {
+      "path": "tests/android_borrow/borrow_fixture.cpp",
+      "sha256": "4d11c7d5b4b948b02ea9ff23e9dccc07a9b4076ffe14a6460487a251cc00d1c0"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/android/app/Instrumentation.java",
+      "sha256": "e53503383eb2bd39b0cd8eec14caa1d856ef7c4f3e754f34fe3ad9513a0a2e09"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/android/os/Bundle.java",
+      "sha256": "2f3ef8278086ea2c176dad3287f8c4c3f5efd488ca1157b8348e6d5b4dff57a8"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/android/os/Looper.java",
+      "sha256": "ba3134e04acb311a2a23f1e4667347c740e86a52a20af6ee228e16083c8c52f0"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/CMakeLists.txt",
+      "sha256": "cd2865498eb7012f3cf07b9b7e867b3e377259797fe1c05bee94f15517272eb6"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/HostProbe.java",
+      "sha256": "2f9765521a0a36c91a9ceafe36aace6f41037abfc60513e1e4d542fe3811d7fc"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/org/json/JSONObject.java",
+      "sha256": "52934864e94fdecb2102f98ab44fa2cda7433b20cd63e508ebde6834779973c1"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/run_host_probe.py",
+      "sha256": "a982bc11a4769b9ca75f2eb50466cca0cf62b06c0671d83b230615eaa8f28c5f"
+    },
+    {
+      "path": "tests/android_borrow/host_stub/stub.cpp",
+      "sha256": "441d823c5a144dd2bb1e11ddfdbb28b6cdfc7a87bc348ea96d82e300eb02d310"
+    },
+    {
+      "path": "tests/android_borrow/NativeBorrowInstrumentation.java",
+      "sha256": "68fdfda8617cb40bb900fb3a9dfd75ad0a735a929ce3c014207016946542296e"
+    },
+    {
+      "path": "tools/android_borrow_round.py",
+      "sha256": "28357a7a2b5697a51b6a476f13696b6e703aa1ac914fd8703dd2e32a79566bd5"
+    }
+  ],
+  "binaries": {
+    "fixture_sha256": "f29571d4c9c77080b7cb37918441c526d93b325ba23f57dff98cccd3807d759b",
+    "name_only_stub_sha256": "44c4d1324b4c6ca7332a7f6cb423f21f05f09cd441ac638ead4d37e941de69a5"
+  },
+  "ctest_log_sha256": "b64ab0db9bbda4f195bfbc7860449d649989a8d94b82c62ccf62633b17af27bd",
+  "limits": [
+    "Android APIs are stubs and the test JNI DLL embeds core+adapter; this is not installed Android runtime, R8 execution or device evidence.",
+    "Checked-release error fixture deliberately retains domain and owner until process exit; it is not normal resource reclamation.",
+    "Pending Java exception injection intentionally violates normal callback no-throw precondition; no C++ exception is propagated across ABI.",
+    "Source hashes identify observed files but alone do not establish build provenance."
+  ]
+}

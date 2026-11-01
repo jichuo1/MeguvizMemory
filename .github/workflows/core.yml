@@ -40,6 +40,8 @@ jobs:
         run: python tools/test_build_pressure_abi.py
       - name: Feature preview privacy scanner checks
         run: python tools/test_package_feature_preview.py
+      - name: Follow-up preview contract checks
+        run: python tools/test_package_followup_preview.py
       - name: Android borrow diagnostic protocol checks
         run: python tools/test_android_borrow_round.py
       - name: Configure host JNI borrowing fixture
@@ -48,6 +50,12 @@ jobs:
         run: cmake --build build/borrow-jni-ci --config Release --parallel 2
       - name: Verify host JNI borrowing fixture
         run: ctest --test-dir build/borrow-jni-ci -C Release --output-on-failure
+      - name: Configure Android borrow host-only diagnostic
+        run: cmake -S tests/android_borrow/host_stub -B build/android-borrow-stub-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build Android borrow host-only diagnostic
+        run: cmake --build build/android-borrow-stub-ci --config Release --parallel 2
+      - name: Verify Android borrow host-only diagnostic
+        run: ctest --test-dir build/android-borrow-stub-ci -C Release --output-on-failure
       - name: Continuation capture validation regressions (offline real fixtures)
         run: python tools/test_continuation_validation.py
       - name: Diagnostic debugger identity and detach regressions
@@ -59,6 +67,8 @@ jobs:
         run: python tools/test_android_close_atomic_windows.py --output artifacts/android-close-investigation-20261030/ci-atomic-windows.json
       - name: Install
         run: cmake --install build/core --config Release
+      - name: Verify installed Java image consumer
+        run: python consumers/java_image/run_host_ci.py --memory-sdk install/host --out-dir build/java-image-ci
       - name: Configure installed consumer
         run: cmake -S consumers/image -B build/image -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=${{ github.workspace }}/install/host
       - name: Build installed consumer

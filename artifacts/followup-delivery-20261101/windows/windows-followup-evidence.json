@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_SANITIZED_WINDOWS_SDK_AND_HOST_JNI",
+  "scope": "HOST_INSTALL_CONSUMERS_AND_JVM_NO_DEVICE_NO_PERFORMANCE_NO_RELEASE",
+  "sdk_zip": {
+    "path": "build/followup-20261101-windows-sdk-v1/shareable/MeguvizMemory-0.2.0-windows-x64-followup-sdk.zip",
+    "bytes": 96091,
+    "sha256": "c52ebf7bfaa9d10d0a603a6a05560b08e4cb599af108ed6b4d0659288e7c46a6"
+  },
+  "host_jni_zip": {
+    "path": "build/followup-20261101-windows-sdk-v1/shareable/MeguvizMemory-0.2.0-windows-x64-host-jni.zip",
+    "bytes": 27713,
+    "sha256": "e827de247ee0f33029456b20386ce57f7a8ed9ad315db1b65f2b50a55dbecb1e"
+  },
+  "core_dll_sha256": "caf7494cc057bbb384d74c1a09852e910ea7b4d8b366193d9d6cd53f4a40cf98",
+  "jni_dll_sha256": "903f008a3003d5ce18018e1e0a8d9df113da2a8b9dac5297c305e82f656daa6b",
+  "jni_imports_matching_shared_core": true,
+  "jni_borrow_exports": [
+    "mgmem_android_borrow_register_v1",
+    "mgmem_android_borrow_cancel_v1",
+    "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeClaim",
+    "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeCopy",
+    "Java_io_github_jichuo1_meguviz_memory_android_NativeMemoryLease_nativeClose"
+  ],
+  "java_jar_sha256": "e7e97dcfd7628f50999d176711dd039aefd3666c1f859d715a74caab40ba716a",
+  "java_source_sha256": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+  "cpp_header_sha256": "134c3bb39cc715bb0b463f435eab59d703d671dc434f935efa179f4a21ae2f63",
+  "installed_tests": {
+    "count": 10,
+    "names": [
+      "checked_normal",
+      "checked_owner-failure",
+      "checked_borrow-failure",
+      "checked_destructor-failure",
+      "checked_borrow-destructor",
+      "checked_move-assignment",
+      "checked_rollback-failure",
+      "checked_concurrent",
+      "checked_c",
+      "legacy_cpp"
+    ],
+    "log_sha256": "edaf4dcd7164512f03220ca2e0e8fc8cbdb8a9287b6394d980523c32a0d12186",
+    "scope": "8_CPP_CHECKED_1_C_CHECKED_1_CPP_LEGACY_ISOLATED_FAILURE_CASES_NOT_NORMAL_ZERO"
+  },
+  "host_jvm": {
+    "state": "PASS",
+    "test_source_sha256": "cff0bdf8e392adad6268fc6e686bb48c13357653c52fab7467688fd13709c885",
+    "transformed_test_source_sha256": "d4e09a90dca40ab86c76ab827dc03a5a5d8dc8472d6908e12d69907e980e3f38",
+    "scope": "TEST_FIXTURE_DYNAMICALLY_LINKS_HOST_JNI_AND_SHARED_CORE_NOT_ANDROID",
+    "jni_loaded_path": "OBSERVED_JVM_LIBRARY_LOG",
+    "library_log_sha256": "cc254325434e95632d26b5b4eab8e87cda1a8ff41aafcffcadd302757b5d1da6"
+  },
+  "bridge_new_core": {
+    "receipt_sha256": "723f5f03c1c8239642cea25e663bd288da3cfe95786398ae72186f8f7a09a92b",
+    "loaded_core_identity": "OS_MODULE_PATH_AND_FILE_HASH_MATCH",
+    "core_sha256": "caf7494cc057bbb384d74c1a09852e910ea7b4d8b366193d9d6cd53f4a40cf98"
+  },
+  "sanitization_proof_sha256": "88a2865aa371bc9222c79ad2503ccb2ad644eed28fcc61f70a8b30f86666434e",
+  "privacy": "BOUNDED_RECURSIVE_KNOWN_IDENTIFIERS_AND_GENERIC_PATH_SCAN_PASSED",
+  "limits": [
+    "The installed C/C++ tests use a configured SDK and PATH; OS module identity is independently confirmed in the bridge consumer only.",
+    "The JVM log confirms the explicit JNI DLL path; it does not independently expose the dependency core path.",
+    "Checked failure tests intentionally retain uncertain resources until isolated process exit.",
+    "Source and file hashes do not alone prove build provenance.",
+    "No Android/ART/R8 runtime, energy, BIL, performance or formal-release claim."
+  ]
+}

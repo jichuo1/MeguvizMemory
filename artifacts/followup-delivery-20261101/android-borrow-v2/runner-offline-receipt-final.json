@@ -1,0 +1,22 @@
+{
+  "state": "PASS_OFFLINE_SYNTHETIC_NO_DEVICE",
+  "scope": "OFFLINE_SYNTHETIC_NO_DEVICE",
+  "coverage": [
+    "strict_report",
+    "occupancy",
+    "v2_close_states_and_separate_quarantine",
+    "v1_not_promoted",
+    "receipt_atomic",
+    "unobserved_freezer",
+    "observed_freeze",
+    "timeout_own_only_cleanup"
+  ],
+  "runner_sha256": "28357a7a2b5697a51b6a476f13696b6e703aa1ac914fd8703dd2e32a79566bd5",
+  "tests_sha256": "7f4799ea7d67439558217ac9f76db8fce336c6d46ff0c4f0ea8d0e329b932578",
+  "stdout_sha256": "48213780eee1bb1337164e47bbdd89d0ad4474e4e104bd4c4619be7e01cb8eb8",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "limits": [
+    "Synthetic runner states and mocked devices are not Android execution.",
+    "The v1 29-check report remains historical and is rejected as v2 qualification."
+  ]
+}

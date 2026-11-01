@@ -25,6 +25,8 @@ BASE = ROOT / 'artifacts/feature-development-20261101'
 PACKAGE = 'io.github.jichuo1.meguviz.memory.borrowprobe'
 INSTRUMENT = 'io.github.jichuo1.meguviz.memory.android.NativeBorrowInstrumentation'
 COMPONENT = PACKAGE + '/' + INSTRUMENT
+REPORT_SUITE = 'android-native-borrow-v2'
+REPORT_CHECKS = 62
 BUSY = re.compile(r'gpudiagnostic|androidx\.test|uiautomator|am instrument|'
                   r'dexmeguviz|dexdash|meguviz|mgmem|'
                   r'(?:^|[ /._-])(?:ncnn|rife|mgv|mgc)[^ ]*(?:bench|test)|' +
@@ -132,24 +134,34 @@ def parse_report(stdout, transport_code):
     require(isinstance(report, dict), 'instrument_report_fields')
     if report.get('status') == 'FAIL':
         require(codes[0].group(1) == '1' and set(report) == {'suite', 'status', 'checks', 'error_type'} and
-                report['suite'] == 'android-native-borrow-v1' and type(report['checks']) is int and
-                0 <= report['checks'] <= 29 and isinstance(report['error_type'], str) and
+                report['suite'] == REPORT_SUITE and type(report['checks']) is int and
+                0 <= report['checks'] <= REPORT_CHECKS and isinstance(report['error_type'], str) and
                 re.fullmatch(r'[A-Za-z_$][A-Za-z0-9_$]{0,100}', report['error_type']), 'instrument_failure_report_invalid')
         return report
     require(codes[0].group(1) == '0', 'instrument_result_code_not_zero')
     expected = {'suite', 'status', 'checks', 'read_only_and_write_cases',
                 'initialization_assertion_and_bytes', 'owner_release_and_domain_closing_lease_access',
-                'duplicate_claim_and_idempotent_close', 'final_domain_backing_bytes',
+                'duplicate_claim_and_idempotent_close', 'close_state_open_releasing_released',
+                'close_state_pending_java_exception', 'close_state_checked_failure',
+                'pending_java_exception_native_status', 'checked_failure_native_status',
+                'normal_domains_final_backing_bytes', 'quarantined_failure_backing_bytes',
+                'quarantined_failure_owner_pins', 'quarantined_failure_reclaimed',
                 'performance_qualified', 'scope'}
     require(set(report) == expected, 'instrument_report_fields')
-    require(report['suite'] == 'android-native-borrow-v1' and report['status'] == 'PASS' and
-            type(report['checks']) is int and report['checks'] == 29 and
+    require(report['suite'] == REPORT_SUITE and report['status'] == 'PASS' and
+            type(report['checks']) is int and report['checks'] == REPORT_CHECKS and
             type(report['read_only_and_write_cases']) is int and report['read_only_and_write_cases'] == 2 and
-            type(report['final_domain_backing_bytes']) is int and report['final_domain_backing_bytes'] == 0 and
+            type(report['normal_domains_final_backing_bytes']) is int and report['normal_domains_final_backing_bytes'] == 0 and
+            type(report['quarantined_failure_backing_bytes']) is int and report['quarantined_failure_backing_bytes'] == 32 and
+            type(report['quarantined_failure_owner_pins']) is int and report['quarantined_failure_owner_pins'] == 2 and
+            report['quarantined_failure_reclaimed'] is False and
+            type(report['pending_java_exception_native_status']) is int and report['pending_java_exception_native_status'] == -1 and
+            type(report['checked_failure_native_status']) is int and report['checked_failure_native_status'] == 9 and
             report['performance_qualified'] is False and
-            report['scope'] == 'isolated_own_domain_no_BIL_no_actual_low_memory', 'instrument_report_scope_or_checks')
+            report['scope'] == 'isolated_normal_and_quarantined_domains_no_BIL_no_actual_low_memory', 'instrument_report_scope_or_checks')
     for key in ('initialization_assertion_and_bytes', 'owner_release_and_domain_closing_lease_access',
-                'duplicate_claim_and_idempotent_close'):
+                'duplicate_claim_and_idempotent_close', 'close_state_open_releasing_released',
+                'close_state_pending_java_exception', 'close_state_checked_failure'):
         require(report[key] == 'PASS', 'instrument_report_lifecycle_failure')
     return report
 
@@ -232,6 +244,7 @@ def verify_local(apk, aar, sdk_core, build_receipt, abi, expected_certificate, a
             built.get('certificate_sha256') == expected_certificate and
             built.get('inputs', {}).get('aar_sha256') == digest(aar), 'build_receipt_identity_mismatch')
     require(built.get('r8_evidence', {}).get('lease_class_name_and_native_signatures_retained_in_dex') is True and
+            built.get('r8_evidence', {}).get('lease_close_observation_methods_retained_in_dex') is True and
             built.get('r8_evidence', {}).get('instrumentation_class_name_and_native_signatures_retained_in_dex') is True,
             'r8_build_evidence_missing')
     with zipfile.ZipFile(apk) as app, zipfile.ZipFile(aar) as library:
@@ -309,6 +322,7 @@ def freeze(args):
     require(len({entry['path'] for entry in files}) == len(files), 'duplicate_frozen_input')
     value = {'schema_version': 1, 'state': 'FROZEN_BEFORE_DEVICE_EXECUTION',
              'scope': 'OWN_R8_BORROW_FUNCTIONAL_NO_BIL_NO_PERFORMANCE', 'frozen_at_utc': utc(),
+             'expected_report_suite': REPORT_SUITE,
              'device_serial_sha256': sha(args.serial.encode()), 'device': {'api': args.api, 'abi': abi, 'page_bytes': args.page_bytes},
              'timeout_seconds': args.timeout_seconds, 'package': PACKAGE, 'component': COMPONENT,
              'certificate_sha256': cert, 'apk_sha256': digest(apk), 'aar_sha256': digest(aar),
@@ -330,6 +344,7 @@ def freeze(args):
 
 def validate_plan(plan, args):
     require(plan.get('state') == 'FROZEN_BEFORE_DEVICE_EXECUTION' and plan.get('schema_version') == 1 and
+            plan.get('expected_report_suite') == REPORT_SUITE and
             plan.get('package') == PACKAGE and plan.get('component') == COMPONENT and
             SERIAL.fullmatch(args.serial) is not None and
             sha(args.serial.encode()) == plan.get('device_serial_sha256'), 'plan_target_mismatch')
@@ -599,6 +614,8 @@ def run(args):
             receipt['android_report'] = parse_report(stdout, child.returncode)
             receipt['report_validated'] = True
             receipt['normal_domain_closed_proven'] = receipt['android_report']['status'] == 'PASS'
+            if receipt['android_report']['status'] == 'PASS':
+                receipt['checked_failure_domain'] = 'INTENTIONALLY_QUARANTINED_32_BYTES_2_OWNER_PINS_NOT_NORMAL_RECLAIM'
             receipt['state'] = 'REPORT_' + receipt['android_report']['status'] + '_POSTFLIGHT_PENDING'
         device.gate('after')
         _, boot_after, _ = device.command('boot-after', ['shell', 'cat', '/proc/sys/kernel/random/boot_id'])

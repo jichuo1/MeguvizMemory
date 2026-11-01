@@ -20,6 +20,8 @@
 
 超时或冻结后，仅当本轮已观察到的 PID、UID、启动时刻仍一致，且新一轮清单未发现其他相关进程或活动 instrumentation 冲突时，才请求停止**本包**；仍无共享锁，不保证别的会话不会在检查后进入。身份或占用不明时不对设备 force-stop，只结束本地 transport 并将远端状态记为 UNKNOWN。异常时不会假设远程安装或进程已结束。
 
-完整 PASS 还需恰好一条 JSON 报告、唯一且在报告后的 `INSTRUMENTATION_CODE: 0`、transport 退出码为 0、29 项检查、READ/WRITE 两组、关闭后 lease 访问及最终域 backing 为 0，并通过设备后验、同一 boot 和已安装 APK 字节回读。明确的测试 FAIL 与环境 INCOMPLETE 分开；正常报告已经通过而后验失败时，报告结果保留，但整轮不会标为完成。若 instrumentation 已结束而本包进程仍驻留，也不会为了制造“空闲”而强停它。
+v2 完整 PASS 还需恰好一条 JSON 报告、唯一且在报告后的 `INSTRUMENTATION_CODE: 0`、transport 退出码为 0、62 项检查、READ/WRITE 两组、关闭后 lease 访问、受控 `OPEN/RELEASING/RELEASED` 和失败状态，以及正常域 backing 为 0；checked-release 错误 fixture 故意保留 32 字节和两个 owner pin，必须明确标为隔离、未正常回收。测试另有意注入 pending Java 异常以验证 JNI 结果未知时的状态，不抛 C++ 异常穿越 ABI，也不把该违反 no-throw 前提的诊断视为正常回调。设备后验、同一 boot 和已安装 APK 字节回读仍须通过。明确的测试 FAIL 与环境 INCOMPLETE 分开；正常报告已经通过而后验失败时，报告结果保留，但整轮不会标为完成。若 instrumentation 已结束而本包进程仍驻留，也不会为了制造“空闲”而强停它。
+
+历史 v1 仅有 29 项，已有构建及宿主模拟证据与对应源码身份保留，未执行 v1 真机；不从 v1 提升 v2 资格。新版冻结计划明确绑定 `android-native-borrow-v2`，新版解析器不接受 v1 报告作为 v2 通过。
 
 原始命令输出、拉回的 APK 和诊断签名材料只放新建的 ignored `build/` 目录，不进入公开回执。公开回执只含固定状态、计数及哈希，采用 fsync 和有界原子替换；共享冲突后保留上一次完整文件和 pending，不覆盖旧证据。可用 `python tools/test_android_borrow_round.py` 执行纯本机模拟测试；该测试不会调用 ADB，也不是设备结果。

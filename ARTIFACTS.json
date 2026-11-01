@@ -414,11 +414,15 @@
     "subsequent_source_changes": "EXCLUDES_JAVA_CLOSE_STATE_CPP_CHECKED_WRAPPER_AND_JAVA_IMAGE_CONSUMER"
   },
   "feature_followup_20261101": {
-    "state": "SOURCE_AND_SCOPED_HOST_CHECKS_ONLY_NO_NEW_PACKAGE",
+    "state": "ENGINEERING_PREVIEW_CANDIDATE_NO_DEVICE_OR_FORMAL_RELEASE",
     "host_evidence": "artifacts/continuation-next-20261101/host-dev-checks.json",
-    "android_latest": "NOT_BUILT_OR_DEVICE_QUALIFIED",
+    "android_latest": "THREE_ABI_REBUILT_ARM64_R8_BUILD_ONLY_NO_DEVICE",
     "performance": "NOT_MEASURED",
     "formal_release": "NOT_QUALIFIED",
-    "source_lock": "artifacts/continuation-next-20261101/SOURCE_LOCK.json"
+    "source_lock": "artifacts/followup-delivery-20261101/SOURCE_LOCK.json",
+    "android_build_evidence": "artifacts/continuation-next-20261101/android-build/metadata-index.json",
+    "prior_source_lock": "artifacts/continuation-next-20261101/SOURCE_LOCK.json",
+    "candidate_manifest": "artifacts/followup-delivery-20261101/manifest.json",
+    "windows_latest": "HOST_CHECKED_SDK_AND_JNI_BUILT_SCOPED_HOST_ONLY"
   }
 }

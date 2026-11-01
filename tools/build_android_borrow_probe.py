@@ -113,7 +113,8 @@ def main():
     prefix = 'Java_io_github_jichuo1_meguviz_memory_android_'
     expected_exports = {
         'fixture': [prefix + 'NativeBorrowInstrumentation_' + name for name in
-                    ('nativeCreate', 'nativeBeginClose', 'nativeSnapshot', 'nativeCollectBusy', 'nativeFinish', 'nativeCleanupBestEffort')],
+                    ('nativeCreate', 'nativeBeginClose', 'nativeSnapshot', 'nativeCollectBusy', 'nativeFinish', 'nativeCleanupBestEffort',
+                     'nativeCreateFailedRelease', 'nativeReleaseGate', 'nativeArmJavaException', 'nativeFailureQuarantined')],
         'jni': ['mgmem_android_borrow_register_v1', 'mgmem_android_borrow_cancel_v1'] +
                [prefix + 'NativeMemoryLease_' + name for name in ('nativeClaim', 'nativeCopy', 'nativeClose')],
     }
@@ -169,7 +170,9 @@ def main():
             raise RuntimeError('Shrinking witness remains in DEX')
         for owner, members in ((lease_name, {'nativeClaim':'(J)J','nativeCopy':'(JJ[BIIZ)I','nativeClose':'(J)I'}),
                                (instrument_name, {'nativeCreate':'(Z)J','nativeBeginClose':'()Z','nativeSnapshot':'()[J',
-                                                  'nativeCollectBusy':'()Z','nativeFinish':'()Z','nativeCleanupBestEffort':'()V'})):
+                                                  'nativeCollectBusy':'()Z','nativeFinish':'()Z','nativeCleanupBestEffort':'()V',
+                                                  'nativeCreateFailedRelease':'()J','nativeReleaseGate':'(I)Z',
+                                                  'nativeArmJavaException':'()Z','nativeFailureQuarantined':'()Z'})):
             block = class_block(owner)
             for name, signature in members.items():
                 method = (r"(?ms)^\s*#\d+\s+:\s+\(in\s+L" + re.escape(owner.replace('.', '/')) +
@@ -178,6 +181,13 @@ def main():
                           r"'\s*\n\s*access\s*:\s*[^\n]*\bNATIVE\b")
                 if not re.search(method, block):
                     raise RuntimeError('Required DEX native name/signature missing: ' + owner + '.' + name)
+        lease_block = class_block(lease_name)
+        for name in ('closeState', 'closeFailureStatus'):
+            method = (r"(?ms)^\s*#\d+\s+:\s+\(in\s+L" + re.escape(lease_name.replace('.', '/')) +
+                      r";\)\s*\n\s*name\s*:\s*'" + re.escape(name) +
+                      r"'\s*\n\s*type\s*:\s*'\(\)I'\s*\n\s*access\s*:\s*[^\n]*\bPUBLIC\b")
+            if not re.search(method, lease_block):
+                raise RuntimeError('Required DEX public close-state method missing: ' + name)
         # Independent negative control: identical inputs and instrumentation
         # root, deliberately omit AAR rules. No production artifact is changed.
         negative = out / 'r8-no-aar-rules'; negative.mkdir()
@@ -194,6 +204,7 @@ def main():
         r8_evidence = {'r8_version': version, 'aar_proguard_sha256': sha(rules_bytes),
             'diagnostic_rule_scope': 'INSTRUMENTATION_CLASS_ONLY_NO_NATIVE_MEMORY_LEASE_KEEP',
             'unused_witness_removed': witness_name, 'lease_class_name_and_native_signatures_retained_in_dex': True,
+            'lease_close_observation_methods_retained_in_dex': True,
             'instrumentation_class_name_and_native_signatures_retained_in_dex': True,
             'mapping_sha256': sha(mapping.read_bytes()), 'usage_sha256': sha(usage.read_bytes()),
             'dex_sha256': sha((dex / 'classes.dex').read_bytes()),

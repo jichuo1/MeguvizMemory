@@ -1,0 +1,34 @@
+{
+  "state": "PASS_BOUNDED_RECURSIVE_PATH_SCAN_AND_MEMBER_IDENTITIES",
+  "scope": "SANITIZED_CANDIDATES_NOT_DEVICE_EXECUTED",
+  "profiles": {
+    "arm64-v8a": {
+      "AAR_sha256": "1dc33f0d0e7eaea1e276bea61209f78eece9910856c9f528a1bfaeaf357ad8ff",
+      "SDK_archive_sha256": "846e32b023f514bfd0af6aa1e4d3f98f6d3c9a1e0fbdfa773132ae74ac32e06e",
+      "SDK_archive_bytes": 133684,
+      "SDK_members": 12,
+      "scan_items": 229,
+      "AAR_and_SDK_core_identical": true
+    },
+    "x86_64": {
+      "AAR_sha256": "580b74b08725eb1871292b13c1a232ec56efbbd31d1fc280aa623a6a4e8fa0ed",
+      "SDK_archive_sha256": "72253ee1685033bd23da4126e66b4eee2f3b442a7e15dc42bf2064e8aef07d78",
+      "SDK_archive_bytes": 127980,
+      "SDK_members": 12,
+      "scan_items": 229,
+      "AAR_and_SDK_core_identical": true
+    },
+    "armeabi-v7a": {
+      "AAR_sha256": "85358e815fd6193a771f7bd47cf7d8ede264e4df707c19df2924ed41d84b2d70",
+      "SDK_archive_sha256": "c62ed3baf797a8e94d6fa71c63126668ad068229cfaf04cb05afd53898704906",
+      "SDK_archive_bytes": 118387,
+      "SDK_members": 12,
+      "scan_items": 229,
+      "AAR_and_SDK_core_identical": true
+    }
+  },
+  "limitations": [
+    "Pattern-based checks cannot prove absence of every secret.",
+    "Binary equivalence does not prove runtime behavior."
+  ]
+}

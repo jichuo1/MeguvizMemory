@@ -1,0 +1,161 @@
+#include <mgmem/compute_read_bridge.h>
+#include <meguviz/compute.h>
+
+#include <cstdio>
+#include <cstdlib>
+#include <atomic>
+#include <cstring>
+#include <thread>
+
+#ifdef _WIN32
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#include <windows.h>
+static bool same_identity(const wchar_t *a,const wchar_t *b) {
+    HANDLE x=CreateFileW(a,FILE_READ_ATTRIBUTES,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,0,nullptr);
+    if(x==INVALID_HANDLE_VALUE)return false;
+    HANDLE y=CreateFileW(b,FILE_READ_ATTRIBUTES,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,0,nullptr);
+    if(y==INVALID_HANDLE_VALUE){CloseHandle(x);return false;}
+    BY_HANDLE_FILE_INFORMATION p{},q{};
+    const bool ok=GetFileInformationByHandle(x,&p)&&GetFileInformationByHandle(y,&q)&&
+        p.dwVolumeSerialNumber==q.dwVolumeSerialNumber&&p.nFileIndexHigh==q.nFileIndexHigh&&p.nFileIndexLow==q.nFileIndexLow;
+    CloseHandle(y);CloseHandle(x);return ok;
+}
+static bool actual_core_matches_expected() {
+    HMODULE module=nullptr;
+    if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+        reinterpret_cast<LPCWSTR>(&mgmem_abi_version_v1),&module))return false;
+    wchar_t actual[32768],expected[32768];
+    DWORD a=GetModuleFileNameW(module,actual,32768), b=GetEnvironmentVariableW(L"MGMEM_EXPECTED_CORE_DLL",expected,32768);
+    return a>0&&a<32768&&b>0&&b<32768&&same_identity(actual,expected);
+}
+#endif
+
+#define CHECK(c) do { if (!(c)) { std::fprintf(stderr, "failed %s:%d: %s\n", __FILE__, __LINE__, #c); std::abort(); } } while (0)
+template<class T> static T init() { T value{}; value.header = MGC_HEADER_INIT(T); return value; }
+static void unexpected_unmap_error(void *, int32_t) { std::abort(); }
+struct ErrorObservation { std::atomic<int> calls{0}; std::atomic<int32_t> status{0}; };
+static void observe_unmap_error(void *opaque, int32_t status) {
+    auto *observation = static_cast<ErrorObservation *>(opaque);
+    observation->status.store(status);
+    ++observation->calls;
+}
+#if defined(MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+struct ContentObservation { std::atomic<unsigned> retained{0}, released{0}; };
+static void retain_content(void *opaque) { ++static_cast<ContentObservation *>(opaque)->retained; }
+static void release_content(void *opaque) { ++static_cast<ContentObservation *>(opaque)->released; }
+#endif
+
+int main(int argc, char **argv) {
+#ifdef _WIN32
+    if(!actual_core_matches_expected()) { std::fputs("CORE_MODULE_IDENTITY_FAIL\n",stderr); return 3; }
+    std::puts("CORE_MODULE_IDENTITY_PASS"); std::fflush(stdout);
+#endif
+
+    const bool violate_unmap = argc == 2 && std::strcmp(argv[1], "--violate-unmap") == 0;
+    CHECK(argc == 1 || violate_unmap);
+    auto rd = init<MgcRuntimeDesc>(); rd.provider = MGC_PROVIDER_CPU_REFERENCE; rd.memory_budget_bytes = 4096;
+    MgcRuntime *runtime = nullptr; CHECK(mgc_runtime_create(&rd, &runtime) == MGC_SUCCESS);
+    auto dd = init<MgcDomainDesc>(); MgcDomain *compute_domain = nullptr;
+    CHECK(mgc_domain_acquire(runtime, &dd, &compute_domain) == MGC_SUCCESS);
+    auto resource_desc = init<MgcResourceDesc>(); resource_desc.allocation_id = 1; resource_desc.allocation_generation = 1;
+    resource_desc.capacity_bytes = 64; resource_desc.format = MGC_FORMAT_BYTES;
+    MgcResource *resource = nullptr; CHECK(mgc_resource_create(compute_domain, &resource_desc, &resource) == MGC_SUCCESS);
+    auto desc = init<MgcLeaseDesc>(); desc.content_id = 1; desc.byte_length = 64; desc.access = MGC_ACCESS_WRITE;
+    MgcLease *writer = nullptr; CHECK(mgc_lease_create(resource, &desc, &writer) == MGC_SUCCESS);
+    void *pointer = nullptr; uint64_t length = 0; CHECK(mgc_lease_map(writer, &pointer, &length) == MGC_SUCCESS && length == 64);
+    for (uint64_t i = 0; i < length; ++i) static_cast<unsigned char *>(pointer)[i] = static_cast<unsigned char>(i);
+    CHECK(mgc_lease_unmap(writer) == MGC_SUCCESS);
+
+    mgmem_domain_options_v1 options{}; options.struct_size = sizeof(options); options.abi_major = MGMEM_ABI_MAJOR;
+    options.abi_minor = MGMEM_ABI_MINOR; options.mode = MGMEM_SYSTEM; options.budget_bytes = 64;
+    mgmem_domain *domain = nullptr; CHECK(mgmem_domain_create_v1(&options, &domain) == MGMEM_OK);
+    mgmem_handle_v1 handle{}; int32_t compute_status = -999;
+    CHECK(mgmem_compute_import_read_v1(domain, writer, 1, unexpected_unmap_error, nullptr, &handle, &compute_status) == MGMEM_UNSUPPORTED);
+    CHECK(handle.id == 0 && compute_status == MGC_SUCCESS);
+    mgc_lease_release(writer); writer = nullptr;
+
+    desc.access = MGC_ACCESS_READ; desc.byte_offset = 1; desc.byte_length = 63;
+    MgcLease *partial = nullptr; CHECK(mgc_lease_create(resource, &desc, &partial) == MGC_SUCCESS);
+    CHECK(mgmem_compute_import_read_v1(domain, partial, 2, unexpected_unmap_error, nullptr, &handle, &compute_status) == MGMEM_UNSUPPORTED);
+    mgc_lease_release(partial);
+    desc.byte_offset = 0; desc.byte_length = 64;
+#if defined(MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+    ContentObservation content;
+    desc.content_context = &content; desc.retain_content = retain_content; desc.release_content = release_content;
+#endif
+    MgcLease *reader = nullptr; CHECK(mgc_lease_create(resource, &desc, &reader) == MGC_SUCCESS);
+#if defined(MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+    CHECK(content.retained.load() == 1 && content.released.load() == 0);
+    desc.content_context = nullptr; desc.retain_content = nullptr; desc.release_content = nullptr;
+#endif
+
+    CHECK(mgmem_domain_set_budget_v1(domain, 63) == MGMEM_OK);
+    CHECK(mgmem_compute_import_read_v1(domain, reader, 3, unexpected_unmap_error, nullptr, &handle, &compute_status) == MGMEM_OUT_OF_BUDGET);
+    CHECK(handle.id == 0 && compute_status == MGC_SUCCESS);
+    CHECK(mgc_lease_map(reader, &pointer, &length) == MGC_SUCCESS);
+    CHECK(mgc_lease_unmap(reader) == MGC_SUCCESS); // failed admission returned its map
+    CHECK(mgmem_domain_set_budget_v1(domain, 64) == MGMEM_OK);
+    ErrorObservation observation;
+    CHECK(mgmem_compute_import_read_v1(domain, reader, 4, observe_unmap_error, &observation, &handle, &compute_status) == MGMEM_OK);
+    CHECK(mgc_lease_map(reader, &pointer, &length) == MGC_BUSY); // held until final Memory borrow
+    mgmem_handle_v1 busy_handle{};
+    CHECK(mgmem_compute_import_read_v1(domain, reader, 8, unexpected_unmap_error, nullptr, &busy_handle, &compute_status) == MGMEM_BUSY);
+    CHECK(compute_status == MGC_BUSY && busy_handle.id == 0); // failed map returned its independent pin
+    MgcLease *other_reader = nullptr; CHECK(mgc_lease_create(resource, &desc, &other_reader) == MGC_SUCCESS);
+    mgmem_domain *other_domain = nullptr; CHECK(mgmem_domain_create_v1(&options, &other_domain) == MGMEM_OK);
+    mgmem_handle_v1 overlap{};
+    CHECK(mgmem_compute_import_read_v1(other_domain, other_reader, 9, unexpected_unmap_error, nullptr, &overlap, &compute_status) == MGMEM_BUSY);
+    CHECK(overlap.id == 0 && mgc_lease_map(other_reader, &pointer, &length) == MGC_SUCCESS);
+    CHECK(mgc_lease_unmap(other_reader) == MGC_SUCCESS);
+    mgc_lease_release(other_reader);
+    CHECK(mgmem_domain_begin_close_v1(other_domain) == MGMEM_OK);
+    CHECK(mgmem_domain_collect_v1(other_domain) == MGMEM_OK);
+    CHECK(mgmem_domain_destroy_v1(other_domain) == MGMEM_OK);
+    if (violate_unmap) {
+        // Deliberately break the caller contract to check failure isolation.
+        CHECK(mgc_lease_unmap(reader) == MGC_SUCCESS);
+        CHECK(mgmem_release_v1(domain, handle) == MGMEM_PROVIDER_ERROR);
+        CHECK(observation.calls.load() == 1 && observation.status.load() != MGC_SUCCESS);
+        mgmem_import_snapshot_v1 snapshot{};
+        CHECK(mgmem_domain_import_snapshot_v1(domain, &snapshot, sizeof(snapshot)) == MGMEM_OK);
+        CHECK(snapshot.poisoned == 1 && snapshot.external_backing_bytes == 64 && snapshot.external_backing_count == 1);
+        mgmem_domain *other = nullptr; CHECK(mgmem_domain_create_v1(&options, &other) == MGMEM_OK);
+        mgmem_handle_v1 duplicate{};
+        CHECK(mgmem_compute_import_read_v1(other, reader, 5, unexpected_unmap_error, nullptr, &duplicate, &compute_status) == MGMEM_BUSY);
+        CHECK(duplicate.id == 0);
+        CHECK(mgmem_domain_begin_close_v1(domain) == MGMEM_OK);
+        CHECK(mgmem_domain_collect_v1(domain) == MGMEM_PROVIDER_ERROR);
+        CHECK(mgmem_domain_destroy_v1(domain) == MGMEM_BUSY);
+#if defined(MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+        mgc_lease_release(reader); mgc_resource_release(resource); mgc_domain_release(compute_domain);
+        CHECK(content.retained.load() == 1 && content.released.load() == 0);
+        CHECK(mgc_runtime_close(runtime) == MGC_BUSY);
+#endif
+        std::puts("PASS scoped checked-release quarantine; fixture intentionally retained until process exit");
+        std::fflush(stdout);
+        std::_Exit(0);
+    }
+    mgmem_borrow_v1 read{};
+    CHECK(mgmem_borrow_acquire_v1(domain, handle, 0, 64, MGMEM_WRITE, &read) != MGMEM_OK);
+    CHECK(mgmem_borrow_acquire_v1(domain, handle, 0, 64, MGMEM_READ, &read) == MGMEM_OK);
+    for (uint64_t i = 0; i < read.length; ++i) CHECK(static_cast<unsigned char *>(read.data)[i] == i);
+    CHECK(mgmem_release_v1(domain, handle) == MGMEM_OK);
+    CHECK(mgmem_domain_begin_close_v1(domain) == MGMEM_OK);
+    CHECK(mgc_lease_map(reader, &pointer, &length) == MGC_BUSY);
+    std::thread last([&] { CHECK(mgmem_borrow_release_v1(domain, read.lease) == MGMEM_OK); });
+    last.join();
+    CHECK(mgc_lease_map(reader, &pointer, &length) == MGC_SUCCESS);
+    CHECK(mgc_lease_unmap(reader) == MGC_SUCCESS);
+    CHECK(mgmem_domain_collect_v1(domain) == MGMEM_OK);
+    CHECK(mgmem_domain_drain_v1(domain, 0) == MGMEM_OK);
+    CHECK(mgmem_domain_destroy_v1(domain) == MGMEM_OK);
+    CHECK(observation.calls.load() == 0);
+    mgc_lease_release(reader); mgc_resource_release(resource); mgc_domain_release(compute_domain);
+#if defined(MGMEM_COMPUTE_TEST_CONTENT_LIFETIME)
+    CHECK(content.retained.load() == 1 && content.released.load() == 1);
+#endif
+    CHECK(mgc_runtime_close(runtime) == MGC_SUCCESS); mgc_runtime_release(runtime);
+    std::puts("PASS scoped full READ-map adapter / real CPU reference SDK");
+}
