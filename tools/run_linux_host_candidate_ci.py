@@ -33,6 +33,146 @@ LLVM_TOOLS = ('llvm-strip', 'llvm-readobj', 'llvm-nm', 'llvm-ar', 'llvm-readelf'
 EXPORT_ARCHIVE = 'MeguvizMemory-Linux-Host-Candidate.tar.gz'
 EXPORT_RECEIPT = 'receipt.json'
 
+# These are source-controlled diagnostic categories, not values supplied by a
+# child process. In particular, never echo an arbitrary alphanumeric "reason".
+HOST_FAILURE_CODES = frozenset('''
+coff_archive_members coff_relocations_missing coff_section_flags_missing coff_section_metadata_missing
+coff_section_name_missing coff_section_raw_pointer_missing coff_section_size_mismatch coff_sections_missing
+coff_static_export_invalid duplicate_host_member elf_nobits_has_payload elf_static_allocated_sections_missing
+elf_static_section_metadata_missing elf_static_section_size_mismatch forbidden_host_archive_member
+generator_root_mismatch host_archive_roundtrip_mismatch host_cmake_package_dir_mismatch
+host_compiler_identity_missing host_compiler_missing host_consumer_result_mismatch host_consumer_source_changed
+host_core_declarations_missing host_core_declarations_unparseable host_core_jni_compiler_mismatch
+host_core_soname_mismatch host_dynamic_binary_changed host_elf_search_path_forbidden host_final_archive_mismatch
+host_generated_jni_headers_missing host_generator_changed_during_build host_java_class_missing
+host_jni_core_dependency host_linux_core_links_missing host_loaded_identity_mismatch
+host_pe_executable_sections_missing host_pe_export_invalid host_pe_export_missing host_pe_export_not_executable
+host_pe_forwarded_or_empty_export host_pe_test_export host_pressure_declarations_missing
+host_pressure_declarations_unparseable host_pressure_export_missing host_probe_path_invalid
+host_published_identity_mismatch host_readback_missing host_sdk_changed_during_validation
+host_sdk_header_mismatch host_sdk_headers_missing host_sdk_member_missing host_sdk_unexpected_member
+host_source_changed_during_build host_static_changed_during_validation host_static_contract_changed
+host_static_debug_remains host_static_input_changed host_symlink_cycle host_symlink_dangling host_symlink_path
+host_symlink_target host_tar_member_missing host_tar_member_short host_tar_too_large host_tool_missing
+host_toolchain_changed host_unexpected_dynamic_dependency host_windows_symlink_unsupported invalid_host_pe
+invalid_host_pe_executable_section invalid_host_pe_export_directory invalid_host_tar_member invalid_jobs
+invalid_private_markers jdk_jni_headers_missing pressure_consumer_imported_path_mismatch
+pressure_consumer_unexpected_stderr pressure_test_main_return_unsupported pressure_test_main_unexpected
+pressure_v1_result_mismatch pressure_v2_result_mismatch private_markers_outside_build required_host_tool_missing
+source_or_lock_missing unsupported_host_architecture unsupported_host_os work_overlaps_source
+wrong_host_consumer_abi wrong_host_elf_abi wrong_host_pe_abi wrong_host_static_abi
+archive_roundtrip_mismatch atomic_noreplace_unsupported duplicate_source_path generator_source_mismatch
+generator_changed built_binary_missing class_jar_mismatch class_native_mismatch core_unexpected_dependency
+debug_section_remains elf_bad_load elf_bad_name elf_bad_name_offset elf_bad_names elf_bad_tables
+elf_changed_during_validation elf_dynamic_or_relocations_changed elf_load_changed elf_load_missing
+elf_not_16k_load_aligned elf_wrong_abi invalid_elf java_sources_invalid jni_core_dependency
+jni_generated_header_missing jni_target_consumer_dependency_mismatch jni_target_export_format_mismatch
+jni_target_imported_path_mismatch jni_unexpected_dependency keep_rule_missing llvm_notice_missing
+published_identity_mismatch required_class_missing sdk_header_mismatch sdk_notice_mismatch sdk_static_mismatch
+sdk_symlink sdk_unexpected_or_missing_member static_changed_during_validation static_debug_section_remains
+stripped_section_allocated stripped_section_loaded toolchain_changed toolchain_file_missing
+invalid_needed invalid_source_path invalid_tool_step java_native_declarations jni_export_missing
+jni_symbol_table_unparseable pressure_binding_missing required_source_missing snapshot_changed
+snapshot_set_changed source_changed_during_build source_changed_during_copy source_file_missing
+source_lock_count source_lock_hash source_lock_mismatch source_lock_scope source_lock_unknown_root
+source_set_mismatch source_symlink static_allocated_sections_missing static_archive_members
+static_contract_changed static_nobits_has_payload static_relocations_missing static_section_size
+test_jni_export test_native_export test_static_export tool_journal_already_started
+tool_journal_duplicate_or_invalid_step tool_journal_empty tool_journal_exists tool_journal_identity_changed
+tool_journal_missing tool_journal_not_private_regular_file tool_journal_open_failed
+tool_journal_record_mismatch tool_log_dir_invalid tool_log_set_mismatch tool_work_dir_invalid
+unresolved_pressure_symbol unsupported_jni_name_escape work_dir_not_fresh_build_child workspace_directory_invalid
+ValueError OSError FileNotFoundError PermissionError TimeoutExpired UnicodeDecodeError BadZipFile RuntimeError TypeError
+'''.split())
+HOST_STEPS = frozenset({
+    'compile-managed-java', 'core-configure', 'core-build', 'core-install', 'jni-configure', 'jni-build', 'jni-install',
+    'pressure-strip', 'pressure-clean-debug-sections', 'pressure-clean-public-exports',
+    'pressure-consumer-configure', 'pressure-consumer-build', 'pressure-v1-dynamic', 'pressure-v1-run',
+    'pressure-v2-dynamic', 'pressure-v2-run', 'consumer-plain-configure', 'consumer-plain-build',
+    'consumer-probe-configure', 'consumer-probe-build', 'consumer-reference-configure',
+    'consumer-reference-build', 'consumer-verify',
+} | {prefix + suffix for prefix in ('core', 'jni') for suffix in
+     ('-symbols', '-dynamic', '-relocations', '-search-path')} |
+    {prefix + suffix for prefix in ('pressure-original', 'pressure-clean') for suffix in
+     ('-members', '-header', '-payload-completeness', '-sections', '-relocations', '-symbols')})
+RUNNER_FAILURE_CODES = frozenset('''
+build_dist_different_filesystems builder_result_mismatch candidate_already_exists candidate_binary_mismatch
+candidate_consumer_identity_mismatch candidate_consumer_mismatch candidate_consumer_receipt_mismatch
+candidate_core_link_mismatch candidate_elf_abi_mismatch candidate_header_mismatch candidate_member_set_mismatch
+candidate_metadata_missing candidate_notice_mismatch candidate_scope_mismatch candidate_source_lock_mismatch
+candidate_source_manifest_mismatch candidate_toolchain_mismatch checkout_commit_mismatch checkout_not_clean
+checkout_root_mismatch ci_work_already_exists complete_llvm_tool_directory_missing duplicate_archive_name
+duplicate_json_key duplicate_source_name export_readback_mismatch git_command_failed github_hosted_linux_required
+github_workspace_mismatch input_not_regular_file input_size_limit invalid_commit_sha invalid_json_constant
+invalid_source_name jdk_or_jni_headers_missing journal_duplicate_step journal_empty journal_link_count
+journal_log_hash_mismatch journal_log_set_mismatch journal_required_step_missing journal_step_failed
+linux_x86_64_required logs_directory_invalid pressure_consumer_output_mismatch runner_script_commit_mismatch
+selected_tool_changed selected_tool_file_missing snapshot_changed snapshot_missing snapshot_path_escape
+snapshot_set_changed snapshot_symlink source_archive_blob_mismatch source_archive_failed source_archive_set_mismatch
+source_archive_size_limit source_archive_size_mismatch source_archive_symlink source_file_size_limit
+source_git_batch_failed source_git_blob_missing source_git_blob_truncated source_git_size_invalid
+source_git_size_mismatch source_lock_changed source_lock_digest_invalid source_lock_duplicate source_lock_invalid
+source_lock_scope source_lock_count source_lock_hash source_lock_unknown_root source_lock_mismatch source_set_mismatch
+generator_source_mismatch source_tree_incomplete unexpected_external_source unsupported_git_tree_entry workflow_commit_mismatch
+workspace_directory_outside_root workspace_directory_symlink
+'''.split()) | frozenset('required_tool_missing_' + name for name in ('cmake', 'ninja', 'gcc', 'git')) | frozenset(
+    'required_tool_not_executable_' + name for name in ('cmake', 'ninja', 'gcc', 'git'))
+
+
+def safe_builder_code(reason):
+    if isinstance(reason, str):
+        if reason in HOST_FAILURE_CODES:
+            return reason
+        for prefix in ('tool_failed_', 'tool_timeout_', 'tool_launch_error_', 'duplicate_tool_step_',
+                       'tool_log_exists_', 'tool_log_hash_mismatch_'):
+            if reason.startswith(prefix) and reason[len(prefix):] in HOST_STEPS:
+                return reason
+    return 'UNKNOWN_BUILDER_REASON'
+
+
+def safe_builder_reason(stderr):
+    """Return only a fixed known category from a bounded builder JSON error."""
+    if not isinstance(stderr, bytes) or len(stderr) > 4096:
+        return 'UNKNOWN_BUILDER_REASON'
+    try:
+        item = strict_json(stderr)
+        if isinstance(item, dict) and item.get('state') in ('FAILED', 'PREFLIGHT_FAILED'):
+            return safe_builder_code(item.get('reason'))
+    except (UnicodeError, ValueError, TypeError, json.JSONDecodeError):
+        pass
+    return 'UNKNOWN_BUILDER_REASON'
+
+
+class ChildStageFailure(ValueError):
+    def __init__(self, stage, outcome, reason, exit_code=None):
+        super().__init__('child_stage_failed')
+        require(stage in ('source_lock', 'host_builder') and
+                outcome in ('EXITED_NONZERO', 'TIMEOUT', 'LAUNCH_ERROR', 'LOG_WRITE_FAILED'), 'invalid_child_stage')
+        if outcome == 'EXITED_NONZERO':
+            reason = safe_builder_code(reason) if stage == 'host_builder' else 'SOURCE_LOCK_FAILED'
+        else:
+            reason = {'TIMEOUT': 'CHILD_TIMEOUT', 'LAUNCH_ERROR': 'CHILD_LAUNCH_FAILED',
+                      'LOG_WRITE_FAILED': 'PRIVATE_LOG_WRITE_FAILED'}[outcome]
+        self.stage, self.outcome, self.reason = stage, outcome, reason
+        self.exit_code = exit_code if type(exit_code) is int and -255 <= exit_code <= 255 else None
+
+    def public_record(self):
+        return {'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD', 'stage': self.stage, 'outcome': self.outcome,
+                'reason': self.reason, 'exit_code': self.exit_code}
+
+
+def public_failure(error):
+    if isinstance(error, ChildStageFailure):
+        return error.public_record()
+    reason = str(error)
+    if reason == 'required_tool_missing_g++':
+        reason = 'required_tool_missing_cpp'
+    elif reason == 'required_tool_not_executable_g++':
+        reason = 'required_tool_not_executable_cpp'
+    elif reason not in RUNNER_FAILURE_CODES:
+        reason = 'UNKNOWN_RUNNER_REASON'
+    return {'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD', 'stage': 'runner', 'reason': reason}
+
 
 def require(value, reason):
     if not value:
@@ -301,13 +441,33 @@ def child_environment(tools, original):
     return env
 
 
-def execute(command, environment, stdout_path, stderr_path, timeout):
-    result = subprocess.run([str(x) for x in command], env=environment, capture_output=True,
-                            timeout=timeout, check=False)
-    write_new(stdout_path, result.stdout)
-    write_new(stderr_path, result.stderr)
-    require(result.returncode == 0, 'child_command_failed')
-    return result.stdout
+def execute(command, environment, stdout_path, stderr_path, timeout, stage):
+    require(stage in ('source_lock', 'host_builder'), 'invalid_child_stage')
+    try:
+        # Reserve both private logs before starting a child. A collision cannot
+        # run a step or overwrite another file, including a dangling symlink.
+        with stdout_path.open('xb') as stdout_file, stderr_path.open('xb') as stderr_file:
+            try:
+                result = subprocess.run([str(x) for x in command], env=environment, capture_output=True,
+                                        timeout=timeout, check=False)
+                stdout, stderr, outcome, exit_code = result.stdout, result.stderr, 'EXITED', result.returncode
+            except subprocess.TimeoutExpired as error:
+                stdout, stderr, outcome, exit_code = error.stdout or b'', error.stderr or b'', 'TIMEOUT', None
+            except OSError:
+                stdout, stderr, outcome, exit_code = b'', b'', 'LAUNCH_ERROR', None
+            # These bytes remain private. Public diagnostics use fixed codes.
+            stdout_file.write(stdout); stdout_file.flush(); os.fsync(stdout_file.fileno())
+            stderr_file.write(stderr); stderr_file.flush(); os.fsync(stderr_file.fileno())
+    except OSError as error:
+        raise ChildStageFailure(stage, 'LOG_WRITE_FAILED', 'PRIVATE_LOG_WRITE_FAILED') from error
+    if outcome == 'TIMEOUT':
+        raise ChildStageFailure(stage, outcome, 'CHILD_TIMEOUT')
+    if outcome == 'LAUNCH_ERROR':
+        raise ChildStageFailure(stage, outcome, 'CHILD_LAUNCH_FAILED')
+    if exit_code != 0:
+        reason = safe_builder_reason(stderr) if stage == 'host_builder' else 'SOURCE_LOCK_FAILED'
+        raise ChildStageFailure(stage, 'EXITED_NONZERO', reason, exit_code)
+    return stdout
 
 
 def validate_source_lock(lock_bytes, source):
@@ -476,8 +636,14 @@ def run(commit):
     archive, snapshot, snapshot_records = export_snapshot(root, commit, work)
     lock = work / 'source-lock.json'
     execute([sys.executable, root / 'tools/source_lock.py', '--root', snapshot, '--output', lock],
-            environment, work / 'source-lock.stdout', work / 'source-lock.stderr', 120)
+            environment, work / 'source-lock.stdout', work / 'source-lock.stderr', 120, 'source_lock')
     lock_bytes = read_regular(lock, MAX_LOG)
+    locked_bytes, source_records = common.verify_lock(snapshot, lock)
+    require(locked_bytes == lock_bytes, 'source_lock_changed')
+    generators = {name: root / ('tools/' + name + '.py') for name in (
+        'run_linux_host_candidate_ci', 'build_host_candidate', 'build_android_candidate',
+        'source_lock', 'package_feature_preview')}
+    common.verify_generator_bindings(source_records, generators)
     marker = work / 'ci-only-marker.txt'
     marker_value = 'ci-only-sentinel-' + secrets.token_hex(16)
     write_new(marker, (marker_value + '\n').encode('ascii'))
@@ -488,7 +654,7 @@ def run(commit):
                       '--source-lock', lock, '--jdk', tools['jdk'], '--cmake', tools['cmake'],
                       '--ninja', tools['ninja'], '--llvm-bin', tools['llvm'], '--private-identifiers-file', marker,
                       '--work-dir', builder_work, '--output', candidate, '--jobs', '2'], environment,
-                     work / 'builder.stdout', work / 'builder.stderr', 3000)
+                     work / 'builder.stdout', work / 'builder.stderr', 3000, 'host_builder')
     outcome = strict_json(stdout)
     status = strict_json(read_regular(builder_work / 'STATUS.json', MAX_LOG))
     payload = read_regular(candidate, MAX_CANDIDATE)
@@ -500,6 +666,9 @@ def run(commit):
     verify_tool_identities(tool_files, tool_identities, report)
     verify_snapshot(snapshot, snapshot_records)
     require(read_regular(lock, MAX_LOG) == lock_bytes, 'source_lock_changed')
+    final_lock, final_records = common.verify_lock(snapshot, lock)
+    require(final_lock == lock_bytes and final_records == source_records, 'source_lock_changed')
+    common.verify_generator_bindings(source_records, generators)
     verify_checkout(root, commit)
     require(source['source_lock_sha256'] == digest_bytes(lock_bytes), 'source_lock_changed')
     consumer = report['consumer']
@@ -546,10 +715,7 @@ def main():
         run(args.commit)
         return 0
     except Exception as error:
-        reason = str(error)
-        if not re.fullmatch(r'[A-Za-z0-9_-]{1,100}', reason):
-            reason = type(error).__name__
-        print(json.dumps({'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD', 'reason': reason}), file=sys.stderr)
+        print(json.dumps(public_failure(error)), file=sys.stderr)
         return 1
 
 

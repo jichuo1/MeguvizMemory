@@ -5,8 +5,8 @@
 ## 统一验证准备（2026-11-01）
 
 - 新增[托管域真机诊断与冻结协议](docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md)：System/Arena 的预算、合成压力、跨关闭 lease、最终账目与回调关闭采用独立 instrumentation；同一源码的宿主 JVM/JNI 加 Android 桩 2 项通过。arm64 与 x86_64 诊断 APK 已完成 R8 构建及 37 个 JNI 声明检查，但未在 Android 运行。[构建限定证据](artifacts/managed-probe-20261101/build-only.json)
-- 独立 runner 已完成假 ADB 的准入、签名、冻结、超时和后验离线回归；真实冻结计划默认仅写入被忽略的 `build/`。设备测试前必须再次确认占用，观察不构成共享锁。短诊断没有前台长稳合同，不能作为 900 秒资格。
-- 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者；runner 离线检查 19 项通过。实际 Linux 候选尚未构建或运行，CI sentinel 不等同用户本机私有标识扫描。
+- 独立 runner 已完成假 ADB 的准入、签名、冻结、超时和后验离线回归；真实冻结计划默认仅写入被忽略的 `build/`。首轮真机安装返回 `INSTALL_FAILED_USER_RESTRICTED`，诊断没有运行；后续只读观察在可见用户中未发现该包，具体取消原因未知。[脱敏记录](artifacts/managed-probe-20261101/device-install-incomplete.json) 设备观察不构成共享锁，短诊断也不能作为 900 秒资格。
+- 新增[Linux 宿主候选隔离 CI 入口](docs/LINUX_HOST_CANDIDATE_CI.md)，按指定提交从源构建并验证安装消费者；runner 的 25 项离线检查通过。[首轮 CI](artifacts/managed-probe-20261101/linux-host-first-attempt.json) 失败且未上传制品，公开输出不足以确定失败子步骤；诊断输出已另行改进，需在新提交单独重试。CI sentinel 不等同用户本机私有标识扫描。
 
 ## 修复后工程候选（2026-11-01）
 

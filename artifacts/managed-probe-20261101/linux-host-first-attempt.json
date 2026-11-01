@@ -1,0 +1,17 @@
+{
+  "state": "INCOMPLETE_LINUX_CANDIDATE_NOT_PUBLISHED",
+  "source_commit": "913653c7e4bbd32ebd2309205bd21ad28e25c45e",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41286810204",
+  "failed_step": "Build and independently inspect Linux candidate",
+  "reported_reason": "child_command_failed",
+  "root_cause": "UNKNOWN_ORIGINAL_LOGS_NOT_AVAILABLE_AFTER_RUN",
+  "uploaded_artifact_count": 0,
+  "scope": "GITHUB_HOSTED_LINUX_CANDIDATE_ATTEMPT_ONLY",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The original failure is retained and is not reclassified as passing.",
+    "No conclusion about which child command failed is supported by the public output.",
+    "Later runner changes may provide a bounded sanitized failure reason in a separate attempt."
+  ]
+}

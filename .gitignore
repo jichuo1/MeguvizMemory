@@ -22,6 +22,10 @@
 /artifacts/continuation-20261030/host-stability*/commands/
 /artifacts/continuation-20261030/image-host*/system/stdout.json
 /artifacts/continuation-20261030/image-host*/arena/stdout.json
+# Device-specific managed-probe receipts remain local; publish scoped summaries separately.
+/artifacts/managed-device-20261101/**/receipt.json
+/artifacts/managed-device-20261101/**/receipt.pending
+/artifacts/managed-device-20261101/**/receipt.failure.json
 /artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-v1.txt
 /artifacts/android-close-investigation-20261030/api34-retry-guard/executed-runner-resume-v2.txt
 /research/

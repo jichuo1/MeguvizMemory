@@ -9,8 +9,10 @@ from pathlib import Path
 import shutil
 import stat
 import subprocess
+import sys
 import tempfile
 import unittest
+from contextlib import redirect_stderr
 from unittest.mock import patch
 import zipfile
 
@@ -20,6 +22,92 @@ import run_linux_host_candidate_ci as subject
 
 
 class RunnerContracts(unittest.TestCase):
+    def test_builder_diagnostics_only_allow_fixed_codes(self):
+        cases = (
+            (b'{"state":"FAILED","reason":"host_jni_core_dependency"}', 'host_jni_core_dependency'),
+            (b'{"state":"PREFLIGHT_FAILED","reason":"tool_failed_core-configure"}', 'tool_failed_core-configure'),
+            (b'{"state":"FAILED","reason":"tool_failed_private_TOKEN"}', 'UNKNOWN_BUILDER_REASON'),
+            (b'{"state":"FAILED","reason":"SECRET_TOKEN_123456"}', 'UNKNOWN_BUILDER_REASON'),
+            (b'{"state":"FAILED","reason":"host_jni_core_dependency/private"}', 'UNKNOWN_BUILDER_REASON'),
+            (b'{"state":"OK","reason":"host_jni_core_dependency"}', 'UNKNOWN_BUILDER_REASON'),
+            (b'{"state":"FAILED","reason":"x","reason":"host_jni_core_dependency"}', 'UNKNOWN_BUILDER_REASON'),
+            (b'not-json SECRET_TOKEN_123456', 'UNKNOWN_BUILDER_REASON'),
+            (b'x' * 4097, 'UNKNOWN_BUILDER_REASON'),
+        )
+        for payload, expected in cases:
+            with self.subTest(payload=payload[:60]):
+                self.assertEqual(subject.safe_builder_reason(payload), expected)
+        result = subject.ChildStageFailure('host_builder', 'EXITED_NONZERO', 'SECRET_TOKEN_123456', 1).public_record()
+        self.assertEqual(result['reason'], 'UNKNOWN_BUILDER_REASON')
+        self.assertNotIn('SECRET_TOKEN_123456', json.dumps(result))
+
+    def test_builder_failure_preserves_private_output_but_exposes_no_extra_text(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            stderr = b'{"state":"FAILED","reason":"tool_failed_core-configure","extra":"SECRET_TOKEN_123456"}'
+            result = subprocess.CompletedProcess(['fake'], 1, stdout=b'private stdout', stderr=stderr)
+            with patch.object(subject.subprocess, 'run', return_value=result):
+                with self.assertRaises(subject.ChildStageFailure) as caught:
+                    subject.execute(['fake'], {}, root / 'stdout', root / 'stderr', 1, 'host_builder')
+            self.assertEqual((root / 'stderr').read_bytes(), stderr)
+            self.assertEqual(caught.exception.public_record(), {'state': 'FAILED_NO_CI_ARTIFACT_UPLOAD',
+                'stage': 'host_builder', 'outcome': 'EXITED_NONZERO', 'reason': 'tool_failed_core-configure', 'exit_code': 1})
+            self.assertNotIn('SECRET_TOKEN_123456', json.dumps(caught.exception.public_record()))
+            self.assertFalse((root / 'export').exists())
+
+    def test_source_lock_failure_never_exposes_child_reason(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            result = subprocess.CompletedProcess(['fake'], 2, stdout=b'',
+                stderr=b'{"state":"FAILED","reason":"host_jni_core_dependency","secret":"hidden"}')
+            with patch.object(subject.subprocess, 'run', return_value=result):
+                with self.assertRaises(subject.ChildStageFailure) as caught:
+                    subject.execute(['fake'], {}, root / 'stdout', root / 'stderr', 1, 'source_lock')
+            self.assertEqual(caught.exception.public_record()['reason'], 'SOURCE_LOCK_FAILED')
+            self.assertEqual(caught.exception.public_record()['stage'], 'source_lock')
+            self.assertNotIn('hidden', json.dumps(caught.exception.public_record()))
+
+    def test_existing_private_log_refuses_child_and_preserves_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp); existing = root / 'stderr'; existing.write_bytes(b'preserve')
+            with patch.object(subject.subprocess, 'run') as child:
+                with self.assertRaises(subject.ChildStageFailure) as caught:
+                    subject.execute(['fake'], {}, root / 'stdout', existing, 1, 'host_builder')
+            child.assert_not_called()
+            self.assertEqual(existing.read_bytes(), b'preserve')
+            self.assertEqual(caught.exception.public_record()['outcome'], 'LOG_WRITE_FAILED')
+            self.assertFalse((root / 'export').exists())
+
+    def test_child_timeout_and_launch_failure_have_fixed_stage_diagnostics(self):
+        for stage in ('source_lock', 'host_builder'):
+            with self.subTest(stage=stage), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                error = subprocess.TimeoutExpired('fake', 1, output=b'partial private', stderr=b'SECRET_TOKEN_123456')
+                with patch.object(subject.subprocess, 'run', side_effect=error):
+                    with self.assertRaises(subject.ChildStageFailure) as caught:
+                        subject.execute(['fake'], {}, root / 'timeout.stdout', root / 'timeout.stderr', 1, stage)
+                self.assertEqual(caught.exception.public_record()['stage'], stage)
+                self.assertEqual(caught.exception.public_record()['outcome'], 'TIMEOUT')
+                self.assertEqual(caught.exception.public_record()['reason'], 'CHILD_TIMEOUT')
+                self.assertEqual((root / 'timeout.stdout').read_bytes(), b'partial private')
+                self.assertNotIn('SECRET_TOKEN_123456', json.dumps(caught.exception.public_record()))
+                with patch.object(subject.subprocess, 'run', side_effect=OSError('SECRET_TOKEN_123456')):
+                    with self.assertRaises(subject.ChildStageFailure) as launch:
+                        subject.execute(['fake'], {}, root / 'launch.stdout', root / 'launch.stderr', 1, stage)
+                self.assertEqual(launch.exception.public_record()['outcome'], 'LAUNCH_ERROR')
+                self.assertEqual(launch.exception.public_record()['reason'], 'CHILD_LAUNCH_FAILED')
+                self.assertNotIn('SECRET_TOKEN_123456', json.dumps(launch.exception.public_record()))
+
+    def test_unknown_runner_errors_are_not_echoed(self):
+        self.assertEqual(subject.public_failure(ValueError('checkout_not_clean'))['reason'], 'checkout_not_clean')
+        self.assertEqual(subject.public_failure(ValueError('SECRET_TOKEN_123456'))['reason'], 'UNKNOWN_RUNNER_REASON')
+        with patch.object(subject, 'run', side_effect=ValueError('SECRET_TOKEN_123456')), \
+             patch.object(sys, 'argv', ['runner', '--commit', 'a' * 40]), \
+             redirect_stderr(io.StringIO()) as output:
+            self.assertEqual(subject.main(), 1)
+        self.assertEqual(json.loads(output.getvalue())['reason'], 'UNKNOWN_RUNNER_REASON')
+        self.assertNotIn('SECRET_TOKEN_123456', output.getvalue())
+
     def test_commit_is_exact_lowercase_hex(self):
         self.assertEqual(subject.valid_commit('a' * 40), 'a' * 40)
         for value in ('a' * 39, 'A' * 40, 'a' * 40 + '\n', 'f' * 40 + ';id', '', None):

@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "state": "INSTALL_REJECTED_TEST_NOT_RUN",
+  "scope": "OWN_MANAGED_R8_SHORT_DIAGNOSTIC",
+  "recorded_at_utc": "2026-11-01T08:01:57.440226+00:00",
+  "initial_receipt_sha256": "a0d45ce88259ba2573927f028ab6a1b7062d2d24c030c6594ec9049300440d25",
+  "install_error": "INSTALL_FAILED_USER_RESTRICTED",
+  "system_message": "INSTALL_CANCELED_BY_USER",
+  "initial_install_outcome": "UNKNOWN_AT_RETURN",
+  "subsequent_read_only_observation": "PACKAGE_ABSENT_ALL_VISIBLE_USERS",
+  "visible_user_count": 2,
+  "matching_test_processes": 0,
+  "active_instrumentation": 0,
+  "shared_device_lock": false,
+  "instrumentation": "NOT_RUN",
+  "android_runtime_result": "NOT_ESTABLISHED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "The system error reports cancellation; it does not establish who or what caused it.",
+    "Absence is a later observation over visible users, not proof of continuous state or a device lock.",
+    "No data clearing, uninstall, forced process stop or repeated installation occurred.",
+    "Raw device identifiers, package paths and command output remain private."
+  ]
+}
