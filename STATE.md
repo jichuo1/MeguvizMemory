@@ -7,7 +7,8 @@
 - 修复 Java backend 和原生 JNI 两层竞争：后台线程启动尚未确认时，并发关闭不得误报已受理；明确失败可重试，JNI 异常未知时不盲目重试，独立完成回调可确认受理。极端线程已启动但 detach 抛异常时保守保留线程对象和可能的系统句柄。[合同](docs/ANDROID_PRESSURE.md)
 - [宿主旧新对照](artifacts/pressure-close-admission-20261101/host.json)复现两层旧版误报；修复后 Java fake-JNI 26 项断言、native JNI 22 项用例、完整核心 42 项及 framework stub 38 项通过，真实宿主 JVM/JNI 组合验证 24 周期、264 项检查，真实 Android SDK 源码编译通过。此前 `2e25092` Android 候选、`085cc13` Linux 候选和真机短测均早于本修复，不能作为修复后制品或设备资格。
 - 修复提交 `ce2a5b2` 的 [Windows/Linux CI](artifacts/pressure-close-admission-20261101/ci-ce2a5b2.json) 均通过，Windows 本机 JNI 相关 ASan 22 项通过；这些仍不是 Android 设备验证。
-- 修复提交已生成[新 Android 三 ABI 和 Windows 宿主工程候选](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json)，源码锁各含 306 项；Android 的 SDK/AAR 对应原生库一致并通过同 ABI 编译链接，Windows 安装消费者通过限定功能检查。修复版 Android ART、设备和性能仍未验证；已有 Linux 候选早于本修复。
+- 修复提交已生成[新 Android 三 ABI 和 Windows 宿主工程候选](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2-corrected.json)，源码锁各含 306 项；Android 的 SDK/AAR 对应原生库一致并通过同 ABI 编译链接，Windows 安装消费者通过限定功能检查。原摘要混用了源码锁记录数组与包内源码字典的哈希口径，保留[原记录](artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json)并以更正记录供诊断工具核验；逐项源码及候选包未变。
+- 随后 `182cc7c` [Linux 宿主候选](artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json)已通过 CI 安装消费者及下载回读；修复版 arm64 托管短测和长稳诊断 APK 已[R8 构建并完成无设备冻结检查](artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json)，但这两个托管诊断不直接覆盖本次修复的 NativePressureBackend。修复版 Android ART、设备和性能仍未验证。
 
 ## 统一验证准备（2026-11-01）
 
@@ -35,7 +36,7 @@
 
 ## 图像访问轨迹工具（2026-11-01）
 
-- 新增[独立 DEX 元数据 reader 轨迹诊断](consumers/dex_trace/README.md)，仅在隔离源码副本插桩固定读取点；不修改共享 DexMeguviz。宿主用诊断 APK 的 DEX 对照原样与插桩 reader，摘要一致并记录 19401 次读取、命中 23/32 个静态位点；损坏输入与事件上限负例、13 项离线合同检查通过。[限定证据](artifacts/dex-metadata-trace-20261101/host.json)不代表 Memory 消费者、DEX 查询全路径、产品轨迹或性能。
+- 新增[独立 DEX 元数据 reader 轨迹诊断](consumers/dex_trace/README.md)，仅在隔离源码副本插桩固定读取点；不修改共享 DexMeguviz。宿主用诊断 APK 的 DEX 对照原样与插桩 reader，摘要一致并记录 19401 次读取、命中 23/32 个静态位点；损坏输入与事件上限负例、13 项离线合同检查通过。[限定证据](artifacts/dex-metadata-trace-20261101/host.json)不代表 Memory 消费者、DEX 查询全路径、产品轨迹或性能。`182cc7c` 的 [Windows/Linux CI](artifacts/dex-metadata-trace-20261101/ci-182cc7c.json) 均通过 12 项并各跳过 1 项缺少外部源码的检查。
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。

@@ -1,0 +1,14 @@
+{
+  "state": "PASS_SCOPED_OFFLINE_HOST_CI",
+  "source_commit": "182cc7c2cbbeb6f3a49e4809a51a8dd005e9c681",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41292477072",
+  "windows": {"passed": 12, "skipped": 1},
+  "linux": {"passed": 12, "skipped": 1},
+  "skipped_reason": "LOCKED_EXTERNAL_DEX_SOURCE_NOT_PRESENT_IN_CI",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "These are offline contract checks, not real DEX product capture or a device result.",
+    "The optional external-source identity negative case was skipped in both CI jobs."
+  ]
+}

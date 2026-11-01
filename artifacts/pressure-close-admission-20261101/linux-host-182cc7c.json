@@ -1,0 +1,21 @@
+{
+  "state": "PASS_SCOPED_LINUX_HOST_ENGINEERING_CANDIDATE",
+  "source_commit": "182cc7c2cbbeb6f3a49e4809a51a8dd005e9c681",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41292500779",
+  "candidate_sha256": "5efa41587b6eb922a6820013c1dbdba8793cf35c3d728ecf365cd8ffaa52bfa3",
+  "candidate_bytes": 164524,
+  "download_readback": "PASS_SHA256_AND_SIZE_MATCH_CI_RECEIPT",
+  "host_consumer": "PASS_INSTALLED_JVM_JNI_IMAGE_AND_PACKAGED_PRESSURE_V1_V2",
+  "journal": {"steps": 43, "verified_streams": 86},
+  "ci_artifact_retention_days": 7,
+  "ci_marker_scope": "CI_ONLY_NOT_USER_PRIVATE_IDENTIFIER_LIST",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "formal_release": "NOT_QUALIFIED",
+  "limits": [
+    "This result covers the specified CI Linux host, fixed source and consumers only.",
+    "The download readback checks archive bytes, not execution on the local Windows host.",
+    "The CI sentinel is not the user's local private identifier list.",
+    "The artifact is an unsigned engineering candidate."
+  ]
+}

@@ -320,9 +320,11 @@
     "native": "STARTING_BUSY_ADMITTED_DISTINCT_HOST_REGRESSION_PASS",
     "real_jvm_jni_host": "TWENTY_FOUR_CYCLES_264_CHECKS_ANDROID_FRAMEWORK_STUBS",
     "android": "NOT_RUN_FOR_FIX",
-    "candidates": "ANDROID_THREE_ABI_AND_WINDOWS_CE2A5B2_BUILT_LINUX_OLD",
+    "candidates": "ANDROID_WINDOWS_CE2A5B2_AND_LINUX_182CC7C_BUILT",
     "host_ci": "artifacts/pressure-close-admission-20261101/ci-ce2a5b2.json",
-    "candidate_evidence": "artifacts/pressure-close-admission-20261101/candidates-ce2a5b2.json",
+    "candidate_evidence": "artifacts/pressure-close-admission-20261101/candidates-ce2a5b2-corrected.json",
+    "linux_candidate_evidence": "artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json",
+    "managed_r8_build": "artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },
   "pressure_races_20261101": {
@@ -344,6 +346,7 @@
     "implementation": "ISOLATED_LOCKED_METADATA_READER_BYTE_READ_CAPTURE",
     "host": "DIAGNOSTIC_APK_DEX_19401_EVENTS_23_OF_32_SITES_BASELINE_MATCH",
     "scope": "NOT_MEMORY_SDK_QUERY_PRODUCT_TRACE_OR_PERFORMANCE",
+    "host_ci": "artifacts/dex-metadata-trace-20261101/ci-182cc7c.json",
     "contract": "consumers/dex_trace/README.md",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },

@@ -1,0 +1,16 @@
+{
+  "state": "PASS_R8_BUILD_ONLY_NO_DEVICE_EXECUTION",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "abi": "arm64-v8a",
+  "managed_short_apk_sha256": "5a4e1bd937fd0790554be671a57a02fb6b7251763df7cc7cabf02e1e35fe8496",
+  "managed_stability_apk_sha256": "4f81c2c80a796bf771a8ac6feeff1141f14f31c1dfe480ffab448441f22dd7bb",
+  "fixture_identity_local_freeze": "PASS_BOTH_NO_ADB",
+  "android_runtime": "NOT_RUN",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "These diagnostics test managed-domain paths and do not directly exercise the fixed NativePressureBackend.",
+    "A build and local freeze do not establish ART execution, device stability or actual 16 KB loading.",
+    "Diagnostic APKs, keys and raw logs remain in the ignored local build directory."
+  ]
+}

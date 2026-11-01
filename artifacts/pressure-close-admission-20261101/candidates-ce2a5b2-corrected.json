@@ -1,0 +1,66 @@
+{
+  "state": "PASS_SCOPED_ENGINEERING_CANDIDATES",
+  "source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "git_archive_blobs_verified": 1186,
+  "source_archive_sha256": "1a4b59a1e27a6ef36b3ff9adbe3667d10f0ac9ff611194eff870922a7e2d3f99",
+  "source_lock_sha256": "7455074f2fafa800adc8bfd3d7f8ca8c90dd8395a2a5c99804c4f8f1b650640e",
+  "source_set_sha256": "3864ea6b2e43acf148bc862278c48c245a12e0d287ec0f162e3451a6a47cc631",
+  "source_record_count": 306,
+  "android": {
+    "filename": "MeguvizMemory-Android-Candidate-ce2a5b2.zip",
+    "bytes": 1494313,
+    "sha256": "c21ae3f6488fac23feb2edd08605842aed8a69c29a96d06b3ff680afc05fbfb1",
+    "profiles": {
+      "arm64-v8a": {
+        "aar_sha256": "605f21d4db090aae4e74688a098b5f25e5482d539a78eecc6b266c906618f67b",
+        "sdk_sha256": "8609d5ca979cf2ddde3f6e589136a72861ae755c301cfbebd957aeb51003a716",
+        "jni_native_declarations": 37,
+        "sdk_aar_native_identity": "PASS",
+        "same_abi_compile_link": "PASS"
+      },
+      "x86_64": {
+        "aar_sha256": "78a997d63c718e109df58d82594deac3d209d09cba812746cc8d0021fb78bfaa",
+        "sdk_sha256": "57811741f3902f82ee0e84645f581e443f76436df59552c2b395fddc25a57c0f",
+        "jni_native_declarations": 37,
+        "sdk_aar_native_identity": "PASS",
+        "same_abi_compile_link": "PASS"
+      },
+      "armeabi-v7a": {
+        "aar_sha256": "72d5c2c71972ca9bc2de3b33c4b2fa08622d623d75227f8447349d6c4311f4bb",
+        "sdk_sha256": "cd9258db3af04d0f0522d3af6f22d7afee25c6455a1611df0b2d24d2682c3432",
+        "jni_native_declarations": 37,
+        "sdk_aar_native_identity": "PASS",
+        "same_abi_compile_link": "PASS"
+      }
+    },
+    "journal_steps": 148,
+    "verified_log_streams": 296,
+    "device_executed": false
+  },
+  "windows": {
+    "filename": "MeguvizMemory-Host-Windows-Candidate-ce2a5b2.zip",
+    "bytes": 210365,
+    "sha256": "5fc63a1b9069e828773698497e866229d7dbc26a3e4e60f43b2f15a8754b9dcd",
+    "image_default_cases": 12,
+    "image_synthetic_pressure_cases": 12,
+    "image_negative_cases": 10,
+    "packaged_pressure_v1_v2": "PASS_HOST_PACKAGED_STATIC_PRESSURE_V1_V2",
+    "journal_steps": 37,
+    "verified_log_streams": 74
+  },
+  "android_runtime": "NOT_RUN",
+  "r8_runtime": "NOT_RUN",
+  "real_16k_loader": "NOT_RUN",
+  "mte": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "formal_release": "NOT_QUALIFIED",
+  "limits": [
+    "Sources and binaries are identified by hashes, not signed provenance.",
+    "Android results are static inspection and cross-compilation/link, not ART or device execution.",
+    "Windows tests cover the stated host workloads only.",
+    "Private logs, tools and identifier values remain in ignored build directories."
+  ],
+  "lock_source_set_sha256": "a49087cb7880d9e91b0183cdcf32ad8b73099ff5829d22e50760364491896cd9",
+  "correction": "Original summary used the source-lock set hash in the local-source-set field; the archived candidates and original summary remain unchanged."
+}
