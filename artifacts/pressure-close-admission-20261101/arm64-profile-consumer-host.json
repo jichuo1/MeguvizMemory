@@ -1,0 +1,19 @@
+{
+  "state": "PASS_SCOPED_OFFLINE_PROFILE_CONSUMER_CONTRACTS",
+  "scope": "NEW_PROFILE_FUNCTIONAL_VALIDATOR_ONLY",
+  "profile_validator_tests": {"passed": 18, "total": 18},
+  "historical_validator_tests": {"passed": 13, "total": 13},
+  "profile_input_tests": {"passed": 10, "total": 10},
+  "local_candidate_asset_mapping": "PASS_SCOPED_NO_ADB",
+  "historical_runner": "UNCHANGED",
+  "historical_performance_freezer": "REJECTS_NEW_SCOPE",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Offline fake-device and local input checks do not establish Android runtime or physical-device qualification.",
+    "Profile and asset checks are point-in-time observations; they do not eliminate all time-of-check/time-of-use races.",
+    "The new functional receipt is not accepted by the historical performance freezer; a new profile-aware performance protocol remains required.",
+    "Private profiles, device identities, inputs and raw logs remain in ignored build directories."
+  ]
+}

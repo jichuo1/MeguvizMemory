@@ -44,6 +44,8 @@ jobs:
         run: python tools/test_device_capture_v2.py --output artifacts/ci-research/fake-device-capture.json
       - name: Arm64 consumer validation checks
         run: python tools/test_validate_arm64_consumers_v2.py
+      - name: Arm64 profile consumer validation checks
+        run: python tools/test_validate_arm64_consumers_profile_v2.py
       - name: Device suite freezing checks
         run: python tools/test_freeze_device_suite_v2.py
       - name: ARM64 input profile offline contracts
