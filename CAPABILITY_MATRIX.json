@@ -347,8 +347,9 @@
   "dex_metadata_trace_20261101": {
     "implementation": "ISOLATED_LOCKED_METADATA_READER_BYTE_READ_CAPTURE",
     "host": "DIAGNOSTIC_APK_DEX_19401_EVENTS_23_OF_32_SITES_BASELINE_MATCH",
-    "scope": "NOT_MEMORY_SDK_QUERY_PRODUCT_TRACE_OR_PERFORMANCE",
+    "scope": "STANDALONE_READER_OR_PAIRED_SNAPSHOT_OPEN_ONLY_NOT_QUERY_PRODUCT_OR_PERFORMANCE",
     "host_ci": "artifacts/dex-metadata-trace-20261101/ci-182cc7c.json",
+    "paired_consumer_host": "artifacts/dex-metadata-trace-20261101/paired-host.json",
     "contract": "consumers/dex_trace/README.md",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },

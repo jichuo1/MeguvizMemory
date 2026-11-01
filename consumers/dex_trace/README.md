@@ -18,3 +18,5 @@ python consumers/dex_trace/capture.py --input <本工作区的原始DEX> --basel
 `--max-events` 默认 250000，上限 1000000；超过时整个采集为 INCOMPLETE，不静默截断。允许的 DEX 输入为 1 至 32 MiB，读取与摘要计算均在上限加一个检测字节处停止，即使文件在读取期间增长也不会无限读入；外部等待默认 60 秒、最高 300 秒。采集器并行读取两个输出管道，stdout 限 32 MiB、stderr 限 8 KiB；超限或超时终止自身启动的子进程，结果仍为 INCOMPLETE。它不负责结束子进程可能创建的后代，后代持有管道时也不能视为资源已经全部退出。该私有工具不自动重试、不清理或覆盖已有输出；失败后没有 PASS 回执。`test_contract.py` 是不依赖 DexMeguviz 的离线合同测试；真实 DEX 运行需自行提供冻结源码、编译器和输入，不能把合成 fixture 当成产品工作负载。
 
 `smoke.py` 接受与 `capture.py` 相同的五个路径参数，在私有新目录内用所选有效 DEX 执行原样与插桩对照，另生成一个 magic 损坏副本验证两者拒绝一致，并检查事件上限失败不会写 PASS 回执。原始输入不会修改；该测试仍不提供性能或产品资格。
+
+另提供[安装 Memory SDK 的真实 DexMeguviz 配对消费者诊断](PAIRED_CONTRACT.md)：它执行四种输入策略及明确的正常、跨线程和拒绝用例，但仍只记录 snapshot-open 调用线程中的元数据 reader 位点，不记录整个查询或跨线程生命周期轨迹。

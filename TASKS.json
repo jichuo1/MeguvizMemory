@@ -1317,13 +1317,14 @@
   },
   "dex_metadata_trace_20261101": {
     "parent": "MM-022",
-    "state": "SCOPED_METADATA_READER_CAPTURE_IMPLEMENTED_PRODUCT_QUERY_TRACE_PENDING",
+    "state": "SCOPED_METADATA_READER_AND_REAL_CONSUMER_CAPTURE_IMPLEMENTED_PRODUCT_QUERY_TRACE_PENDING",
     "host": "DIAGNOSTIC_APK_DEX_19401_EVENTS_23_OF_32_SITES_BASELINE_MATCH",
     "offline": "THIRTEEN_PASS",
     "device": "NOT_RUN",
     "performance": "NOT_MEASURED",
     "contract": "consumers/dex_trace/README.md",
     "host_ci": "artifacts/dex-metadata-trace-20261101/ci-182cc7c.json",
+    "paired_consumer_host": "artifacts/dex-metadata-trace-20261101/paired-host.json",
     "evidence": "artifacts/dex-metadata-trace-20261101/host.json"
   },
   "image_trace_20261101": {

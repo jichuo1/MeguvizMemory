@@ -1,0 +1,32 @@
+{
+  "state": "PASS_SCOPED_PAIRED_READER_CAPTURE",
+  "scope": "SNAPSHOT_OPEN_CALLER_THREAD_METADATA_READER_ONLY",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "input_origin": "ANDROID_DIAGNOSTIC_APK_CLASSES_DEX_NOT_PRODUCT",
+  "input_bytes": 29480,
+  "variants": ["D-C0", "D-Z0", "D-C1", "D-C2"],
+  "cases_per_variant": ["normal", "cross-thread", "invalid-lease", "borrow-budget", "corrupt-input"],
+  "paired_comparisons": 20,
+  "normal_and_cross_thread_events_each": 19401,
+  "normal_and_cross_thread_sites_each": 23,
+  "static_sites": 32,
+  "corrupt_input_events_each": 3,
+  "invalid_lease_and_budget_events_each": 0,
+  "event_limit_negative": "INCOMPLETE_NO_PASS_RECEIPT",
+  "loaded_core_identity": "CHILD_REPORTED_OS_MODULE_PATH_AND_DISK_HASH_MATCH",
+  "preparation_offline_tests": {"passed": 10, "skipped": 2, "skip_reason": "WINDOWS_SYMLINK_PERMISSION"},
+  "paired_offline_tests": {"passed": 10, "skipped": 1, "skip_reason": "WINDOWS_SYMLINK_PERMISSION"},
+  "original_reader_offline_tests": {"passed": 13, "total": 13},
+  "private_receipt_sha256": "abdbf0bf33837033fa086ec8a8cdb603614a1000e642c0697c7cc9f3fd663421",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "product_trace": "NOT_CAPTURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "Only snapshot-open caller-thread metadata-reader accesses were traced; query internals, SHA, other parser paths and cross-thread lifetime events are excluded.",
+    "The selected DEX is from a diagnostic APK, not a product workload.",
+    "Module identity is child reported and checked against disk; it is not signed provenance or mapped-byte proof.",
+    "D-C0 and D-Z0 do not create a Memory domain; ordinary copy and borrowing optimizations are not Memory net benefit.",
+    "Raw input, traces, module paths and command output remain private."
+  ]
+}

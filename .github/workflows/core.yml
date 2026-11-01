@@ -101,6 +101,10 @@ jobs:
         run: python tools/test_android_managed_stability_round.py
       - name: DEX metadata trace offline contracts
         run: python consumers/dex_trace/test_contract.py
+      - name: DEX consumer source preparation contracts
+        run: python consumers/dex_trace/test_prepare_consumer.py
+      - name: DEX paired trace offline contracts
+        run: python consumers/dex_trace/test_paired_compare.py
       - name: Managed Android sample AAR structure checks
         run: python consumers/android_managed/tests/test_verify_compile.py
       - name: Configure host JNI borrowing fixture

@@ -52,7 +52,7 @@ def input_identity(path, maximum=MAX_INPUT):
     return size, digest.hexdigest()
 
 
-def run_bounded(command, timeout, stdout_limit=MAX_STDOUT, stderr_limit=MAX_STDERR):
+def run_bounded(command, timeout, stdout_limit=MAX_STDOUT, stderr_limit=MAX_STDERR, env=None):
     """Drain both pipes concurrently with bounded memory and terminate our child on failure."""
     prepare.require(timeout > 0 and stdout_limit >= 0 and stderr_limit >= 0, 'invalid_process_limits')
     failed = threading.Event()
@@ -62,7 +62,7 @@ def run_bounded(command, timeout, stdout_limit=MAX_STDOUT, stderr_limit=MAX_STDE
     limits = [stdout_limit, stderr_limit]
     names = ['stdout', 'stderr']
     threads = []
-    child = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0)
+    child = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=0, env=env)
     streams = [child.stdout, child.stderr]
 
     def reader(index):
