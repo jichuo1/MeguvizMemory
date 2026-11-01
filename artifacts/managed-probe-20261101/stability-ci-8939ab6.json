@@ -1,0 +1,17 @@
+{
+  "state": "PASS_SCOPED_HOST_CI",
+  "source_commit": "8939ab66f72539abceb159c4e266f2a90f147c3d",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41290908652",
+  "platforms": ["ubuntu-latest", "windows-latest"],
+  "stability_builder_contracts": "PASS_BOTH",
+  "stability_runner_contracts": "PASS_BOTH",
+  "stability_host_build_and_tests": "PASS_BOTH",
+  "android_device_execution": "NOT_RUN",
+  "long_stability": "NOT_QUALIFIED",
+  "real_system_low_memory": "NOT_TESTED",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host CI and synthetic tests do not establish Android ART or real-device stability.",
+    "CI status applies to the specified commit and its workflow only."
+  ]
+}

@@ -360,7 +360,8 @@
     "performance": "NOT_MEASURED",
     "evidence": "artifacts/managed-probe-20261101/build-only.json",
     "device_evidence": "artifacts/managed-probe-20261101/device-short-pass-20261101.json",
-    "stability_preparation": "artifacts/managed-probe-20261101/stability-preparation.json"
+    "stability_preparation": "artifacts/managed-probe-20261101/stability-preparation.json",
+    "stability_host_ci": "artifacts/managed-probe-20261101/stability-ci-8939ab6.json"
   },
   "linux_host_candidate_ci_20261101": {
     "implementation": "MANUAL_EXACT_COMMIT_WORKFLOW_AND_BOUNDED_RUNNER",

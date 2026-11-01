@@ -1336,6 +1336,7 @@
     "evidence": "artifacts/managed-probe-20261101/build-only.json",
     "device_evidence": "artifacts/managed-probe-20261101/device-short-pass-20261101.json",
     "stability_preparation": "artifacts/managed-probe-20261101/stability-preparation.json",
+    "stability_host_ci": "artifacts/managed-probe-20261101/stability-ci-8939ab6.json",
     "contract": "docs/ANDROID_MANAGED_DEVICE_PROTOCOL.md"
   },
   "linux_host_candidate_ci_20261101": {
