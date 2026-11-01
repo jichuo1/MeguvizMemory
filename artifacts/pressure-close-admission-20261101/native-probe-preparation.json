@@ -1,0 +1,29 @@
+{
+  "state": "HOST_AND_R8_BUILD_ONLY_DEVICE_NOT_RUN",
+  "scope": "ISOLATED_NATIVE_PRESSURE_CLOSE_DIAGNOSTIC",
+  "candidate_source_commit": "ce2a5b29609c02ef2aff30f4e26901c050882948",
+  "host_stub_tests": {"passed": 2, "total": 2, "real_host_jvm_jni_cycles": 4, "real_host_jvm_jni_checks": 53},
+  "builder_offline_tests": {"passed": 10, "total": 10},
+  "runner_offline_tests": {"passed": 20, "total": 20},
+  "r8_builds": {
+    "arm64-v8a": {
+      "apk_sha256": "80399bfdf515490a45c4137d4be75bdd64266a647e0742eb988b94ec271a549f",
+      "private_build_receipt_sha256": "a589a58a2a21268c4975442df2b57eefd51d0f6f85444ad344b7a68be44c0f7a",
+      "local_freeze_with_fixture_identity": "PASS_NO_ADB"
+    },
+    "x86_64": {
+      "apk_sha256": "65e5f15afc56f01ca1c9ff55a4708d67cf64e5af4bf8447d6ae5a0a7155c6b01",
+      "private_build_receipt_sha256": "853df5c14c2b41310ec0a2c9050a0af0d774c8f0d3727ad5b892b3bbd554c3c1",
+      "local_freeze_with_fixture_identity": "PASS_NO_ADB"
+    }
+  },
+  "android_device_execution": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "limits": [
+    "The host diagnostic uses Android framework stubs, not ART or a physical device.",
+    "Two close callers are released together but no particular scheduling window is guaranteed.",
+    "Real system low-memory, long stability, 16 KB loading and performance remain unqualified.",
+    "Diagnostic APKs, keys, raw logs and private plans remain in the ignored local build directory."
+  ]
+}

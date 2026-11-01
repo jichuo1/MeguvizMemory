@@ -325,6 +325,7 @@
     "candidate_evidence": "artifacts/pressure-close-admission-20261101/candidates-ce2a5b2-corrected.json",
     "linux_candidate_evidence": "artifacts/pressure-close-admission-20261101/linux-host-182cc7c.json",
     "managed_r8_build": "artifacts/pressure-close-admission-20261101/managed-r8-build-ce2a5b2.json",
+    "native_probe_preparation": "artifacts/pressure-close-admission-20261101/native-probe-preparation.json",
     "evidence": "artifacts/pressure-close-admission-20261101/host.json"
   },
   "pressure_races_20261101": {

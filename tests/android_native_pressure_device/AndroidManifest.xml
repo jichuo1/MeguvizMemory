@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.github.jichuo1.meguviz.memory.nativepressureprobe">
+  <uses-sdk android:minSdkVersion="27" android:targetSdkVersion="33" />
+  <application android:debuggable="true" android:label="Native Pressure Close Probe" android:allowBackup="false" />
+  <instrumentation android:name="io.github.jichuo1.meguviz.memory.android.NativePressureCloseInstrumentation"
+      android:targetPackage="io.github.jichuo1.meguviz.memory.nativepressureprobe" android:functionalTest="true" />
+</manifest>

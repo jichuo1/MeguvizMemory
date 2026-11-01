@@ -65,6 +65,16 @@ jobs:
         run: cmake --build build/pressure-real-jvm-ci --config Release --parallel 2
       - name: Verify real JVM pressure close integration
         run: ctest --test-dir build/pressure-real-jvm-ci -C Release --output-on-failure
+      - name: Configure native pressure diagnostic host stubs
+        run: cmake -S tests/android_native_pressure_device/host_stub -B build/native-pressure-device-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build native pressure diagnostic host stubs
+        run: cmake --build build/native-pressure-device-ci --config Release --parallel 2
+      - name: Verify native pressure diagnostic host stubs
+        run: ctest --test-dir build/native-pressure-device-ci -C Release --output-on-failure
+      - name: Native pressure diagnostic builder contracts
+        run: python tools/test_build_android_native_pressure_probe.py
+      - name: Native pressure diagnostic runner contracts
+        run: python tools/test_android_native_pressure_round.py
       - name: Android packaging ABI checks
         run: python tools/test_build_pressure_abi.py
       - name: Android candidate offline safety contracts
