@@ -16,6 +16,8 @@ cleanup worker 调用 quiet-only trim。活跃owner、retiring lease、在途操
 
 `MemoryPressureAdapter` 使用 application context 注册和注销真实 `ComponentCallbacks2`。接口调用不在Java内部state锁下运行，支持回调中close、在途回调与close竞争。成功注销和cleanup admission分别记账，异常后可以显式重试，已成功步骤不重复执行；close之后始终拒绝新事件。
 
+`isClosed()` 只表示事件准入已停止，不证明注销或后台清理请求已完成。首次 `close()` 正在执行时，同线程的重入调用直接返回，由外层调用负责结果；其他线程的并发调用立即抛出可重试的 `IllegalStateException`，不会等待或把尚未确认的注销/清理准入视为成功。外层调用正常返回仅表示注销和清理请求已成功接纳；调用方仍须在合适线程用 `awaitClosed` 观察后台清理完成。某一步抛异常后应保留 adapter 并重试，已成功的步骤不重复执行。
+
 策略对5–14映射MODERATE、15–19映射CRITICAL、20–39忽略、40–79映射MODERATE、80及以上映射CRITICAL。UI_HIDDEN=20是界面生命周期信号，默认不把它当RAM压力，更不释放别的组件的图像/GPU对象。background级别也是可回收缓存提示，不等于已证明整机低RAM。
 
 Android官方说明，API34起不再通知多数旧RUNNING/MODERATE/COMPLETE级别，onLowMemory也不再调用；API35将相应入口标为deprecated。因此该桥提供兼容处理、background事件和显式request/restore，**不能保证新Android一定递送低内存事件**。来源：[ComponentCallbacks2](https://developer.android.com/reference/android/content/ComponentCallbacks2)。

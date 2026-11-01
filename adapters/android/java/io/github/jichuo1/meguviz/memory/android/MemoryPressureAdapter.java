@@ -22,6 +22,7 @@ public final class MemoryPressureAdapter implements ComponentCallbacks2, AutoClo
     private final Backend backend;
     private final Object state = new Object();
     private boolean closed, unregistered, cleanupAccepted, closeInProgress;
+    private Thread closeThread;
     private final AtomicLong forwarded = new AtomicLong(), ignored = new AtomicLong();
 
     public MemoryPressureAdapter(Context context, Backend backend) {
@@ -68,6 +69,7 @@ public final class MemoryPressureAdapter implements ComponentCallbacks2, AutoClo
     @Override public void onConfigurationChanged(Configuration configuration) {}
     public long forwardedEvents() { return forwarded.get(); }
     public long ignoredLifecycleEvents() { return ignored.get(); }
+    /** Event admission is closed; this does not prove unregister or cleanup admission completed. */
     public boolean isClosed() { synchronized (state) { return closed; } }
     public long[] logicalSnapshot() { return backend.snapshot(); }
     public boolean awaitClosed(long timeoutMillis) {
@@ -76,12 +78,21 @@ public final class MemoryPressureAdapter implements ComponentCallbacks2, AutoClo
             throw new IllegalStateException("positive close waits require a worker thread");
         return backend.awaitClosed(timeoutMillis);
     }
+    /** Stops event admission and attempts unregister and cleanup admission.
+     * Same-thread reentry returns to the outer call; another thread racing an
+     * unfinished close gets a retryable IllegalStateException. Normal return
+     * from the outer call confirms admission, not completion of cleanup. */
     @Override public void close() {
         final boolean unregister, cleanup;
         synchronized (state) {
             closed = true;
-            if (closeInProgress || (unregistered && cleanupAccepted)) return;
+            if (closeInProgress) {
+                if (closeThread == Thread.currentThread()) return;
+                throw new IllegalStateException("close in progress; retry");
+            }
+            if (unregistered && cleanupAccepted) return;
             closeInProgress = true;
+            closeThread = Thread.currentThread();
             unregister = !unregistered; cleanup = !cleanupAccepted;
         }
         // Unregister outside state: framework callback completion/close may
@@ -99,6 +110,6 @@ public final class MemoryPressureAdapter implements ComponentCallbacks2, AutoClo
                     synchronized (state) { cleanupAccepted = true; }
                 }
             }
-        } finally { synchronized (state) { closeInProgress = false; } }
+        } finally { synchronized (state) { closeInProgress = false; closeThread = null; } }
     }
 }

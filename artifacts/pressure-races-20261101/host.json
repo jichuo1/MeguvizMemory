@@ -1,0 +1,40 @@
+{
+  "state": "PASS_SCOPED_WINDOWS_HOST_REGRESSIONS",
+  "scope": "PRESSURE_CREATION_AND_CLOSE_RACES",
+  "previous_commit": "ad61d8c6b94bc8051b81986139b2a17029c9e409",
+  "attach_race": {
+    "old_four_combinations": "UNSAFE_STALE_BUDGET",
+    "new_four_combinations": "BUSY",
+    "old_stdout_sha256": "948020457b65b0854d78114a397164386eb6121c32d7c9f59839e8532b1b0df9",
+    "new_stdout_sha256": "e4e6e3d3ab63855c1ce3a7476fcf79f5db72441968241d7b03b5e06ebdd85c68",
+    "snapshot_error_retries": 40,
+    "callback_reentry_and_failure": "PASS"
+  },
+  "java_close": {
+    "old": "CONCURRENT_CLOSE_RETURNED_BEFORE_ADMISSION",
+    "new": "PASS_41_HOST_STUB_CHECKS",
+    "old_stderr_sha256": "b3e92f744f2de1a46936f9cca078a39e2b066e63a76dcfe5d71b8fdc7f98afba",
+    "new_stdout_sha256": "15396b91559c6ae8e266bfd780cf6d6f9dbf4c4f9810992c533c3b76408c43f3",
+    "existing_stub_checks": 38
+  },
+  "root_checks": {
+    "pressure_jni_tests": 22,
+    "managed_host_tests": 50,
+    "attach_race_fixture": "PASS"
+  },
+  "source_sha256": {
+    "adapters/android/native/pressure.cpp": "ffe7656989d336c9097044700b72cd330c7731af9535a4947285f611229d632a",
+    "include/mgmem/pressure.h": "04160af3e749c90ca38670d5ffd37da6910db72b109774b1898ffa197aa55bea",
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/MemoryPressureAdapter.java": "dbce35895797f4e2c39f25ca1cbcdf1f1827909e515822f2c7729868a7e40249",
+    "tests/pressure_attach_race/pressure_attach_race.cpp": "ba208d72de537c87f6c61b857a7c515ebe0aeeb03379dfde55750b3a03bc9d26",
+    "tests/pressure_attach_race/pressure_wrapped.cpp": "13a14b755779551b134acd49852a0eb2f64e451910ba94b9e1110ece75d17d4c",
+    "tests/android_pressure_close/PressureCloseConcurrencyTest.java": "67fafd3dfbe21ca257e77801d079ce1d754aed13dadab9e8827a7624a2cc7919"
+  },
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "limits": [
+    "Host tests do not establish ART, actual Android callback delivery, device or performance qualification.",
+    "Test-only interception forces a particular snapshot interleaving; it does not prove all schedules.",
+    "Old raw logs remain local; hashes identify their bytes without publishing machine paths."
+  ]
+}

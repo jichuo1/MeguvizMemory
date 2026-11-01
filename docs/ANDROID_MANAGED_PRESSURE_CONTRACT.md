@@ -14,7 +14,7 @@
 
 ## Android 回调组合
 
-如需注册系统回调，显式创建 `ManagedPressureBackend(pressure)`，再将它交给 `new MemoryPressureAdapter(context, backend)`；仅调用 `attachPressure` 不会注册 Android 回调。adapter 负责注册与注销自己的 `ComponentCallbacks2`，其 `close()` 注销回调并请求关闭 backend，不关闭整个托管域。域先关闭时宿主仍须关闭 adapter，完成 framework callback 注销。
+如需注册系统回调，显式创建 `ManagedPressureBackend(pressure)`，再将它交给 `new MemoryPressureAdapter(context, backend)`；仅调用 `attachPressure` 不会注册 Android 回调。adapter 负责注册与注销自己的 `ComponentCallbacks2`，其 `close()` 注销回调并请求关闭 backend，不关闭整个托管域。域先关闭时宿主仍须关闭 adapter，完成 framework callback 注销。并发 `close()` 若由其他线程正在执行，会抛出可重试的 `IllegalStateException`；同线程重入只返回给外层调用，不能视为关闭已接纳。`isClosed()` 只表示停止新事件，不证明注销和清理请求已经完成。
 
 framework 回调只做事件投递，不同步执行 trim、free 或等待清理；Java monitor、JNI registry 和域准入仍可能使用短锁，无法保证严格无等待或硬实时。`MemoryPressureAdapter.forwardedEvents()` 在该 backend 下表示入队成功，不表示预算已应用；`ManagedPressureBackend.rejectedEvents()` 是饱和累计的拒绝数，`lastNotificationStatus()` 提供最近状态，零表示已排队。系统回调没有返回值，调用方应结合这些观测处理拒绝。`awaitClosed` 的正超时只能在工作线程调用。
 

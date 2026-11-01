@@ -14,6 +14,12 @@ jobs:
         run: cmake --build build/core --config Release --parallel 2
       - name: Core safety verification
         run: ctest --test-dir build/core -C Release --output-on-failure
+      - name: Configure pressure attachment race regression
+        run: cmake -S tests/pressure_attach_race -B build/pressure-attach-race-ci -DCMAKE_BUILD_TYPE=Release
+      - name: Build pressure attachment race regression
+        run: cmake --build build/pressure-attach-race-ci --config Release --parallel 2
+      - name: Verify pressure attachment race regression
+        run: ctest --test-dir build/pressure-attach-race-ci -C Release --output-on-failure
       - name: Multi-arena diagnostic contracts (Linux)
         if: runner.os == 'Linux'
         run: python bench/test_tlb_multi_arena.py --exe build/core/mgmem_tlb_multi_arena --runtime-dir build/core

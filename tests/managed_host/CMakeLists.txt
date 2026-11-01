@@ -93,3 +93,11 @@ add_test(NAME managed_pressure_backend_stub COMMAND ${Java_JAVA_EXECUTABLE}
   "-Djava.library.path=$<TARGET_FILE_DIR:mgmem_pressure_jni>" -cp "${JAVA_CLASSES}"
   io.github.jichuo1.meguviz.memory.android.ManagedPressureBackendJvmTest)
 set_tests_properties(managed_pressure_backend_stub PROPERTIES TIMEOUT 30)
+
+set(PRESSURE_CLOSE_TEST "${ROOT}/tests/android_pressure_close/PressureCloseConcurrencyTest.java")
+add_custom_command(OUTPUT "${JAVA_CLASSES}/PressureCloseConcurrencyTest.class"
+  COMMAND ${Java_JAVAC_EXECUTABLE} --release 8 -cp "${JAVA_CLASSES}" -d "${JAVA_CLASSES}" "${PRESSURE_CLOSE_TEST}"
+  DEPENDS managed_pressure_backend_classes "${JAVA_SOURCE}/MemoryPressureAdapter.java" "${PRESSURE_CLOSE_TEST}" VERBATIM)
+add_custom_target(managed_pressure_close_classes ALL DEPENDS "${JAVA_CLASSES}/PressureCloseConcurrencyTest.class")
+add_test(NAME managed_pressure_close_concurrency COMMAND ${Java_JAVA_EXECUTABLE} -cp "${JAVA_CLASSES}" PressureCloseConcurrencyTest)
+set_tests_properties(managed_pressure_close_concurrency PROPERTIES TIMEOUT 30)

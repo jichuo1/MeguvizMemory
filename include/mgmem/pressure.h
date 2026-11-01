@@ -60,8 +60,11 @@ typedef struct mgmem_pressure_snapshot_v1 {
     mgmem_snapshot_v1 domain;
 } mgmem_pressure_snapshot_v1;
 
-/* One active controller per domain in this adapter runtime. Initial normal
- * budget must match domain's current budget; attaching does not mutate it. */
+/* One active or creating controller per domain in this adapter runtime.
+ * Creation reserves that slot before reading the budget; a competing create
+ * returns BUSY. Initial normal budget must match the current domain budget;
+ * attaching does not mutate it. Callers must coordinate direct budget writes
+ * with creation and with the entire lifetime of an attached controller. */
 MGMEM_PRESSURE_API mgmem_status mgmem_pressure_create_v1(mgmem_domain *domain,
     const mgmem_domain_lifetime_v1 *lifetime, const mgmem_pressure_options_v1 *options,
     mgmem_pressure_controller **out);
@@ -114,8 +117,10 @@ typedef struct mgmem_pressure_snapshot_v2 {
 } mgmem_pressure_snapshot_v2;
 
 /* Attaches without changing the current open domain budget, including zero.
- * The caller must serialize all domain budget writes through this controller
- * until it is destroyed, and serialize destroy against all other raw calls. */
+ * The shared v1/v2 attachment slot is reserved before the budget snapshot; a
+ * competing create returns BUSY. The caller must coordinate direct budget
+ * writes with creation and route writes through this controller until it is
+ * destroyed, and serialize destroy against all other raw calls. */
 MGMEM_PRESSURE_API mgmem_status mgmem_pressure_create_v2(mgmem_domain *domain,
     const mgmem_domain_lifetime_v1 *lifetime, const mgmem_pressure_options_v2 *options,
     mgmem_pressure_controller **out);

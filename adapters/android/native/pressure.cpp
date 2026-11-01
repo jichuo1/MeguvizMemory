@@ -48,6 +48,17 @@ void detach(mgmem_domain *domain) {
     std::lock_guard<std::mutex> lock(attachments_mutex);
     attachments.erase(domain);
 }
+// Roll back a failed create without invoking an owner callback under the
+// attachment lock. If detachment itself fails, keep the owner pin rather than
+// leave a registry entry pointing at a potentially destroyed domain.
+mgmem_status rollback_create(mgmem_domain *domain, const mgmem_domain_lifetime_v1 *lifetime,
+    bool attached, bool retained, mgmem_status result) noexcept {
+    try {
+        if (attached) detach(domain);
+        if (retained) lifetime->release(lifetime->context);
+        return result;
+    } catch (...) { return MGMEM_PROVIDER_ERROR; }
+}
 }
 struct mgmem_pressure_controller {
     std::mutex mutex;
@@ -212,35 +223,32 @@ mgmem_status mgmem_pressure_create_v1(mgmem_domain *domain, const mgmem_domain_l
         options->critical_budget_bytes > options->moderate_budget_bytes ||
         options->moderate_budget_bytes > options->normal_budget_bytes ||
         options->deferred_poll_ms == 0 || options->deferred_poll_ms > 60000) return MGMEM_INVALID_ARGUMENT;
-    bool retained = false, attached = false;
+    bool retained = false, attached = false, retain_entered = false;
     try {
         auto result = std::make_unique<mgmem_pressure_controller>(1);
         result->domain = domain; result->lifetime = *lifetime; result->options = *options;
+        retain_entered = true;
         lifetime->retain(lifetime->context); retained = true;
+        {
+            std::lock_guard<std::mutex> lock(attachments_mutex);
+            attached = attachments.emplace(domain).second;
+        }
+        if (!attached) return rollback_create(domain, lifetime, false, retained, MGMEM_BUSY);
         const auto status = mgmem_domain_snapshot_v1(domain, &result->cached, sizeof(result->cached));
         if (status != MGMEM_OK || result->cached.state != MGMEM_OPEN ||
             result->cached.budget_bytes != options->normal_budget_bytes) {
-            retained = false; lifetime->release(lifetime->context);
-            return status != MGMEM_OK ? status : result->cached.state != MGMEM_OPEN ? MGMEM_IS_CLOSED : MGMEM_INVALID_ARGUMENT;
+            const auto failure = status != MGMEM_OK ? status :
+                result->cached.state != MGMEM_OPEN ? MGMEM_IS_CLOSED : MGMEM_INVALID_ARGUMENT;
+            return rollback_create(domain, lifetime, attached, retained, failure);
         }
-        bool unique = false;
-        {
-            std::lock_guard<std::mutex> lock(attachments_mutex);
-            unique = attachments.emplace(domain).second;
-            attached = unique;
-        }
-        if (!unique) {retained = false; lifetime->release(lifetime->context); return MGMEM_BUSY;}
         result->worker = std::thread(worker, result.get());
         *out = result.release();
         return MGMEM_OK;
     } catch (const std::bad_alloc &) {
-        if (attached) detach(domain);
-        if (retained) {try {lifetime->release(lifetime->context);} catch (...) {return MGMEM_PROVIDER_ERROR;}}
-        return MGMEM_OUT_OF_MEMORY;
+        return rollback_create(domain, lifetime, attached, retained,
+            retain_entered && !retained ? MGMEM_PROVIDER_ERROR : MGMEM_OUT_OF_MEMORY);
     } catch (...) {
-        if (attached) detach(domain);
-        if (retained) {try {lifetime->release(lifetime->context);} catch (...) {}}
-        return MGMEM_PROVIDER_ERROR;
+        return rollback_create(domain, lifetime, attached, retained, MGMEM_PROVIDER_ERROR);
     }
 }
 mgmem_status mgmem_pressure_notify_v1(mgmem_pressure_controller *control, uint32_t pressure) {
@@ -334,47 +342,46 @@ mgmem_status mgmem_pressure_create_v2(mgmem_domain *domain, const mgmem_domain_l
         options->queue_capacity > MGMEM_PRESSURE_V2_MAX_QUEUE || options->result_capacity == 0 ||
         options->result_capacity > MGMEM_PRESSURE_V2_MAX_RESULTS) return MGMEM_INVALID_ARGUMENT;
     if (!reserve_v2_worker()) return MGMEM_BUSY;
-    bool retained = false, attached = false;
+    bool retained = false, attached = false, retain_entered = false;
     try {
         auto result = std::make_unique<mgmem_pressure_controller>(2);
         result->domain = domain; result->lifetime = *lifetime; result->options2 = *options;
         result->queue.resize(options->queue_capacity);
         result->results.resize(options->result_capacity);
+        retain_entered = true;
         lifetime->retain(lifetime->context); retained = true;
-        auto status = mgmem_domain_snapshot_v1(domain, &result->cached, sizeof(result->cached));
-        if (status == MGMEM_OK && (result->cached.struct_size < sizeof(result->cached) ||
-            result->cached.abi_major != MGMEM_ABI_MAJOR || result->cached.domain_id == 0)) status = MGMEM_PROVIDER_ERROR;
-        if (status != MGMEM_OK || result->cached.state != MGMEM_OPEN) {
-            retained = false; lifetime->release(lifetime->context);
-            v2_workers.fetch_sub(1, std::memory_order_release);
-            return status != MGMEM_OK ? status : MGMEM_IS_CLOSED;
-        }
-        result->manual = result->effective = result->cached.budget_bytes;
-        result->domain_id = result->cached.domain_id;
         {
             std::lock_guard<std::mutex> lock(attachments_mutex);
             attached = attachments.emplace(domain).second;
         }
         if (!attached) {
-            retained = false; lifetime->release(lifetime->context);
+            const auto failure = rollback_create(domain, lifetime, false, retained, MGMEM_BUSY);
             v2_workers.fetch_sub(1, std::memory_order_release);
-            return MGMEM_BUSY;
+            return failure;
         }
+        auto status = mgmem_domain_snapshot_v1(domain, &result->cached, sizeof(result->cached));
+        if (status == MGMEM_OK && (result->cached.struct_size < sizeof(result->cached) ||
+            result->cached.abi_major != MGMEM_ABI_MAJOR || result->cached.domain_id == 0)) status = MGMEM_PROVIDER_ERROR;
+        if (status != MGMEM_OK || result->cached.state != MGMEM_OPEN) {
+            const auto failure = rollback_create(domain, lifetime, attached, retained,
+                status != MGMEM_OK ? status : MGMEM_IS_CLOSED);
+            v2_workers.fetch_sub(1, std::memory_order_release);
+            return failure;
+        }
+        result->manual = result->effective = result->cached.budget_bytes;
+        result->domain_id = result->cached.domain_id;
         result->worker = std::thread(worker, result.get());
         *out = result.release();
         return MGMEM_OK;
     } catch (const std::bad_alloc &) {
-        if (attached) detach(domain);
-        if (retained) { try { lifetime->release(lifetime->context); } catch (...) {
-            v2_workers.fetch_sub(1, std::memory_order_release); return MGMEM_PROVIDER_ERROR;
-        } }
+        const auto failure = rollback_create(domain, lifetime, attached, retained,
+            retain_entered && !retained ? MGMEM_PROVIDER_ERROR : MGMEM_OUT_OF_MEMORY);
         v2_workers.fetch_sub(1, std::memory_order_release);
-        return MGMEM_OUT_OF_MEMORY;
+        return failure;
     } catch (...) {
-        if (attached) detach(domain);
-        if (retained) { try { lifetime->release(lifetime->context); } catch (...) {} }
+        const auto failure = rollback_create(domain, lifetime, attached, retained, MGMEM_PROVIDER_ERROR);
         v2_workers.fetch_sub(1, std::memory_order_release);
-        return MGMEM_PROVIDER_ERROR;
+        return failure;
     }
 }
 mgmem_status mgmem_pressure_submit_v2(mgmem_pressure_controller *control, uint32_t pressure, uint64_t *ticket) {

@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.25)
+project(MeguvizMemoryPressureAttachRace LANGUAGES CXX)
+find_package(Threads REQUIRED)
+get_filename_component(ROOT "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+# The test compiles the real core and wraps the real pressure source only to
+# intercept its snapshot boundary; this fixture is never installed.
+add_executable(pressure_attach_race pressure_wrapped.cpp pressure_attach_race.cpp "${ROOT}/src/mgmem.cpp")
+target_include_directories(pressure_attach_race PRIVATE "${ROOT}/include")
+target_compile_features(pressure_attach_race PRIVATE cxx_std_17)
+target_link_libraries(pressure_attach_race PRIVATE Threads::Threads)
+if(MSVC)
+  target_compile_options(pressure_attach_race PRIVATE /W4 /permissive- /utf-8)
+else()
+  target_compile_options(pressure_attach_race PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+enable_testing()
+add_test(NAME pressure_attach_race COMMAND pressure_attach_race)
+set_tests_properties(pressure_attach_race PROPERTIES TIMEOUT 30)
