@@ -112,6 +112,118 @@ class FollowupPreviewChecks(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError, '^host_scope$'):
                         subject.check_host({})
 
+    def test_borrow_v2_selectable_host_receipt_and_strict_scope(self):
+        base = subject.ROOT / 'artifacts/followup-delivery-20261101/android-borrow-v2'
+        selected = base / 'host-receipt-new-fixture.json'
+        historical = base / 'host-receipt-final.json'
+        runner_path = base / 'runner-offline-receipt-final.json'
+        r8_path = base / 'r8-build-receipt-final.json'
+        source_names = set(subject.HOST_STUB_REQUIRED_SOURCES) | {
+            *subject.HOST_STUB_POSTCI_EXTRA_SOURCES,
+            'tools/test_android_borrow_round.py', 'tools/build_android_borrow_probe.py'}
+        source_bytes = {name: ('source fixture:' + name + '\n').encode('utf-8') for name in source_names}
+        fixture = {subject.ROOT / name: payload for name, payload in source_bytes.items()}
+        classes, core, jni = b'fixture classes', b'fixture core', b'fixture jni'
+        arm = archive({'classes.jar': classes, 'jni/arm64-v8a/libmgmem.so': core,
+                       'jni/arm64-v8a/libmgmem_pressure_jni.so': jni})
+        arm_name = 'android/arm64-v8a/MeguvizMemory-Android-Pressure.aar'
+        report = {'state': 'PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART',
+                  'suite': 'android-native-borrow-v2', 'checks': 62,
+                  'normal_backing_bytes': 0, 'quarantined_backing_bytes': 32,
+                  'quarantined_owner_pins': 2, 'quarantine_reclaimed': False}
+        host = {'state': report['state'], 'scope': 'LOCAL_HOST_STUB_SINGLE_TEST_DLL_NO_DEVICE',
+                'report': report,
+                'sources': [{'path': name, 'sha256': subject.sha(source_bytes[name])}
+                            for name in sorted(subject.HOST_STUB_REQUIRED_SOURCES)]}
+        runner = {'state': 'PASS_OFFLINE_SYNTHETIC_NO_DEVICE', 'scope': 'OFFLINE_SYNTHETIC_NO_DEVICE',
+                  'runner_sha256': subject.sha(source_bytes['tools/android_borrow_round.py']),
+                  'tests_sha256': subject.sha(source_bytes['tools/test_android_borrow_round.py']),
+                  'coverage': ['v2_close_states_and_separate_quarantine', 'v1_not_promoted']}
+        r8 = {'state': 'PASS_R8_BUILD_ONLY_NOT_DEVICE_EXECUTION', 'device_executed': False,
+              'abi': 'arm64-v8a', 'inputs': {'aar_sha256': subject.sha(arm),
+                    'classes_jar_sha256': subject.sha(classes), 'shared_core_sha256': subject.sha(core),
+                    'shared_jni_sha256': subject.sha(jni)},
+              'source_sha256': {'NativeBorrowInstrumentation.java':
+                                    subject.sha(source_bytes['tests/android_borrow/NativeBorrowInstrumentation.java']),
+                                'borrow_fixture.cpp': subject.sha(source_bytes['tests/android_borrow/borrow_fixture.cpp']),
+                                'build_android_borrow_probe.py': subject.sha(source_bytes['tools/build_android_borrow_probe.py'])},
+              'r8_evidence': {'lease_class_name_and_native_signatures_retained_in_dex': True,
+                              'device_execution': 'NOT_RUN'}}
+        old_host = {**host, 'receipt_revision': 'historical'}
+        new_report = {**report, 'java_specification': 17, 'native_access_explicit': False}
+        new_host = {'schema_version': 1, 'state': 'PASS_SCOPED_JDK17_HOST_STUB_POST_CI',
+                    'scope': 'HOST_ONLY_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART', 'report': new_report,
+                    'ctest': {'passed': 2, 'total': 2,
+                              'cases': ['android_borrow_v2_host_stub', 'android_borrow_host_launcher_unit'],
+                              'launcher_unit_checks': 8},
+                    'dependency_checks': {'cpp_and_java_inputs_not_newer_than_outputs': True,
+                                          'launcher_inputs_not_newer_than_log': True,
+                                          'targeted_ninja_dry_run': {'mgmem_borrow_fixture': {'result': 'NO_WORK'},
+                                              'borrow_probe_java_classes': {'result': 'NO_WORK'}}},
+                    'observed_source_sha256': {name: subject.sha(source_bytes[name]) for name in
+                                               sorted(subject.HOST_STUB_REQUIRED_SOURCES |
+                                                      subject.HOST_STUB_POSTCI_EXTRA_SOURCES)}}
+        fixture.update({historical: encoded(old_host), selected: encoded(new_host),
+                        runner_path: encoded(runner), r8_path: encoded(r8)})
+
+        def read(path):
+            if path not in fixture:
+                raise AssertionError('unexpected borrow v2 fixture read')
+            return fixture[path]
+
+        with mock.patch.object(subject, 'file_data', side_effect=read):
+            data = {arm_name: arm}
+            subject.check_borrow_v2(data, selected)
+            self.assertEqual(encoded(new_host), data['evidence/android-borrow-v2/host-receipt-selected.json'])
+            self.assertNotIn('evidence/android-borrow-v2/host-receipt-final.json', data)
+            data = {arm_name: arm}
+            subject.check_borrow_v2(data)
+            self.assertEqual(encoded(old_host), data['evidence/android-borrow-v2/host-receipt-final.json'])
+
+            for name in sorted(subject.HOST_STUB_REQUIRED_SOURCES | subject.HOST_STUB_POSTCI_EXTRA_SOURCES):
+                with self.subTest(source=name):
+                    path = subject.ROOT / name
+                    original = fixture[path]
+                    fixture[path] = original + b'drift'
+                    with self.assertRaisesRegex(ValueError, '^recorded_source_drift$'):
+                        subject.check_borrow_v2({arm_name: arm}, selected)
+                    fixture[path] = original
+
+            missing = copy.deepcopy(new_host)
+            del missing['observed_source_sha256']['tests/android_borrow/host_stub/stub.cpp']
+            fixture[selected] = encoded(missing)
+            with self.assertRaisesRegex(ValueError, '^borrow_v2_host_sources_missing$'):
+                subject.check_borrow_v2({arm_name: arm}, selected)
+            duplicate = copy.deepcopy(old_host)
+            duplicate['sources'].append(duplicate['sources'][0])
+            fixture[selected] = encoded(duplicate)
+            with self.assertRaisesRegex(ValueError, '^borrow_v2_host_sources$'):
+                subject.check_borrow_v2({arm_name: arm}, selected)
+
+            for field, wrong in (('checks', 61), ('checks', 62.0), ('normal_backing_bytes', 1),
+                                 ('normal_backing_bytes', False), ('quarantined_backing_bytes', 0),
+                                 ('quarantined_owner_pins', 1), ('quarantine_reclaimed', True)):
+                with self.subTest(report_field=field, wrong=wrong):
+                    altered = copy.deepcopy(new_host)
+                    altered['report'][field] = wrong
+                    fixture[selected] = encoded(altered)
+                    with self.assertRaisesRegex(ValueError, '^borrow_v2_host_scope_or_source$'):
+                        subject.check_borrow_v2({arm_name: arm}, selected)
+            altered = copy.deepcopy(new_host)
+            altered['state'] = 'FAIL'
+            fixture[selected] = encoded(altered)
+            with self.assertRaisesRegex(ValueError, '^borrow_v2_host_scope_or_source$'):
+                subject.check_borrow_v2({arm_name: arm}, selected)
+
+            fixture[selected] = encoded(new_host)
+            fixture[runner_path] = encoded({**runner, 'state': 'FAIL'})
+            with self.assertRaisesRegex(ValueError, '^borrow_v2_runner_scope_or_source$'):
+                subject.check_borrow_v2({arm_name: arm}, selected)
+            fixture[runner_path] = encoded(runner)
+            fixture[r8_path] = encoded({**r8, 'device_executed': True})
+            with self.assertRaisesRegex(ValueError, '^borrow_v2_r8_scope_or_source$'):
+                subject.check_borrow_v2({arm_name: arm}, selected)
+
     def test_bridge_source_only_without_candidate(self):
         args = SimpleNamespace(bridge_sdk_zip=None, bridge_evidence=None,
                                bridge_test_source=None, bridge_test_cmake=None, bridge_sanitization_evidence=None,

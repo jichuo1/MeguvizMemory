@@ -434,5 +434,13 @@
     "tested_commit": "17aee94265c84cf0af00c0458383a950febbc4ae",
     "fresh_ci_evidence": "artifacts/ci-portability-20261101/fresh-ci.json",
     "source_lock_scope": "OBSERVED_INPUTS_FOR_TESTED_COMMIT_NOT_LATER_DOCUMENTATION"
+  },
+  "postci_preview_20261101": {
+    "state": "DEFERRED_BEFORE_PACKAGE_NEW_MANAGED_DOMAIN_FEATURE_IN_PROGRESS",
+    "prior_preview": "artifacts/followup-delivery-20261101/manifest.json",
+    "host_stub": "artifacts/ci-portability-20261101/borrow-host-postci.json",
+    "device_execution": "NOT_QUALIFIED",
+    "performance": "NOT_MEASURED",
+    "formal_release": "NOT_QUALIFIED"
   }
 }

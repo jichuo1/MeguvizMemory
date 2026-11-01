@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "state": "PASS_SCOPED_JDK17_HOST_STUB_POST_CI",
+  "scope": "HOST_ONLY_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART",
+  "recorded_at_utc": "2026-11-01T04:31:32.941398+00:00",
+  "ctest": {
+    "passed": 2,
+    "total": 2,
+    "cases": [
+      "android_borrow_v2_host_stub",
+      "android_borrow_host_launcher_unit"
+    ],
+    "launcher_unit_checks": 8,
+    "log_sha256": "9d820fb0e216e80abdad3120606af68d5d639c5c721efae056cd67c6278c0909"
+  },
+  "report": {
+    "state": "PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART",
+    "suite": "android-native-borrow-v2",
+    "java_specification": 17,
+    "native_access_explicit": false,
+    "checks": 62,
+    "normal_backing_bytes": 0,
+    "quarantined_backing_bytes": 32,
+    "quarantined_owner_pins": 2,
+    "quarantine_reclaimed": false
+  },
+  "observed_source_sha256": {
+    "adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java": "8ef53e41a5246d8de2687be655b16f136acf6640aa39d0dbce208ca0d0f43fd2",
+    "adapters/android/native/borrow_jni.cpp": "e3a8f48d41f38c686d77d2fa953dbf8f9e97112f4d2d6b20265ff16544693571",
+    "include/mgmem/android_borrow_jni.h": "bf07306528fe52786f7ce8b45496446973452a2e5210b789ca14dff0e5195f34",
+    "include/mgmem/mgmem.h": "aa5b8ca0066f8059e805285c1ee4574b4cf8c3e7c6e09147b85db286ee39dc84",
+    "include/mgmem/pressure.h": "f9d0b2ecfc10e43510a745344b837ccd51b09acafcadbe24ec6295431ed22f32",
+    "src/mgmem.cpp": "d45455c1b8fd456cdf016017a4ab817c9021d6738a9d6c0308b082e8ac29a06c",
+    "tests/android_borrow/NativeBorrowInstrumentation.java": "68fdfda8617cb40bb900fb3a9dfd75ad0a735a929ce3c014207016946542296e",
+    "tests/android_borrow/borrow_fixture.cpp": "4d11c7d5b4b948b02ea9ff23e9dccc07a9b4076ffe14a6460487a251cc00d1c0",
+    "tests/android_borrow/host_stub/CMakeLists.txt": "77a06e2604999049421e267d09e925e415fbb754394e4a827dfdc69622ac8f9c",
+    "tests/android_borrow/host_stub/HostProbe.java": "2f9765521a0a36c91a9ceafe36aace6f41037abfc60513e1e4d542fe3811d7fc",
+    "tests/android_borrow/host_stub/android/app/Instrumentation.java": "e53503383eb2bd39b0cd8eec14caa1d856ef7c4f3e754f34fe3ad9513a0a2e09",
+    "tests/android_borrow/host_stub/android/os/Bundle.java": "2f3ef8278086ea2c176dad3287f8c4c3f5efd488ca1157b8348e6d5b4dff57a8",
+    "tests/android_borrow/host_stub/android/os/Looper.java": "ba3134e04acb311a2a23f1e4667347c740e86a52a20af6ee228e16083c8c52f0",
+    "tests/android_borrow/host_stub/org/json/JSONObject.java": "52934864e94fdecb2102f98ab44fa2cda7433b20cd63e508ebde6834779973c1",
+    "tests/android_borrow/host_stub/run_host_probe.py": "0c58863255a4d6a54f65d566b93e4f2fe7e8bbc8836081849268cb65b995c916",
+    "tests/android_borrow/host_stub/stub.cpp": "441d823c5a144dd2bb1e11ddfdbb28b6cdfc7a87bc348ea96d82e300eb02d310",
+    "tests/android_borrow/host_stub/test_host_launcher.py": "30b4144271cfd036504eacb72f8298a77260be71e4e2e42bc97511e085a5bec3",
+    "tools/android_borrow_round.py": "28357a7a2b5697a51b6a476f13696b6e703aa1ac914fd8703dd2e32a79566bd5"
+  },
+  "observed_binary_sha256": {
+    "fixture_dll_sha256": "f3c86349f68fdee4b0d5e42e88ed3cbdb6dbdfcc5b29b9a79eac32764c9d1e9a",
+    "name_only_stub_dll_sha256": "8127366e2596ec2551387bf0e9286616d7c93692c53bde2429460fbc9112525f",
+    "classes_sha256": {
+      "android/app/Instrumentation.class": "9e54d65b0953383db3131994e2f64456bfa807e55f9ae939abef7c939b5c0115",
+      "android/os/Bundle.class": "485a257cc2518fb72876406251cdb090d24aca7437e7c047be3e3a8ecc265185",
+      "android/os/Looper.class": "5e494bb9ded7bc5f042fa89c37fe7ef5d3c72a03118a000454225ec49bbef676",
+      "HostProbe.class": "a955f54b1d160a0fcb56b2466f645c8f96300f872e89d8b114181003cb5d6da8",
+      "io/github/jichuo1/meguviz/memory/android/NativeBorrowInstrumentation.class": "c6439fb7b5604740bbe955ca8f1c18076ebd781306fe6aa2e862ecf460a241a8",
+      "io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.class": "cab5697f8d3c9ae44d79dde2c66cf08360b457b3940030771fa067a77af09595",
+      "org/json/JSONObject.class": "c2d1939ff29697336cdade89da812e49ccb6490979be710d3425a81e495a6b28"
+    }
+  },
+  "dependency_checks": {
+    "cpp_and_java_inputs_not_newer_than_outputs": true,
+    "launcher_inputs_not_newer_than_log": true,
+    "targeted_ninja_dry_run": {
+      "mgmem_borrow_fixture": {
+        "result": "NO_WORK",
+        "stdout_sha256": "132f4afed3b5d32fc57db80f04efcd9ced648ba4e5748a070f6790430c46c1d2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "borrow_probe_java_classes": {
+        "result": "NO_WORK",
+        "stdout_sha256": "132f4afed3b5d32fc57db80f04efcd9ced648ba4e5748a070f6790430c46c1d2",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "limitations": [
+    "JDK 17 only; no JDK 25 runtime or native-access warning conclusion.",
+    "CTEST ran a host JVM and test-only JNI DLL with Android stubs; no Android/ART/device execution.",
+    "Checked-release failure intentionally retains 32 bytes and two owner pins; it is not normal reclamation.",
+    "Current source hashes, timestamps and incremental dry-run are consistency checks; they do not prove cryptographic build or execution provenance.",
+    "CTest raw logs and local paths stay in ignored build; preparer was an ephemeral command, not a retained reproducible script.",
+    "No product performance, energy, BIL, or formal-release qualification."
+  ]
+}

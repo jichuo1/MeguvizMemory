@@ -50,6 +50,28 @@ HOST_SOURCES = {
     'java_image_native': 'consumers/java_image/native/image_jni.cpp',
     'java_image_verify': 'consumers/java_image/verify_host.py',
 }
+HOST_STUB_REQUIRED_SOURCES = frozenset((
+    'adapters/android/java/io/github/jichuo1/meguviz/memory/android/NativeMemoryLease.java',
+    'adapters/android/native/borrow_jni.cpp',
+    'include/mgmem/android_borrow_jni.h',
+    'include/mgmem/mgmem.h',
+    'src/mgmem.cpp',
+    'tests/android_borrow/borrow_fixture.cpp',
+    'tests/android_borrow/host_stub/android/app/Instrumentation.java',
+    'tests/android_borrow/host_stub/android/os/Bundle.java',
+    'tests/android_borrow/host_stub/android/os/Looper.java',
+    'tests/android_borrow/host_stub/CMakeLists.txt',
+    'tests/android_borrow/host_stub/HostProbe.java',
+    'tests/android_borrow/host_stub/org/json/JSONObject.java',
+    'tests/android_borrow/host_stub/run_host_probe.py',
+    'tests/android_borrow/host_stub/stub.cpp',
+    'tests/android_borrow/NativeBorrowInstrumentation.java',
+    'tools/android_borrow_round.py',
+))
+HOST_STUB_POSTCI_EXTRA_SOURCES = frozenset((
+    'include/mgmem/pressure.h',
+    'tests/android_borrow/host_stub/test_host_launcher.py',
+))
 CONSUMER_SOURCES = (
     'consumers/java_image/CMakeLists.txt',
     'consumers/java_image/README.md',
@@ -116,6 +138,20 @@ def sha(data: bytes) -> str:
 
 def decoded(data: bytes):
     return json.loads(data.decode('utf-8-sig'))
+
+
+def decoded_unique(data: bytes):
+    def pairs(items):
+        result = {}
+        for key, value in items:
+            require(key not in result, 'borrow_v2_host_duplicate_json_key')
+            result[key] = value
+        return result
+
+    def nonfinite(_):
+        raise ValueError('borrow_v2_host_nonfinite_json_value')
+
+    return json.loads(data.decode('utf-8-sig'), object_pairs_hook=pairs, parse_constant=nonfinite)
 
 
 def file_data(path: Path) -> bytes:
@@ -333,26 +369,57 @@ def check_packed(data: dict) -> None:
     data['evidence/packed/functional-receipt.json'] = rec_raw
 
 
-def check_borrow_v2(data: dict) -> None:
+def check_borrow_v2(data: dict, host_stub_receipt: Path | None = None) -> None:
     """Keep host stubs, mocked runner and R8 build as separate scopes."""
     base = ROOT / 'artifacts/followup-delivery-20261101/android-borrow-v2'
-    names = ('host-receipt-final.json', 'runner-offline-receipt-final.json', 'r8-build-receipt-final.json')
-    payloads = {name: file_data(base / name) for name in names}
-    host, runner, r8 = (decoded(payloads[name]) for name in names)
+    host_name = 'host-receipt-selected.json' if host_stub_receipt is not None else 'host-receipt-final.json'
+    host_path = host_stub_receipt if host_stub_receipt is not None else base / 'host-receipt-final.json'
+    names = (host_name, 'runner-offline-receipt-final.json', 'r8-build-receipt-final.json')
+    payloads = {host_name: file_data(host_path), **{name: file_data(base / name) for name in names[1:]}}
+    host = decoded_unique(payloads[host_name])
+    runner, r8 = (decoded(payloads[name]) for name in names[1:])
     instrumentation = ROOT / 'tests/android_borrow/NativeBorrowInstrumentation.java'
     fixture = ROOT / 'tests/android_borrow/borrow_fixture.cpp'
     lease = ROOT / HOST_SOURCES['native_lease_java']
+    require(isinstance(host, dict), 'borrow_v2_host_scope_or_source')
     report = host.get('report', {})
-    require(host.get('state') == 'PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART' and
-            host.get('scope') == 'LOCAL_HOST_STUB_SINGLE_TEST_DLL_NO_DEVICE' and
-            report.get('state') == host['state'] and report.get('suite') == 'android-native-borrow-v2' and
-            report.get('checks') == 62 and report.get('normal_backing_bytes') == 0 and
-            report.get('quarantined_backing_bytes') == 32 and report.get('quarantined_owner_pins') == 2 and
+    require(isinstance(report, dict) and
+            report.get('state') == 'PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART' and
+            report.get('suite') == 'android-native-borrow-v2' and
+            type(report.get('checks')) is int and report['checks'] == 62 and
+            type(report.get('normal_backing_bytes')) is int and report['normal_backing_bytes'] == 0 and
+            type(report.get('quarantined_backing_bytes')) is int and report['quarantined_backing_bytes'] == 32 and
+            type(report.get('quarantined_owner_pins')) is int and report['quarantined_owner_pins'] == 2 and
             report.get('quarantine_reclaimed') is False,
             'borrow_v2_host_scope_or_source')
-    sources = host.get('sources', [])
-    require(isinstance(sources, list) and len(sources) == len({x['path'] for x in sources}), 'borrow_v2_host_sources')
-    source_hashes = {x['path']: x['sha256'] for x in sources}
+    if host.get('state') == 'PASS_HOST_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART':
+        require(host.get('scope') == 'LOCAL_HOST_STUB_SINGLE_TEST_DLL_NO_DEVICE', 'borrow_v2_host_scope_or_source')
+        sources = host.get('sources', [])
+        require(isinstance(sources, list) and
+                all(isinstance(x, dict) and isinstance(x.get('path'), str) and isinstance(x.get('sha256'), str) for x in sources) and
+                len(sources) == len({x['path'] for x in sources}), 'borrow_v2_host_sources')
+        source_hashes = {x['path']: x['sha256'] for x in sources}
+        required_sources = HOST_STUB_REQUIRED_SOURCES
+    else:
+        ctest = host.get('ctest', {})
+        dependency = host.get('dependency_checks', {})
+        require(host.get('schema_version') == 1 and host.get('state') == 'PASS_SCOPED_JDK17_HOST_STUB_POST_CI' and
+                host.get('scope') == 'HOST_ONLY_REAL_JVM_JNI_ANDROID_STUBS_NOT_ART' and
+                type(report.get('java_specification')) is int and report['java_specification'] == 17 and
+                report.get('native_access_explicit') is False and isinstance(ctest, dict) and
+                type(ctest.get('passed')) is int and ctest['passed'] == 2 and
+                type(ctest.get('total')) is int and ctest['total'] == 2 and
+                ctest.get('cases') == ['android_borrow_v2_host_stub', 'android_borrow_host_launcher_unit'] and
+                type(ctest.get('launcher_unit_checks')) is int and ctest['launcher_unit_checks'] == 8 and
+                isinstance(dependency, dict) and dependency.get('cpp_and_java_inputs_not_newer_than_outputs') is True and
+                dependency.get('launcher_inputs_not_newer_than_log') is True and
+                dependency.get('targeted_ninja_dry_run', {}).get('mgmem_borrow_fixture', {}).get('result') == 'NO_WORK' and
+                dependency.get('targeted_ninja_dry_run', {}).get('borrow_probe_java_classes', {}).get('result') == 'NO_WORK',
+                'borrow_v2_host_scope_or_source')
+        source_hashes = host.get('observed_source_sha256')
+        require(isinstance(source_hashes, dict), 'borrow_v2_host_sources')
+        required_sources = HOST_STUB_REQUIRED_SOURCES | HOST_STUB_POSTCI_EXTRA_SOURCES
+    require(required_sources.issubset(source_hashes), 'borrow_v2_host_sources_missing')
     expected_source_hashes(source_hashes)
     require(source_hashes.get('tests/android_borrow/NativeBorrowInstrumentation.java') == file_sha(instrumentation) and
             source_hashes.get('tests/android_borrow/borrow_fixture.cpp') == file_sha(fixture) and
@@ -502,6 +569,8 @@ def main() -> int:
     parser.add_argument('--private-identifiers-file', type=Path, required=True)
     parser.add_argument('--source-lock', type=Path, default=LOCK_DEFAULT)
     parser.add_argument('--output', type=Path, default=OUTPUT_DEFAULT)
+    parser.add_argument('--host-stub-receipt', type=Path,
+                        help='Select another workspace host-stub receipt; default retains the historical path')
     parser.add_argument('--write', action='store_true', help='Write a fresh dist ZIP after all checks')
     for name in ('windows-sdk-zip', 'windows-jni-zip', 'windows-evidence', 'windows-comparison', 'windows-path-scan',
                  'bridge-sdk-zip', 'bridge-evidence', 'bridge-test-source', 'bridge-test-cmake'):
@@ -526,7 +595,7 @@ def main() -> int:
     data = {'evidence/SOURCE_LOCK.json': lock}
     check_host(data)
     check_android(data)
-    check_borrow_v2(data)
+    check_borrow_v2(data, args.host_stub_receipt)
     core_sha = check_windows(data, args)
     bridge_included = check_bridge(data, args, core_sha)
     check_packed(data)
@@ -541,6 +610,9 @@ def main() -> int:
     manifest = {'schema_version': 1, 'state': 'ENGINEERING_PREVIEW_NOT_FORMAL_RELEASE',
         'scope': 'SANITIZED_BUILD_AND_SCOPED_HOST_CHECKS_NO_DEVICE',
         'source_commit_binding': 'NOT_ESTABLISHED_HASHES_NOT_BUILD_PROVENANCE',
+        'host_stub_receipt': {'selection': 'EXPLICIT' if args.host_stub_receipt is not None else 'HISTORICAL_DEFAULT',
+            'sha256': sha(data['evidence/android-borrow-v2/' +
+                               ('host-receipt-selected.json' if args.host_stub_receipt is not None else 'host-receipt-final.json')])},
         'android_art_r8_runtime': 'NOT_QUALIFIED', 'performance_energy_bil_release': 'NOT_QUALIFIED',
         'compute_bridge': 'BINARY_HOST_INSTALLED_WITH_IDENTICAL_CORE_FILE_SOURCE_ID_RECORDED' if bridge_included else 'SOURCE_ONLY',
         'project_license': 'FILE_INCLUDED' if any(k in data for k in ('source/LICENSE', 'source/LICENSE.txt')) else 'NOT_SPECIFIED_NO_LICENSE_FILE',
