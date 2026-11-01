@@ -6,7 +6,7 @@
 
 后续源码还补充了 C++ checked 导入、Java 关闭状态与独立 Java 图像消费者；此前预览包不包含这些改动。[当前证据](artifacts/continuation-next-20261101/README.md)。
 
-最新源码提供可选 Java 托管 System/Arena 域及同域压力绑定，并修复控制器创建与并发关闭的竞争；宿主检查通过。此前 `c45723f` 的三 ABI Android 工程候选早于这些修复，不能当作当前新版制品；Android 运行验证仍待完成。[托管域合同](docs/ANDROID_MANAGED_DOMAIN.md)、[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)、[旧候选证据](artifacts/android-candidate-20261101/candidate.json)。
+最新源码提供可选 Java 托管 System/Arena 域及同域压力绑定，并修复控制器创建与并发关闭的竞争；宿主检查通过。已从 `2e25092` 快照生成新的三 ABI Android 和 Windows 宿主工程候选；Android 运行验证仍待完成。[托管域合同](docs/ANDROID_MANAGED_DOMAIN.md)、[压力合同](docs/ANDROID_MANAGED_PRESSURE_CONTRACT.md)、[候选证据](artifacts/delivery-20261101/final-candidates-2e25092.json)。
 
 新版还提供 [Android 后台使用示例](consumers/android_managed/README.md)和[多域 Arena 功能诊断](bench/TLB_MULTI_ARENA.md)；宿主或源码编译通过不代表 Android 运行、硬件机制或性能资格。
 

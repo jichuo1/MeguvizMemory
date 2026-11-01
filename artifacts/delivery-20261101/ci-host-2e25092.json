@@ -1,0 +1,15 @@
+{
+  "state": "PASS_SCOPED_HOST_CI_WINDOWS_AND_LINUX",
+  "tested_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "url": "https://github.com/jichuo1/MeguvizMemory/actions/runs/41284685274",
+  "profiles": [
+    {"name": "verify (ubuntu-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "android_jni_cmake_contracts": 32, "android_builder_contracts": 29, "host_builder_contracts": 21, "real_log_symlink_checks": "PASS_NO_SKIPS", "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_replay_positive": 12, "trace_replay_negative": 53},
+    {"name": "verify (windows-latest)", "conclusion": "success", "core_ctest": 39, "pressure_attach_race_ctest": 1, "managed_ctest": 50, "android_jni_cmake_contracts": 32, "android_builder_contracts": 29, "host_builder_contracts": 21, "real_log_symlink_checks": "PASS_NO_SKIPS", "trace_capture_positive": 6, "trace_capture_negative": 4, "trace_replay_positive": 12, "trace_replay_negative": 53}
+  ],
+  "limits": [
+    "The local Windows host lacked permission to create symlinks; CI results are separate and do not change the local skipped tests.",
+    "Host CI and Android type stubs do not establish Android ART, R8 runtime or physical-device execution.",
+    "Trace tests use synthetic P6 input and do not establish performance, TLB mechanism or a production trace.",
+    "Linux host candidate construction and runtime were not performed by these offline builder checks."
+  ]
+}

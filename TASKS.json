@@ -1242,7 +1242,7 @@
     "host_ci": "WINDOWS_LINUX_CORE_39_MANAGED_49_IMAGE_12_PLUS_12_PLUS_10_PASS_ON_d90f9d8",
     "java_image": "WINDOWS_INSTALLED_CORE_HOST_JNI_DEFAULT_12_SYNTHETIC_PRESSURE_12_NEGATIVE_10_RETRY_CONTRACT_PASS",
     "android_runtime": "NOT_RUN_FOR_THIS_SOURCE",
-    "release_artifact": "C45723F_ENGINEERING_CANDIDATE_AVAILABLE_FORMAL_RELEASE_NOT_QUALIFIED",
+    "release_artifact": "2E25092_ENGINEERING_CANDIDATES_AVAILABLE_FORMAL_RELEASE_NOT_QUALIFIED",
     "performance": "NOT_MEASURED",
     "BIL": "NOT_INTEGRATED",
     "evidence": "artifacts/managed-pressure-20261101/host.json",
@@ -1285,17 +1285,17 @@
     "java_close": "SAME_THREAD_REENTRY_OTHER_THREAD_RETRYABLE_41_HOST_CHECKS",
     "host": "PRESSURE_JNI_22_MANAGED_50_ATTACH_FIXTURE_PASS",
     "android_runtime": "NOT_RUN",
-    "previous_candidate": "C45723F_PREDATES_FIXES",
+    "previous_candidate": "C45723F_PREDATES_FIXES_FINAL_2E25092_INCLUDES_FIXES",
     "performance": "NOT_MEASURED",
     "evidence": "artifacts/pressure-races-20261101/host.json"
   },
   "android_jni_target_20261101": {
     "parents": ["MM-001", "MM-009"],
-    "state": "OPTIONAL_INSTALLED_TARGET_IMPLEMENTED_DEV_CROSS_LINK_ONLY",
+    "state": "OPTIONAL_INSTALLED_TARGET_IMPLEMENTED_FINAL_THREE_ABI_CROSS_LINK_ONLY",
     "host_fixture": "THIRTY_TWO_CMAKE_CONTRACTS_PASS",
-    "builder_fixture": "WINDOWS_TWENTY_SIX_PASS_THREE_REAL_SYMLINK_UNAVAILABLE_AFTER_JOURNAL_FIX",
+    "builder_fixture": "LOCAL_WINDOWS_26_PASS_3_SYMLINK_UNAVAILABLE_CI_WINDOWS_LINUX_29_PASS_ON_2e25092",
     "android_runtime": "NOT_RUN",
-    "previous_candidate": "C45723F_PREDATES_TARGET",
+    "previous_candidate": "C45723F_PREDATES_TARGET_FINAL_2E25092_BUILT_CROSS_LINK_ONLY",
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
   },
   "image_trace_20261101": {
@@ -1313,11 +1313,12 @@
   },
   "host_candidate_builder_20261101": {
     "parent": "MM-001",
-    "state": "IMPLEMENTED_WINDOWS_DEV_BUILD_PASS_FINAL_SNAPSHOT_PENDING",
-    "windows": "DEV_ARCHIVE_INSTALLED_JAVA_IMAGE_PASS_4AA_FIRST_LOG_COLLISION_RETAINED_FINAL_REBUILD_PENDING",
+    "state": "WINDOWS_2E25092_ENGINEERING_CANDIDATE_PASS_LINUX_RUNTIME_PENDING",
+    "windows": "FINAL_ARCHIVE_INSTALLED_IMAGE_12_PLUS_12_PLUS_10_AND_PRESSURE_V1_V2_PASS",
     "linux": "OFFLINE_CONTRACTS_ONLY_REAL_BUILD_NOT_RUN",
     "offline_contracts": "TWENTY_ONE_PASS",
     "formal_release": "NOT_QUALIFIED",
-    "contract": "docs/HOST_CANDIDATE_BUILDER.md"
+    "contract": "docs/HOST_CANDIDATE_BUILDER.md",
+    "evidence": "artifacts/delivery-20261101/final-candidates-2e25092.json"
   }
 }

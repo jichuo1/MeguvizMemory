@@ -2,11 +2,18 @@
 
 最近补充：2026-11-01。当前交付 **0.2.0 功能工程预览 / native ABI 1.1**。公开仓库为 [jichuo1/MeguvizMemory](https://github.com/jichuo1/MeguvizMemory)。正式 Release、性能资格和 BIL 接入尚未完成。
 
+## 修复后工程候选（2026-11-01）
+
+- 从提交 `2e25092` 的独立源码快照分别生成本地三 ABI Android 候选和 Windows x86_64 宿主候选；两包的 261 项源码记录与该提交一致。包名、SHA-256 和[限定证据](artifacts/delivery-20261101/final-candidates-2e25092.json)已固定，候选仅留本地 `dist/`，不等于正式 Release。
+- Android 的三个 AAR/SDK 内核心与 JNI 字节分别一致；真实图像、压力图像及显式 `android_jni` 目标均完成三 ABI 交叉编译和链接，arm64 AAR 完成 Android SDK 示例源码编译。没有运行 Android 可执行文件、ART 或设备。[安装消费记录](artifacts/delivery-20261101/android-installed-link-2e25092.json)
+- Windows 包从归档回读后运行真实 Java 图像默认 12 组、合成压力 12 组、失败 10 组，以及 pressure v1/v2 消费者；37 个步骤的 74 份私有日志均与 journal 摘要一致。此前 `4aa2874` Windows 旧轮的覆盖记录不被改写。Linux 宿主候选尚未真实构建或运行。
+- [最新源码 Windows/Linux CI](artifacts/delivery-20261101/ci-host-2e25092.json) 均通过；两端候选构建器的 29 项合同检查均全部执行，包括三个真实日志符号链接负例。本机 Windows 因权限跳过三项的原记录保留。设备、R8 运行、16 KB loader、MTE、性能、BIL 和正式发布资格仍独立待验证；项目许可证尚未确定。
+
 ## 压力并发安全与 JNI 安装目标（2026-11-01）
 
 - 修复 Android 回调适配器并发 `close()`：同线程重入继续由外层处理；另一线程遇正在执行的关闭会得到可重试异常，不会把未完成的注销或清理准入误报为成功。`isClosed()` 只表示停止事件准入。[宿主新旧反例](artifacts/pressure-races-20261101/host.json)
 - 修复 pressure v1/v2 控制器并发创建时先取快照、后占附着槽导致的过期预算：现在先预占唯一附着，再读取预算；失败时在锁外归还 owner。四种版本交叉竞争的旧失败与新通过、失败回滚及回调锁序均有限定宿主证据。
-- Android SDK 新增可选的 `MeguvizMemory::android_jni` 安装目标，core-only 包仍可使用；显式组件会校验架构、ELF 和同安装前缀。配置合同 32 项通过；构建器补强日志保护后，本机 26 项离线合同通过，另 3 项真实符号链接检查因权限不可用而跳过。最终源码制品与运行验证仍待完成。
+- Android SDK 新增可选的 `MeguvizMemory::android_jni` 安装目标，core-only 包仍可使用；显式组件会校验架构、ELF 和同安装前缀。配置合同 32 项通过；构建器补强日志保护后，本机 26 项离线合同通过、3 项因权限跳过，随后两端 CI 的 29 项全部通过。最终源码制品见上节，运行验证仍待完成。
 - 此前本地 `c45723f` 工程候选早于上述修复与 JNI 目标，不能作为修复后的新版制品。设备、R8 运行、真实低内存和性能资格仍待统一验证。
 
 ## 图像访问轨迹工具（2026-11-01）
@@ -14,14 +21,14 @@
 - 新增显式启用的[图像源码级采集与回放](consumers/image/TRACE_CONTRACT.md)：覆盖实际 P6 图像算法的 direct、System 和 Arena 路径及 full/ring 工作区。轨迹只记录相对访问与生命周期，不包含像素或原始地址；完整输入、原始轨迹和输出留在本机。
 - 安装版宿主核心上的合成 P6 功能验证通过采集 6 正例、4 反例及回放 12 正例、53 反例；本机测试环境未能创建符号链接，但后续 Windows/Linux CI 的该拒绝路径均通过。[本机证据](artifacts/image-trace-20261101/host.json)、[公开 CI](artifacts/image-trace-20261101/ci-host.json)；不插桩目标不运行记录逻辑。
 - 尚未取得用户业务输入或 BIL 产品访问轨迹；源码语义回放不证明 CPU 指令顺序、硬件机制或性能收益。输入文件原始 header 和实际加载映像身份也未认证，详见合同。
-- 新增[宿主工程候选构建器](docs/HOST_CANDIDATE_BUILDER.md)，从独立源码快照构建核心、宿主 JNI 与纯 JVM 类；Windows 开发候选的归档回读和真实图像消费者通过，21 项离线合同检查通过。基于 `4aa2874` 的首个 Windows 候选有一条原始日志被同名步骤覆盖，不能声称日志链完整；已保留该轮并修复构建器，最终候选须重新生成。Linux 分支只有离线合同检查，尚无真实 Linux 构建证据。
+- 新增[宿主工程候选构建器](docs/HOST_CANDIDATE_BUILDER.md)，从独立源码快照构建核心、宿主 JNI 与纯 JVM 类；Windows 归档回读和真实图像消费者通过，21 项离线合同检查通过。基于 `4aa2874` 的旧 Windows 候选有一条原始日志被同名步骤覆盖，不能声称日志链完整；该轮保留，修复后的候选见上节。Linux 分支只有离线合同检查，尚无真实 Linux 构建证据。
 - `4aa2874` 的 [Windows/Linux 公开 CI](artifacts/delivery-20261101/ci-host-4aa.json) 均通过；[该提交两份本地候选的回读记录](artifacts/delivery-20261101/prior-candidates-4aa.json)分别保留 Android 日志完整和 Windows 单条日志覆盖的差异。CI 不包含后续日志保护修复。
 
 ## 多域诊断与 Android 接入示例（2026-11-01）
 
 - 新增 [MM-021 多域 Arena 诊断](bench/TLB_MULTI_ARENA.md)，以相同工作量比较两种访问顺序，检查预算、持有 lease 时关闭及最后归零；Windows 宿主 5 个正例与 8 个拒绝路径通过。它是单线程功能工具，不证明 TLB 机制或性能收益。[限定证据](artifacts/multi-arena-20261101/host.json)
 - 新增[独立 Android 使用示例](consumers/android_managed/README.md)，显式处理后台注册、合成压力票据、注销与关闭；宿主 JNI 和 framework 类型桩通过，并用本批 arm64 AAR 与真实 Android SDK 编译通过。ART、真机和 R8 运行仍须分别验证。
-- 新增[Android 工程候选构建器](docs/ANDROID_CANDIDATE_BUILDER.md)，从提交 `c45723f` 的独立源码快照构建并检查三 ABI AAR 与 SDK；14 项离线合同检查通过。最终候选已生成，独立消费者的三 ABI 交叉编译、链接及 AAR/SDK 身份回读通过；[制品与限定证据](artifacts/android-candidate-20261101/candidate.json)。候选 `dist/MeguvizMemory-Android-Candidate-c45723f.zip` 留在本地、未随仓库发布；未发布正式 Release。构建和脱敏检查不替代设备资格。
+- 新增[Android 工程候选构建器](docs/ANDROID_CANDIDATE_BUILDER.md)，该阶段从 `c45723f` 的独立源码快照构建并检查三 ABI AAR 与 SDK；14 项离线合同检查通过，独立消费者的三 ABI 交叉编译、链接及 AAR/SDK 身份回读通过。[历史候选证据](artifacts/android-candidate-20261101/candidate.json)；该候选早于后续修复，新版见上节。
 - 本批 [Windows/Linux 公开 CI](artifacts/android-candidate-20261101/ci-host.json) 均通过：各自核心 39 项、托管域 49 项、多域诊断 5 正例和 8 反例，以及候选工具与 Android 示例的宿主检查。
 
 ## 托管域同域压力继续开发（2026-11-01）

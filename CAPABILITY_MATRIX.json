@@ -320,14 +320,14 @@
     "java_close": "CONCURRENT_CLOSE_RETRYABLE_SAME_THREAD_REENTRY_SAFE",
     "host": "PRESSURE_JNI_22_MANAGED_50_ATTACH_FIXTURE_PASS",
     "android": "NOT_RUN",
-    "previous_candidate": "C45723F_PREDATES_FIXES",
+    "previous_candidate": "C45723F_PREDATES_FIXES_FINAL_2E25092_INCLUDES_FIXES",
     "evidence": "artifacts/pressure-races-20261101/host.json"
   },
   "android_jni_target_20261101": {
     "implementation": "OPTIONAL_INSTALLED_ANDROID_JNI_TARGET_WITH_ABI_AND_PREFIX_CHECKS",
     "development": "EARLIER_THREE_ABI_CROSS_LINK_AND_CURRENT_THIRTY_TWO_CMAKE_FIXTURES_PASS",
     "android": "NOT_RUN",
-    "previous_candidate": "C45723F_PREDATES_TARGET",
+    "previous_candidate": "C45723F_PREDATES_TARGET_FINAL_2E25092_BUILT_CROSS_LINK_ONLY",
     "contract": "docs/ANDROID_CANDIDATE_BUILDER.md"
   },
   "image_trace_20261101": {
@@ -342,9 +342,10 @@
   },
   "host_candidate_builder_20261101": {
     "implementation": "SOURCE_LOCKED_HOST_CORE_JNI_PURE_JVM_PACKAGE",
-    "windows": "DEV_BUILD_PASS_4AA_FIRST_LOG_COLLISION_RETAINED_FINAL_REBUILD_PENDING",
+    "windows": "FINAL_2E25092_INSTALLED_IMAGE_AND_PRESSURE_PASS",
     "linux": "OFFLINE_CONTRACTS_ONLY_REAL_BUILD_NOT_RUN",
     "release": "NOT_QUALIFIED",
-    "contract": "docs/HOST_CANDIDATE_BUILDER.md"
+    "contract": "docs/HOST_CANDIDATE_BUILDER.md",
+    "evidence": "artifacts/delivery-20261101/final-candidates-2e25092.json"
   }
 }

@@ -1,0 +1,64 @@
+{
+  "state": "PASS_SCOPED_ENGINEERING_CANDIDATES",
+  "source_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "source_archive_sha256": "3bff4c34e25362a4b0b783882f4fff011bcc3ef7bcf2e885ccad224fa7c71140",
+  "source_lock_sha256": "b2ac490dbd5698e2036ad737ae991c26c047c0239359de91e38484986764f617",
+  "source_record_count": 261,
+  "source_set_sha256": "ada40ecf56bf3f8b219a5ddd4c6ad63fd0630a549343960512b0f478203b9eaf",
+  "android": {
+    "sha256": "3ede208a832d0429e8f53044fd7bfb87896354b43412ac02537dbbbc32c24a5f",
+    "bytes": 1141604,
+    "profiles": {
+      "arm64-v8a": {
+        "aar_sha256": "2aa013a14a79773464667afda569a07f8e9202b50b2a66c3bfa5f65d2c988927",
+        "sdk_sha256": "a6e9ca06c1f46cf0af5f14d2b0483afd6e63beef2c05ace3ce0e2eafec30e885",
+        "jni_native_declarations": 37
+      },
+      "x86_64": {
+        "aar_sha256": "f729eff616744f151816fb3d544a9e24b47a8393f2fd1e69dbfd9b8b9fcd41ab",
+        "sdk_sha256": "33607274ebbe96eec30df8d6b43b1b9a43414ee3bc211d7d81bb965caf6e255c",
+        "jni_native_declarations": 37
+      },
+      "armeabi-v7a": {
+        "aar_sha256": "a2b12a8a22314d62478b32e5720fb4d74939f39fc9c87d10b2bac732d9f04921",
+        "sdk_sha256": "8cd5ed662930fc1a1daec6d250f919fbbffd8cfb2114e5547510d16ef214a96f",
+        "jni_native_declarations": 37
+      }
+    },
+    "unique_steps": 148,
+    "verified_log_streams": 296,
+    "sdk_consumer": "PASS_THREE_ABI_CROSS_COMPILE_LINK_ONLY",
+    "sdk_consumer_receipt_sha256": "8afef4a0707c2fd97f45243f0c7859162944a60cbfef000b578723c99cb2790e",
+    "arm64_aar_sample": "PASS_ANDROID_SDK_COMPILE_ONLY",
+    "aar_sample_receipt_sha256": "1b9ac2b35dd3edd7635cdb68725f68d30b3fed45a3226898e7b9e12e5738154c"
+  },
+  "windows_host": {
+    "sha256": "e5175f6205a89df33dbafc4df06cba8d3fcf9feca8b041534a834026c8a038eb",
+    "bytes": 205338,
+    "unique_steps": 37,
+    "verified_log_streams": 74,
+    "installed_image": {
+      "default_cases": 12,
+      "synthetic_pressure_cases": 12,
+      "negative_cases": 10
+    },
+    "packaged_pressure": "PASS_HOST_V1_V2",
+    "core_identity": "OS_MODULE_PATH_AND_DISK_HASH_NOT_MAPPED_BYTES"
+  },
+  "linux_host_candidate": "NOT_BUILT_OR_RUN",
+  "device": "NOT_RUN",
+  "android_runtime": "NOT_RUN",
+  "r8_runtime": "NOT_RUN",
+  "real_16k_loader": "NOT_RUN",
+  "mte": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "BIL": "NOT_INTEGRATED",
+  "formal_release": "NOT_QUALIFIED_PROJECT_LICENSE_UNSPECIFIED",
+  "limits": [
+    "Artifacts are local engineering candidates, not a formal release or signed provenance.",
+    "Android results are build, static and cross-link evidence only; no executable or ART was run.",
+    "Windows consumer results are scoped host executions, not Android, Linux or performance qualification.",
+    "Private raw build directories and trace inputs are not included; bounded privacy scans cannot prove absence of all private information.",
+    "Previous Windows candidate with an overwritten raw log remains historical and is not reclassified."
+  ]
+}

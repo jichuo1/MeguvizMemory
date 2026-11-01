@@ -1,0 +1,229 @@
+{
+  "state": "PASS_SCOPED_ANDROID_SDK_CONSUMER_LINK",
+  "scope": "ANDROID_CROSS_COMPILE_LINK_ONLY",
+  "device_executed": false,
+  "profiles": {
+    "arm64-v8a": {
+      "image_and_pressure_image": "CROSS_COMPILE_LINK_PASS",
+      "explicit_jni_target": "CROSS_COMPILE_LINK_PASS",
+      "imported_and_link_paths": "MATCH_EXTRACTED_SDK",
+      "elf_abi_and_dynamic_dependencies": "PASS",
+      "sdk_aar_core_jni": "BYTE_IDENTICAL",
+      "sdk_unchanged_after_link": true,
+      "core_sha256": "e53a71b8fc521859ea5d6b46a089a5c42bc2e9af4c9a45ee605854d7e8fbb839",
+      "jni_sha256": "98fece39b3465ee56a61109ec957ec75797ea9222851be4265ba224d3c984e7c",
+      "static_pressure_sha256": "58d3b87cce3d4b1ab3f03d01c895f895b6ffeea174b1b0e3417624afc825a838"
+    },
+    "x86_64": {
+      "image_and_pressure_image": "CROSS_COMPILE_LINK_PASS",
+      "explicit_jni_target": "CROSS_COMPILE_LINK_PASS",
+      "imported_and_link_paths": "MATCH_EXTRACTED_SDK",
+      "elf_abi_and_dynamic_dependencies": "PASS",
+      "sdk_aar_core_jni": "BYTE_IDENTICAL",
+      "sdk_unchanged_after_link": true,
+      "core_sha256": "82ae7db49c174539540753cc393989570645e4a05847b36e3412d534fc2848b8",
+      "jni_sha256": "c597fc98c4a633199334c3893d13ff384d05fa29bc78cdd5fe4628d5b6e2df3e",
+      "static_pressure_sha256": "e186d255bb1bedcc4a82db7d9b6343acca1239e6d36069341e9f9d0e91c63a41"
+    },
+    "armeabi-v7a": {
+      "image_and_pressure_image": "CROSS_COMPILE_LINK_PASS",
+      "explicit_jni_target": "CROSS_COMPILE_LINK_PASS",
+      "imported_and_link_paths": "MATCH_EXTRACTED_SDK",
+      "elf_abi_and_dynamic_dependencies": "PASS",
+      "sdk_aar_core_jni": "BYTE_IDENTICAL",
+      "sdk_unchanged_after_link": true,
+      "core_sha256": "8d9d33748e2b01f91f2dedcfc16661582da67eef67dc63bc01a243097ab193f2",
+      "jni_sha256": "233cc18f629223b217ebf76d4f9bfe4140e3db74c81ec1e9fd5ef50f9800166a",
+      "static_pressure_sha256": "07264e09da79a215b3c7883fbe1c0bd27c8a159dc59565139aa03b4cd5aca348"
+    }
+  },
+  "candidate_sha256": "3ede208a832d0429e8f53044fd7bfb87896354b43412ac02537dbbbc32c24a5f",
+  "source_commit": "2e2509239616e8c6d161c1d846312db330ce5352",
+  "source_records_checked": 14,
+  "operations": [
+    {
+      "step": "arm64-v8a-image-configure",
+      "exit_code": 0,
+      "stdout_sha256": "0e78adac3b98d6870eb37b4e726ac0ced2eedf73acda973fae39c0441f89a264",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-image-build",
+      "exit_code": 0,
+      "stdout_sha256": "900c912ffe8825291fa778bffa924401332447d993dfa8944dcbdf59bf260f26",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-jni-configure",
+      "exit_code": 0,
+      "stdout_sha256": "31a4680e6921ffefad69646e8c1b085b9a9e30f9b88b74f071fe897a791b3b10",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-jni-build",
+      "exit_code": 0,
+      "stdout_sha256": "3aa9cb188bd6512c905988c7ee4507a74d3c29f3cd63d83b0951caded10e3133",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-mgmem_image-commands",
+      "exit_code": 0,
+      "stdout_sha256": "9479399902729d478908c3b5a57dd33dfbc33ed6134854887e0ccfa9533aa1eb",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-mgmem_image_pressure_stability-commands",
+      "exit_code": 0,
+      "stdout_sha256": "f2d5e4e276d6726f0c5dff8ebd5cdb6c74761f2951161cf1bd3c823226475939",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-jni-commands",
+      "exit_code": 0,
+      "stdout_sha256": "e89d9d3fcb991059e1e5ca042b30515b04304f76010307a8f3d8c1d3d7fc193b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "4c7cd7d53b8e3cd7e633d02be846e4201c1c1d81d8ee5fe1cb1aa377cb19f793",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-pressure_image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "f41225e4c7fe0e6629f01bca5ee47f43dea4d5c7f99ba0107976f916972d97f4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "arm64-v8a-jni-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "200971a89a95583a561d7b77359d9e0bfb0737235666458fa9b6f4fa7ea775b5",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-image-configure",
+      "exit_code": 0,
+      "stdout_sha256": "df724e858a7bad277de30043df57fe1e77face32d52bd4502b4254074bbccc60",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-image-build",
+      "exit_code": 0,
+      "stdout_sha256": "5a882e74c79940eeec5f71a9a62253fa5748ca1553fa7ada04d4158ba6ea0300",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-jni-configure",
+      "exit_code": 0,
+      "stdout_sha256": "9b8d57cbfe6f90507d9af312fe813b0a0ab09ffc55fd48916c6d658cdb4000d4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-jni-build",
+      "exit_code": 0,
+      "stdout_sha256": "58b2a4ec0062f5aadf9955f9bd5a52f8fc01074de08c86b53833dbf4882bb9d0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-mgmem_image-commands",
+      "exit_code": 0,
+      "stdout_sha256": "5f31988ee8de2dd6acc59c1b6067dd070435d44601dd24ca26ff62fe4d08cd55",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-mgmem_image_pressure_stability-commands",
+      "exit_code": 0,
+      "stdout_sha256": "ef95d4f4330efa4d7f37da1ee9854e0dcc28e23496b75de9951b1fc10a10fefc",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-jni-commands",
+      "exit_code": 0,
+      "stdout_sha256": "acd8e17cd6a993555ee801d87ddc7881cdc952628631095a97308a78ee4ee8ec",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "7fe28dc7ceee6452c8fbb2123a11c4af1f83fb3bd897461ddf72ff20b8bac9cd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-pressure_image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "51833b17205c82e59fc774af155fcc50b855235b530277bb8d34f80011c90b8b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "x86_64-jni-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "1054e13a39500392f262a579ae13a4441e86774d472ed4ab965e05fa5ca18e9a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-image-configure",
+      "exit_code": 0,
+      "stdout_sha256": "58becf67b6f10a021a78d605f2e4fda77f45546fe9f13176468b27514388a56d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-image-build",
+      "exit_code": 0,
+      "stdout_sha256": "57bed9127157bc23e435abc4cba7bfbd7b7839f686f53bf6307003cd2f64c7bd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-jni-configure",
+      "exit_code": 0,
+      "stdout_sha256": "efddf9f1a67c781696c4ba8721e4c00fa070aeb92a0971f14c685ab03e9289dd",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-jni-build",
+      "exit_code": 0,
+      "stdout_sha256": "7e980c7a22546bcdbb28bbbd26fc3c9f9bbd6b6aabbe60319b7d8d1fd2ac8682",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-mgmem_image-commands",
+      "exit_code": 0,
+      "stdout_sha256": "e9708e6f259a8b003fbf46edfdf6fcbf20b0ed94ea17b16953f5af63d733499f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-mgmem_image_pressure_stability-commands",
+      "exit_code": 0,
+      "stdout_sha256": "6b67fc4cd5a0095dfb140d48b620517a00491c5ada804cc82ca79a063d38c04f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-jni-commands",
+      "exit_code": 0,
+      "stdout_sha256": "bbc3c13ad6b3a482314d94a3f36504183dd5eafcbe9ce134ee411c08f8768e84",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "08ff1317fa44aaf7d89a6e2239d65f21931956841cf5c91ef14c514b158c749e",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-pressure_image-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "163e43a3fee3056922b28f1a1a0e68211b201ed619303a7b7450af0fb7454908",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "step": "armeabi-v7a-jni-dynamic",
+      "exit_code": 0,
+      "stdout_sha256": "91fe9a8b11af9fc9ded7954e974a58ab43e26f87abef8a49f83b906b5aaae845",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "limits": [
+    "Cross-compilation and link only; no executable, ART, Android device or performance run.",
+    "Link and file identity do not establish signed provenance or runtime loader behavior."
+  ]
+}

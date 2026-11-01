@@ -1,0 +1,18 @@
+{
+  "scope": "ANDROID_JAVA_COMPILE_ONLY_NO_RUNTIME",
+  "status": "PASS",
+  "input_kind": "AAR",
+  "input_sha256": "2aa013a14a79773464667afda569a07f8e9202b50b2a66c3bfa5f65d2c988927",
+  "android_jar_sha256": "bf1b4387cc7ca94fc6ef684f040d9d16fbf16248e181819f020736ea2053f177",
+  "sample_source_sha256": "44e34eb5f7a7f7f77f4a449444a8d57458f8aeaf04ed6dd2d6093ba305ee6407",
+  "verifier_sha256": "c162cda5f9e060f49ea1790e1002518f0aea1438e186d33d86901b68e7ad8f85",
+  "android_runtime": "NOT_RUN",
+  "device": "NOT_RUN",
+  "performance": "NOT_MEASURED",
+  "aar_abis_with_core_and_jni": [
+    "arm64-v8a"
+  ],
+  "classes_jar_sha256": "708ea9b4c692eb43798876ec538b787715863d08ca7f24a144cb1888f83a9891",
+  "javac_exit_code": 0,
+  "sample_class_sha256": "a683b4fef66301bc2d2ec2d8a6f19930fb1972dbd86ba2fa6243c149909c916f"
+}
